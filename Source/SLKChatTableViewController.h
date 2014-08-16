@@ -17,8 +17,6 @@
 @property (nonatomic, readonly) UIButton *leftButton;
 @property (nonatomic, readonly) UIButton *rightButton;
 
-- (instancetype)initWithStyle:(UITableViewStyle)style;
-
 - (void)scrollToBottomAnimated:(BOOL)animated;
 
 @end
