@@ -15,10 +15,13 @@
 
 @property (nonatomic, readonly) UITableView *tableView;
 @property (nonatomic, readonly) SLKTextView *textView;
-@property (nonatomic, readonly) UIToolbar *textContainerView;
+@property (nonatomic, readonly) UIView *textContainerView;
 
 @property (nonatomic, strong) UIButton *leftButton;
 @property (nonatomic, strong) UIButton *rightButton;
+
+@property (nonatomic, strong) NSString *leftButtonTitle;
+@property (nonatomic, strong) NSString *rightButtonTitle;
 
 - (instancetype)initWithStyle:(UITableViewStyle)style;
 

@@ -47,7 +47,7 @@
 
 - (void)configure
 {
-    self.contentInset = UIEdgeInsetsMake(-2.0, 0.0, 0.0, 0.0);
+//    self.contentInset = UIEdgeInsetsMake(-2.0, 0.0, 0.0, 0.0);
     
     self.placeholderColor = [UIColor lightGrayColor];
     self.font = [UIFont systemFontOfSize:14.0];

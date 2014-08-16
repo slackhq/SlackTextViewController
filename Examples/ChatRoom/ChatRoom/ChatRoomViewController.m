@@ -24,7 +24,22 @@
     self.textView.placeholder = @"Message";
     self.textView.placeholderColor = [UIColor lightGrayColor];
     self.textView.layer.borderColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0].CGColor;
-    self.textContainerView.barTintColor = [UIColor colorWithRed:248.0/255.0 green:249.0/255.0 blue:250.0/255.0 alpha:1.0];
+    self.textContainerView.backgroundColor = [UIColor colorWithRed:248.0/255.0 green:249.0/255.0 blue:250.0/255.0 alpha:1.0];
+    
+    [self.leftButton addTarget:self action:@selector(didTapLeftButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.rightButton addTarget:self action:@selector(didTapRighttButton:) forControlEvents:UIControlEventTouchUpInside];
+    
+//    self.rightButtonTitle = @"Enviar";
+}
+
+- (IBAction)didTapLeftButton:(id)sender
+{
+    NSLog(@"%s",__FUNCTION__);
+}
+
+- (IBAction)didTapRighttButton:(id)sender
+{
+    NSLog(@"%s",__FUNCTION__);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -112,7 +127,5 @@
 {
     return YES;
 }
-
-
 
 @end
