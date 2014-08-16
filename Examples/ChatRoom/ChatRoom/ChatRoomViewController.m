@@ -20,6 +20,11 @@
     [super viewDidLoad];
     
     self.title = @"SLKChatKit";
+    
+    self.textView.placeholder = @"Message";
+    self.textView.placeholderColor = [UIColor lightGrayColor];
+    self.textView.layer.borderColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0].CGColor;
+    self.textContainerView.barTintColor = [UIColor colorWithRed:248.0/255.0 green:249.0/255.0 blue:250.0/255.0 alpha:1.0];
 }
 
 - (void)viewWillAppear:(BOOL)animated

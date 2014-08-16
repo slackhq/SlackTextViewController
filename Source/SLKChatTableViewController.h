@@ -13,8 +13,12 @@
 
 @interface SLKChatTableViewController : UIViewController
 
-@property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) SLKTextView *textView;
+@property (nonatomic, readonly) UITableView *tableView;
+@property (nonatomic, readonly) SLKTextView *textView;
+@property (nonatomic, readonly) UIToolbar *textContainerView;
+
+@property (nonatomic, strong) UIButton *leftButton;
+@property (nonatomic, strong) UIButton *rightButton;
 
 - (instancetype)initWithStyle:(UITableViewStyle)style;
 

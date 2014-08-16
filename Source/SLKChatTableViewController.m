@@ -23,17 +23,19 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 @interface SLKChatTableViewController () <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic) UITableViewStyle tableStyle;
-@property (nonatomic, strong) UIToolbar *toolBar;
 
 @property (nonatomic, strong) UIGestureRecognizer *dismissingGesture;
 
 @property (nonatomic) BOOL wasDragging;
 @property (nonatomic) CGFloat minOffset;
 @property (nonatomic) CGRect inputViewRect;
-@property (nonatomic, readonly) SLKKeyboardStatus keyboardStatus;
+@property (nonatomic) SLKKeyboardStatus keyboardStatus;
 @end
 
 @implementation SLKChatTableViewController
+@synthesize tableView = _tableView;
+@synthesize textView = _textView;
+@synthesize textContainerView = _textContainerView;
 
 - (instancetype)initWithStyle:(UITableViewStyle)style
 {
@@ -54,7 +56,7 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
 - (void)configure
 {
     [self.view addSubview:self.tableView];
-    [self.view addSubview:self.toolBar];
+    [self.view addSubview:self.textContainerView];
     
     [self registerNotifications];
 }
@@ -70,7 +72,7 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
 {
     [super viewWillAppear:animated];
     
-    _minOffset = _tableView.contentOffset.y;
+    _minOffset = self.tableView.contentOffset.y;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -109,27 +111,27 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
     return _tableView;
 }
 
-- (UIToolbar *)toolBar
+- (UIToolbar *)textContainerView
 {
-    if (!_toolBar)
+    if (!_textContainerView)
     {
-        _toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-44.0, self.view.bounds.size.width, 44.0)];
-        _toolBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        _toolBar.items = @[[[UIBarButtonItem alloc] initWithCustomView:self.textView]];
-        _toolBar.barTintColor = [UIColor whiteColor];
-        _toolBar.translucent = NO;
+        _textContainerView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-44.0, self.view.bounds.size.width, 44.0)];
+        _textContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        _textContainerView.barTintColor = [UIColor whiteColor];
+        _textContainerView.translucent = NO;
+        
+        _textContainerView.items = @[[[UIBarButtonItem alloc] initWithCustomView:self.leftButton],[[UIBarButtonItem alloc] initWithCustomView:self.textView],[[UIBarButtonItem alloc] initWithCustomView:self.rightButton]];
 
-        _inputViewRect = _toolBar.frame;
+        _inputViewRect = _textContainerView.frame;
     }
-    return _toolBar;
+    return _textContainerView;
 }
 
 - (SLKTextView *)textView
 {
     if (!_textView)
     {
-        _textView = [[SLKTextView alloc] initWithFrame:CGRectMake(0, 0, 290, 30)];
-        _textView.placeholder = @"Message";
+        _textView = [[SLKTextView alloc] initWithFrame:CGRectMake(0, 0, 215, 30)];
         _textView.font = [UIFont systemFontOfSize:15.0f];
         _textView.textContainer.maximumNumberOfLines = 0;
         _textView.layer.cornerRadius = 5.0f;
@@ -138,6 +140,31 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
         _textView.inputAccessoryView = [SLKInputAccessoryView new];
     }
     return _textView;
+}
+
+- (UIButton *)leftButton
+{
+    if (!_leftButton)
+    {
+        _leftButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+        _leftButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
+        
+        [_leftButton sizeToFit];
+    }
+    return _leftButton;
+}
+
+- (UIButton *)rightButton
+{
+    if (!_rightButton)
+    {
+        _rightButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        _rightButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
+        [_rightButton setTitle:@"Send" forState:UIControlStateNormal];
+        
+        [_rightButton sizeToFit];
+    }
+    return _rightButton;
 }
 
 
@@ -157,22 +184,21 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 - (void)willShowOrHideKeyboard:(NSNotification *)notification
 {
-    CGRect frameBegin = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGRect frameEnd   = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     double duration   = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     NSInteger curve   = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     
-    frameBegin = [_toolBar.superview convertRect:frameBegin fromView:nil];
-    frameEnd   = [_toolBar.superview convertRect:frameEnd fromView:nil];
+//    frameBegin = [_toolBar.superview convertRect:frameBegin fromView:nil];
+//    frameEnd   = [_toolBar.superview convertRect:frameEnd fromView:nil];
     
     if (![self isKeyboardFrameValid:frameEnd]) return;
     
     BOOL show = [notification.name isEqualToString:UIKeyboardWillShowNotification];
     
-    CGRect inputFrame = self.toolBar.frame;
+    CGRect inputFrame = self.textContainerView.frame;
     inputFrame.origin.y  = CGRectGetMinY(frameEnd)-CGRectGetHeight(inputFrame);
     
-    _keyboardStatus = show ? SLKKeyboardStatusWillShow : SLKKeyboardStatusWillHide;
+    self.keyboardStatus = show ? SLKKeyboardStatusWillShow : SLKKeyboardStatusWillHide;
     
     CGFloat scrollingGap = CGRectGetHeight(frameEnd);
     CGFloat scrollingOffset = self.tableView.contentOffset.y+(show ? scrollingGap : -scrollingGap);
@@ -186,7 +212,7 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
                           delay:0.0
                         options:(curve << 16)|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews
                      animations:^{
-                         self.toolBar.frame = inputFrame;
+                         self.textContainerView.frame = inputFrame;
                          self.tableView.frame = CGRectMake(0.0, 0.0, CGRectGetWidth(self.view.frame), CGRectGetMinY(inputFrame));
                          
                          if (!self.wasDragging && scroll) {
@@ -202,43 +228,41 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
 {
-    CGRect frameBegin = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGRect frameEnd   = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
-    frameBegin = [_toolBar.superview convertRect:frameBegin fromView:nil];
-    frameEnd   = [_toolBar.superview convertRect:frameEnd fromView:nil];
+//    frameBegin = [_toolBar.superview convertRect:frameBegin fromView:nil];
+//    frameEnd   = [_toolBar.superview convertRect:frameEnd fromView:nil];
     
     if (![self isKeyboardFrameValid:frameEnd]) return;
     
     BOOL show = [notification.name isEqualToString:UIKeyboardWillShowNotification];
     
-    CGRect frame = self.toolBar.frame;
+    CGRect frame = self.textContainerView.frame;
     frame.origin.y  = CGRectGetMinY(frameEnd)-CGRectGetHeight(frame);
     
-    _keyboardStatus = show ? SLKKeyboardStatusDidShow : SLKKeyboardStatusDidHide;
+    self.keyboardStatus = show ? SLKKeyboardStatusDidShow : SLKKeyboardStatusDidHide;
 
     self.tableView.frame = CGRectMake(0.0, 0.0, CGRectGetWidth(self.view.frame), CGRectGetMinY(frame));
 }
 
 - (void)didChangeKeywordFrame:(NSNotification *)notification
 {
-    if (_keyboardStatus == SLKKeyboardStatusWillShow || _keyboardStatus == SLKKeyboardStatusWillHide) return;
+    if (self.keyboardStatus == SLKKeyboardStatusWillShow || self.keyboardStatus == SLKKeyboardStatusWillHide) return;
     
-    CGRect endFrame   = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGRect frame      = endFrame;
-    CGRect inputFrame = _toolBar.frame;
+    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect frame = endFrame;
+    CGRect inputFrame = self.textContainerView.frame;
     
     if (CGRectEqualToRect(inputFrame, _inputViewRect)) {
-        _keyboardStatus = SLKKeyboardStatusDidHide;
+        self.keyboardStatus = SLKKeyboardStatusDidHide;
     }
     else {
-        _keyboardStatus = SLKKeyboardStatusDragging;
+        self.keyboardStatus = SLKKeyboardStatusDragging;
     }
     
     inputFrame.origin.y = CGRectGetMinY(frame)-CGRectGetHeight(inputFrame);
     
-    _toolBar.frame = inputFrame;
-    
+    self.textContainerView.frame = inputFrame;
     self.tableView.frame = CGRectMake(0.0, 0.0, CGRectGetWidth(self.view.frame), CGRectGetMinY(frame));
 }
 
