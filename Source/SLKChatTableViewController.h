@@ -9,17 +9,17 @@
 #import <UIKit/UIKit.h>
 #import "SLKTextView.h"
 
-
-
 @interface SLKChatTableViewController : UIViewController
 
 @property (nonatomic, readonly) UITableView *tableView;
 @property (nonatomic, readonly) SLKTextView *textView;
-@property (nonatomic, readonly) UIView *textContainerView;
+@property (nonatomic, readonly) UIToolbar *textContainerView;
 
 @property (nonatomic, strong) UIButton *leftButton;
 @property (nonatomic, strong) UIButton *rightButton;
 
 - (instancetype)initWithStyle:(UITableViewStyle)style;
+
+- (void)scrollToBottomAnimated:(BOOL)animated;
 
 @end

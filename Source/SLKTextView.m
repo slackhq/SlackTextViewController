@@ -40,15 +40,13 @@
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
 }
 
 #pragma mark - Setup
 
 - (void)configure
 {
-//    self.contentInset = UIEdgeInsetsMake(-2.0, 0.0, 0.0, 0.0);
-    
     self.placeholderColor = [UIColor lightGrayColor];
     self.font = [UIFont systemFontOfSize:14.0];
     
@@ -74,27 +72,14 @@
         
         [self addSubview:_placeholderLabel];
     }
-    
     return _placeholderLabel;
 }
 
 #pragma mark - Setters
 
-- (void)setText:(NSString *)text
-{
-    [super setText:text];
-    [self textViewDidChange:nil];
-}
-
-- (void)setFont:(UIFont *)font
-{
-    [super setFont:font];
-    self.placeholderLabel.font = self.font;
-}
-
 - (void)setPlaceholder:(NSString *)placeholder
 {
-    if ([placeholder isEqualToString:_placeholder]) {
+    if ([placeholder isEqualToString:self.placeholder]) {
         return;
     }
     
@@ -102,16 +87,32 @@
     self.placeholderLabel.text = placeholder;
 }
 
-#pragma mark - Auto-Layout
-
-- (void)updateConstraints
+- (void)setText:(NSString *)text
 {
-    [super updateConstraints];
+    [super setText:text];
+    
+    [self textViewDidChange:nil];
 }
 
-- (void)updateConstraintsIfNeeded
+- (void)setAttributedText:(NSAttributedString *)attributedText
 {
-    [super updateConstraintsIfNeeded];
+    [super setAttributedText:attributedText];
+    
+    [self textViewDidChange:nil];
+}
+
+- (void)setFont:(UIFont *)font
+{
+    [super setFont:font];
+    
+    self.placeholderLabel.font = self.font;
+}
+
+- (void)setTextAlignment:(NSTextAlignment)textAlignment
+{
+    [super setTextAlignment:textAlignment];
+    
+    self.placeholderLabel.textAlignment = textAlignment;
 }
 
 #pragma mark - Notifications
@@ -122,35 +123,24 @@
         return;
     }
 
-    _placeholderLabel.hidden = (self.text.length > 0) ? YES : NO;
+    self.placeholderLabel.hidden = (self.text.length > 0) ? YES : NO;
 }
 
-- (BOOL)shouldRenderPlaceholder
-{
-    if (_placeholderLabel.hidden && self.placeholder.length > 0 && self.text.length == 0) {
-        return YES;
-    }
-    return NO;
-}
-
-#pragma mark - UIViewRendering
+#pragma mark - Rendering
 
 - (void)drawRect:(CGRect)rect
 {
     [super drawRect:rect];
     
-    if (!_placeholder) {
+    if (!self.placeholder) {
         return;
     }
     
-    if ([self shouldRenderPlaceholder]) {
-        CGRect frame = self.bounds;
-        frame.origin.x += 5.0;
-        _placeholderLabel.frame = frame;
-        _placeholderLabel.textColor = _placeholderColor;
-        _placeholderLabel.hidden = NO;
-        
-        [self sendSubviewToBack:_placeholderLabel];
+    if (self.text.length == 0 && self.placeholder) {
+        self.placeholderLabel.frame = CGRectInset(rect, 5.0f, 5.0f);
+        self.placeholderLabel.textColor = self.placeholderColor;
+        self.placeholderLabel.hidden = NO;
+        [self sendSubviewToBack:self.placeholderLabel];
     }
 }
 

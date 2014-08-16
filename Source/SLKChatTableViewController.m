@@ -35,8 +35,6 @@ static NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification 
     UIGestureRecognizer *_dismissingGesture;
 }
 
-@property (nonatomic, strong) UIView *containerHairline;
-
 @property (nonatomic, copy) NSString *rightButtonTitle;
 @property (nonatomic) BOOL wasDragging;
 
@@ -124,18 +122,13 @@ static NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification 
     return _tableView;
 }
 
-- (UIView *)textContainerView
+- (UIToolbar *)textContainerView
 {
     if (!_textContainerView)
     {
-        _textContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-44.0, self.view.bounds.size.width, 44.0)];
+        _textContainerView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-44.0, self.view.bounds.size.width, 44.0)];
         _textContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _textContainerView.backgroundColor = [UIColor whiteColor];
-        
-        _containerHairline = [UIView new];
-        _containerHairline.translatesAutoresizingMaskIntoConstraints = NO;
-        _containerHairline.backgroundColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0];
-        [_textContainerView addSubview:self.containerHairline];
         
         [_textContainerView addSubview:self.leftButton];
         [_textContainerView addSubview:self.rightButton];
@@ -198,6 +191,21 @@ static NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification 
 
 #pragma mark - Actions
 
+- (void)scrollToBottomAnimated:(BOOL)animated
+{
+    if ([self.tableView numberOfSections] == 0) {
+        return;
+    }
+    
+    NSInteger items = [self.tableView numberOfRowsInSection:0];
+    
+    if (items > 0) {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForItem:items - 1 inSection:0]
+                              atScrollPosition:UITableViewScrollPositionTop
+                                      animated:animated];
+    }
+}
+
 - (void)dismissKeyboard:(id)sender
 {
     if ([self.textView isFirstResponder]) {
@@ -249,8 +257,10 @@ static NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification 
 //    NSLog(@"wasDragging : %@", self.wasDragging ? @"YES" : @"NO");
 //    NSLog(@"scroll : %@", scroll ? @"YES" : @"NO");
     
-    [UIView animateWithDuration:duration
+    [UIView animateWithDuration:duration*3
                           delay:0.0
+         usingSpringWithDamping:0.7
+          initialSpringVelocity:0.7
                         options:(curve << 16)|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews
                      animations:^{
                          self.textContainerView.frame = inputFrame;
@@ -269,7 +279,7 @@ static NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification 
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
 {
-    CGRect frameEnd   = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect frameEnd = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
     if (![self isKeyboardFrameValid:frameEnd]) return;
     
@@ -280,7 +290,13 @@ static NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification 
     
     _keyboardStatus = show ? SLKKeyboardStatusDidShow : SLKKeyboardStatusDidHide;
 
-    self.tableView.frame = CGRectMake(0.0, 0.0, CGRectGetWidth(self.view.frame), CGRectGetMinY(frame));
+    [UIView animateWithDuration:0.2
+                          delay:0.0
+                        options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.tableView.frame = CGRectMake(0.0, 0.0, CGRectGetWidth(self.view.frame), CGRectGetMinY(frame));
+                     }
+                     completion:NULL];
 }
 
 - (void)didChangeKeywordFrame:(NSNotification *)notification
@@ -401,9 +417,9 @@ static NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification 
     
     [self setupViewConstraints];
     
-    [UIView animateWithDuration:0.2
+    [UIView animateWithDuration:0.3
                           delay:0.0
-         usingSpringWithDamping:0.65
+         usingSpringWithDamping:0.6
           initialSpringVelocity:0.5
                         options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut
                      animations:^{
@@ -423,16 +439,13 @@ static NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification 
     CGSize rigthButtonSize = [rightTitle sizeWithAttributes:@{NSFontAttributeName: self.rightButton.titleLabel.font}];
     CGFloat rightButtonWidth = rigthButtonSize.width+kTextViewHorizontalPadding/2.0f;
 
-    NSDictionary *views = @{@"textView": self.textView, @"leftButton": self.leftButton, @"rightButton": self.rightButton, @"hairline": self.containerHairline};
+    NSDictionary *views = @{@"textView": self.textView, @"leftButton": self.leftButton, @"rightButton": self.rightButton};
     NSDictionary *metrics = @{@"hor" : @(kTextViewHorizontalPadding), @"ver" : @(kTextViewVerticalPadding), @"leftButtonMargin" : @(leftButtonMargin), @"rightButtonMargin" : @(rightButtonMargin), @"rightButtonWidth": @(rightButtonWidth)};
     
     [self.textContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==hor)-[leftButton]-(==hor)-[textView]-(==hor)-[rightButton(rightButtonWidth)]-(==hor)-|" options:0 metrics:metrics views:views]];
     [self.textContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=leftButtonMargin)-[leftButton]-(==leftButtonMargin)-|" options:0 metrics:metrics views:views]];
     [self.textContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=rightButtonMargin)-[rightButton]-(==rightButtonMargin)-|" options:0 metrics:metrics views:views]];
     [self.textContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(==ver)-[textView]-(==ver)-|" options:0 metrics:metrics views:views]];
-    
-    [self.textContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==0)-[hairline]-(==0)-|" options:0 metrics:metrics views:views]];
-    [self.textContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(==0)-[hairline(1.0)]-(>=0)-|" options:0 metrics:metrics views:views]];
 }
 
 
