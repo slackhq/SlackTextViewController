@@ -98,6 +98,7 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-44.0) style:_tableStyle ? : UITableViewStylePlain];
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
+        _tableView.scrollsToTop = YES;
         _tableView.delegate = self;
         _tableView.dataSource = self;
         
@@ -179,7 +180,7 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
     CGFloat minOffset = self.tableView.contentOffset.y;
     CGFloat maxOffset = self.tableView.contentSize.height-(CGRectGetHeight(self.view.frame)-CGRectGetHeight(inputFrame));
     
-    BOOL scroll = ((!show && (scrollingOffset >= (minOffset-scrollingGap)) && (scrollingOffset <= (maxOffset-scrollingGap+_minOffset))) || show);
+    BOOL scroll = ((!show && (scrollingOffset > (minOffset-scrollingGap)) && (scrollingOffset < (maxOffset-scrollingGap+_minOffset))) || show);
     
     [UIView animateWithDuration:duration
                           delay:0.0
