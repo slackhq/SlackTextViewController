@@ -22,6 +22,7 @@
 		4F3EDB8B199ED069004C15D6 /* SLKChatTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB86199ED069004C15D6 /* SLKChatTableViewController.m */; };
 		4F3EDB8D199ED069004C15D6 /* SLKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB8A199ED069004C15D6 /* SLKTextView.m */; };
 		4F3EDB90199ED091004C15D6 /* ChatRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB8F199ED091004C15D6 /* ChatRoomViewController.m */; };
+		4F3EDB93199FC41D004C15D6 /* SLKTextContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB92199FC41D004C15D6 /* SLKTextContainerView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,8 @@
 		4F3EDB8A199ED069004C15D6 /* SLKTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextView.m; sourceTree = "<group>"; };
 		4F3EDB8E199ED091004C15D6 /* ChatRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatRoomViewController.h; sourceTree = "<group>"; };
 		4F3EDB8F199ED091004C15D6 /* ChatRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatRoomViewController.m; sourceTree = "<group>"; };
+		4F3EDB91199FC41D004C15D6 /* SLKTextContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextContainerView.h; sourceTree = "<group>"; };
+		4F3EDB92199FC41D004C15D6 /* SLKTextContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextContainerView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +164,8 @@
 			children = (
 				4F3EDB85199ED069004C15D6 /* SLKChatTableViewController.h */,
 				4F3EDB86199ED069004C15D6 /* SLKChatTableViewController.m */,
+				4F3EDB91199FC41D004C15D6 /* SLKTextContainerView.h */,
+				4F3EDB92199FC41D004C15D6 /* SLKTextContainerView.m */,
 				4F3EDB89199ED069004C15D6 /* SLKTextView.h */,
 				4F3EDB8A199ED069004C15D6 /* SLKTextView.m */,
 			);
@@ -264,6 +269,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F3EDB93199FC41D004C15D6 /* SLKTextContainerView.m in Sources */,
 				4F3EDB5D199ED00F004C15D6 /* AppDelegate.m in Sources */,
 				4F3EDB8B199ED069004C15D6 /* SLKChatTableViewController.m in Sources */,
 				4F3EDB90199ED091004C15D6 /* ChatRoomViewController.m in Sources */,

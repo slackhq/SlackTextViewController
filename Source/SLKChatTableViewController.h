@@ -7,16 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SLKTextView.h"
+#import "SLKTextContainerView.h"
 
 @interface SLKChatTableViewController : UIViewController
 
 @property (nonatomic, readonly) UITableView *tableView;
+@property (nonatomic, readonly) SLKTextContainerView *textContainerView;
 @property (nonatomic, readonly) SLKTextView *textView;
-@property (nonatomic, readonly) UIToolbar *textContainerView;
-
-@property (nonatomic, strong) UIButton *leftButton;
-@property (nonatomic, strong) UIButton *rightButton;
+@property (nonatomic, readonly) UIButton *leftButton;
+@property (nonatomic, readonly) UIButton *rightButton;
 
 - (instancetype)initWithStyle:(UITableViewStyle)style;
 
