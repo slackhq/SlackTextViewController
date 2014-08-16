@@ -13,6 +13,14 @@
 
 @implementation ChatRoomViewController
 
+- (instancetype)init
+{
+    if (self = [super init]) {
+        
+    }
+    return self;
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -28,8 +36,6 @@
     
     [self.leftButton addTarget:self action:@selector(didTapLeftButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.rightButton addTarget:self action:@selector(didTapRighttButton:) forControlEvents:UIControlEventTouchUpInside];
-    
-//    self.rightButtonTitle = @"Enviar";
 }
 
 - (IBAction)didTapLeftButton:(id)sender

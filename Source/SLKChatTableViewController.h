@@ -20,9 +20,6 @@
 @property (nonatomic, strong) UIButton *leftButton;
 @property (nonatomic, strong) UIButton *rightButton;
 
-@property (nonatomic, strong) NSString *leftButtonTitle;
-@property (nonatomic, strong) NSString *rightButtonTitle;
-
 - (instancetype)initWithStyle:(UITableViewStyle)style;
 
 @end

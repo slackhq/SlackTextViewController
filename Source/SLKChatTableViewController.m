@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
     SLKKeyboardStatusDragging,
 };
 
-extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
+static NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.chatkit.keyboard.frameDidChange";
 
 #define kTextViewVerticalPadding 5
 #define kTextViewHorizontalPadding 8
@@ -25,14 +25,21 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
 @end
 
 @interface SLKChatTableViewController () <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
-@property (nonatomic) UITableViewStyle tableStyle;
+{
+    UITableViewStyle _tableStyle;
+    SLKKeyboardStatus _keyboardStatus;
+    
+    CGRect _inputViewRect;
+    CGFloat _minYOffset;
+    
+    UIGestureRecognizer *_dismissingGesture;
+}
 
-@property (nonatomic, strong) UIGestureRecognizer *dismissingGesture;
+@property (nonatomic, strong) UIView *containerHairline;
 
+@property (nonatomic, copy) NSString *rightButtonTitle;
 @property (nonatomic) BOOL wasDragging;
-@property (nonatomic) CGFloat minOffset;
-@property (nonatomic) CGRect inputViewRect;
-@property (nonatomic) SLKKeyboardStatus keyboardStatus;
+
 @end
 
 @implementation SLKChatTableViewController
@@ -58,7 +65,7 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 - (void)configure
 {
-    self.rightButtonTitle = @"Send";
+    _rightButtonTitle = NSLocalizedString(@"Send", nil);
     
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.textContainerView];
@@ -77,7 +84,8 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
 {
     [super viewWillAppear:animated];
     
-    _minOffset = self.tableView.contentOffset.y;
+    // We save the minimum offset of the tableView
+    _minYOffset = self.tableView.contentOffset.y;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -111,9 +119,7 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
         
         _dismissingGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
         _dismissingGesture.delegate = self;
-        [_tableView addGestureRecognizer:self.dismissingGesture];
-        
-        NSLog(@"self.tableView : %@", self.tableView);
+        [_tableView addGestureRecognizer:_dismissingGesture];
     }
     return _tableView;
 }
@@ -125,6 +131,11 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
         _textContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-44.0, self.view.bounds.size.width, 44.0)];
         _textContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _textContainerView.backgroundColor = [UIColor whiteColor];
+        
+        _containerHairline = [UIView new];
+        _containerHairline.translatesAutoresizingMaskIntoConstraints = NO;
+        _containerHairline.backgroundColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0];
+        [_textContainerView addSubview:self.containerHairline];
         
         [_textContainerView addSubview:self.leftButton];
         [_textContainerView addSubview:self.rightButton];
@@ -221,20 +232,20 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
     CGRect inputFrame = self.textContainerView.frame;
     inputFrame.origin.y  = CGRectGetMinY(frameEnd)-CGRectGetHeight(inputFrame);
     
-    self.keyboardStatus = show ? SLKKeyboardStatusWillShow : SLKKeyboardStatusWillHide;
+    _keyboardStatus = show ? SLKKeyboardStatusWillShow : SLKKeyboardStatusWillHide;
     
     CGFloat scrollingGap = CGRectGetHeight(frameEnd);
-    CGFloat scrollingOffset = self.tableView.contentOffset.y+(show ? scrollingGap : -scrollingGap);
+    CGFloat targetOffset = self.tableView.contentOffset.y+(show ? scrollingGap : -scrollingGap);
     
-    CGFloat minOffset = self.tableView.contentOffset.y;
-    CGFloat maxOffset = self.tableView.contentSize.height-(CGRectGetHeight(self.view.frame)-CGRectGetHeight(inputFrame));
+    CGFloat currentYOffset = self.tableView.contentOffset.y;
+    CGFloat maxYOffset = self.tableView.contentSize.height-(CGRectGetHeight(self.view.frame)-CGRectGetHeight(inputFrame));
     
-    BOOL scroll = (((!show && scrollingOffset != minOffset && scrollingOffset > (_minOffset-scrollingGap) && scrollingOffset < (maxOffset-scrollingGap+_minOffset)) || show) && !self.wasDragging);
+    BOOL scroll = (((!show && targetOffset != currentYOffset && targetOffset > (_minYOffset-scrollingGap) && targetOffset < (maxYOffset-scrollingGap+_minYOffset)) || show) && !self.wasDragging);
     
 //    NSLog(@"show ? %@", show ? @"YES" : @"NO");
-//    NSLog(@"scrollingOffset(%f) != %f ? %@", scrollingOffset, minOffset, scrollingOffset != minOffset ? @"YES" : @"NO");
-//    NSLog(@"scrollingOffset(%f) >= %f ? %@", scrollingOffset, (_minOffset-scrollingGap), scrollingOffset > (_minOffset-scrollingGap) ? @"YES" : @"NO");
-//    NSLog(@"scrollingOffset(%f) < %f ? %@", scrollingOffset, (maxOffset-scrollingGap+_minOffset), (scrollingOffset < (maxOffset-scrollingGap+_minOffset)) ? @"YES" : @"NO");
+//    NSLog(@"scrollingOffset(%f) != %f ? %@", scrollingOffset, minYOffset, scrollingOffset != minYOffset ? @"YES" : @"NO");
+//    NSLog(@"scrollingOffset(%f) >= %f ? %@", scrollingOffset, (_minYOffset-scrollingGap), scrollingOffset > (_minYOffset-scrollingGap) ? @"YES" : @"NO");
+//    NSLog(@"scrollingOffset(%f) < %f ? %@", scrollingOffset, (maxYOffset-scrollingGap+_minYOffset), (scrollingOffset < (maxYOffset-scrollingGap+_minYOffset)) ? @"YES" : @"NO");
 //    NSLog(@"wasDragging : %@", self.wasDragging ? @"YES" : @"NO");
 //    NSLog(@"scroll : %@", scroll ? @"YES" : @"NO");
     
@@ -246,7 +257,7 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
                          self.tableView.frame = CGRectMake(0.0, 0.0, CGRectGetWidth(self.view.frame), CGRectGetMinY(inputFrame));
                          
                          if (scroll) {
-                             self.tableView.contentOffset = CGPointMake(0, scrollingOffset);
+                             self.tableView.contentOffset = CGPointMake(0, targetOffset);
                          }
                      }
                      completion:^(BOOL finished) {
@@ -267,24 +278,24 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
     CGRect frame = self.textContainerView.frame;
     frame.origin.y  = CGRectGetMinY(frameEnd)-CGRectGetHeight(frame);
     
-    self.keyboardStatus = show ? SLKKeyboardStatusDidShow : SLKKeyboardStatusDidHide;
+    _keyboardStatus = show ? SLKKeyboardStatusDidShow : SLKKeyboardStatusDidHide;
 
     self.tableView.frame = CGRectMake(0.0, 0.0, CGRectGetWidth(self.view.frame), CGRectGetMinY(frame));
 }
 
 - (void)didChangeKeywordFrame:(NSNotification *)notification
 {
-    if (self.keyboardStatus == SLKKeyboardStatusWillShow || self.keyboardStatus == SLKKeyboardStatusWillHide) return;
+    if (_keyboardStatus == SLKKeyboardStatusWillShow || _keyboardStatus == SLKKeyboardStatusWillHide) return;
     
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect frame = endFrame;
     CGRect inputFrame = self.textContainerView.frame;
     
     if (CGRectEqualToRect(inputFrame, _inputViewRect)) {
-        self.keyboardStatus = SLKKeyboardStatusDidHide;
+        _keyboardStatus = SLKKeyboardStatusDidHide;
     }
     else {
-        self.keyboardStatus = SLKKeyboardStatusDragging;
+        _keyboardStatus = SLKKeyboardStatusDragging;
     }
     
     inputFrame.origin.y = CGRectGetMinY(frame)-CGRectGetHeight(inputFrame);
@@ -319,7 +330,7 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
-    if ([self.dismissingGesture isEqual:gestureRecognizer]) {
+    if ([_dismissingGesture isEqual:gestureRecognizer]) {
         return [self.textView isFirstResponder];
     }
     
@@ -412,13 +423,16 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
     CGSize rigthButtonSize = [rightTitle sizeWithAttributes:@{NSFontAttributeName: self.rightButton.titleLabel.font}];
     CGFloat rightButtonWidth = rigthButtonSize.width+kTextViewHorizontalPadding/2.0f;
 
-    NSDictionary *views = @{@"textView": self.textView, @"leftButton": self.leftButton, @"rightButton": self.rightButton};
+    NSDictionary *views = @{@"textView": self.textView, @"leftButton": self.leftButton, @"rightButton": self.rightButton, @"hairline": self.containerHairline};
     NSDictionary *metrics = @{@"hor" : @(kTextViewHorizontalPadding), @"ver" : @(kTextViewVerticalPadding), @"leftButtonMargin" : @(leftButtonMargin), @"rightButtonMargin" : @(rightButtonMargin), @"rightButtonWidth": @(rightButtonWidth)};
     
     [self.textContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==hor)-[leftButton]-(==hor)-[textView]-(==hor)-[rightButton(rightButtonWidth)]-(==hor)-|" options:0 metrics:metrics views:views]];
     [self.textContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=leftButtonMargin)-[leftButton]-(==leftButtonMargin)-|" options:0 metrics:metrics views:views]];
     [self.textContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=rightButtonMargin)-[rightButton]-(==rightButtonMargin)-|" options:0 metrics:metrics views:views]];
     [self.textContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(==ver)-[textView]-(==ver)-|" options:0 metrics:metrics views:views]];
+    
+    [self.textContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==0)-[hairline]-(==0)-|" options:0 metrics:metrics views:views]];
+    [self.textContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(==0)-[hairline(1.0)]-(>=0)-|" options:0 metrics:metrics views:views]];
 }
 
 
@@ -455,8 +469,6 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 
 @implementation SLKInputAccessoryView
-
-NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.chatkit.keyboard.frameDidChange";
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
