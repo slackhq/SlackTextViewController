@@ -17,4 +17,6 @@ extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
 @property (nonatomic, strong) UIButton *leftButton;
 @property (nonatomic, strong) UIButton *rightButton;
 
+@property (nonatomic, copy) UIImage *leftButtonImage;
+
 @end

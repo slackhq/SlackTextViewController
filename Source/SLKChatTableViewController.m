@@ -90,7 +90,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 }
 
 
-#pragma mark - Getter Methods
+#pragma mark - Getters
 
 - (UITableView *)tableView
 {
@@ -136,6 +136,10 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 {
     return _textContainerView.rightButton;
 }
+
+
+#pragma mark - Setters
+
 
 #pragma mark - Actions
 

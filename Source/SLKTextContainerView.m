@@ -46,8 +46,7 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 - (void)configure
 {
     _translucent = NO;
-    _rightButtonTitle = NSLocalizedString(@"Send", nil);
-
+    
     [self addSubview:self.leftButton];
     [self addSubview:self.rightButton];
     [self addSubview:self.textView];
@@ -84,6 +83,7 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.font = [UIFont systemFontOfSize:15.0f];
         _textView.textContainer.maximumNumberOfLines = 0;
         _textView.autocorrectionType = UITextAutocorrectionTypeNo;
+        _textView.keyboardType = UIKeyboardTypeTwitter;
         _textView.layer.cornerRadius = 5.0f;
         _textView.layer.borderWidth = 1.0f;
         _textView.layer.borderColor =  [UIColor colorWithRed:200.0f/255.0f green:200.0f/255.0f blue:205.0f/255.0f alpha:1.0f].CGColor;
@@ -111,9 +111,11 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _rightButton.translatesAutoresizingMaskIntoConstraints = NO;
         _rightButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
         
-        [self.rightButton setTitle:self.rightButtonTitle forState:UIControlStateNormal];
-        [self.rightButton sizeToFit];
-        [self.rightButton setTitle:@"" forState:UIControlStateNormal];
+        _rightButtonTitle = NSLocalizedString(@"Send", nil);
+        
+        [_rightButton setTitle:_rightButtonTitle forState:UIControlStateNormal];
+        [_rightButton sizeToFit];
+        [_rightButton setTitle:@"" forState:UIControlStateNormal];
     }
     return _rightButton;
 }
@@ -135,7 +137,7 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     NSString *rightTitle = [self.rightButton titleForState:UIControlStateNormal];
     
     if (![title isEqualToString:rightTitle]) {
-        [_rightButton setTitle:title forState:UIControlStateNormal];
+        [self.rightButton setTitle:title forState:UIControlStateNormal];
         [self updateConstraintsAnimated:YES];
     }
 }
@@ -148,10 +150,10 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     // Removes all constraints
     [self removeConstraints:self.constraints];
 
-    CGFloat height = CGRectGetHeight(self.frame);
-    
-    CGFloat leftButtonMargin = roundf((height - self.leftButton.frame.size.height) / 2.0f);
-    CGFloat rightButtonMargin = roundf((height - self.rightButton.frame.size.height) / 2.0f);
+    CGFloat minHeight = self.intrinsicContentSize.height;
+
+    CGFloat leftButtonMargin = roundf((minHeight - self.leftButton.frame.size.height) / 2.0f);
+    CGFloat rightButtonMargin = roundf((minHeight - self.rightButton.frame.size.height) / 2.0f);
     
     NSString *rightTitle = [self.rightButton titleForState:UIControlStateNormal];
     CGSize rigthButtonSize = [rightTitle sizeWithAttributes:@{NSFontAttributeName: self.rightButton.titleLabel.font}];
