@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Tiny Speck, Inc. All rights reserved.
 //
 
-#import "SLKChatTableViewController.h"
+#import "SCKChatTableViewController.h"
 
-@interface ChatRoomViewController : SLKChatTableViewController
+@interface ChatRoomViewController : SCKChatTableViewController
 
 @end

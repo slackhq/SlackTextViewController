@@ -27,7 +27,7 @@
 {
     [super viewDidLoad];
     
-    self.title = @"SLKChatKit";
+    self.title = @"SlackChatKit";
     
     self.textView.placeholder = @"Message";
     self.textView.placeholderColor = [UIColor lightGrayColor];
@@ -41,11 +41,19 @@
 - (IBAction)didTapLeftButton:(id)sender
 {
     NSLog(@"%s",__FUNCTION__);
+    
+    
 }
 
 - (IBAction)didTapRighttButton:(id)sender
 {
     NSLog(@"%s",__FUNCTION__);
+    
+    self.textView.text = @"";
+    
+    [self dismissKeyboard];
+    
+    self.textView.text = @"";
 }
 
 - (void)viewWillAppear:(BOOL)animated

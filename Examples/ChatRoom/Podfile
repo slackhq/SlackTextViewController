@@ -1,0 +1,7 @@
+platform :ios, "7.0"
+
+pod 'SlackChatKit', :path => '../../'
+
+target "ChatRoomTests" do
+end
+

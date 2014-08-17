@@ -19,10 +19,10 @@
 		4F3EDB71199ED00F004C15D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB50199ED00F004C15D6 /* UIKit.framework */; };
 		4F3EDB79199ED00F004C15D6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EDB77199ED00F004C15D6 /* InfoPlist.strings */; };
 		4F3EDB7B199ED00F004C15D6 /* ChatRoomTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB7A199ED00F004C15D6 /* ChatRoomTests.m */; };
-		4F3EDB8B199ED069004C15D6 /* SLKChatTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB86199ED069004C15D6 /* SLKChatTableViewController.m */; };
-		4F3EDB8D199ED069004C15D6 /* SLKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB8A199ED069004C15D6 /* SLKTextView.m */; };
+		4F3EDB8B199ED069004C15D6 /* SCKChatTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB86199ED069004C15D6 /* SCKChatTableViewController.m */; };
+		4F3EDB8D199ED069004C15D6 /* SCKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB8A199ED069004C15D6 /* SCKTextView.m */; };
 		4F3EDB90199ED091004C15D6 /* ChatRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB8F199ED091004C15D6 /* ChatRoomViewController.m */; };
-		4F3EDB93199FC41D004C15D6 /* SLKTextContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB92199FC41D004C15D6 /* SLKTextContainerView.m */; };
+		4F3EDB93199FC41D004C15D6 /* SCKTextContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB92199FC41D004C15D6 /* SCKTextContainerView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,14 +52,14 @@
 		4F3EDB76199ED00F004C15D6 /* ChatRoomTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ChatRoomTests-Info.plist"; sourceTree = "<group>"; };
 		4F3EDB78199ED00F004C15D6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4F3EDB7A199ED00F004C15D6 /* ChatRoomTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatRoomTests.m; sourceTree = "<group>"; };
-		4F3EDB85199ED069004C15D6 /* SLKChatTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKChatTableViewController.h; sourceTree = "<group>"; };
-		4F3EDB86199ED069004C15D6 /* SLKChatTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKChatTableViewController.m; sourceTree = "<group>"; };
-		4F3EDB89199ED069004C15D6 /* SLKTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextView.h; sourceTree = "<group>"; };
-		4F3EDB8A199ED069004C15D6 /* SLKTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextView.m; sourceTree = "<group>"; };
+		4F3EDB85199ED069004C15D6 /* SCKChatTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKChatTableViewController.h; sourceTree = "<group>"; };
+		4F3EDB86199ED069004C15D6 /* SCKChatTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKChatTableViewController.m; sourceTree = "<group>"; };
+		4F3EDB89199ED069004C15D6 /* SCKTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKTextView.h; sourceTree = "<group>"; };
+		4F3EDB8A199ED069004C15D6 /* SCKTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKTextView.m; sourceTree = "<group>"; };
 		4F3EDB8E199ED091004C15D6 /* ChatRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatRoomViewController.h; sourceTree = "<group>"; };
 		4F3EDB8F199ED091004C15D6 /* ChatRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatRoomViewController.m; sourceTree = "<group>"; };
-		4F3EDB91199FC41D004C15D6 /* SLKTextContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextContainerView.h; sourceTree = "<group>"; };
-		4F3EDB92199FC41D004C15D6 /* SLKTextContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextContainerView.m; sourceTree = "<group>"; };
+		4F3EDB91199FC41D004C15D6 /* SCKTextContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKTextContainerView.h; sourceTree = "<group>"; };
+		4F3EDB92199FC41D004C15D6 /* SCKTextContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKTextContainerView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				4F3EDB52199ED00F004C15D6 /* ChatRoom */,
-				4F3EDB84199ED069004C15D6 /* SLKChatKit */,
+				4F3EDB84199ED069004C15D6 /* SlackChatKit */,
 				4F3EDB74199ED00F004C15D6 /* ChatRoomTests */,
 				4F3EDB4B199ED00F004C15D6 /* Frameworks */,
 				4F3EDB4A199ED00F004C15D6 /* Products */,
@@ -159,17 +159,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		4F3EDB84199ED069004C15D6 /* SLKChatKit */ = {
+		4F3EDB84199ED069004C15D6 /* SlackChatKit */ = {
 			isa = PBXGroup;
 			children = (
-				4F3EDB85199ED069004C15D6 /* SLKChatTableViewController.h */,
-				4F3EDB86199ED069004C15D6 /* SLKChatTableViewController.m */,
-				4F3EDB91199FC41D004C15D6 /* SLKTextContainerView.h */,
-				4F3EDB92199FC41D004C15D6 /* SLKTextContainerView.m */,
-				4F3EDB89199ED069004C15D6 /* SLKTextView.h */,
-				4F3EDB8A199ED069004C15D6 /* SLKTextView.m */,
+				4F3EDB85199ED069004C15D6 /* SCKChatTableViewController.h */,
+				4F3EDB86199ED069004C15D6 /* SCKChatTableViewController.m */,
+				4F3EDB91199FC41D004C15D6 /* SCKTextContainerView.h */,
+				4F3EDB92199FC41D004C15D6 /* SCKTextContainerView.m */,
+				4F3EDB89199ED069004C15D6 /* SCKTextView.h */,
+				4F3EDB8A199ED069004C15D6 /* SCKTextView.m */,
 			);
-			name = SLKChatKit;
+			name = SlackChatKit;
 			path = ../../Source;
 			sourceTree = "<group>";
 		};
@@ -269,11 +269,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F3EDB93199FC41D004C15D6 /* SLKTextContainerView.m in Sources */,
+				4F3EDB93199FC41D004C15D6 /* SCKTextContainerView.m in Sources */,
 				4F3EDB5D199ED00F004C15D6 /* AppDelegate.m in Sources */,
-				4F3EDB8B199ED069004C15D6 /* SLKChatTableViewController.m in Sources */,
+				4F3EDB8B199ED069004C15D6 /* SCKChatTableViewController.m in Sources */,
 				4F3EDB90199ED091004C15D6 /* ChatRoomViewController.m in Sources */,
-				4F3EDB8D199ED069004C15D6 /* SLKTextView.m in Sources */,
+				4F3EDB8D199ED069004C15D6 /* SCKTextView.m in Sources */,
 				4F3EDB59199ED00F004C15D6 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
