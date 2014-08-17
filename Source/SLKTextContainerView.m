@@ -8,9 +8,6 @@
 
 #import "SLKTextContainerView.h"
 
-#define kTextViewVerticalPadding 5
-#define kTextViewHorizontalPadding 8
-
 NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.chatkit.keyboard.frameDidChange";
 
 @interface SLKInputAccessoryView : UIView
@@ -134,6 +131,13 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (void)didChangeTextView:(NSNotification *)notification
 {
+    SLKTextView *textView = (SLKTextView *)notification.object;
+    
+    // If it's not the expected textView, return.
+    if (![textView isEqual:self.textView]) {
+        return;
+    }
+    
     NSString *title = (self.textView.text.length > 0) ? self.rightButtonTitle : @"";
     NSString *rightTitle = [self.rightButton titleForState:UIControlStateNormal];
     

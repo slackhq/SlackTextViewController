@@ -16,6 +16,8 @@
     CGFloat _tableViewHeight;
     CGFloat _containerViewHeight;
     CGFloat _containerViewBottomMargin;
+    
+    CGFloat _textContentHeight;
 }
 
 @property (nonatomic) BOOL didDrag;
@@ -244,6 +246,43 @@
     [self updateViewConstraintsAnimated:!self.tableView.isDragging];
 }
 
+- (void)didChangeTextView:(NSNotification *)notification
+{
+    SLKTextView *textView = (SLKTextView *)notification.object;
+    
+    // If it's not the expected textView, return.
+    if (![textView isEqual:self.textView]) {
+        return;
+    }
+    
+    CGSize textContentSize = textView.contentSize;
+    
+    if (_textContentHeight == 0) {
+        _textContentHeight = textContentSize.height;
+    }
+    
+    if (textContentSize.height != _textContentHeight) {
+        
+        _textContentHeight = textContentSize.height;
+        
+        CGFloat delta = textContentSize.height-_textContentHeight;
+        NSLog(@"delta : %f", delta);
+        
+        _containerViewHeight = _textContentHeight+delta+(kTextViewVerticalPadding*2);
+        
+        CGRect inputFrame = self.textContainerView.frame;
+        inputFrame.size.height = _containerViewHeight;
+        inputFrame.origin.y  = _containerViewBottomMargin-CGRectGetHeight(inputFrame);
+        
+        _tableViewHeight = CGRectGetMinY(inputFrame);
+        
+        NSLog(@"_containerViewHeight : %f", _containerViewHeight);
+        NSLog(@"_tableViewHeight : %f", _tableViewHeight);
+
+        [self updateViewConstraintsAnimated:YES];
+    }
+}
+
 
 #pragma mark - UITableViewDataSource Methods
 
@@ -280,6 +319,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideKeyboard:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
+    
+    // textView notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
 }
 
 - (void)unregisterNotifications
@@ -290,6 +332,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
+    
+    // textView notifications
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
 }
 
 
@@ -303,7 +348,7 @@
     NSDictionary *views = @{@"tableView": self.tableView, @"textContainerView": self.textContainerView};
     NSDictionary *metrics = @{@"tableHeight": @(_tableViewHeight), @"containerHeight": @(_containerViewHeight), @"bottomMargin": @(_containerViewBottomMargin)};
 
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tableView(>=tableHeight)][textContainerView(>=44@750,<=containerHeight@250)]-(bottomMargin)-|" options:0 metrics:metrics views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tableView(>=tableHeight)]-(==0)-[textContainerView(>=containerHeight)]-(bottomMargin)-|" options:0 metrics:metrics views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[tableView]-0-|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[textContainerView]-0-|" options:0 metrics:nil views:views]];
     

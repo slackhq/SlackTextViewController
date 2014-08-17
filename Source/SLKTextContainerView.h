@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "SLKTextView.h"
 
+#define kTextViewVerticalPadding 5
+#define kTextViewHorizontalPadding 8
+
 extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 @interface SLKTextContainerView : UIToolbar
