@@ -262,11 +262,16 @@
         return;
     }
     
+    NSLog(@"%s",__FUNCTION__);
+    
     CGSize textContentSize = textView.contentSize;
     
     if (_textContentHeight == 0) {
         _textContentHeight = textContentSize.height;
     }
+    
+    NSLog(@"textContentSize : %@", NSStringFromCGSize(textContentSize));
+    NSLog(@"_textContentHeight : %f", _textContentHeight);
     
     if (textContentSize.height != _textContentHeight) {
         

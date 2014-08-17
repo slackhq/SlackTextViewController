@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02A53F8D703648E8873566E0 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1142AE8585EB462B8CC69D35 /* libPods.a */; };
 		4F3EDB4D199ED00F004C15D6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB4C199ED00F004C15D6 /* Foundation.framework */; };
 		4F3EDB4F199ED00F004C15D6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB4E199ED00F004C15D6 /* CoreGraphics.framework */; };
 		4F3EDB51199ED00F004C15D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB50199ED00F004C15D6 /* UIKit.framework */; };
@@ -19,10 +20,7 @@
 		4F3EDB71199ED00F004C15D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB50199ED00F004C15D6 /* UIKit.framework */; };
 		4F3EDB79199ED00F004C15D6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EDB77199ED00F004C15D6 /* InfoPlist.strings */; };
 		4F3EDB7B199ED00F004C15D6 /* ChatRoomTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB7A199ED00F004C15D6 /* ChatRoomTests.m */; };
-		4F3EDB8B199ED069004C15D6 /* SCKChatTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB86199ED069004C15D6 /* SCKChatTableViewController.m */; };
-		4F3EDB8D199ED069004C15D6 /* SCKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB8A199ED069004C15D6 /* SCKTextView.m */; };
 		4F3EDB90199ED091004C15D6 /* ChatRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB8F199ED091004C15D6 /* ChatRoomViewController.m */; };
-		4F3EDB93199FC41D004C15D6 /* SCKTextContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB92199FC41D004C15D6 /* SCKTextContainerView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1142AE8585EB462B8CC69D35 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F3EDB49199ED00F004C15D6 /* ChatRoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatRoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F3EDB4C199ED00F004C15D6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4F3EDB4E199ED00F004C15D6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -52,14 +51,9 @@
 		4F3EDB76199ED00F004C15D6 /* ChatRoomTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ChatRoomTests-Info.plist"; sourceTree = "<group>"; };
 		4F3EDB78199ED00F004C15D6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4F3EDB7A199ED00F004C15D6 /* ChatRoomTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatRoomTests.m; sourceTree = "<group>"; };
-		4F3EDB85199ED069004C15D6 /* SCKChatTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKChatTableViewController.h; sourceTree = "<group>"; };
-		4F3EDB86199ED069004C15D6 /* SCKChatTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKChatTableViewController.m; sourceTree = "<group>"; };
-		4F3EDB89199ED069004C15D6 /* SCKTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKTextView.h; sourceTree = "<group>"; };
-		4F3EDB8A199ED069004C15D6 /* SCKTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKTextView.m; sourceTree = "<group>"; };
 		4F3EDB8E199ED091004C15D6 /* ChatRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatRoomViewController.h; sourceTree = "<group>"; };
 		4F3EDB8F199ED091004C15D6 /* ChatRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatRoomViewController.m; sourceTree = "<group>"; };
-		4F3EDB91199FC41D004C15D6 /* SCKTextContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKTextContainerView.h; sourceTree = "<group>"; };
-		4F3EDB92199FC41D004C15D6 /* SCKTextContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKTextContainerView.m; sourceTree = "<group>"; };
+		8522B79647AD437F85843A28 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +64,7 @@
 				4F3EDB4F199ED00F004C15D6 /* CoreGraphics.framework in Frameworks */,
 				4F3EDB51199ED00F004C15D6 /* UIKit.framework in Frameworks */,
 				4F3EDB4D199ED00F004C15D6 /* Foundation.framework in Frameworks */,
+				02A53F8D703648E8873566E0 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,10 +85,10 @@
 			isa = PBXGroup;
 			children = (
 				4F3EDB52199ED00F004C15D6 /* ChatRoom */,
-				4F3EDB84199ED069004C15D6 /* SlackChatKit */,
 				4F3EDB74199ED00F004C15D6 /* ChatRoomTests */,
 				4F3EDB4B199ED00F004C15D6 /* Frameworks */,
 				4F3EDB4A199ED00F004C15D6 /* Products */,
+				8522B79647AD437F85843A28 /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -113,6 +108,7 @@
 				4F3EDB4E199ED00F004C15D6 /* CoreGraphics.framework */,
 				4F3EDB50199ED00F004C15D6 /* UIKit.framework */,
 				4F3EDB6E199ED00F004C15D6 /* XCTest.framework */,
+				1142AE8585EB462B8CC69D35 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -159,20 +155,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		4F3EDB84199ED069004C15D6 /* SlackChatKit */ = {
-			isa = PBXGroup;
-			children = (
-				4F3EDB85199ED069004C15D6 /* SCKChatTableViewController.h */,
-				4F3EDB86199ED069004C15D6 /* SCKChatTableViewController.m */,
-				4F3EDB91199FC41D004C15D6 /* SCKTextContainerView.h */,
-				4F3EDB92199FC41D004C15D6 /* SCKTextContainerView.m */,
-				4F3EDB89199ED069004C15D6 /* SCKTextView.h */,
-				4F3EDB8A199ED069004C15D6 /* SCKTextView.m */,
-			);
-			name = SlackChatKit;
-			path = ../../Source;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -180,9 +162,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4F3EDB7E199ED00F004C15D6 /* Build configuration list for PBXNativeTarget "ChatRoom" */;
 			buildPhases = (
+				CDD847F204B5437180FB97BB /* Check Pods Manifest.lock */,
 				4F3EDB45199ED00F004C15D6 /* Sources */,
 				4F3EDB46199ED00F004C15D6 /* Frameworks */,
 				4F3EDB47199ED00F004C15D6 /* Resources */,
+				598FDC5936E74A05A38CC639 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -264,16 +248,46 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		598FDC5936E74A05A38CC639 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CDD847F204B5437180FB97BB /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4F3EDB45199ED00F004C15D6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F3EDB93199FC41D004C15D6 /* SCKTextContainerView.m in Sources */,
 				4F3EDB5D199ED00F004C15D6 /* AppDelegate.m in Sources */,
-				4F3EDB8B199ED069004C15D6 /* SCKChatTableViewController.m in Sources */,
 				4F3EDB90199ED091004C15D6 /* ChatRoomViewController.m in Sources */,
-				4F3EDB8D199ED069004C15D6 /* SCKTextView.m in Sources */,
 				4F3EDB59199ED00F004C15D6 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,6 +404,7 @@
 		};
 		4F3EDB7F199ED00F004C15D6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8522B79647AD437F85843A28 /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -403,6 +418,7 @@
 		};
 		4F3EDB80199ED00F004C15D6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8522B79647AD437F85843A28 /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;

@@ -1,7 +1,5 @@
 platform :ios, "7.0"
 
-pod 'SlackChatKit', :path => '../../'
+pod 'SlackChatKit', :path => '../../SlackChatKit.podspec'
 
-target "ChatRoomTests" do
-end
-
+pod 'LoremIpsum', '~> 1.0'

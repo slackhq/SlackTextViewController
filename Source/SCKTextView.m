@@ -89,9 +89,15 @@
 
 - (void)setText:(NSString *)text
 {
+    NSLog(@"%s",__FUNCTION__);
+    
+    if (!self.isFirstResponder) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidBeginEditingNotification object:self];
+    }
+    
     [super setText:text];
     
-    [self textViewDidChange:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:self];
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText

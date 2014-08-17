@@ -8,6 +8,8 @@
 
 #import "ChatRoomViewController.h"
 
+#import <LoremIpsum/LoremIpsum.h>
+
 @interface ChatRoomViewController ()
 @end
 
@@ -29,6 +31,8 @@
     
     self.title = @"SlackChatKit";
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Fill" style:UIBarButtonItemStyleDone target:self action:@selector(insertLorem:)];
+    
     self.textView.placeholder = @"Message";
     self.textView.placeholderColor = [UIColor lightGrayColor];
     self.textView.layer.borderColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0].CGColor;
@@ -38,22 +42,24 @@
     [self.rightButton addTarget:self action:@selector(didTapRighttButton:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (IBAction)didTapLeftButton:(id)sender
+- (void)didTapLeftButton:(id)sender
 {
     NSLog(@"%s",__FUNCTION__);
     
     
 }
 
-- (IBAction)didTapRighttButton:(id)sender
+- (void)didTapRighttButton:(id)sender
 {
     NSLog(@"%s",__FUNCTION__);
     
     self.textView.text = @"";
-    
     [self dismissKeyboard];
-    
-    self.textView.text = @"";
+}
+
+- (void)insertLorem:(id)sender
+{
+    self.textView.text = [LoremIpsum sentencesWithNumber:3];
 }
 
 - (void)viewWillAppear:(BOOL)animated
