@@ -126,6 +126,7 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 - (void)setBackgroundColor:(UIColor *)color
 {
     self.barTintColor = color;
+    self.textView.inputAccessoryView.backgroundColor = color;
 }
 
 
@@ -212,6 +213,13 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     {
         NSDictionary *userInfo = @{UIKeyboardFrameEndUserInfoKey:[NSValue valueWithCGRect:[object frame]]};
         [[NSNotificationCenter defaultCenter] postNotificationName:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil userInfo:userInfo];
+    }
+}
+
+- (void)dealloc
+{
+    if (self.superview) {
+        [self.superview removeObserver:self forKeyPath:NSStringFromSelector(@selector(frame))];
     }
 }
 

@@ -8,28 +8,17 @@
 
 #import "SLKChatTableViewController.h"
 
-typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
-    SLKKeyboardStatusDidHide,
-    SLKKeyboardStatusWillHide,
-    SLKKeyboardStatusDidShow,
-    SLKKeyboardStatusWillShow,
-    SLKKeyboardStatusDragging,
-};
-
 @interface SLKChatTableViewController () <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
 {
-    SLKKeyboardStatus _keyboardStatus;
-    
-    CGRect _inputViewRect;
     CGFloat _minYOffset;
-    
     UIGestureRecognizer *_dismissingGesture;
     
     CGFloat _tableViewHeight;
-    CGFloat _bottomMargin;
+    CGFloat _containerViewHeight;
+    CGFloat _containerViewBottomMargin;
 }
 
-@property (nonatomic) BOOL wasDragging;
+@property (nonatomic) BOOL didDrag;
 
 @end
 
@@ -110,8 +99,6 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
     {
         _textContainerView = [SLKTextContainerView new];
         _textContainerView.translatesAutoresizingMaskIntoConstraints = NO;
-        
-//        _inputViewRect = _textContainerView.frame;
     }
     return _textContainerView;
 }
@@ -154,8 +141,8 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 
 - (void)dismissKeyboard:(id)sender
 {
-    if ([self.textContainerView.textView isFirstResponder]) {
-        [self.textContainerView.textView resignFirstResponder];
+    if ([self.textView isFirstResponder]) {
+        [self.textView resignFirstResponder];
     }
 }
 
@@ -165,41 +152,37 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 - (void)willShowOrHideKeyboard:(NSNotification *)notification
 {
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    double animationDuration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    NSInteger animationCurve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    double duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     
-    // Inverts end rect for landscape orientation
-    if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
-        endFrame = CGRectMake(0.0, endFrame.origin.x, endFrame.size.height, endFrame.size.width);
-    }
+    endFrame = adjustEndFrame(endFrame, self.interfaceOrientation);
     
     if (!isKeyboardFrameValid(endFrame)) return;
 
     // Checks if it's showing or hidding the keyboard
     BOOL show = [notification.name isEqualToString:UIKeyboardWillShowNotification];
-
-    CGRect contentViewFrame = self.textContainerView.frame;
-    contentViewFrame.origin.y  = CGRectGetMinY(endFrame)-CGRectGetHeight(contentViewFrame);
-
-    NSLayoutConstraint *tableViewConstaint = self.view.constraints[1];
-    tableViewConstaint.constant = show ? CGRectGetMinY(contentViewFrame) : 0.0;
     
-    NSLayoutConstraint *contentViewConstaint = self.view.constraints[4];
-    contentViewConstaint.constant = show ? endFrame.size.height : 0.0;
+    CGRect inputFrame = self.textContainerView.frame;
+    inputFrame.origin.y  = CGRectGetMinY(endFrame)-CGRectGetHeight(inputFrame);
+    
+    _tableViewHeight = show ? CGRectGetMinY(inputFrame) : 0.0;
+    _containerViewBottomMargin = show ? endFrame.size.height : 0.0;
     
     CGFloat scrollingGap = CGRectGetHeight(endFrame);
     CGFloat targetOffset = self.tableView.contentOffset.y+(show ? scrollingGap : -scrollingGap);
     
     CGFloat currentYOffset = self.tableView.contentOffset.y;
-    CGFloat maxYOffset = self.tableView.contentSize.height-(CGRectGetHeight(self.view.frame)-CGRectGetHeight(contentViewFrame));
+    CGFloat maxYOffset = self.tableView.contentSize.height-(CGRectGetHeight(self.view.frame)-CGRectGetHeight(inputFrame));
     
-    BOOL scroll = (((!show && targetOffset != currentYOffset && targetOffset > (_minYOffset-scrollingGap) && targetOffset < (maxYOffset-scrollingGap+_minYOffset)) || show) && !self.wasDragging);
+    BOOL scroll = (((!show && targetOffset != currentYOffset && targetOffset > (_minYOffset-scrollingGap) && targetOffset < (maxYOffset-scrollingGap+_minYOffset)) || show) && !self.didDrag);
+    
+    [self updateViewConstraints];
 
-    [UIView animateWithDuration:animationDuration*3
+    [UIView animateWithDuration:duration*3
                           delay:0.0
          usingSpringWithDamping:0.7
           initialSpringVelocity:0.7
-                        options:(animationCurve << 16)|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionCurveEaseInOut
+                        options:(curve << 16)|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          [self.view layoutIfNeeded];
                          
@@ -208,7 +191,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
                          }
                      }
                      completion:^(BOOL finished) {
-                         
+
                      }];
 }
 
@@ -216,23 +199,20 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 {
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
-    // Inverts end rect for landscape orientation
-    if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
-        endFrame = CGRectMake(0.0, endFrame.origin.x, endFrame.size.height, endFrame.size.width);
-    }
+    endFrame = adjustEndFrame(endFrame, self.interfaceOrientation);
     
     if (!isKeyboardFrameValid(endFrame)) return;
     
     // Checks if it's showing or hidding the keyboard
-    BOOL show = [notification.name isEqualToString:UIKeyboardWillShowNotification];
+    BOOL show = [notification.name isEqualToString:UIKeyboardDidShowNotification];
     
-    CGRect contentViewFrame = self.textContainerView.frame;
-    contentViewFrame.origin.y  = CGRectGetMinY(endFrame)-CGRectGetHeight(contentViewFrame);
-    
-    _keyboardStatus = show ? SLKKeyboardStatusDidShow : SLKKeyboardStatusDidHide;
+    CGRect inputFrame = self.textContainerView.frame;
+    inputFrame.origin.y  = CGRectGetMinY(endFrame)-CGRectGetHeight(inputFrame);
     
     NSLayoutConstraint *tableViewConstaint = self.view.constraints[1];
-    tableViewConstaint.constant = show ? CGRectGetMinY(contentViewFrame) : 0.0;
+    tableViewConstaint.constant = show ? CGRectGetMinY(inputFrame) : 0.0;
+    
+    [self updateViewConstraints];
 
     [UIView animateWithDuration:0.2
                           delay:0.0
@@ -240,37 +220,30 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
                      animations:^{
                          [self.view layoutIfNeeded];
                      }
-                     completion:NULL];
+                     completion:^(BOOL finished) {
+                         if (self.didDrag) {
+                             self.didDrag = NO;
+                         }
+                     }];
 }
 
 - (void)didChangeKeyboardFrame:(NSNotification *)notification
 {
-//    if (_keyboardStatus == SLKKeyboardStatusWillShow || _keyboardStatus == SLKKeyboardStatusWillHide) return;
-//    
-//    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-//    CGRect frame = endFrame;
-//    CGRect inputFrame = self.textContainerView.frame;
-//    
-//    if (CGRectEqualToRect(inputFrame, _inputViewRect)) {
-//        _keyboardStatus = SLKKeyboardStatusDidHide;
-//    }
-//    else {
-//        _keyboardStatus = SLKKeyboardStatusDragging;
-//    }
-//    
-//    inputFrame.origin.y = CGRectGetMinY(frame)-CGRectGetHeight(inputFrame);
-//    
-//    self.textContainerView.frame = inputFrame;
-//    self.tableView.frame = CGRectMake(0.0, 0.0, CGRectGetWidth(self.view.frame), CGRectGetMinY(inputFrame));
+    if (self.tableView.isDragging) {
+        self.didDrag = YES;
+    }
+
+    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect inputFrame = self.textContainerView.frame;
+    
+    inputFrame.origin.y  = CGRectGetMinY(endFrame)-CGRectGetHeight(inputFrame);
+
+    _tableViewHeight = CGRectGetMinY(inputFrame);
+    _containerViewBottomMargin = CGRectGetHeight(self.view.frame)-endFrame.origin.y;
+    
+    [self updateViewConstraintsAnimated:!self.tableView.isDragging];
 }
 
-BOOL isKeyboardFrameValid(CGRect frame) {
-    if ((frame.origin.y > CGRectGetHeight([UIScreen mainScreen].bounds)) ||
-        (frame.size.height < 1) || (frame.size.width < 1) || (frame.origin.y < 0)) {
-        return NO;
-    }
-    return YES;
-}
 
 #pragma mark - UITableViewDataSource Methods
 
@@ -284,6 +257,7 @@ BOOL isKeyboardFrameValid(CGRect frame) {
     return nil;
 }
 
+
 #pragma mark - UIGestureRecognizerDelegate Methods
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
@@ -293,29 +267,6 @@ BOOL isKeyboardFrameValid(CGRect frame) {
     }
     
     return YES;
-}
-
-#pragma mark - UIScrollViewDelegate Methods
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    if (!self.wasDragging) {
-        self.wasDragging = YES;
-    }
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView;
-{
-    if (self.wasDragging) {
-        self.wasDragging = NO;
-    }
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    if (self.wasDragging) {
-        self.wasDragging = NO;
-    }
 }
 
 
@@ -350,8 +301,9 @@ BOOL isKeyboardFrameValid(CGRect frame) {
     [self.view removeConstraints:self.view.constraints];
     
     NSDictionary *views = @{@"tableView": self.tableView, @"textContainerView": self.textContainerView};
-    
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tableView(>=0)]-0-[textContainerView(>=44)]-(>=0)-|" options:0 metrics:nil views:views]];
+    NSDictionary *metrics = @{@"tableHeight": @(_tableViewHeight), @"containerHeight": @(_containerViewHeight), @"bottomMargin": @(_containerViewBottomMargin)};
+
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tableView(>=tableHeight)][textContainerView(>=44@750,<=containerHeight@250)]-(bottomMargin)-|" options:0 metrics:metrics views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[tableView]-0-|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[textContainerView]-0-|" options:0 metrics:nil views:views]];
     
@@ -366,6 +318,35 @@ BOOL isKeyboardFrameValid(CGRect frame) {
         [self.view layoutIfNeeded];
         return;
     }
+    
+    [UIView animateWithDuration:0.2
+                          delay:0.0
+                        options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         [self.view layoutIfNeeded];
+                     }
+                     completion:NULL];
+}
+
+
+#pragma mark - Convenience Methods
+
+CGRect adjustEndFrame(CGRect endFrame, UIInterfaceOrientation orientation) {
+    
+    // Inverts the end rect for landscape orientation
+    if (UIInterfaceOrientationIsLandscape(orientation)) {
+        endFrame = CGRectMake(0.0, endFrame.origin.x, endFrame.size.height, endFrame.size.width);
+    }
+    
+    return endFrame;
+}
+
+BOOL isKeyboardFrameValid(CGRect frame) {
+    if ((frame.origin.y > CGRectGetHeight([UIScreen mainScreen].bounds)) ||
+        (frame.size.height < 1) || (frame.size.width < 1) || (frame.origin.y < 0)) {
+        return NO;
+    }
+    return YES;
 }
 
 
@@ -376,10 +357,16 @@ BOOL isKeyboardFrameValid(CGRect frame) {
     return UIInterfaceOrientationMaskAll;
 }
 
+- (BOOL)shouldAutomaticallyForwardRotationMethods
+{
+    return YES;
+}
+
 - (BOOL)shouldAutorotate
 {
     return YES;
 }
+
 
 #pragma mark - View lifeterm
 
