@@ -31,7 +31,11 @@
     
     self.title = @"SlackChatKit";
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Fill" style:UIBarButtonItemStyleDone target:self action:@selector(insertLorem:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Type" style:UIBarButtonItemStylePlain target:self action:@selector(simulateTyping:)];
+
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Fill" style:UIBarButtonItemStyleDone target:self action:@selector(fillWithText:)];
+    
+    NSLog(@"self.textView : %@", self.textView);
     
     self.textView.placeholder = @"Message";
     self.textView.placeholderColor = [UIColor lightGrayColor];
@@ -57,9 +61,16 @@
     [self dismissKeyboard];
 }
 
-- (void)insertLorem:(id)sender
+- (void)simulateTyping:(id)sender
 {
-    self.textView.text = [LoremIpsum sentencesWithNumber:3];
+    [self.typeIndicatorView insertUsername:@"Ignacio"];
+}
+
+- (void)fillWithText:(id)sender
+{
+//    self.textView.text = [LoremIpsum sentencesWithNumber:3];
+    
+    [self.textView insertTextAtCursor:[LoremIpsum word]];
 }
 
 - (void)viewWillAppear:(BOOL)animated

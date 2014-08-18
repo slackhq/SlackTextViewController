@@ -16,10 +16,11 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 @interface SCKTextContainerView : UIToolbar
 
+/** The centered text view. */
 @property (nonatomic, strong) SCKTextView *textView;
+/** The left action button action. */
 @property (nonatomic, strong) UIButton *leftButton;
+/** The right action button action. */
 @property (nonatomic, strong) UIButton *rightButton;
-
-@property (nonatomic, copy) UIImage *leftButtonImage;
 
 @end

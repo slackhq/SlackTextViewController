@@ -8,7 +8,7 @@
 
 #import "SCKTextView.h"
 
-NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatkit.text_view.content_size.did_change";
+NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatkit.SCKTextView.contentSizeDidChange";
 
 @interface SCKTextView ()
 {

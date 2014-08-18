@@ -8,7 +8,7 @@
 
 #import "SCKTextContainerView.h"
 
-NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.chatkit.input_accessory_view.frame.did_change";
+NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.chatkit.SCKTextContainerView.frameDidChange";
 
 @interface SCKInputAccessoryView : UIView
 @end

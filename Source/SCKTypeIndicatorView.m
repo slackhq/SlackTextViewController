@@ -8,7 +8,8 @@
 
 #import "SCKTypeIndicatorView.h"
 
-#define kIndentifierKey @"identifier"
+NSString * const SCKTypeIndicatorViewWillShowOrHideNotification = @"com.slack.chatkit.SCKTypeIndicatorView.willShowOrHide";
+NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 
 @interface SCKTypeIndicatorView ()
 
@@ -21,56 +22,51 @@
 
 @implementation SCKTypeIndicatorView
 
+#pragma mark - Initializer
+
 - (id)init
 {
     self = [super init];
     if (self) {
+        _interval = 6.0;
+        _height = 30.0;
+        _canResignByTouch = NO;
         
         self.backgroundColor = [UIColor whiteColor];
-        
-        _interval = 6.0;
-        _height = 24.0;
-        _canResignByTouch = NO;
+        self.userInteractionEnabled = NO;
+        self.clipsToBounds = YES;
         
         _usernames = [NSMutableArray new];
         _timers = [NSMutableArray new];
         
         [self addSubview:self.indicatorLabel];
+        
+        [self updateConstraints];
     }
     return self;
 }
 
-- (void)sizeToFit
+- (void)dealloc
 {
-    [super sizeToFit];
+    [self clean];
     
-    if (self.didChangeSize)
-    {
-        CGSize size = [self sizeThatFits:self.frame.size];
-        self.didChangeSize(size);
-        
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.superview.frame.size.width, size.height);
-        self.indicatorLabel.frame = CGRectMake(56.0, 2.0, self.frame.size.width-(56.0+10.0), 16.0);
-    }
-}
-
-- (CGSize)sizeThatFits:(CGSize)size
-{
-    size.height = self.isVisible ? _height : 0.0;
-    return size;
+    _indicatorLabel = nil;
+    _usernames = nil;
+    _timers = nil;
 }
 
 
-#pragma mark - Getter methods
+#pragma mark - Getters
 
 - (UILabel *)indicatorLabel
 {
     if (!_indicatorLabel)
     {
         _indicatorLabel = [UILabel new];
-        _indicatorLabel.backgroundColor = [UIColor clearColor];
+        _indicatorLabel.translatesAutoresizingMaskIntoConstraints = NO;
         _indicatorLabel.font = [UIFont systemFontOfSize:12.0];
         _indicatorLabel.textColor =[UIColor grayColor];
+        _indicatorLabel.backgroundColor = [UIColor clearColor];
         _indicatorLabel.userInteractionEnabled = NO;
     }
     return _indicatorLabel;
@@ -109,7 +105,7 @@
 - (NSTimer *)timerWithIdentifier:(NSString *)identifier
 {
     for (NSTimer *timer in _timers) {
-        if ([identifier isEqualToString:[timer.userInfo objectForKey:kIndentifierKey]]) {
+        if ([identifier isEqualToString:[timer.userInfo objectForKey:SCKTypeIndicatorViewIdentifier]]) {
             return timer;
         }
     }
@@ -117,8 +113,13 @@
     return nil;
 }
 
+- (CGSize)intrinsicContentSize
+{
+    return CGSizeMake(CGRectGetWidth(self.superview.frame), self.isVisible ? self.height : 0.0);
+}
 
-#pragma mark - Setter methods
+
+#pragma mark - Setters
 
 - (void)setVisible:(BOOL)visible
 {
@@ -137,11 +138,11 @@
         [self clean];
     }
     
-    [self sizeToFit];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SCKTypeIndicatorViewWillShowOrHideNotification object:self];
 }
 
 
-#pragma mark - SCKTypeIndicatorView methods
+#pragma mark - Public Methods
 
 - (void)insertUsername:(NSString *)username;
 {
@@ -158,7 +159,7 @@
             [self invalidateTimer:timer];
         }
         
-        NSTimer *timer = [NSTimer timerWithTimeInterval:_interval target:self selector:@selector(shouldRemoveUsername:) userInfo:@{kIndentifierKey: username} repeats:NO];
+        NSTimer *timer = [NSTimer timerWithTimeInterval:_interval target:self selector:@selector(shouldRemoveUsername:) userInfo:@{SCKTypeIndicatorViewIdentifier: username} repeats:NO];
         [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
         [_timers addObject:timer];
     }
@@ -192,23 +193,24 @@
     }
 }
 
-- (void)shouldRemoveUsername:(NSTimer *)timer
-{
-    NSString *identifier = [timer.userInfo objectForKey:kIndentifierKey];
-    
-    [self removeUsername:identifier];
-    [self invalidateTimer:timer];
-}
-
-
-#pragma mark - Dimissing methods
-
 - (void)dismissIndicator
 {
     if (self.isVisible) {
         [self setVisible:NO animated:YES];
     }
 }
+
+
+#pragma mark - Dimissing methods
+
+- (void)shouldRemoveUsername:(NSTimer *)timer
+{
+    NSString *identifier = [timer.userInfo objectForKey:SCKTypeIndicatorViewIdentifier];
+    
+    [self removeUsername:identifier];
+    [self invalidateTimer:timer];
+}
+
 
 #pragma mark - Cleaning methods
 
@@ -239,19 +241,22 @@
     [_usernames removeAllObjects];
 }
 
-- (void)dealloc
+
+#pragma mark - Auto-Layout
+
+- (void)updateConstraints
 {
-    [self clean];
+    [super updateConstraints];
     
-    _didChangeSize = nil;
-    _usernames = nil;
-    _timers = nil;
+    NSDictionary *views = @{@"label": self.indicatorLabel};
+    NSDictionary *metrics = @{@"height": @(self.height)};
     
-    _indicatorLabel = nil;
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[label(==height)]|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==40)-[label]-(==20)-|" options:0 metrics:metrics views:views]];
 }
 
 
-#pragma mark - Hit Testing methods
+#pragma mark - Hit Testing
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
