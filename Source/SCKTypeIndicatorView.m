@@ -28,16 +28,13 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 {
     self = [super init];
     if (self) {
-        _interval = 6.0;
-        _height = 30.0;
-        _canResignByTouch = NO;
+        self.height = 30.0;
+        self.interval = 6.0;
+        self.canResignByTouch = YES;
+        self.usernames = [NSMutableArray new];
+        self.timers = [NSMutableArray new];
         
-        self.backgroundColor = [UIColor whiteColor];
-        self.userInteractionEnabled = NO;
-        self.clipsToBounds = YES;
-        
-        _usernames = [NSMutableArray new];
-        _timers = [NSMutableArray new];
+        self.backgroundColor = [UIColor redColor];
         
         [self addSubview:self.indicatorLabel];
         
@@ -66,7 +63,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
         _indicatorLabel.translatesAutoresizingMaskIntoConstraints = NO;
         _indicatorLabel.font = [UIFont systemFontOfSize:12.0];
         _indicatorLabel.textColor =[UIColor grayColor];
-        _indicatorLabel.backgroundColor = [UIColor clearColor];
+        _indicatorLabel.backgroundColor = [UIColor blueColor];
         _indicatorLabel.userInteractionEnabled = NO;
     }
     return _indicatorLabel;
@@ -115,7 +112,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 
 - (CGSize)intrinsicContentSize
 {
-    return CGSizeMake(CGRectGetWidth(self.superview.frame), self.isVisible ? self.height : 0.0);
+    return CGSizeMake(CGRectGetWidth(self.superview.frame), self.height);
 }
 
 
@@ -248,10 +245,13 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 {
     [super updateConstraints];
     
-    NSDictionary *views = @{@"label": self.indicatorLabel};
-    NSDictionary *metrics = @{@"height": @(self.height)};
+    NSNumber *lineHeight = @(roundf(self.indicatorLabel.font.lineHeight));
+    NSNumber *padding = @((self.height-[lineHeight floatValue])/2.0);
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[label(==height)]|" options:0 metrics:metrics views:views]];
+    NSDictionary *views = @{@"label": self.indicatorLabel};
+    NSDictionary *metrics = @{@"lineHeight": lineHeight, @"padding": padding};
+    
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=padding)-[label(==lineHeight)]-(<=padding)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==40)-[label]-(==20)-|" options:0 metrics:metrics views:views]];
 }
 

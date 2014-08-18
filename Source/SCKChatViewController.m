@@ -180,6 +180,8 @@
 
 - (void)willShowOrHideKeyboard:(NSNotification *)notification
 {
+//    NSLog(@"%s",__FUNCTION__);
+    
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     double duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
@@ -194,7 +196,7 @@
     CGRect inputFrame = self.textContainerView.frame;
     inputFrame.origin.y  = CGRectGetMinY(endFrame)-CGRectGetHeight(inputFrame);
     
-    _tableViewHeight = show ? CGRectGetMinY(inputFrame) : 0.0;
+    _tableViewHeight = CGRectGetMinY(inputFrame) - _typeIndicatorViewHeight;
     _keyboardHeight = show ? endFrame.size.height : 0.0;
     
     CGFloat delta = CGRectGetHeight(endFrame);
@@ -226,6 +228,8 @@
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
 {
+//    NSLog(@"%s",__FUNCTION__);
+    
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
     endFrame = adjustEndFrame(endFrame, self.interfaceOrientation);
@@ -267,7 +271,7 @@
     
     inputFrame.origin.y  = CGRectGetMinY(endFrame)-CGRectGetHeight(inputFrame);
 
-    _tableViewHeight = CGRectGetMinY(inputFrame);
+    _tableViewHeight = CGRectGetMinY(inputFrame) - _typeIndicatorViewHeight;
     _keyboardHeight = CGRectGetHeight(self.view.frame)-endFrame.origin.y;
     
     NSTimeInterval duration = !self.tableView.isDragging ? 0.2 : 0.0;
@@ -315,7 +319,7 @@
         if (textView.numberOfLines <= textView.maxNumberOfLines)
         {
             _containerViewHeight = _textContentHeight+delta+(kTextViewVerticalPadding*2.0);
-            _tableViewHeight = _keyboardHeight-_containerViewHeight;
+            _tableViewHeight = (_keyboardHeight-_containerViewHeight)-_typeIndicatorViewHeight;
             
             CGFloat offsetY = self.tableView.contentOffset.y+delta/2.0;
             [self.tableView setContentOffset:CGPointMake(0, offsetY) animated:YES];
@@ -342,16 +346,16 @@
 
 - (void)willShowOrHideTypeIndicatorView:(NSNotification *)notification
 {
-    NSLog(@"%s : %@",__FUNCTION__, notification);
-    
-    SCKTypeIndicatorView *typeIndicatorView = (SCKTypeIndicatorView *)notification.object;
+    SCKTypeIndicatorView *indicatorView = (SCKTypeIndicatorView *)notification.object;
     
     // If it's not the expected textView, return.
-    if (![typeIndicatorView isEqual:self.typeIndicatorView]) {
+    if (![indicatorView isEqual:self.typeIndicatorView]) {
         return;
     }
     
-    _typeIndicatorViewHeight = typeIndicatorView.intrinsicContentSize.height;
+    _typeIndicatorViewHeight = indicatorView.isVisible ? indicatorView.height : 0.0;
+    _tableViewHeight -= _typeIndicatorViewHeight;
+    
     [self updateViewConstraintsAnimated:0.2 bouncing:YES];
 }
 
@@ -409,7 +413,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidBeginEditingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidEndEditingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:SCKTextViewContentSizeDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:SCKTextViewContentSizeDidChangeNotification object:nil];
     
     // TypeIndicator notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SCKTypeIndicatorViewWillShowOrHideNotification object:nil];
@@ -454,7 +458,7 @@
     
     NSLog(@"metrics : %@", metrics);
 
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tableView(>=tableHeight)][typeIndicatorView(<=indicatorViewHeight)][textContainerView(>=containerHeight)]-(keyboardHeight)-|" options:0 metrics:metrics views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView(>=tableHeight)][typeIndicatorView(<=indicatorViewHeight)][textContainerView(>=containerHeight)]-(keyboardHeight)-|" options:0 metrics:metrics views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[tableView]-0-|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[typeIndicatorView]-0-|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[textContainerView]-0-|" options:0 metrics:nil views:views]];
