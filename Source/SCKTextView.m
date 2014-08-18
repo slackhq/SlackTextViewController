@@ -8,6 +8,8 @@
 
 #import "SCKTextView.h"
 
+NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatkit.text_view.content_size.did_change";
+
 @interface SCKTextView ()
 @property (nonatomic, strong) UILabel *placeholderLabel;
 @end
@@ -41,7 +43,10 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+    
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
 }
+
 
 #pragma mark - Setup
 
@@ -51,7 +56,10 @@
     self.font = [UIFont systemFontOfSize:14.0];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewDidChange:) name:UITextViewTextDidChangeNotification object:nil];
+    
+    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize)) options:0 context:NULL];
 }
+
 
 #pragma mark - Getters
 
@@ -75,6 +83,12 @@
     return _placeholderLabel;
 }
 
+- (NSUInteger)numberOfLines
+{
+    return self.contentSize.height/self.font.lineHeight;
+}
+
+
 #pragma mark - Setters
 
 - (void)setPlaceholder:(NSString *)placeholder
@@ -91,9 +105,9 @@
 {
     NSLog(@"%s",__FUNCTION__);
     
-    if (!self.isFirstResponder) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidBeginEditingNotification object:self];
-    }
+//    if (!self.isFirstResponder) {
+//        [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidBeginEditingNotification object:self];
+//    }
     
     [super setText:text];
     
@@ -121,6 +135,7 @@
     self.placeholderLabel.textAlignment = textAlignment;
 }
 
+
 #pragma mark - Notifications
 
 - (void)textViewDidChange:(NSNotification *)notification
@@ -131,6 +146,7 @@
 
     self.placeholderLabel.hidden = (self.text.length > 0) ? YES : NO;
 }
+
 
 #pragma mark - Rendering
 
@@ -147,6 +163,13 @@
         self.placeholderLabel.textColor = self.placeholderColor;
         self.placeholderLabel.hidden = NO;
         [self sendSubviewToBack:self.placeholderLabel];
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([object isEqual:self] && [keyPath isEqualToString:NSStringFromSelector(@selector(contentSize))]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:SCKTextViewContentSizeDidChangeNotification object:self userInfo:nil];
     }
 }
 

@@ -8,7 +8,7 @@
 
 #import "SCKTextContainerView.h"
 
-NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.chatkit.keyboard.frameDidChange";
+NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.chatkit.input_accessory_view.frame.did_change";
 
 @interface SCKInputAccessoryView : UIView
 @end
@@ -81,7 +81,8 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.textContainer.maximumNumberOfLines = 0;
         _textView.autocorrectionType = UITextAutocorrectionTypeNo;
         _textView.keyboardType = UIKeyboardTypeTwitter;
-        _textView.layer.cornerRadius = 5.0f;
+        _textView.scrollIndicatorInsets = UIEdgeInsetsMake(0, -1, 0, 1);
+        _textView.layer.cornerRadius = 4.0f;
         _textView.layer.borderWidth = 1.0f;
         _textView.layer.borderColor =  [UIColor colorWithRed:200.0f/255.0f green:200.0f/255.0f blue:205.0f/255.0f alpha:1.0f].CGColor;
         _textView.inputAccessoryView = [SCKInputAccessoryView new];

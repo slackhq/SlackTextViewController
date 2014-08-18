@@ -18,6 +18,8 @@
     CGFloat _containerViewBottomMargin;
     
     CGFloat _textContentHeight;
+    
+    NSUInteger _numberOfLines;
 }
 
 @property (nonatomic) BOOL didDrag;
@@ -27,6 +29,7 @@
 @implementation SCKChatTableViewController
 @synthesize tableView = _tableView;
 @synthesize textContainerView = _textContainerView;
+@synthesize maxNumberOfLines = _maxNumberOfLines;
 
 - (instancetype)init
 {
@@ -38,6 +41,8 @@
 
 - (void)configure
 {
+    _maxNumberOfLines = 4;
+    
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.textContainerView];
     
@@ -124,6 +129,7 @@
 #pragma mark - Setters
 
 
+
 #pragma mark - Actions
 
 - (void)scrollToBottomAnimated:(BOOL)animated
@@ -177,13 +183,13 @@
     _tableViewHeight = show ? CGRectGetMinY(inputFrame) : 0.0;
     _containerViewBottomMargin = show ? endFrame.size.height : 0.0;
     
-    CGFloat scrollingGap = CGRectGetHeight(endFrame);
-    CGFloat targetOffset = self.tableView.contentOffset.y+(show ? scrollingGap : -scrollingGap);
+    CGFloat delta = CGRectGetHeight(endFrame);
+    CGFloat offsetY = self.tableView.contentOffset.y+(show ? delta : -delta);
     
     CGFloat currentYOffset = self.tableView.contentOffset.y;
     CGFloat maxYOffset = self.tableView.contentSize.height-(CGRectGetHeight(self.view.frame)-CGRectGetHeight(inputFrame));
     
-    BOOL scroll = (((!show && targetOffset != currentYOffset && targetOffset > (_minYOffset-scrollingGap) && targetOffset < (maxYOffset-scrollingGap+_minYOffset)) || show) && !self.didDrag);
+    BOOL scroll = (((!show && offsetY != currentYOffset && offsetY > (_minYOffset-delta) && offsetY < (maxYOffset-delta+_minYOffset)) || show) && !self.didDrag);
     
     [self updateViewConstraints];
 
@@ -191,12 +197,12 @@
                           delay:0.0
          usingSpringWithDamping:0.7
           initialSpringVelocity:0.7
-                        options:(curve << 16)|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionCurveEaseInOut
+                        options:(curve << 16)|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews
                      animations:^{
                          [self.view layoutIfNeeded];
                          
                          if (scroll) {
-                             self.tableView.contentOffset = CGPointMake(0, targetOffset);
+                             self.tableView.contentOffset = CGPointMake(0, offsetY);
                          }
                      }
                      completion:^(BOOL finished) {
@@ -225,7 +231,7 @@
 
     [UIView animateWithDuration:0.2
                           delay:0.0
-                        options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionCurveEaseInOut
+                        options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews
                      animations:^{
                          [self.view layoutIfNeeded];
                      }
@@ -272,27 +278,56 @@
     
     NSLog(@"textContentSize : %@", NSStringFromCGSize(textContentSize));
     NSLog(@"_textContentHeight : %f", _textContentHeight);
+//
+//    NSLog(@"numberOfLines : %d", textView.numberOfLines);
+    
+    
     
     if (textContentSize.height != _textContentHeight) {
         
-        _textContentHeight = textContentSize.height;
-        
         CGFloat delta = textContentSize.height-_textContentHeight;
+        
+//        if (delta < 0) {
+//            delta = 0;
+//        }
+        
         NSLog(@"delta : %f", delta);
+        NSLog(@"lineHeight : %f", textView.font.lineHeight);
         
-        _containerViewHeight = _textContentHeight+delta+(kTextViewVerticalPadding*2);
+//        NSLog(@"textView.numberOfLines : %d", textView.numberOfLines);
+//        NSLog(@"self.maxNumberOfLines : %d", self.maxNumberOfLines);
+//        NSLog(@"textView.numberOfLines <= self.maxNumberOfLines : %@", textView.numberOfLines <= self.maxNumberOfLines ? @"YES" : @"NO");
         
-        CGRect inputFrame = self.textContainerView.frame;
-        inputFrame.size.height = _containerViewHeight;
-        inputFrame.origin.y  = _containerViewBottomMargin-CGRectGetHeight(inputFrame);
         
-        _tableViewHeight = CGRectGetMinY(inputFrame);
         
-        NSLog(@"_containerViewHeight : %f", _containerViewHeight);
-        NSLog(@"_tableViewHeight : %f", _tableViewHeight);
-
-        [self updateViewConstraintsAnimated:YES];
+        if (textView.numberOfLines <= self.maxNumberOfLines)
+        {
+            _containerViewHeight = _textContentHeight+delta+(kTextViewVerticalPadding*2.0);
+            _tableViewHeight = _containerViewBottomMargin-_containerViewHeight;
+            
+            CGFloat offsetY = self.tableView.contentOffset.y+delta/2.0;
+            [self.tableView setContentOffset:CGPointMake(0, offsetY) animated:YES];
+            
+            [self updateViewConstraints];
+            
+            [UIView animateWithDuration:0.5
+                                  delay:0.0
+                 usingSpringWithDamping:0.7
+                  initialSpringVelocity:0.7
+                                options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews
+                             animations:^{
+                                 [self.view layoutIfNeeded];
+                                 self.tableView.contentOffset = CGPointMake(0, offsetY);
+                             }
+                             completion:^(BOOL finished) {
+                                 
+                             }];
+            
+            NSLog(@"_containerViewHeight : %f", _containerViewHeight);
+        }
     }
+    
+    _textContentHeight = textContentSize.height;
 }
 
 
@@ -336,6 +371,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidBeginEditingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidEndEditingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:SCKTextViewContentSizeDidChangeNotification object:nil];
 }
 
 - (void)unregisterNotifications
@@ -351,6 +387,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidBeginEditingNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidEndEditingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewContentSizeDidChangeNotification object:nil];
 }
 
 
