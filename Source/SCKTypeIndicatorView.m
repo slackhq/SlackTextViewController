@@ -8,7 +8,8 @@
 
 #import "SCKTypeIndicatorView.h"
 
-NSString * const SCKTypeIndicatorViewWillShowOrHideNotification = @"com.slack.chatkit.SCKTypeIndicatorView.willShowOrHide";
+NSString * const SCKTypeIndicatorViewWillShowNotification = @"com.slack.chatkit.SCKTypeIndicatorView.willShow";
+NSString * const SCKTypeIndicatorViewWillHideNotification = @"com.slack.chatkit.SCKTypeIndicatorView.willHide";
 NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 
 @interface SCKTypeIndicatorView ()
@@ -34,7 +35,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
         self.usernames = [NSMutableArray new];
         self.timers = [NSMutableArray new];
         
-        self.backgroundColor = [UIColor redColor];
+        self.backgroundColor = [UIColor whiteColor];
         
         [self addSubview:self.indicatorLabel];
         
@@ -63,7 +64,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
         _indicatorLabel.translatesAutoresizingMaskIntoConstraints = NO;
         _indicatorLabel.font = [UIFont systemFontOfSize:12.0];
         _indicatorLabel.textColor =[UIColor grayColor];
-        _indicatorLabel.backgroundColor = [UIColor blueColor];
+        _indicatorLabel.backgroundColor = [UIColor clearColor];
         _indicatorLabel.userInteractionEnabled = NO;
     }
     return _indicatorLabel;
@@ -135,7 +136,8 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
         [self clean];
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:SCKTypeIndicatorViewWillShowOrHideNotification object:self];
+    NSString *notificationName = visible ? SCKTypeIndicatorViewWillShowNotification : SCKTypeIndicatorViewWillHideNotification;
+    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
 }
 
 

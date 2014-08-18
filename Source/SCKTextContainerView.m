@@ -64,11 +64,12 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
 }
 
+
 #pragma mark - Getters
 
 - (CGSize)intrinsicContentSize
 {
-    return CGSizeMake(CGRectGetHeight(self.superview.frame), 44.0);
+    return CGSizeMake(CGRectGetWidth(self.superview.frame), 44.0);
 }
 
 - (SCKTextView *)textView
@@ -216,7 +217,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
           initialSpringVelocity:0.5
                         options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         [_rightButton sizeToFit];
+                         [self.rightButton sizeToFit];
                          [self layoutIfNeeded];
                      }
                      completion:NULL];

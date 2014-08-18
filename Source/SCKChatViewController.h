@@ -19,6 +19,8 @@
 @property (nonatomic, readonly) SCKTextContainerView *textContainerView;
 /** The typing indicator. */
 @property (nonatomic, readonly) SCKTypeIndicatorView *typeIndicatorView;
+/** YES if control's animation should be elastic and bouncy. Default is YES. */
+@property (nonatomic, assign) BOOL allowElasticity;
 
 // Convenience accessors (access through the text container view)
 @property (nonatomic, readonly) SCKTextView *textView;

@@ -11,6 +11,7 @@
 #import <LoremIpsum/LoremIpsum.h>
 
 @interface ChatRoomViewController ()
+@property (nonatomic, getter = isReachable) BOOL reachable;
 @end
 
 @implementation ChatRoomViewController
@@ -31,9 +32,15 @@
     
     self.title = @"SlackChatKit";
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Type" style:UIBarButtonItemStylePlain target:self action:@selector(simulateTyping:)];
-
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Fill" style:UIBarButtonItemStyleDone target:self action:@selector(fillWithText:)];
+    UIBarButtonItem *typeItem = [[UIBarButtonItem alloc] initWithTitle:@"Type" style:UIBarButtonItemStylePlain target:self action:@selector(simulateUserTyping)];
+    UIBarButtonItem *reachItem = [[UIBarButtonItem alloc] initWithTitle:@"Reach" style:UIBarButtonItemStylePlain target:self action:@selector(simulateReachability)];
+    self.navigationItem.leftBarButtonItems = @[typeItem,reachItem];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Fill" style:UIBarButtonItemStyleDone target:self action:@selector(fillWithText)];
+    
+    self.reachable = YES;
+    
+    self.allowElasticity = YES;
     
     self.textView.placeholder = @"Message";
     self.textView.placeholderColor = [UIColor lightGrayColor];
@@ -46,10 +53,13 @@
     [self.leftButton setAccessibilityLabel:@"Send button"];
 
     [self.leftButton addTarget:self action:@selector(didTapLeftButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.leftButton setTintColor:[UIColor colorWithRed:186/255.0 green:189/255.0 blue:194/255.0 alpha:1.0]];
+    [self.leftButton setTintColor:[UIColor colorWithRed:154/255.0 green:159/255.0 blue:166/255.0 alpha:1.0]];
     [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
     [self.leftButton setAccessibilityLabel:@"Upload image"];
 }
+
+
+#pragma mark - Action Methods
 
 - (void)didTapLeftButton:(id)sender
 {
@@ -64,36 +74,29 @@
     [self dismissKeyboard];
 }
 
-- (void)simulateTyping:(id)sender
-{
-    [self.typeIndicatorView insertUsername:@"Ignacio"];
-}
-
-- (void)fillWithText:(id)sender
+- (void)fillWithText
 {
     self.textView.text = [LoremIpsum sentencesWithNumber:3];
     
 //    [self.textView insertTextAtCursor:[LoremIpsum word]];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)simulateUserTyping
 {
-    [super viewWillAppear:animated];
+    [self.typeIndicatorView insertUsername:@"Ignacio"];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)simulateReachability
 {
-    [super viewDidAppear:animated];
-}
+    _reachable = !self.isReachable;
+    
+    NSString *placeholder = self.isReachable ? @"Message" : @"Loading...";
+    UIColor *textViewColor = self.isReachable ? [UIColor whiteColor] : [UIColor colorWithRed:253/255.0 green:240/255.0 blue:195/255.0 alpha:1.0];
+    
+    self.textView.placeholder = placeholder;
+    self.textView.backgroundColor = textViewColor;
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
+    self.rightButton.enabled = self.isReachable;
 }
 
 

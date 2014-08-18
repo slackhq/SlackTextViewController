@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-extern NSString * const SCKTypeIndicatorViewWillShowOrHideNotification;
+extern NSString * const SCKTypeIndicatorViewWillShowNotification;
+extern NSString * const SCKTypeIndicatorViewWillHideNotification;
 
 @interface SCKTypeIndicatorView : UIView
 
