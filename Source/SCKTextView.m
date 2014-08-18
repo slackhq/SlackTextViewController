@@ -11,6 +11,9 @@
 NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatkit.text_view.content_size.did_change";
 
 @interface SCKTextView ()
+{
+    BOOL _didFlashScrollIndicators;
+}
 @property (nonatomic, strong) UILabel *placeholderLabel;
 @end
 
@@ -52,11 +55,21 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 
 - (void)configure
 {
+    self.maxNumberOfLines = 4;
     self.placeholderColor = [UIColor lightGrayColor];
     self.font = [UIFont systemFontOfSize:14.0];
+    self.editable = YES;
+    self.selectable = YES;
+    self.scrollEnabled = YES;
+    self.scrollsToTop = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewDidChange:) name:UITextViewTextDidChangeNotification object:nil];
-    
+}
+
+- (void)didMoveToSuperview
+{
+    [super didMoveToSuperview];
+
     [self addObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize)) options:0 context:NULL];
 }
 
@@ -103,8 +116,6 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 
 - (void)setText:(NSString *)text
 {
-    NSLog(@"%s",__FUNCTION__);
-    
 //    if (!self.isFirstResponder) {
 //        [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidBeginEditingNotification object:self];
 //    }
@@ -118,7 +129,7 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 {
     [super setAttributedText:attributedText];
     
-    [self textViewDidChange:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:self];
 }
 
 - (void)setFont:(UIFont *)font
@@ -136,15 +147,68 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 }
 
 
+#pragma mark - Text Editing
+
+- (void)insertTextAtCursor:(NSString *)text
+{
+    NSRange range = [self insertText:text inRange:self.selectedRange];
+    self.selectedRange = NSMakeRange(range.location, 0);
+}
+
+- (NSRange)insertText:(NSString *)text inRange:(NSRange)range
+{
+    if (text.length == 0) {
+        return NSMakeRange(0, 0);
+    }
+    
+    // Append the new string at the caret position
+    if (range.length == 0)
+    {
+        NSString *leftString = [self.text substringToIndex:range.location];
+        NSString *rightString = [self.text substringFromIndex: range.location];
+        
+        self.text = [NSString stringWithFormat: @"%@%@%@", leftString, text, rightString];
+        
+        range.location += [text length];
+        return range;
+    }
+    // Some text is selected, so we replace it with the new text
+    else if (range.length > 0)
+    {
+        self.text = [self.text stringByReplacingCharactersInRange:range withString:text];
+        
+        return NSMakeRange(range.location+[self.text rangeOfString:text].length, text.length);
+    }
+    
+    return self.selectedRange;
+}
+
+
+#pragma mark - ScrollView Extensions
+
+- (void)flashScrollIndicatorsIfNeeded
+{
+    if (self.numberOfLines == self.maxNumberOfLines+1) {
+        if (!_didFlashScrollIndicators) {
+            _didFlashScrollIndicators = YES;
+            [super flashScrollIndicators];
+        }
+    }
+    else if (_didFlashScrollIndicators) {
+        _didFlashScrollIndicators = NO;
+    }
+}
+
+
 #pragma mark - Notifications
 
 - (void)textViewDidChange:(NSNotification *)notification
 {
-    if (self.placeholder.length == 0) {
-        return;
+    if (self.placeholder.length > 0) {
+        self.placeholderLabel.hidden = (self.text.length > 0) ? YES : NO;
     }
 
-    self.placeholderLabel.hidden = (self.text.length > 0) ? YES : NO;
+    [self flashScrollIndicatorsIfNeeded];
 }
 
 
@@ -153,12 +217,8 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 - (void)drawRect:(CGRect)rect
 {
     [super drawRect:rect];
-    
-    if (!self.placeholder) {
-        return;
-    }
-    
-    if (self.text.length == 0 && self.placeholder) {
+        
+    if (self.text.length == 0 && self.placeholder.length > 0) {
         self.placeholderLabel.frame = CGRectInset(rect, 5.0f, 5.0f);
         self.placeholderLabel.textColor = self.placeholderColor;
         self.placeholderLabel.hidden = NO;
