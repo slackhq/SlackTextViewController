@@ -18,7 +18,6 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 @end
 
 @implementation SCKTextContainerView
-@synthesize translucent = _translucent;
 
 #pragma mark - Initialization
 
@@ -42,7 +41,8 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (void)configure
 {
-    _translucent = NO;
+    self.translucent = NO;
+    self.autoHideRightButton = YES;
     
     [self addSubview:self.leftButton];
     [self addSubview:self.rightButton];
@@ -108,6 +108,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _rightButton = [UIButton buttonWithType:UIButtonTypeSystem];
         _rightButton.translatesAutoresizingMaskIntoConstraints = NO;
         _rightButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
+        _rightButton.enabled = NO;
         
         [_rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
     }
@@ -129,8 +130,10 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [super didMoveToSuperview];
     
     // We save the right button title for later so when the textView is not first responder, we hide the button.
-    self.rightButtonTitle = [self.rightButton titleForState:UIControlStateNormal];
-    [self.rightButton setTitle:@"" forState:UIControlStateNormal];
+    if (self.autoHideRightButton) {
+        self.rightButtonTitle = [self.rightButton titleForState:UIControlStateNormal];
+        [self.rightButton setTitle:@"" forState:UIControlStateNormal];
+    }
 }
 
 
@@ -145,12 +148,23 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         return;
     }
     
-    NSString *title = (self.textView.text.length > 0) ? self.rightButtonTitle : @"";
-    NSString *rightTitle = [self.rightButton titleForState:UIControlStateNormal];
+    BOOL enableRightButton = (self.textView.text.length > 0) ? YES : NO;
+
+    // If the button should automatically hide when the text view is empty
+    if (self.autoHideRightButton) {
+        
+        NSString *title = enableRightButton ? self.rightButtonTitle : @"";
+        NSString *rightTitle = [self.rightButton titleForState:UIControlStateNormal];
+        
+        // If titles don't match, update the title and the button constraints
+        if (![title isEqualToString:rightTitle]) {
+            [self.rightButton setTitle:title forState:UIControlStateNormal];
+            [self updateConstraintsAnimated:YES];
+        }
+    }
     
-    if (![title isEqualToString:rightTitle]) {
-        [self.rightButton setTitle:title forState:UIControlStateNormal];
-        [self updateConstraintsAnimated:YES];
+    if (self.rightButton.enabled != enableRightButton) {
+        [self.rightButton setEnabled:enableRightButton];
     }
 }
 

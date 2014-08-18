@@ -23,4 +23,7 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 /** The right action button action. */
 @property (nonatomic, strong) UIButton *rightButton;
 
+/** YES if the right button should be hidden animatedly in case the text view has no text in it. YES by default. */
+@property (nonatomic) BOOL autoHideRightButton;
+
 @end
