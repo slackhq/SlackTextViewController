@@ -15,7 +15,3 @@ profile
 DerivedData
 .idea/
 *.hmap
-
-#Pods
-Pods
-Podfile.lock
