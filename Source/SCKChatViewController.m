@@ -456,9 +456,7 @@
                               @"indicatorViewHeight": @(_typeIndicatorViewHeight),
                               @"keyboardHeight": @(_keyboardHeight)};
     
-    NSLog(@"metrics : %@", metrics);
-
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView(>=tableHeight)][typeIndicatorView(<=indicatorViewHeight)][textContainerView(>=containerHeight)]-(keyboardHeight)-|" options:0 metrics:metrics views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView(>=tableHeight)][typeIndicatorView(==indicatorViewHeight)][textContainerView(>=containerHeight)]-(keyboardHeight)-|" options:0 metrics:metrics views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[tableView]-0-|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[typeIndicatorView]-0-|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[textContainerView]-0-|" options:0 metrics:nil views:views]];

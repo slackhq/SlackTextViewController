@@ -35,22 +35,25 @@
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Fill" style:UIBarButtonItemStyleDone target:self action:@selector(fillWithText:)];
     
-    NSLog(@"self.textView : %@", self.textView);
-    
     self.textView.placeholder = @"Message";
     self.textView.placeholderColor = [UIColor lightGrayColor];
-    self.textView.layer.borderColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0].CGColor;
-    self.textContainerView.backgroundColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1.0];
+    self.textView.layer.borderColor = [UIColor colorWithRed:217/255.0 green:217/255.0 blue:217/255.0 alpha:1.0].CGColor;
+    self.textContainerView.backgroundColor = [UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:1.0];
     
-    [self.leftButton addTarget:self action:@selector(didTapLeftButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.rightButton addTarget:self action:@selector(didTapRighttButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.rightButton setTitle:@"Send" forState:UIControlStateNormal];
+    [self.rightButton setTintColor:[UIColor colorWithRed:0/255.0 green:136.0/255.0 blue:204.0/255.0 alpha:1.0]];
+    [self.leftButton setAccessibilityLabel:@"Send button"];
+
+    [self.leftButton addTarget:self action:@selector(didTapLeftButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.leftButton setTintColor:[UIColor colorWithRed:186/255.0 green:189/255.0 blue:194/255.0 alpha:1.0]];
+    [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
+    [self.leftButton setAccessibilityLabel:@"Upload image"];
 }
 
 - (void)didTapLeftButton:(id)sender
 {
     NSLog(@"%s",__FUNCTION__);
-    
-    
 }
 
 - (void)didTapRighttButton:(id)sender
@@ -68,9 +71,9 @@
 
 - (void)fillWithText:(id)sender
 {
-//    self.textView.text = [LoremIpsum sentencesWithNumber:3];
+    self.textView.text = [LoremIpsum sentencesWithNumber:3];
     
-    [self.textView insertTextAtCursor:[LoremIpsum word]];
+//    [self.textView insertTextAtCursor:[LoremIpsum word]];
 }
 
 - (void)viewWillAppear:(BOOL)animated

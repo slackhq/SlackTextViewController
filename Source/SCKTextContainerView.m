@@ -64,7 +64,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
 }
 
-#pragma mark - Setters
+#pragma mark - Getters
 
 - (CGSize)intrinsicContentSize
 {
@@ -109,11 +109,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _rightButton.translatesAutoresizingMaskIntoConstraints = NO;
         _rightButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
         
-        _rightButtonTitle = NSLocalizedString(@"Send", nil);
-        
-        [_rightButton setTitle:_rightButtonTitle forState:UIControlStateNormal];
-        [_rightButton sizeToFit];
-        [_rightButton setTitle:@"" forState:UIControlStateNormal];
+        [_rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
     }
     return _rightButton;
 }
@@ -125,6 +121,16 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 {
     self.barTintColor = color;
     self.textView.inputAccessoryView.backgroundColor = color;
+}
+
+
+- (void)didMoveToSuperview
+{
+    [super didMoveToSuperview];
+    
+    // We save the right button title for later so when the textView is not first responder, we hide the button.
+    self.rightButtonTitle = [self.rightButton titleForState:UIControlStateNormal];
+    [self.rightButton setTitle:@"" forState:UIControlStateNormal];
 }
 
 
@@ -158,7 +164,12 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
     CGFloat minHeight = self.intrinsicContentSize.height;
 
-    CGFloat leftButtonMargin = roundf((minHeight - self.leftButton.frame.size.height) / 2.0f);
+    CGFloat leftButtonMargin = 0;
+    UIImage *leftButtonImg = [self.leftButton imageForState:UIControlStateNormal];
+    if (leftButtonImg) {
+        leftButtonMargin = roundf((minHeight - leftButtonImg.size.height) / 2.0f);
+    }
+    
     CGFloat rightButtonMargin = roundf((minHeight - self.rightButton.frame.size.height) / 2.0f);
     
     NSString *rightTitle = [self.rightButton titleForState:UIControlStateNormal];
