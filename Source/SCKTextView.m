@@ -116,20 +116,12 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 
 - (void)setText:(NSString *)text
 {
-//    if (!self.isFirstResponder) {
-//        [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidBeginEditingNotification object:self];
-//    }
-    
     [super setText:text];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:self];
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText
 {
     [super setAttributedText:attributedText];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:self];
 }
 
 - (void)setFont:(UIFont *)font

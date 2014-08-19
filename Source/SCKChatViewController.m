@@ -10,17 +10,15 @@
 
 @interface SCKChatViewController () <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
 {
-    CGFloat _minYOffset;
-    UIGestureRecognizer *_dismissingGesture;
+    CGFloat minYOffset;
+    UIGestureRecognizer *dismissingGesture;
     
     NSLayoutConstraint *tableViewHeight;
     NSLayoutConstraint *containerViewHeight;
     NSLayoutConstraint *typeIndicatorViewHeight;
     NSLayoutConstraint *keyboardHeight;
     
-    CGFloat _textContentHeight;
-    
-    NSUInteger _numberOfLines;
+    CGFloat textContentHeight;
 }
 
 @end
@@ -63,7 +61,7 @@
     [super viewWillAppear:animated];
     
     // We save the minimum offset of the tableView
-    _minYOffset = self.tableView.contentOffset.y;
+    minYOffset = self.tableView.contentOffset.y;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -96,9 +94,9 @@
         _tableView.dataSource = self;
         _tableView.delegate = self;
 
-        _dismissingGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-        _dismissingGesture.delegate = self;
-        [_tableView addGestureRecognizer:_dismissingGesture];
+        dismissingGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+        dismissingGesture.delegate = self;
+        [_tableView addGestureRecognizer:dismissingGesture];
     }
     return _tableView;
 }
@@ -109,6 +107,8 @@
     {
         _textContainerView = [SCKTextContainerView new];
         _textContainerView.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        textContentHeight = self.textView.contentSize.height;
     }
     return _textContainerView;
 }
@@ -143,12 +143,12 @@
 
 - (CGFloat)damping
 {
-    return 0.7;// self.allowElasticity ? 0.7 : 1.0;
+    return self.allowElasticity ? 0.7 : 1.0;
 }
 
 - (CGFloat)velocity
 {
-    return 0.7;// self.allowElasticity ? 0.7 : 1.0;
+    return self.allowElasticity ? 0.7 : 1.0;
 }
 
 
@@ -215,7 +215,7 @@
     CGFloat currentYOffset = self.tableView.contentOffset.y;
     CGFloat maxYOffset = self.tableView.contentSize.height-(CGRectGetHeight(self.view.frame)-CGRectGetHeight(inputFrame));
     
-    BOOL scroll = ((!show && offsetY != currentYOffset && offsetY > (_minYOffset-delta) && offsetY < (maxYOffset-delta+_minYOffset)) || show);
+    BOOL scroll = ((!show && offsetY != currentYOffset && offsetY > (minYOffset-delta) && offsetY < (maxYOffset-delta+minYOffset)) || show);
     
     [UIView animateWithDuration:duration*2
                           delay:0.0
@@ -272,45 +272,23 @@
     
     CGSize textContentSize = textView.contentSize;
     
-    if (_textContentHeight == 0) {
-        _textContentHeight = textContentSize.height;
+    if (textContentSize.height == textContentHeight) {
+        return;
     }
+
+    if (textContentSize.height != textContentHeight)
+    {
+        CGFloat delta = textContentSize.height-textContentHeight;
+        CGFloat containerNewHeight = 0;
+        
+        if (textView.numberOfLines <= textView.maxNumberOfLines) {
+            containerNewHeight = textContentHeight+delta+(kTextViewVerticalPadding*2.0);
+        }
     
-//    NSLog(@"frame : %@", NSStringFromCGRect(textView.frame));
-//    NSLog(@"contentSize : %@", NSStringFromCGSize(textContentSize));
-//    NSLog(@"_textContentHeight : %f", _textContentHeight);
-//
-//    NSLog(@"numberOfLines : %d", textView.numberOfLines);
-    
-    
-    
-    if (textContentSize.height != _textContentHeight) {
-        
-        CGFloat delta = textContentSize.height-_textContentHeight;
-        
-//        if (delta < 0) {
-//            delta = 0;
-//        }
-        
-        NSLog(@"delta : %f", delta);
-//        NSLog(@"lineHeight : %f", textView.font.lineHeight);
-        
-//        NSLog(@"textView.numberOfLines : %d", textView.numberOfLines);
-//        NSLog(@"self.maxNumberOfLines : %d", self.maxNumberOfLines);
-//        NSLog(@"textView.numberOfLines <= self.maxNumberOfLines : %@", textView.numberOfLines <= self.maxNumberOfLines ? @"YES" : @"NO");
-        
-        CGFloat containerViewNewHeight = 0;
-        
-//        if (textView.numberOfLines <= textView.maxNumberOfLines) {
-            containerViewNewHeight = _textContentHeight+delta+(kTextViewVerticalPadding*2.0);
-//        }
-        
-        if (containerViewNewHeight != containerViewHeight.constant) {
-            
-            NSLog(@"containerViewNewHeight : %f", containerViewNewHeight);
-            
-            containerViewHeight.constant = containerViewNewHeight;
-            tableViewHeight.constant = (keyboardHeight.constant-containerViewNewHeight)-typeIndicatorViewHeight.constant;
+        if (containerNewHeight != containerViewHeight.constant)
+        {
+            containerViewHeight.constant = containerNewHeight;
+            tableViewHeight.constant = (keyboardHeight.constant-containerNewHeight)-typeIndicatorViewHeight.constant;
             
             CGFloat offsetY = self.tableView.contentOffset.y+delta/2.0;
             [self.tableView setContentOffset:CGPointMake(0, offsetY) animated:YES];
@@ -328,7 +306,7 @@
         }
     }
     
-    _textContentHeight = textContentSize.height;
+    textContentHeight = textContentSize.height;
 }
 
 - (void)willShowOrHideTypeIndicatorView:(NSNotification *)notification
@@ -385,7 +363,7 @@
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
-    if ([_dismissingGesture isEqual:gestureRecognizer]) {
+    if ([dismissingGesture isEqual:gestureRecognizer]) {
         return [self.textContainerView.textView isFirstResponder];
     }
     
@@ -405,9 +383,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
     
     // TextView notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidBeginEditingNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidBeginEditingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidEndEditingNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidEndEditingNotification object:nil];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:SCKTextViewContentSizeDidChangeNotification object:nil];
     
     // TypeIndicator notifications
