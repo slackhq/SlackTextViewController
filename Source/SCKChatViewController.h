@@ -25,19 +25,38 @@
 // Convenience accessors (access through the text container view)
 @property (nonatomic, readonly) SCKTextView *textView;
 @property (nonatomic, readonly) UIButton *leftButton;
-@property (nonatomic, readonly) UIButton *rightButton;
-
-/**
- Scrolls the tableView/collectionView to the bottom.
- 
- @animated YES if the scrolling should be animated.
- */
-- (void)scrollToBottomAnimated:(BOOL)animated;
+@property (nonatomic, readonly) UIButton *rightButton; 
 
 /** Shows the keyboard */
 - (void)presentKeyboard;
 
 /** Dismisses the keyboard */
 - (void)dismissKeyboard;
+
+@end
+
+
+@protocol SCKAutoCompletionDataSource <UITableViewDataSource>
+
+- (BOOL)tableView:(UITableView *)tableView shouldAutoCompleteForFoundString:(NSString *)string;
+
+@end
+
+@protocol SCKAutoCompletionDelegate <UITableViewDelegate>
+
+- (void)tableView:(UITableView *)tableView didSelectStringRepresentation:(NSString *)string;
+
+@end
+
+
+@interface SCKChatViewController (AutoCompletion)
+
+@property (nonatomic, assign) id<SCKAutoCompletionDataSource>autoCompletionDataSource;
+@property (nonatomic, assign) id<SCKAutoCompletionDelegate>autoCompletionDelegate;
+
+- (void)registerAutoCompletionStringRepresentation:(NSString *)string;
+- (void)registerAutoCompletionStringRepresentations:(NSArray *)strings;
+
+- (void)removeAutoCompletionStringRepresentation:(NSString *)string;
 
 @end
