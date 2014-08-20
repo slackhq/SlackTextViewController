@@ -24,6 +24,7 @@
     return self;
 }
 
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -32,23 +33,26 @@
     
     self.title = @"SlackChatKit";
     
-    UIBarButtonItem *typeItem = [[UIBarButtonItem alloc] initWithTitle:@"Type" style:UIBarButtonItemStylePlain target:self action:@selector(simulateUserTyping)];
-    UIBarButtonItem *reachItem = [[UIBarButtonItem alloc] initWithTitle:@"Reach" style:UIBarButtonItemStylePlain target:self action:@selector(simulateReachability)];
-    self.navigationItem.leftBarButtonItems = @[typeItem,reachItem];
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Fill" style:UIBarButtonItemStyleDone target:self action:@selector(fillWithText)];
+    UIBarButtonItem *reachItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_network"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateReachability)];
+    UIBarButtonItem *typeItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_typing"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateUserTyping)];
+    UIBarButtonItem *appendItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_append"] style:UIBarButtonItemStylePlain target:self action:@selector(fillWithText)];
+
+    self.navigationItem.leftBarButtonItems = @[reachItem];
+    self.navigationItem.rightBarButtonItems = @[appendItem,typeItem];
     
     self.reachable = YES;
     
     self.allowElasticity = YES;
     
-    self.textView.placeholder = @"Message";
+    self.textContainerView.autoHideRightButton = NO;
+    
+    self.textView.placeholder = NSLocalizedString(@"Message", nil);
     self.textView.placeholderColor = [UIColor lightGrayColor];
     self.textView.layer.borderColor = [UIColor colorWithRed:217/255.0 green:217/255.0 blue:217/255.0 alpha:1.0].CGColor;
     self.textContainerView.backgroundColor = [UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:1.0];
     
     [self.rightButton addTarget:self action:@selector(didTapRighttButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.rightButton setTitle:@"Send" forState:UIControlStateNormal];
+    [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
     [self.rightButton setTintColor:[UIColor colorWithRed:0/255.0 green:136.0/255.0 blue:204.0/255.0 alpha:1.0]];
     [self.leftButton setAccessibilityLabel:@"Send button"];
 
@@ -71,14 +75,16 @@
     NSLog(@"%s",__FUNCTION__);
     
     self.textView.text = @"";
-    [self dismissKeyboard];
 }
 
 - (void)fillWithText
 {
-    self.textView.text = [LoremIpsum sentencesWithNumber:3];
-    
-//    [self.textView insertTextAtCursor:[LoremIpsum word]];
+    if (self.textView.text.length == 0) {
+        self.textView.text = [LoremIpsum sentencesWithNumber:3];
+    }
+    else {
+        [self.textView insertTextAtCursor:[LoremIpsum word]];
+    }
 }
 
 - (void)simulateUserTyping
@@ -90,13 +96,29 @@
 {
     _reachable = !self.isReachable;
     
-    NSString *placeholder = self.isReachable ? @"Message" : @"Loading...";
+    [self didChangeReachability];
+}
+
+
+#pragma mark - Extension
+
+- (void)didChangeReachability
+{
+    NSString *placeholder = self.isReachable ? NSLocalizedString(@"Message", nil) : NSLocalizedString(@"Loading...", nil);
     UIColor *textViewColor = self.isReachable ? [UIColor whiteColor] : [UIColor colorWithRed:253/255.0 green:240/255.0 blue:195/255.0 alpha:1.0];
     
     self.textView.placeholder = placeholder;
     self.textView.backgroundColor = textViewColor;
-
+    
     self.rightButton.enabled = self.isReachable;
+}
+
+
+#pragma mark - Overriden Methods
+
+- (BOOL)canPressSendButton
+{
+    return self.isReachable;
 }
 
 
@@ -109,7 +131,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 100;
+    return 30;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
