@@ -90,8 +90,6 @@
 - (void)didTapLeftButton:(id)sender
 {
     NSLog(@"%s",__FUNCTION__);
-    
-    
 }
 
 - (void)didTapRighttButton:(id)sender
