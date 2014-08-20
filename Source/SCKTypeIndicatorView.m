@@ -39,7 +39,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
         
         [self addSubview:self.indicatorLabel];
         
-        [self updateConstraints];
+        [self setupConstraints];
     }
     return self;
 }
@@ -121,11 +121,6 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 
 - (void)setVisible:(BOOL)visible
 {
-    [self setVisible:visible animated:NO];
-}
-
-- (void)setVisible:(BOOL)visible animated:(BOOL)animated
-{
     if (visible == _visible) {
         return;
     }
@@ -139,7 +134,6 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
     NSString *notificationName = visible ? SCKTypeIndicatorViewWillShowNotification : SCKTypeIndicatorViewWillHideNotification;
     [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
 }
-
 
 #pragma mark - Public Methods
 
@@ -172,7 +166,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
     _indicatorLabel.attributedText = [self attributedString];
     
     if (!self.isVisible) {
-        [self setVisible:YES animated:YES];
+        [self setVisible:YES];
     }
 }
 
@@ -188,14 +182,14 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
         _indicatorLabel.attributedText = [self attributedString];
     }
     else if (self.isVisible) {
-        [self setVisible:NO animated:YES];
+        [self setVisible:NO];
     }
 }
 
 - (void)dismissIndicator
 {
     if (self.isVisible) {
-        [self setVisible:NO animated:YES];
+        [self setVisible:NO];
     }
 }
 
@@ -243,10 +237,8 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 
 #pragma mark - Auto-Layout
 
-- (void)updateConstraints
+- (void)setupConstraints
 {
-    [super updateConstraints];
-    
     NSNumber *lineHeight = @(roundf(self.indicatorLabel.font.lineHeight));
     NSNumber *padding = @((self.height-[lineHeight floatValue])/2.0);
     
@@ -266,7 +258,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
     
     if ([view isEqual:self]) {
         if (self.isVisible && self.canResignByTouch) {
-            [self setVisible:NO animated:YES];
+            [self setVisible:NO];
         }
         return view;
     }
