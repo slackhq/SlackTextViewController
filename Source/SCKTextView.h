@@ -19,7 +19,7 @@ extern NSString * const SCKTextViewContentSizeDidChangeNotification;
 @property (nonatomic, strong) UIColor *placeholderColor;
 /** The current number of lines displayed. */
 @property (nonatomic, readonly) NSUInteger numberOfLines;
-/** The maximum number of lines before enabling scrolling. Default is 4. */
+/** The maximum number of lines before enabling scrolling. Default is 0 wich means limitless. */
 @property (nonatomic, readwrite) NSUInteger maxNumberOfLines;
 
 /**

@@ -7,6 +7,7 @@
 //
 
 #import "SCKTextContainerView.h"
+#import "UIScrollView+SCKHelpers.h"
 
 NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.chatkit.SCKTextContainerView.frameDidChange";
 
@@ -79,14 +80,16 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView = [[SCKTextView alloc] init];
         _textView.translatesAutoresizingMaskIntoConstraints = NO;
         _textView.font = [UIFont systemFontOfSize:15.0f];
-        _textView.textContainer.maximumNumberOfLines = 0;
-        _textView.autocorrectionType = UITextAutocorrectionTypeNo;
+        _textView.maxNumberOfLines = 6;
+        _textView.autocorrectionType = UITextAutocorrectionTypeNo; // for debugging purpose
         _textView.keyboardType = UIKeyboardTypeTwitter;
+        _textView.enablesReturnKeyAutomatically = YES;
         _textView.scrollIndicatorInsets = UIEdgeInsetsMake(0, -1, 0, 1);
+        _textView.inputAccessoryView = [SCKInputAccessoryView new];
+        
         _textView.layer.cornerRadius = 4.0f;
         _textView.layer.borderWidth = 1.0f;
         _textView.layer.borderColor =  [UIColor colorWithRed:200.0f/255.0f green:200.0f/255.0f blue:205.0f/255.0f alpha:1.0f].CGColor;
-        _textView.inputAccessoryView = [SCKInputAccessoryView new];
     }
     return _textView;
 }
@@ -114,6 +117,23 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         [_rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
     }
     return _rightButton;
+}
+
+- (CGFloat)minHeight
+{
+    return self.intrinsicContentSize.height;
+}
+
+- (CGFloat)maxHeight
+{
+    CGFloat height = 0.0;
+    
+    if (self.textView.maxNumberOfLines > 0) {
+        height += self.textView.font.lineHeight*self.textView.maxNumberOfLines;
+        height += (kTextViewVerticalPadding*2.0);
+        
+    }
+    return height;
 }
 
 
@@ -177,15 +197,13 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     // Removes all constraints
     [self removeConstraints:self.constraints];
 
-    CGFloat minHeight = self.intrinsicContentSize.height;
-
     CGFloat leftButtonMargin = 0;
     UIImage *leftButtonImg = [self.leftButton imageForState:UIControlStateNormal];
     if (leftButtonImg) {
-        leftButtonMargin = roundf((minHeight - leftButtonImg.size.height) / 2.0f);
+        leftButtonMargin = roundf((self.minHeight - leftButtonImg.size.height) / 2.0f);
     }
     
-    CGFloat rightButtonMargin = roundf((minHeight - self.rightButton.frame.size.height) / 2.0f);
+    CGFloat rightButtonMargin = roundf((self.minHeight - self.rightButton.frame.size.height) / 2.0f);
     
     NSString *rightTitle = [self.rightButton titleForState:UIControlStateNormal];
     CGSize rigthButtonSize = [rightTitle sizeWithAttributes:@{NSFontAttributeName: self.rightButton.titleLabel.font}];

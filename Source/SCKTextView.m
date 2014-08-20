@@ -7,6 +7,7 @@
 //
 
 #import "SCKTextView.h"
+#import "UIScrollView+SCKHelpers.h"
 
 NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatkit.SCKTextView.contentSizeDidChange";
 
@@ -24,7 +25,7 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 - (id)init
 {
     if (self = [super init]) {
-        [self configure];
+        [self commonInit];
     }
     return self;
 }
@@ -32,7 +33,7 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 - (id)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        [self configure];
+        [self commonInit];
     }
     return self;
 }
@@ -40,7 +41,7 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    [self configure];
+    [self commonInit];
 }
 
 - (void)dealloc
@@ -53,10 +54,10 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 
 #pragma mark - Setup
 
-- (void)configure
+- (void)commonInit
 {
-    self.maxNumberOfLines = 4;
     self.placeholderColor = [UIColor lightGrayColor];
+    
     self.font = [UIFont systemFontOfSize:14.0];
     self.editable = YES;
     self.selectable = YES;
@@ -116,7 +117,13 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 
 - (void)setText:(NSString *)text
 {
+//    if (!self.isFirstResponder) {
+//        [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidBeginEditingNotification object:self];
+//    }
+    
     [super setText:text];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:self];
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText
@@ -175,8 +182,17 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
     return self.selectedRange;
 }
 
+- (BOOL)isCursorAtEnd
+{
+    if (self.selectedRange.location == self.text.length && self.selectedRange.length == 0) {
+        return YES;
+    }
+    
+    return NO;
+}
 
-#pragma mark - ScrollView Extensions
+
+#pragma mark - TextView Extensions
 
 - (void)flashScrollIndicatorsIfNeeded
 {
@@ -199,6 +215,10 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
     if (self.placeholder.length > 0) {
         self.placeholderLabel.hidden = (self.text.length > 0) ? YES : NO;
     }
+    
+//    if (self.numberOfLines > self.maxNumberOfLines && [self isCursorAtEnd]) {
+//        [self scrollToBottomAnimated:YES];
+//    }
 
     [self flashScrollIndicatorsIfNeeded];
 }
