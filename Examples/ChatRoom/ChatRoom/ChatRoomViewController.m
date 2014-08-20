@@ -44,7 +44,7 @@
     
     self.allowElasticity = YES;
     
-    self.textContainerView.autoHideRightButton = NO;
+    self.textContainerView.autoHideRightButton = YES;
     
     self.textView.placeholder = NSLocalizedString(@"Message", nil);
     self.textView.placeholderColor = [UIColor lightGrayColor];
@@ -68,6 +68,8 @@
 - (void)didTapLeftButton:(id)sender
 {
     NSLog(@"%s",__FUNCTION__);
+    
+    
 }
 
 - (void)didTapRighttButton:(id)sender
@@ -80,7 +82,7 @@
 - (void)fillWithText
 {
     if (self.textView.text.length == 0) {
-        self.textView.text = [LoremIpsum sentencesWithNumber:3];
+        self.textView.text = [LoremIpsum sentencesWithNumber:4];
     }
     else {
         [self.textView insertTextAtCursor:[LoremIpsum word]];
