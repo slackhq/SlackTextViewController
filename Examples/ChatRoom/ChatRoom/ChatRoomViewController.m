@@ -10,8 +10,24 @@
 
 #import <LoremIpsum/LoremIpsum.h>
 
+@interface SearchResult : NSObject
+@property (nonatomic, strong) NSString *key;
+@property (nonatomic, strong) NSArray *list;
+@end
+
+@implementation SearchResult
+@end
+
 @interface ChatRoomViewController ()
 @property (nonatomic, getter = isReachable) BOOL reachable;
+
+@property (nonatomic, strong) NSArray *users;
+@property (nonatomic, strong) NSArray *channels;
+@property (nonatomic, strong) NSArray *commands;
+@property (nonatomic, strong) NSArray *emojis;
+
+@property (nonatomic, strong) SearchResult *searchResult;
+
 @end
 
 @implementation ChatRoomViewController
@@ -20,6 +36,10 @@
 {
     if (self = [super init]) {
         
+        self.users = @[@"ignacio", @"michael", @"brady", @"everyone", @"channel", @"ali"];
+        self.channels = @[@"general", @"ios", @"random", @"ssb", @"mobile", @"ui", @"released", @"SF"];
+        self.commands = @[@"help", @"away", @"close", @"color", @"colors", @"feedback", @"invite", @"me", @"msg", @"dm", @"open"];
+        self.emojis = @[@"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
     }
     return self;
 }
@@ -60,6 +80,8 @@
     [self.leftButton setTintColor:[UIColor colorWithRed:154/255.0 green:159/255.0 blue:166/255.0 alpha:1.0]];
     [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
     [self.leftButton setAccessibilityLabel:@"Upload image"];
+    
+    self.signLookup = [@[@"@", @"#", @"/", @":"] mutableCopy];
 }
 
 
@@ -124,6 +146,68 @@
 }
 
 
+#pragma mark - SCKAutoCompletionDelegate Methods
+
+- (BOOL)tableView:(UITableView *)tableView shouldShowAutoCompletionForSearchString:(NSString *)string withSign:(NSString *)sign
+{
+    NSLog(@"%s string: %@ sign: %@",__FUNCTION__, string, sign);
+    
+    NSArray *array = nil;
+    
+    self.searchResult = [SearchResult new];
+    self.searchResult.key = sign;
+
+    if ([sign isEqualToString:@"@"]) {
+        array = self.users;
+    }
+    else if ([sign isEqualToString:@"#"]) {
+        array = self.channels;
+    }
+    else if ([sign isEqualToString:@"/"]) {
+        array = self.commands;
+    }
+    else if ([sign isEqualToString:@":"]) {
+        array = self.emojis;
+    }
+    else {
+        array = nil;
+    }
+    
+    if (array.count == 0) {
+        return NO;
+    }
+    
+    //TODO: not include user_me in the list (like web app)
+    
+    if (string.length > 0) {
+        array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self != %@", string, string]];
+        self.searchResult.list = [array sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    }
+    
+    self.searchResult.list = [array sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+
+    return self.searchResult.list.count > 0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForSearchString:(NSString *)string withSign:(NSString *)sign
+{
+    CGFloat cellHeight = [self.autoCompleteView.delegate tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    return cellHeight*self.searchResult.list.count;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectStringRepresentation:(NSString *)string withSign:(NSString *)sign
+{
+    NSLog(@"%s",__FUNCTION__);
+}
+
+- (NSString *)tableView:(UITableView *)tableView stringToAppendAfterSelectingSearchString:(NSString *)string withSign:(NSString *)sign
+{
+    NSLog(@"%s",__FUNCTION__);
+    
+    return nil;
+}
+
+
 #pragma mark - UITableViewDataSource Methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -133,7 +217,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 30;
+    if ([tableView isEqual:self.tableView]) {
+        return 30;
+    }
+    else {
+        return self.searchResult.list.count;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -145,14 +234,56 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    cell.textLabel.text = [NSString stringWithFormat:@"cell %ld", (long)indexPath.row];
+    if ([tableView isEqual:self.tableView]) {
+        cell.backgroundColor = [UIColor whiteColor];
+        
+        cell.textLabel.text = [NSString stringWithFormat:@"cell %ld", (long)indexPath.row];
+    }
+    else {
+        cell.backgroundColor = [UIColor clearColor];
+        
+        NSString *sign = self.searchResult.key;
+        NSString *item = self.searchResult.list[indexPath.row];
+
+        if ([sign isEqualToString:@"#"]) {
+            item = [NSString stringWithFormat:@"# %@", item];
+        }
+        else if ([sign isEqualToString:@":"]) {
+            item = [NSString stringWithFormat:@":%@:", item];
+        }
+        
+        cell.textLabel.text = item;
+    }
     
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44.0;
+    if ([tableView isEqual:self.tableView]) {
+        return 60.0;
+    }
+    else {
+        return 40.0;
+    }
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if ([tableView isEqual:self.autoCompleteView]) {
+        UIView *topView = [UIView new];
+        topView.backgroundColor = self.autoCompleteView.separatorColor;
+        return topView;
+    }
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if ([tableView isEqual:self.autoCompleteView]) {
+        return 0.5;
+    }
+    return 0.0;
 }
 
 
@@ -160,8 +291,29 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    if ([tableView isEqual:self.autoCompleteView]) {
+        
+        NSString *sign = self.searchResult.key;
+        NSString *item = self.searchResult.list[indexPath.row];
+        
+        if ([sign isEqualToString:@"@"]) {
+            item = [NSString stringWithFormat:@"%@: ", item];
+        }
+        else if ([sign isEqualToString:@":"]) {
+            item = [NSString stringWithFormat:@"%@: ", item];
+        }
+        else {
+            item = [NSString stringWithFormat:@"%@ ", item];
+        }
+        
+        NSLog(@"item : %@", item);
+        
+        [self replaceFoundStringWithString:item];
+        
+        [self hideAutoCompleteView];
+    }
 }
+
 
 
 #pragma mark - View lifeterm

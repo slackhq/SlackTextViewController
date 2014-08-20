@@ -9,18 +9,33 @@
 #import "SCKChatViewController.h"
 #import "UITextView+SCKHelpers.h"
 
-@interface SCKChatViewController () <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
+#define DEBUG_VIEWS YES
+
+#if DEBUG && DEBUG_VIEWS
+#define SCKLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#define SCKLog(...)
+#endif
+
+@interface SCKChatViewController () <UITableViewDataSource, UITableViewDelegate, SCKAutoCompletionDelegate, UIGestureRecognizerDelegate>
 {
     CGFloat minYOffset;
     UIGestureRecognizer *dismissingGesture;
     
     CGFloat textContentHeight;
+    
+    BOOL rotating;
 }
 
 @property (nonatomic, strong) NSLayoutConstraint *tableViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *containerViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *typeIndicatorViewHC;
+@property (nonatomic, strong) NSLayoutConstraint *autoCompleteViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *keyboardHC;
+
+@property (nonatomic, strong) NSString *keyString;
+@property (nonatomic) NSRange keyRange;
+@property (nonatomic, strong) NSString *currentWord;
 
 @end
 
@@ -28,7 +43,7 @@
 @synthesize tableView = _tableView;
 @synthesize typeIndicatorView = _typeIndicatorView;
 @synthesize textContainerView = _textContainerView;
-
+@synthesize autoCompleteView = _autoCompleteView;
 
 #pragma mark - Initializer
 
@@ -37,8 +52,10 @@
     if (self = [super init])
     {
         self.allowElasticity = YES;
+        self.autoCompletionDelegate = self;
         
         [self.view addSubview:self.tableView];
+        [self.view addSubview:self.autoCompleteView];
         [self.view addSubview:self.typeIndicatorView];
         [self.view addSubview:self.textContainerView];
 
@@ -94,12 +111,29 @@
         _tableView.scrollsToTop = YES;
         _tableView.dataSource = self;
         _tableView.delegate = self;
+        
+        _tableView.tableFooterView = [UIView new];
 
         dismissingGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
         dismissingGesture.delegate = self;
         [_tableView addGestureRecognizer:dismissingGesture];
     }
     return _tableView;
+}
+
+- (UITableView *)autoCompleteView
+{
+    if (!_autoCompleteView)
+    {
+        _autoCompleteView = [UITableView new];
+        _autoCompleteView.translatesAutoresizingMaskIntoConstraints = NO;
+        _autoCompleteView.backgroundColor = [UIColor colorWithWhite:0.96 alpha:1.0];
+        _autoCompleteView.dataSource = self;
+        _autoCompleteView.delegate = self;
+        
+        _autoCompleteView.tableFooterView = [UIView new];
+    }
+    return _autoCompleteView;
 }
 
 - (SCKTextContainerView *)textContainerView
@@ -159,21 +193,6 @@
 
 #pragma mark - Actions
 
-- (void)scrollToBottomAnimated:(BOOL)animated
-{
-//    if ([self.tableView numberOfSections] == 0) {
-//        return;
-//    }
-//    
-//    NSInteger items = [self.tableView numberOfRowsInSection:0];
-//    
-//    if (items > 0) {
-//        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForItem:items - 1 inSection:0]
-//                              atScrollPosition:UITableViewScrollPositionTop
-//                                      animated:animated];
-//    }
-}
-
 - (void)presentKeyboard
 {
     if (![self.textView isFirstResponder]) {
@@ -225,7 +244,8 @@
                          [self.view layoutIfNeeded];
                          
                          if (scroll) {
-                             self.tableView.contentOffset = CGPointMake(0, offsetY);
+                             SCKLog(@"%s setContentOffset : %f",__FUNCTION__, offsetY);
+                             [self.tableView setContentOffset:CGPointMake(0, offsetY)];
                          }
                      }
                      completion:NULL];
@@ -233,6 +253,8 @@
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
 {
+    SCKLog(@"%s",__FUNCTION__);
+    
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     endFrame = adjustEndFrame(endFrame, self.interfaceOrientation);
     
@@ -252,6 +274,8 @@
 
 - (void)didChangeKeyboardFrame:(NSNotification *)notification
 {
+    SCKLog(@"%s",__FUNCTION__);
+    
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect inputFrame = self.textContainerView.frame;
     
@@ -263,21 +287,34 @@
     [self.view layoutIfNeeded];
 }
 
+- (void)willChangeTextView:(NSNotification *)notification
+{
+    SCKTextView *textView = (SCKTextView *)notification.object;
+    
+    // If it's not the expected textView, return.
+    if (![textView isEqual:self.textView]) {
+        SCKLog(@"Not the expected textView, return");
+        return;
+    }
+}
+
 - (void)didChangeTextView:(NSNotification *)notification
 {
     SCKTextView *textView = (SCKTextView *)notification.object;
     
     // If it's not the expected textView, return.
     if (![textView isEqual:self.textView]) {
-        NSLog(@"Not the expected textView, return");
+        SCKLog(@"Not the expected textView, return");
         return;
     }
+    
+    [self processAutoCompletion];
     
     CGSize textContentSize = textView.contentSize;
     
     // If the content size didn't change, return.
     if (textContentSize.height == textContentHeight) {
-        NSLog(@"The content size didn't change, return");
+        SCKLog(@"The content size didn't change, return");
         return;
     }
 
@@ -294,7 +331,7 @@
         }
         
         if (containerNewHeight < self.textContainerView.minHeight) {
-            NSLog(@"The containerNewHeight smaller than min height (%f): return", containerNewHeight);
+            SCKLog(@"The containerNewHeight smaller than min height (%f): return", containerNewHeight);
             return;
         }
         
@@ -314,6 +351,8 @@
                                 options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews
                              animations:^{
                                  [self.view layoutIfNeeded];
+                                 
+                                 SCKLog(@"%s setContentOffset : %f",__FUNCTION__, offsetY);
                                  [self.tableView setContentOffset:CGPointMake(0.0, offsetY)];
                                  
                                  if (self.textView.selectedRange.length == 0) {
@@ -323,7 +362,7 @@
                              completion:NULL];
         }
         else {
-            NSLog(@"The self.containerViewHC didn't change (%f): return", containerNewHeight);
+            SCKLog(@"The self.containerViewHC didn't change (%f): return", containerNewHeight);
             return;
         }
     }
@@ -335,7 +374,11 @@
     
     // If it's not the expected textView, return.
     if (![indicatorView isEqual:self.typeIndicatorView]) {
-        NSLog(@"Not the expected indicatorView, return");
+        SCKLog(@"Not the expected indicatorView, return");
+        return;
+    }
+    
+    if (self.autoCompleteViewHC.constant > 0) {
         return;
     }
     
@@ -352,9 +395,136 @@
                          
                          CGFloat offsetDelta = indicatorView.isVisible ? indicatorView.height : -indicatorView.height;
                          CGFloat offsetY = self.tableView.contentOffset.y+offsetDelta;
-                         self.tableView.contentOffset = CGPointMake(0, offsetY);
+                         
+                         SCKLog(@"%s setContentOffset : %f",__FUNCTION__, offsetY);
+                         [self.tableView setContentOffset:CGPointMake(0.0, offsetY)];
                      }
                      completion:NULL];
+}
+
+
+#pragma mark - Auto-Completion Text Processing
+
+- (void)cancelAutoCompletion
+{
+    self.keyString = nil;
+    self.keyRange = NSRangeFromString(nil);
+    [self showAutoCompletionView:NO];
+}
+
+- (void)processAutoCompletion
+{
+    NSString *text = self.textView.text;
+    
+    if (text.length == 0) {
+        [self cancelAutoCompletion];
+        return;
+    }
+
+    NSRange range;
+    self.currentWord = [self.textView closerWord:&range];
+
+    NSLog(@"text : %@", text);
+    NSLog(@"currentWord : %@", self.currentWord);
+    NSLog(@"currentWord range : %@", NSStringFromRange(range));
+    NSLog(@"currentWord.length : %d", self.currentWord.length);
+    
+    for (NSString *sign in self.signLookup) {
+        if ([self.currentWord rangeOfString:sign].location == 0) {
+            self.keyString = sign;
+            self.keyRange = NSMakeRange(range.location, sign.length);
+            
+            NSLog(@"keyRange : %@", NSStringFromRange(self.keyRange));
+        }
+    }
+    
+    NSLog(@"currentWord has \\n : %@", [self.currentWord rangeOfString:@"\n"].location != NSNotFound ? @"YES" : @"NO");
+    
+    if (self.keyString.length > 0) {
+        if (range.length == 0 || [self.currentWord rangeOfString:@"\n"].location != NSNotFound || range.length != self.currentWord.length) {
+            [self cancelAutoCompletion];
+        }
+    }
+    
+    BOOL show = NO;
+    
+    if (self.autoCompletionDelegate && [self.autoCompletionDelegate respondsToSelector:@selector(tableView:shouldShowAutoCompletionForSearchString:withSign:)]) {
+        
+        NSString *word = nil;
+        if (self.keyString.length > 0) {
+            word = [self.currentWord stringByReplacingOccurrencesOfString:self.keyString withString:@""];
+        }
+        
+        show = [self.autoCompletionDelegate tableView:self.autoCompleteView shouldShowAutoCompletionForSearchString:word withSign:self.keyString];
+    }
+    
+    [self showAutoCompletionView:show];
+}
+
+- (void)replaceFoundStringWithString:(NSString *)string
+{
+    NSLog(@"%s",__FUNCTION__);
+    
+    if (string.length == 0) {
+        return;
+    }
+    
+    NSString *word = nil;
+    if (self.keyString.length > 0) {
+        word = [self.currentWord stringByReplacingOccurrencesOfString:self.keyString withString:@""];
+    }
+    
+    NSRange insertionRange;
+    
+    if (word.length > 0) {
+        NSRange range = [self.textView.text rangeOfString:word];
+        NSLog(@"word range : %@", NSStringFromRange(range));
+        
+        insertionRange = [self.textView insertText:string inRange:range];
+    }
+    else {
+        NSRange range = NSMakeRange(self.keyRange.location+1, 0.0);
+        NSLog(@"sign range : %@", NSStringFromRange(range));
+
+        insertionRange = [self.textView insertText:string inRange:range];
+    }
+
+    NSLog(@"insertionRange : %@", NSStringFromRange(insertionRange));
+}
+
+- (void)hideAutoCompleteView
+{
+    [self showAutoCompletionView:NO];
+}
+
+- (void)showAutoCompletionView:(BOOL)show
+{
+    CGFloat autoCompleteViewHeight = 0.0;
+    
+    if (show && self.autoCompletionDelegate && [self.autoCompletionDelegate respondsToSelector:@selector(tableView:heightForSearchString:withSign:)]) {
+        autoCompleteViewHeight = [self.autoCompletionDelegate tableView:self.autoCompleteView heightForSearchString:self.currentWord withSign:self.keyString];
+        
+        if (autoCompleteViewHeight > 140.0) {
+            autoCompleteViewHeight = 140.0;
+        }
+    }
+    
+    if (self.autoCompleteViewHC.constant != autoCompleteViewHeight)
+    {
+        self.autoCompleteViewHC.constant = autoCompleteViewHeight;
+        
+        [UIView animateWithDuration:0.2
+                              delay:0.0
+             usingSpringWithDamping:[self damping]
+              initialSpringVelocity:[self velocity]
+                            options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews
+                         animations:^{
+                             [self.view layoutIfNeeded];
+                         }
+                         completion:NULL];
+    }
+    
+    [self.autoCompleteView reloadData];
 }
 
 
@@ -366,19 +536,6 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return nil;
-}
-
-
-#pragma mark - UICollectionViewDataSource Methods
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return 0;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return nil;
 }
@@ -408,6 +565,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
     
     // TextView notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willChangeTextView:) name:SCKTextViewTextWillChangeNotification object:nil];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidBeginEditingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidEndEditingNotification object:nil];
@@ -428,6 +586,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
     
     // TextView notifications
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewTextWillChangeNotification object:nil];
 //    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidBeginEditingNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
 //    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidEndEditingNotification object:nil];
@@ -447,21 +606,24 @@
     [self.view removeConstraints:self.view.constraints];
     
     NSDictionary *views = @{@"tableView": self.tableView,
+                            @"autoCompleteView": self.autoCompleteView,
+                            @"typeIndicatorView": self.typeIndicatorView,
                             @"textContainerView": self.textContainerView,
-                            @"typeIndicatorView": self.typeIndicatorView};
+                            };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView(0@250)][typeIndicatorView(0)][textContainerView(0@750)]-0-|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView(>=0@250)][autoCompleteView(0)][typeIndicatorView(0)][textContainerView(==0)]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[textContainerView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[autoCompleteView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[typeIndicatorView]|" options:0 metrics:nil views:views]];
-    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[textContainerView]|" options:0 metrics:nil views:views]];
+
     NSArray *heightConstraints = [self constraintsForAttribute:NSLayoutAttributeHeight];
     NSArray *bottomConstraints = [self constraintsForAttribute:NSLayoutAttributeBottom];
     
     self.tableViewHC = heightConstraints[0];
-    self.typeIndicatorViewHC = heightConstraints[1];
-    self.containerViewHC = heightConstraints[2];
-    
+    self.autoCompleteViewHC = heightConstraints[1];
+    self.typeIndicatorViewHC = heightConstraints[2];
+    self.containerViewHC = heightConstraints[3];
     self.keyboardHC = bottomConstraints[0];
     
     self.containerViewHC.constant = self.textContainerView.minHeight;
@@ -497,9 +659,14 @@ BOOL isKeyboardFrameValid(CGRect frame) {
 
 #pragma mark - View Auto-Rotation
 
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    rotating = YES;
+}
+
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    [self.view layoutIfNeeded];
+    rotating = NO;
 }
 
 - (NSUInteger)supportedInterfaceOrientations

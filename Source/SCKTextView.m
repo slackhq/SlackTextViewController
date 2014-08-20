@@ -7,8 +7,8 @@
 //
 
 #import "SCKTextView.h"
-#import "UIScrollView+SCKHelpers.h"
 
+NSString * const SCKTextViewTextWillChangeNotification = @"com.slack.chatkit.SCKTextView.willChangeText";
 NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatkit.SCKTextView.contentSizeDidChange";
 
 @interface SCKTextView ()
@@ -145,52 +145,6 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
     [super setTextAlignment:textAlignment];
     
     self.placeholderLabel.textAlignment = textAlignment;
-}
-
-
-#pragma mark - Text Editing
-
-- (void)insertTextAtCursor:(NSString *)text
-{
-    NSRange range = [self insertText:text inRange:self.selectedRange];
-    self.selectedRange = NSMakeRange(range.location, 0);
-}
-
-- (NSRange)insertText:(NSString *)text inRange:(NSRange)range
-{
-    if (text.length == 0) {
-        return NSMakeRange(0, 0);
-    }
-    
-    // Append the new string at the caret position
-    if (range.length == 0)
-    {
-        NSString *leftString = [self.text substringToIndex:range.location];
-        NSString *rightString = [self.text substringFromIndex: range.location];
-        
-        self.text = [NSString stringWithFormat: @"%@%@%@", leftString, text, rightString];
-        
-        range.location += [text length];
-        return range;
-    }
-    // Some text is selected, so we replace it with the new text
-    else if (range.length > 0)
-    {
-        self.text = [self.text stringByReplacingCharactersInRange:range withString:text];
-        
-        return NSMakeRange(range.location+[self.text rangeOfString:text].length, text.length);
-    }
-    
-    return self.selectedRange;
-}
-
-- (BOOL)isCursorAtEnd
-{
-    if (self.selectedRange.location == self.text.length && self.selectedRange.length == 0) {
-        return YES;
-    }
-    
-    return NO;
 }
 
 

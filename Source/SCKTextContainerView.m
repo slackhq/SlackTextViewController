@@ -13,7 +13,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 @interface SCKInputAccessoryView : UIView
 @end
 
-@interface SCKTextContainerView ()
+@interface SCKTextContainerView () <UITextViewDelegate>
 @property (nonatomic, copy) NSString *rightButtonTitle;
 @end
 
@@ -51,7 +51,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [self updateConstraints];
     
     // textView notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
 }
 
 - (void)dealloc
@@ -61,7 +61,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     _textView = nil;
     
     // textView notifications
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
 }
 
 
@@ -85,6 +85,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.enablesReturnKeyAutomatically = YES;
         _textView.scrollIndicatorInsets = UIEdgeInsetsMake(0, -1, 0, 1);
         _textView.inputAccessoryView = [SCKInputAccessoryView new];
+        _textView.delegate = self;
         
         _textView.layer.cornerRadius = 4.0f;
         _textView.layer.borderWidth = 1.0f;
@@ -157,19 +158,25 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 }
 
 
-#pragma mark - Notifications
+#pragma mark - UITextViewDelegate
 
-- (void)didChangeTextView:(NSNotification *)notification
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    SCKTextView *textView = (SCKTextView *)notification.object;
+    NSDictionary *userInfo = @{@"text": text, @"range": [NSValue valueWithRange:range]};
+    [[NSNotificationCenter defaultCenter] postNotificationName:SCKTextViewTextWillChangeNotification object:self.textView userInfo:userInfo];
     
+    return YES;
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
     // If it's not the expected textView, return.
     if (![textView isEqual:self.textView]) {
         return;
     }
     
     BOOL enableRightButton = (self.textView.text.length > 0) ? YES : NO;
-
+    
     // If the button should automatically hide when the text view is empty
     if (self.autoHideRightButton) {
         
@@ -187,6 +194,14 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         [self.rightButton setEnabled:enableRightButton];
     }
 }
+
+
+//#pragma mark - Notifications
+//
+//- (void)didChangeTextView:(NSNotification *)notification
+//{
+//    
+//}
 
 
 #pragma mark - View Auto-Layout

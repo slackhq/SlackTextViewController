@@ -10,15 +10,19 @@
 #import "SCKTextContainerView.h"
 #import "SCKTypeIndicatorView.h"
 
+@protocol SCKAutoCompletionDelegate;
+
 /** */
 @interface SCKChatViewController : UIViewController
 
-/** The tableView. */
+/** The main tableView. */
 @property (nonatomic, readonly) UITableView *tableView;
 /** The bottom text container view, wrapping the text view and buttons. */
 @property (nonatomic, readonly) SCKTextContainerView *textContainerView;
 /** The typing indicator. */
 @property (nonatomic, readonly) SCKTypeIndicatorView *typeIndicatorView;
+/** The tableView used to display auto-completion results. */
+@property (nonatomic, readonly) UITableView *autoCompleteView;
 /** YES if control's animation should be elastic and bouncy. Default is YES. */
 @property (nonatomic, assign) BOOL allowElasticity;
 
@@ -33,30 +37,27 @@
 /** Dismisses the keyboard */
 - (void)dismissKeyboard;
 
-@end
+- (void)hideAutoCompleteView;
+
+- (void)replaceFoundStringWithString:(NSString *)string;
 
 
-@protocol SCKAutoCompletionDataSource <UITableViewDataSource>
-
-- (BOOL)tableView:(UITableView *)tableView shouldAutoCompleteForFoundString:(NSString *)string;
-
-@end
-
-@protocol SCKAutoCompletionDelegate <UITableViewDelegate>
-
-- (void)tableView:(UITableView *)tableView didSelectStringRepresentation:(NSString *)string;
+// Auto-completion
+/** */
+@property (nonatomic, weak) id<SCKAutoCompletionDelegate>autoCompletionDelegate;
+/** */
+@property (nonatomic, strong) NSMutableArray *signLookup;
 
 @end
 
 
-@interface SCKChatViewController (AutoCompletion)
+@protocol SCKAutoCompletionDelegate <NSObject>
+@optional
 
-@property (nonatomic, assign) id<SCKAutoCompletionDataSource>autoCompletionDataSource;
-@property (nonatomic, assign) id<SCKAutoCompletionDelegate>autoCompletionDelegate;
+/** */
+- (BOOL)tableView:(UITableView *)tableView shouldShowAutoCompletionForSearchString:(NSString *)string withSign:(NSString *)sign;
 
-- (void)registerAutoCompletionStringRepresentation:(NSString *)string;
-- (void)registerAutoCompletionStringRepresentations:(NSArray *)strings;
-
-- (void)removeAutoCompletionStringRepresentation:(NSString *)string;
+/** */
+- (CGFloat)tableView:(UITableView *)tableView heightForSearchString:(NSString *)string withSign:(NSString *)sign;
 
 @end
