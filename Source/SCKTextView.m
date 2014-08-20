@@ -25,36 +25,12 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 - (id)init
 {
     if (self = [super init]) {
-        [self commonInit];
+        [self configure];
     }
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame
-{
-    if (self = [super initWithFrame:frame]) {
-        [self commonInit];
-    }
-    return self;
-}
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    [self commonInit];
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
-    
-    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
-}
-
-
-#pragma mark - Setup
-
-- (void)commonInit
+- (void)configure
 {
     self.placeholderColor = [UIColor lightGrayColor];
     
@@ -64,26 +40,23 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
     self.scrollEnabled = YES;
     self.scrollsToTop = NO;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewDidChange:) name:UITextViewTextDidChangeNotification object:nil];
-}
-
-- (void)didMoveToSuperview
-{
-    [super didMoveToSuperview];
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
+    
     [self addObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize)) options:0 context:NULL];
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+    
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
+}
 
 #pragma mark - Getters
 
 - (UILabel *)placeholderLabel
 {
-    if (!_placeholder) {
-        return nil;
-    }
-    
-    if (!_placeholderLabel) {
+    if (!_placeholderLabel && _placeholder) {
         _placeholderLabel = [UILabel new];
         _placeholderLabel.lineBreakMode = NSLineBreakByWordWrapping;
         _placeholderLabel.numberOfLines = 0;
@@ -117,13 +90,7 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 
 - (void)setText:(NSString *)text
 {
-//    if (!self.isFirstResponder) {
-//        [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidBeginEditingNotification object:self];
-//    }
-    
     [super setText:text];
-    
-//    [self textViewDidChange:nil];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:self];
 }
@@ -166,7 +133,7 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 
 #pragma mark - Notifications
 
-- (void)textViewDidChange:(NSNotification *)notification
+- (void)didChangeTextView:(NSNotification *)notification
 {
     if (self.placeholder.length > 0) {
         self.placeholderLabel.hidden = (self.text.length > 0) ? YES : NO;
