@@ -44,12 +44,12 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     
     [self setupViewConstraints];
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
 }
 
 - (void)dealloc
 {
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
     
     _leftButton = nil;
     _rightButton = nil;
@@ -165,6 +165,16 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 #pragma mark - UITextViewDelegate
 
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    return YES;
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView
+{
+    return YES;
+}
+
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     NSDictionary *userInfo = @{@"text": text, @"range": [NSValue valueWithRange:range]};
@@ -179,10 +189,9 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [[NSNotificationCenter defaultCenter] postNotificationName:SCKTextViewSelectionDidChangeNotification object:self.textView userInfo:userInfo];
 }
 
-- (void)textViewDidChange:(UITextView *)textView;
-//- (void)didChangeTextView:(NSNotification *)notification
+- (void)didChangeTextView:(NSNotification *)notification
 {
-//    SCKTextView *textView = (SCKTextView *)notification.object;
+    SCKTextView *textView = (SCKTextView *)notification.object;
     
     // If it's not the expected textView, return.
     if (![textView isEqual:self.textView]) {

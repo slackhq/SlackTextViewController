@@ -15,7 +15,7 @@
 
 @protocol SCKAutoCompletionDelegate;
 
-/** */
+/** A drop-in replacement of UITableViewController with chat features. */
 @interface SCKChatViewController : UIViewController
 
 /** The main tableView. */
@@ -48,28 +48,72 @@
  */
 - (void)textDidUpdate:(BOOL)animated;
 
+/**
+ Verifies if the right button can be pressed. If NO, the button is disabled.
+ @discussion You can override this method to perform additional tasks.
+ 
+ @return YES if the right button can be pressed.
+ */
+- (BOOL)canPressSendButton;
 
-/** Shows the keyboard */
-- (void)presentKeyboard;
+/**
+ Presents the keyboard, if not already, animated.
+ 
+ @animated YES if the keyboard should show using an animation.
+ */
+- (void)presentKeyboard:(BOOL)animated;
 
-/** Dismisses the keyboard */
-- (void)dismissKeyboard;
+/**
+ Dimisses the keyboard, if not already, animated.
+ 
+ @animated YES if the keyboard should be dismissed using an animation.
+ */
+- (void)dismissKeyboard:(BOOL)animated;
 
-/** Hides the auto-completion view, animated */
+
+///------------------------------------------------
+/// Text typing Auto-Completion
+///------------------------------------------------
+
+@property (nonatomic, strong) NSString *detectedKey;
+@property (nonatomic, strong) NSString *detectedWord;
+
+/**
+ Registers any string key for auto-completion detection. The keys must be valid NSString, no longer than 1 character.
+ This also checks if no repeated key is inserted.
+ 
+ @param keys An array of string keys.
+ */
+- (void)registerKeysForAutoCompletion:(NSArray *)keys;
+
+/**
+ Verifies that the auto-completion can be shown.
+ @discussion You can override this method to perform additional tasks.
+ 
+ @return YES if the auto-completion view can be shown.
+ */
+- (BOOL)canShowAutoCompletion;
+
+/**
+ Returns a custom height for the auto-completion view. Default and maximum is 0.0.
+ */
+- (CGFloat)heightForAutoCompletionView;
+
+/**
+ Returns the maximum height for the auto-completion view. Default and maximum is 140.0.
+ */
+- (CGFloat)maximumHeightForAutoCompletionView;
+
+/**
+ Cancels and hides the auto-completion view, animated
+ */
 - (void)cancelAutoCompletion;
 
-/**  */
-- (void)didSelectAutoCompletionSuggestion:(NSString *)string;
-
-// Auto-completion
-@property (nonatomic, strong) NSMutableArray *keysLookup;
-@property (nonatomic, strong) NSString *keyString;
-@property (nonatomic) NSRange keyRange;
-@property (nonatomic, strong) NSString *currentWord;
-
-// Methods to override
-- (BOOL)canPressSendButton;
-- (BOOL)canShowAutoCompletion;
-- (CGFloat)heightForAutoCompletionView;
+/** 
+ Accepts the auto-completion, replacing the detected key and word with a new string.
+ 
+ @param string The string to be used for replacing auto-completion placeholders.
+ */
+- (void)acceptAutoCompletionWithString:(NSString *)string;
 
 @end

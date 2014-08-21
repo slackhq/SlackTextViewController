@@ -33,6 +33,9 @@
 @property (nonatomic, strong) NSLayoutConstraint *autoCompleteViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *keyboardHC;
 
+@property (nonatomic, strong) NSMutableArray *keysLookupList;
+@property (nonatomic) NSRange detectedKeyRange;
+
 @end
 
 @implementation SCKChatViewController
@@ -188,9 +191,56 @@
     return 0.0;
 }
 
+- (CGFloat)maximumHeightForAutoCompletionView
+{
+    return 140.0;
+}
+
 - (BOOL)canPressSendButton
 {
     return self.textView.text.length > 0;
+}
+
+- (void)presentKeyboard:(BOOL)animated
+{
+    if (![self.textView isFirstResponder])
+    {
+        if (!animated)
+        {
+            [UIView beginAnimations:nil context:nil];
+            [UIView setAnimationDuration:0.0];
+            [UIView setAnimationDelay:0.0];
+            [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+            
+            [self.textView becomeFirstResponder];
+            
+            [UIView commitAnimations];
+        }
+        else {
+            [self.textView becomeFirstResponder];
+        }
+    }
+}
+
+- (void)dismissKeyboard:(BOOL)animated
+{
+    if ([self.textView isFirstResponder])
+    {
+        if (!animated)
+        {
+            [UIView beginAnimations:nil context:nil];
+            [UIView setAnimationDuration:0.0];
+            [UIView setAnimationDelay:0.0];
+            [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+            
+            [self.textView resignFirstResponder];
+            
+            [UIView commitAnimations];
+        }
+        else {
+            [self.textView resignFirstResponder];
+        }
+    }
 }
 
 - (void)textWillUpdate
@@ -271,20 +321,11 @@
 }
 
 
-#pragma mark - Actions
-
-- (void)presentKeyboard
-{
-    if (![self.textView isFirstResponder]) {
-        [self.textView becomeFirstResponder];
-    }
-}
+#pragma mark - Private Actions
 
 - (void)dismissKeyboard
 {
-    if ([self.textView isFirstResponder]) {
-        [self.textView resignFirstResponder];
-    }
+    [self dismissKeyboard:YES];
 }
 
 
@@ -433,11 +474,21 @@
 
 #pragma mark - Auto-Completion Text Processing
 
-- (void)cancelAutoCompletion
+- (void)registerKeysForAutoCompletion:(NSArray *)keys
 {
-    self.keyString = nil;
-    self.keyRange = NSRangeFromString(nil);
-    [self showAutoCompletionView:NO];
+    if (!self.keysLookupList) {
+        self.keysLookupList = [[NSMutableArray alloc] initWithCapacity:keys.count];
+    }
+    
+    for (NSString *key in keys) {
+        if (![key isKindOfClass:[NSString class]] || key.length == 0 || key.length > 1) {
+            continue;
+        }
+        
+        if (![self.keysLookupList containsObject:key]) {
+            [self.keysLookupList addObject:key];
+        }
+    }
 }
 
 - (void)processAutoCompletion
@@ -451,24 +502,24 @@
     NSRange range;
     NSString *word = [self.textView getWordAtCursor:&range];
         
-    for (NSString *sign in self.keysLookup) {
+    for (NSString *sign in self.keysLookupList) {
         
         NSRange keyRange = [word rangeOfString:sign];
         
         if (keyRange.location == 0 || (keyRange.length == 1)) {
-            self.keyString = sign;
-            self.keyRange = NSMakeRange(range.location, sign.length);
+            self.detectedKey = sign;
+            self.detectedKeyRange = NSMakeRange(range.location, sign.length);
         }
     }
     
-    if (self.keyString.length > 0) {
+    if (self.detectedKey.length > 0) {
         if (range.length == 0 || range.length != word.length) {
             [self cancelAutoCompletion];
         }
     }
     
-    if (self.keyString.length > 0) {
-        self.currentWord = [word stringByReplacingOccurrencesOfString:self.keyString withString:@""];
+    if (self.detectedKey.length > 0) {
+        self.detectedWord = [word stringByReplacingOccurrencesOfString:self.detectedKey withString:@""];
     }
     
     BOOL show = [self canShowAutoCompletion];
@@ -476,15 +527,22 @@
     [self showAutoCompletionView:show];
 }
 
-- (void)didSelectAutoCompletionSuggestion:(NSString *)string
+- (void)cancelAutoCompletion
+{
+    self.detectedKey = nil;
+    self.detectedKeyRange = NSRangeFromString(nil);
+    [self showAutoCompletionView:NO];
+}
+
+- (void)acceptAutoCompletionWithString:(NSString *)string
 {
     if (string.length == 0) {
         return;
     }
     
     NSString *word = nil;
-    if (self.keyString.length > 0) {
-        word = [self.currentWord stringByReplacingOccurrencesOfString:self.keyString withString:@""];
+    if (self.detectedKey.length > 0) {
+        word = [self.detectedWord stringByReplacingOccurrencesOfString:self.detectedKey withString:@""];
     }
     
     SCKTextView *textView = self.textView;
@@ -495,11 +553,13 @@
         insertionRange = [textView insertText:string inRange:range];
     }
     else {
-        NSRange range = NSMakeRange(self.keyRange.location+1, 0.0);
+        NSRange range = NSMakeRange(self.detectedKeyRange.location+1, 0.0);
         insertionRange = [textView insertText:string inRange:range];
     }
     
     textView.selectedRange = NSMakeRange(insertionRange.location, 0);
+    
+    [self cancelAutoCompletion];
 }
 
 - (void)hideAutoCompleteView
@@ -511,8 +571,8 @@
 {
     CGFloat viewHeight = show ? [self heightForAutoCompletionView] : 0.0;
     
-    if (viewHeight > 140.0) {
-        viewHeight = 140.0;
+    if (viewHeight > [self maximumHeightForAutoCompletionView]) {
+        viewHeight = [self maximumHeightForAutoCompletionView];
     }
     
     if (self.autoCompleteViewHC.constant != viewHeight)

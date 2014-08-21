@@ -78,7 +78,7 @@
     self.textContainerView.backgroundColor = [UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:1.0];
     
     [self.rightButton addTarget:self action:@selector(didTapRighttButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.rightButton setTitle:NSLocalizedString(@"Enviar", nil) forState:UIControlStateNormal];
+    [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
     [self.rightButton setTintColor:[UIColor colorWithRed:0/255.0 green:136.0/255.0 blue:204.0/255.0 alpha:1.0]];
     [self.leftButton setAccessibilityLabel:@"Send button"];
 
@@ -87,7 +87,7 @@
     [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
     [self.leftButton setAccessibilityLabel:@"Upload image"];
     
-    self.keysLookup = [@[@"@", @"#", @"/", @":"] mutableCopy];
+    [self registerKeysForAutoCompletion:@[@"@", @"#", @"/", @":"]];
 }
 
 
@@ -138,7 +138,7 @@
 
 - (void)didChangeReachability
 {
-    NSString *placeholder = self.isReachable ? NSLocalizedString(@"Message", nil) : NSLocalizedString(@"Loading...", nil);
+    NSString *placeholder = self.isReachable ? NSLocalizedString(@"Message", nil) : NSLocalizedString(@"Connecting...", nil);
     UIColor *textViewColor = self.isReachable ? [UIColor whiteColor] : [UIColor colorWithRed:253/255.0 green:240/255.0 blue:195/255.0 alpha:1.0];
     
     self.textView.placeholder = placeholder;
@@ -150,6 +150,16 @@
 
 #pragma mark - Overriden Methods
 
+//- (void)presentKeyboard:(BOOL)animated
+//{
+//    [super presentKeyboard:animated];
+//}
+//
+//- (void)dismissKeyboard:(BOOL)animated
+//{
+//    [super presentKeyboard:animated];
+//}
+
 - (BOOL)canPressSendButton
 {
     return self.isReachable && self.textView.text.length > 0;
@@ -158,8 +168,8 @@
 - (BOOL)canShowAutoCompletion
 {
     NSArray *array = nil;
-    NSString *key = self.keyString;
-    NSString *string = self.currentWord;
+    NSString *key = self.detectedKey;
+    NSString *string = self.detectedWord;
     
     self.searchResult = [SearchResult new];
     self.searchResult.key = key;
@@ -328,9 +338,7 @@
         
         NSLog(@"selected item : %@", item);
         
-        [self didSelectAutoCompletionSuggestion:item];
-        
-        [self cancelAutoCompletion];
+        [self acceptAutoCompletionWithString:item];
     }
 }
 
