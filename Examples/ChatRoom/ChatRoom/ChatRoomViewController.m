@@ -161,8 +161,6 @@
     NSString *key = self.keyString;
     NSString *string = self.currentWord;
     
-    NSLog(@"%s string: %@ sign: %@",__FUNCTION__, string, key);
-    
     self.searchResult = [SearchResult new];
     self.searchResult.key = key;
     
@@ -202,6 +200,16 @@
 {
     CGFloat cellHeight = [self.autoCompleteView.delegate tableView:self.autoCompleteView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     return cellHeight*self.searchResult.list.count;
+}
+
+- (void)textWillUpdate
+{
+    [super textWillUpdate];
+}
+
+- (void)textDidUpdate:(BOOL)animated
+{
+    [super textDidUpdate:animated];
 }
 
 
@@ -318,11 +326,11 @@
             item = [NSString stringWithFormat:@"%@ ", item];
         }
         
-        NSLog(@"item : %@", item);
+        NSLog(@"selected item : %@", item);
         
         [self didSelectAutoCompletionSuggestion:item];
         
-        [self hideAutoCompleteView];
+        [self cancelAutoCompletion];
     }
 }
 

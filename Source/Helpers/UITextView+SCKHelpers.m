@@ -10,14 +10,17 @@
 
 @implementation UITextView (SCKHelpers)
 
-- (void)scrollRangeToBottom
+- (void)scrollToBottom:(BOOL)animated
 {
-    NSUInteger lenght = self.text.length;
+    CGRect caretRect = [self caretRectForPosition:self.endOfDocument];
+    [self scrollRectToVisible:caretRect animated:animated];
     
-    if (lenght > 0) {
-        NSRange bottom = NSMakeRange(lenght-1.0, 1.0);
-        [self scrollRangeToVisible:bottom];
-    }
+//    NSUInteger lenght = self.text.length;
+//    
+//    if (lenght > 0) {
+//        NSRange bottom = NSMakeRange(lenght-1.0, 1.0);
+//        [self scrollRangeToVisible:bottom];
+//    }
 }
 
 - (void)insertTextAtCursor:(NSString *)text

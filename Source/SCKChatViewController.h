@@ -32,7 +32,22 @@
 // Convenience accessors (access through the text container view)
 @property (nonatomic, readonly) SCKTextView *textView;
 @property (nonatomic, readonly) UIButton *leftButton;
-@property (nonatomic, readonly) UIButton *rightButton; 
+@property (nonatomic, readonly) UIButton *rightButton;
+
+/**
+ Notifies the view controller that the text input will be updated.
+ @discussion You can override this method to perform additional tasks associated with presenting the view. If you override this method, you must call super at some point in your implementation.
+ */
+- (void)textWillUpdate;
+
+/**
+ Notifies the view controller that the text input has been updated.
+ @discussion You can override this method to perform additional tasks associated with presenting the view. If you override this method, you must call super at some point in your implementation.
+ 
+ @param If YES, the text container view was resized using an animation.
+ */
+- (void)textDidUpdate:(BOOL)animated;
+
 
 /** Shows the keyboard */
 - (void)presentKeyboard;
@@ -41,7 +56,7 @@
 - (void)dismissKeyboard;
 
 /** Hides the auto-completion view, animated */
-- (void)hideAutoCompleteView;
+- (void)cancelAutoCompletion;
 
 /**  */
 - (void)didSelectAutoCompletionSuggestion:(NSString *)string;

@@ -16,7 +16,7 @@
 /**
  Scrolls animated to the very end of the content size.
  */
-- (void)scrollRangeToBottom;
+- (void)scrollToBottom:(BOOL)animated;
 
 /**
  Adds a string at the cursor's position.

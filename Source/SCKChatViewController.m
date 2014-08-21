@@ -193,6 +193,83 @@
     return self.textView.text.length > 0;
 }
 
+- (void)textWillUpdate
+{
+    
+}
+
+- (void)textDidUpdate:(BOOL)animated
+{
+    self.rightButton.enabled = [self canPressSendButton];
+    
+    CGSize textContentSize = self.textView.contentSize;
+    
+    // If the content size didn't change, return.
+    if (textContentSize.height == textContentHeight) {
+        SCKLog(@"The content size didn't change, return");
+        return;
+    }
+    
+    if (textContentSize.height != textContentHeight)
+    {
+        CGFloat delta = textContentSize.height-textContentHeight;
+        CGFloat containerNewHeight = 0;
+        
+        if (self.textView.numberOfLines <= self.textView.maxNumberOfLines) {
+            containerNewHeight = textContentHeight+delta+(kTextViewVerticalPadding*2.0);
+        }
+        else if (self.containerViewHC.constant < self.textContainerView.maxHeight) {
+            containerNewHeight = self.textContainerView.maxHeight;
+        }
+        
+        if (containerNewHeight < self.textContainerView.minHeight) {
+            SCKLog(@"The containerNewHeight smaller than min height (%f): return", containerNewHeight);
+            return;
+        }
+        
+        if (containerNewHeight != self.containerViewHC.constant)
+        {
+            CGFloat offsetDelta = roundf(self.containerViewHC.constant-containerNewHeight);
+            CGFloat offsetY = self.tableView.contentOffset.y-offsetDelta;
+            
+            self.containerViewHC.constant = containerNewHeight;
+            self.tableViewHC.constant = (self.keyboardHC.constant-containerNewHeight)-self.typeIndicatorViewHC.constant;
+            
+            BOOL scroll = [self.tableView canScrollToBottom];
+            
+            // If not animated, we layout and scroll without animation
+            if (!animated) {
+                [self.view layoutIfNeeded];
+                
+                if (scroll && offsetY >= 0) {
+                    [self.tableView setContentOffset:CGPointMake(0.0, offsetY) animated:animated];
+                }
+                
+                if (self.textView.selectedRange.length == 0) {
+                    [self.textView scrollToBottom:animated];
+                }
+                return;
+            }
+            
+            [self.view animateLayoutIfNeeded:self.allowElasticity
+                                       curve:UIViewAnimationOptionCurveEaseInOut
+                                  animations:^{
+                                      if (scroll && offsetY >= 0) {
+                                          [self.tableView setContentOffset:CGPointMake(0.0, offsetY)];
+                                      }
+                                      
+                                      if (self.textView.selectedRange.length == 0) {
+                                          [self.textView scrollToBottom:YES];
+                                      }
+                                  }];
+        }
+        else {
+            SCKLog(@"The self.containerViewHC didn't change (%f): return", containerNewHeight);
+            return;
+        }
+    }
+}
+
 
 #pragma mark - Actions
 
@@ -291,6 +368,8 @@
         SCKLog(@"Not the expected textView, return");
         return;
     }
+    
+    [self textWillUpdate];
 }
 
 - (void)didChangeTextViewText:(NSNotification *)notification
@@ -303,60 +382,7 @@
         return;
     }
     
-    self.rightButton.enabled = [self canPressSendButton];
-    
-    CGSize textContentSize = textView.contentSize;
-    
-    // If the content size didn't change, return.
-    if (textContentSize.height == textContentHeight) {
-        SCKLog(@"The content size didn't change, return");
-        return;
-    }
-
-    if (textContentSize.height != textContentHeight)
-    {
-        CGFloat delta = textContentSize.height-textContentHeight;
-        CGFloat containerNewHeight = 0;
-        
-        if (textView.numberOfLines <= textView.maxNumberOfLines) {
-            containerNewHeight = textContentHeight+delta+(kTextViewVerticalPadding*2.0);
-        }
-        else if (self.containerViewHC.constant < self.textContainerView.maxHeight) {
-            containerNewHeight = self.textContainerView.maxHeight;
-        }
-        
-        if (containerNewHeight < self.textContainerView.minHeight) {
-            SCKLog(@"The containerNewHeight smaller than min height (%f): return", containerNewHeight);
-            return;
-        }
-        
-        if (containerNewHeight != self.containerViewHC.constant)
-        {
-            CGFloat offsetDelta = roundf(self.containerViewHC.constant-containerNewHeight);
-            CGFloat offsetY = self.tableView.contentOffset.y-offsetDelta;
-            
-            self.containerViewHC.constant = containerNewHeight;
-            self.tableViewHC.constant = (self.keyboardHC.constant-containerNewHeight)-self.typeIndicatorViewHC.constant;
-            
-            BOOL scroll = [self.tableView canScrollToBottom];
-            
-            [self.view animateLayoutIfNeeded:self.allowElasticity
-                                       curve:UIViewAnimationOptionCurveEaseInOut
-                                  animations:^{
-                                      if (scroll && offsetY >= 0) {
-                                          [self.tableView setContentOffset:CGPointMake(0.0, offsetY)];
-                                      }
-                                      
-                                      if (self.textView.selectedRange.length == 0) {
-                                          [self.textView scrollRangeToBottom];
-                                      }
-                                  }];
-        }
-        else {
-            SCKLog(@"The self.containerViewHC didn't change (%f): return", containerNewHeight);
-            return;
-        }
-    }
+    [self textDidUpdate:YES];
 }
 
 - (void)willShowOrHideTypeIndicatorView:(NSNotification *)notification
@@ -392,7 +418,7 @@
 
 - (void)didChangeTextViewContentSize:(NSNotification *)notification
 {
-    NSLog(@"%s",__FUNCTION__);
+    [self textDidUpdate:YES];
 }
 
 - (void)didChangeTextViewSelection:(NSNotification *)notification
