@@ -196,7 +196,7 @@
     return 140.0;
 }
 
-- (BOOL)canPressSendButton
+- (BOOL)canPressRightButton
 {
     return self.textView.text.length > 0;
 }
@@ -250,7 +250,7 @@
 
 - (void)textDidUpdate:(BOOL)animated
 {
-    self.rightButton.enabled = [self canPressSendButton];
+    self.rightButton.enabled = [self canPressRightButton];
     
     CGSize textContentSize = self.textView.contentSize;
     
@@ -701,6 +701,52 @@
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstAttribute = %d", attribute];
     return [self.view.constraints filteredArrayUsingPredicate:predicate];
+}
+
+- (NSArray *)keyCommands
+{
+    return @[[UIKeyCommand keyCommandWithInput:@"\r"
+                                 modifierFlags:0
+                                        action:@selector(shouldHitReturn)],
+             [UIKeyCommand keyCommandWithInput:@"\r"
+                                 modifierFlags:UIKeyModifierShift
+                                        action:@selector(shouldInsertNewLineBreak)],
+             [UIKeyCommand keyCommandWithInput:@"\r"
+                                 modifierFlags:UIKeyModifierAlternate
+                                        action:@selector(shouldInsertNewLineBreak)],
+             [UIKeyCommand keyCommandWithInput:@"\r"
+                                 modifierFlags:UIKeyModifierControl
+                                        action:@selector(shouldInsertNewLineBreak)],
+             ];
+}
+
+- (void)shouldHitReturn
+{
+//    if (isEditing) {
+//        [self commitEditedMessage];
+//        return;
+//    }
+    
+    NSArray *actions = [self.rightButton actionsForTarget:self forControlEvent:UIControlEventTouchUpInside];
+    
+    if (actions.count > 0) {
+        SEL selector = NSSelectorFromString([actions firstObject]);
+        
+        if ([self respondsToSelector:selector] && [self canPressRightButton]) {
+            [self performSelector:selector withObject:nil afterDelay:0];
+        }
+    }
+}
+
+- (void)shouldInsertNewLineBreak
+{
+//    if (isEditing) {
+//        [self commitEditedMessage];
+//        return;
+//    }
+    
+    // Respond to the event
+    [self.textView insertTextAtCursor:@"\n"];
 }
 
 

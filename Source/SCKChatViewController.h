@@ -54,7 +54,7 @@
  
  @return YES if the right button can be pressed.
  */
-- (BOOL)canPressSendButton;
+- (BOOL)canPressRightButton;
 
 /**
  Presents the keyboard, if not already, animated.

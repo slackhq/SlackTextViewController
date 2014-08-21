@@ -160,7 +160,7 @@
 //    [super presentKeyboard:animated];
 //}
 
-- (BOOL)canPressSendButton
+- (BOOL)canPressRightButton
 {
     return self.isReachable && self.textView.text.length > 0;
 }
@@ -291,6 +291,10 @@
         
         CGRect bounds = [message boundingRectWithSize:CGSizeMake(CGRectGetWidth(tableView.frame)-40.0, 0.0) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
         
+        if (message.length == 0) {
+            return 0.0;
+        }
+        
         return CGRectGetHeight(bounds)+20.0;
     }
     else {
@@ -335,8 +339,6 @@
         else {
             item = [NSString stringWithFormat:@"%@ ", item];
         }
-        
-        NSLog(@"selected item : %@", item);
         
         [self acceptAutoCompletionWithString:item];
     }
