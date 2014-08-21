@@ -462,15 +462,18 @@
     }
     
     SCKTextView *textView = self.textView;
+    NSRange insertionRange = textView.selectedRange;
     
     if (word.length > 0) {
         NSRange range = [self.textView.text rangeOfString:word];
-        textView.selectedRange = [textView insertText:string inRange:range];
+        insertionRange = [textView insertText:string inRange:range];
     }
     else {
         NSRange range = NSMakeRange(self.keyRange.location+1, 0.0);
-        textView.selectedRange = [textView insertText:string inRange:range];
+        insertionRange = [textView insertText:string inRange:range];
     }
+    
+    textView.selectedRange = NSMakeRange(insertionRange.location, 0);
 }
 
 - (void)hideAutoCompleteView
