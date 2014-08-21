@@ -423,8 +423,8 @@
     }
 
     NSRange range;
-    NSString *word = [self.textView closerWord:&range];
-
+    NSString *word = [self.textView getWordAtCursor:&range];
+        
     for (NSString *sign in self.keysLookup) {
         
         NSRange keyRange = [word rangeOfString:sign];

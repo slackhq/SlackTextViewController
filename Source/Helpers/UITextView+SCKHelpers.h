@@ -10,8 +10,11 @@
 
 @interface UITextView (SCKHelpers)
 
+/** YES if the cursor is positionned at the very end. */
+@property (nonatomic, readonly) BOOL isCursorAtEnd;
+
 /**
- 
+ Scrolls animated to the very end of the content size.
  */
 - (void)scrollRangeToBottom;
 
@@ -33,17 +36,16 @@
 - (NSRange)insertText:(NSString *)text inRange:(NSRange)range;
 
 /**
+ Finds the word close to the cursor's position, if any.
  
+ @param range Returns the range of the found word.
+ @returns The found word.
  */
-- (BOOL)isCursorAtEnd;
+- (NSString *)getWordAtCursor:(NSRangePointer)range;
 
 /**
- 
- */
-- (NSString *)closerWord:(NSRangePointer)range;
-
-/**
- 
+ Disables iOS8's Quick Type bar.
+ @param disable YES if the bar should be disabled.
  */
 - (void)disableQuickTypeBar:(BOOL)disable;
 

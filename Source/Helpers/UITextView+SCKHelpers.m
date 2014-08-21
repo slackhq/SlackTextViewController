@@ -38,7 +38,7 @@
         NSString *leftString = [self.text substringToIndex:range.location];
         NSString *rightString = [self.text substringFromIndex: range.location];
         
-        self.text = [NSString stringWithFormat: @"%@%@%@", leftString, text, rightString];
+        self.text = [NSString stringWithFormat:@"%@%@%@", leftString, text, rightString];
         
         range.location += [text length];
         return range;
@@ -63,35 +63,36 @@
     return NO;
 }
 
-- (NSString *)closerWord:(NSRangePointer)range
+- (NSString *)getWordAtCursor:(NSRangePointer)range
 {
     NSString *text = self.text;
     NSInteger location = self.selectedRange.location;
     
-    NSString *frontString = [text substringToIndex:location];
-    NSString *backString = [text substringFromIndex:location];
-
-    NSArray *frontComponents = [frontString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    frontComponents = [frontComponents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
+    if (text.length == 0) {
+        return nil;
+    }
     
-    NSString *frontWordPart = [frontComponents lastObject];
+    NSString *leftPortion = [text substringToIndex:location];
+    NSArray *leftComponents = [leftPortion componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *leftWordPart = [leftComponents lastObject];
     
-    NSArray *backComponents = [backString componentsSeparatedByString:@" "];
-    NSString *backWordPart = [backComponents firstObject];
+    NSString *rightPortion = [text substringFromIndex:location];
+    NSArray *rightComponents = [rightPortion componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *rightPart = [rightComponents firstObject];
     
     if (location > 0) {
         NSString *characterBeforeCursor = [text substringWithRange:NSMakeRange(location-1, 1)];
         
         if ([characterBeforeCursor isEqualToString:@" "]) {
             // At the start of a word, just use the word behind the cursor for the current word
-            *range = NSMakeRange(location, backWordPart.length);
-            return backWordPart;
+            *range = NSMakeRange(location, rightPart.length);
+            return rightPart;
         }
     }
     
     // In the middle of a word, so combine the part of the word before the cursor, and after the cursor to get the current word
-    NSString *word = [frontWordPart stringByAppendingString:backWordPart];
-    *range = NSMakeRange(location-frontWordPart.length, frontWordPart.length+backWordPart.length);
+    NSString *word = [leftWordPart stringByAppendingString:rightPart];
+    *range = NSMakeRange(location-leftWordPart.length, leftWordPart.length+rightPart.length);
 
     if ([word rangeOfString:@"\n"].location != NSNotFound) {
         word = [[word componentsSeparatedByString:@"\n"] lastObject];
