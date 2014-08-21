@@ -10,6 +10,7 @@
 #import "UITextView+SCKHelpers.h"
 
 extern NSString * const SCKTextViewTextWillChangeNotification;
+extern NSString * const SCKTextViewSelectionDidChangeNotification;
 extern NSString * const SCKTextViewContentSizeDidChangeNotification;
 
 /** A custom text view with placeholder text. */

@@ -10,6 +10,9 @@
 #import "SCKTextContainerView.h"
 #import "SCKTypeIndicatorView.h"
 
+#import "UIScrollView+SCKHelpers.h"
+#import "UITextView+SCKHelpers.h"
+
 @protocol SCKAutoCompletionDelegate;
 
 /** */
@@ -37,27 +40,21 @@
 /** Dismisses the keyboard */
 - (void)dismissKeyboard;
 
+/** Hides the auto-completion view, animated */
 - (void)hideAutoCompleteView;
 
-- (void)replaceFoundStringWithString:(NSString *)string;
-
+/**  */
+- (void)didSelectAutoCompletionSuggestion:(NSString *)string;
 
 // Auto-completion
-/** */
-@property (nonatomic, weak) id<SCKAutoCompletionDelegate>autoCompletionDelegate;
-/** */
-@property (nonatomic, strong) NSMutableArray *signLookup;
+@property (nonatomic, strong) NSMutableArray *keysLookup;
+@property (nonatomic, strong) NSString *keyString;
+@property (nonatomic) NSRange keyRange;
+@property (nonatomic, strong) NSString *currentWord;
 
-@end
-
-
-@protocol SCKAutoCompletionDelegate <NSObject>
-@optional
-
-/** */
-- (BOOL)tableView:(UITableView *)tableView shouldShowAutoCompletionForSearchString:(NSString *)string withSign:(NSString *)sign;
-
-/** */
-- (CGFloat)tableView:(UITableView *)tableView heightForSearchString:(NSString *)string withSign:(NSString *)sign;
+// Methods to override
+- (BOOL)canPressSendButton;
+- (BOOL)canShowAutoCompletion;
+- (CGFloat)heightForAutoCompletionView;
 
 @end

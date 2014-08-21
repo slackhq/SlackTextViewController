@@ -37,6 +37,14 @@
  */
 - (BOOL)isCursorAtEnd;
 
+/**
+ 
+ */
 - (NSString *)closerWord:(NSRangePointer)range;
+
+/**
+ 
+ */
+- (void)disableQuickTypeBar:(BOOL)disable;
 
 @end

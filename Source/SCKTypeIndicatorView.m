@@ -29,19 +29,24 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 {
     self = [super init];
     if (self) {
-        self.height = 30.0;
-        self.interval = 6.0;
-        self.canResignByTouch = YES;
-        self.usernames = [NSMutableArray new];
-        self.timers = [NSMutableArray new];
-        
-        self.backgroundColor = [UIColor whiteColor];
-        
-        [self addSubview:self.indicatorLabel];
-        
-        [self setupConstraints];
+        [self configure];
     }
     return self;
+}
+
+- (void)configure
+{
+    self.height = 30.0;
+    self.interval = 6.0f;
+    self.canResignByTouch = YES;
+    self.usernames = [NSMutableArray new];
+    self.timers = [NSMutableArray new];
+    
+    self.backgroundColor = [UIColor whiteColor];
+    
+    [self addSubview:self.indicatorLabel];
+    
+    [self setupConstraints];
 }
 
 - (void)dealloc
@@ -62,7 +67,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
     {
         _indicatorLabel = [UILabel new];
         _indicatorLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        _indicatorLabel.font = [UIFont systemFontOfSize:12.0];
+        _indicatorLabel.font = [UIFont systemFontOfSize:12.0f];
         _indicatorLabel.textColor =[UIColor grayColor];
         _indicatorLabel.backgroundColor = [UIColor clearColor];
         _indicatorLabel.userInteractionEnabled = NO;
@@ -90,11 +95,11 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
     style.lineBreakMode = NSLineBreakByWordWrapping;
     style.minimumLineHeight = 10.0;
     
-    [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, text.length)];
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0.0, text.length)];
     
     if (_usernames.count <= 2) {
-        [attributedString addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:12.0] range:[text rangeOfString:[_usernames firstObject]]];
-        [attributedString addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:12.0] range:[text rangeOfString:[_usernames lastObject]]];
+        [attributedString addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:12.0f] range:[text rangeOfString:[_usernames firstObject]]];
+        [attributedString addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:12.0f] range:[text rangeOfString:[_usernames lastObject]]];
     }
     
     return attributedString;
@@ -145,7 +150,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
     
     BOOL isShowing = [_usernames containsObject:username];
     
-    if (_interval > 0) {
+    if (_interval > 0.0) {
         
         if (isShowing) {
             NSTimer *timer = [self timerWithIdentifier:username];
@@ -240,13 +245,15 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 - (void)setupConstraints
 {
     NSNumber *lineHeight = @(roundf(self.indicatorLabel.font.lineHeight));
-    NSNumber *padding = @((self.height-[lineHeight floatValue])/2.0);
+    NSNumber *padding = @(roundf((self.height-[lineHeight floatValue]) / 2.0f));
     
     NSDictionary *views = @{@"label": self.indicatorLabel};
     NSDictionary *metrics = @{@"lineHeight": lineHeight, @"padding": padding};
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=padding)-[label(==lineHeight)]-(<=padding)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==40)-[label]-(==20)-|" options:0 metrics:metrics views:views]];
+    
+    [self layoutIfNeeded];
 }
 
 

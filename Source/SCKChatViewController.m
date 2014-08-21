@@ -7,7 +7,7 @@
 //
 
 #import "SCKChatViewController.h"
-#import "UITextView+SCKHelpers.h"
+#import "UIView+SCKHelpers.h"
 
 #define DEBUG_VIEWS YES
 
@@ -17,7 +17,7 @@
 #define SCKLog(...)
 #endif
 
-@interface SCKChatViewController () <UITableViewDataSource, UITableViewDelegate, SCKAutoCompletionDelegate, UIGestureRecognizerDelegate>
+@interface SCKChatViewController () <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
 {
     CGFloat minYOffset;
     UIGestureRecognizer *dismissingGesture;
@@ -32,10 +32,6 @@
 @property (nonatomic, strong) NSLayoutConstraint *typeIndicatorViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *autoCompleteViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *keyboardHC;
-
-@property (nonatomic, strong) NSString *keyString;
-@property (nonatomic) NSRange keyRange;
-@property (nonatomic, strong) NSString *currentWord;
 
 @end
 
@@ -52,7 +48,6 @@
     if (self = [super init])
     {
         self.allowElasticity = YES;
-        self.autoCompletionDelegate = self;
         
         [self.view addSubview:self.tableView];
         [self.view addSubview:self.autoCompleteView];
@@ -66,8 +61,12 @@
     return self;
 }
 
-
 #pragma mark - View lifecycle
+
+- (void)loadView
+{
+    [super loadView];
+}
 
 - (void)viewDidLoad
 {
@@ -176,19 +175,23 @@
     return self.textContainerView.rightButton;
 }
 
-- (CGFloat)damping
+
+#pragma mark - Subclassable Methods
+
+- (BOOL)canShowAutoCompletion
 {
-    return self.allowElasticity ? 0.7 : 1.0;
+    return NO;
 }
 
-- (CGFloat)velocity
+- (CGFloat)heightForAutoCompletionView
 {
-    return self.allowElasticity ? 0.7 : 1.0;
+    return 0.0;
 }
 
-
-#pragma mark - Setters
-
+- (BOOL)canPressSendButton
+{
+    return self.textView.text.length > 0;
+}
 
 
 #pragma mark - Actions
@@ -213,7 +216,7 @@
 - (void)willShowOrHideKeyboard:(NSNotification *)notification
 {
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    double duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     
     endFrame = adjustEndFrame(endFrame, self.interfaceOrientation);
@@ -226,6 +229,7 @@
     CGRect inputFrame = self.textContainerView.frame;
     inputFrame.origin.y  = CGRectGetMinY(endFrame)-CGRectGetHeight(inputFrame);
     
+    // Updates the height constraints' constants
     self.tableViewHC.constant = CGRectGetMinY(inputFrame) - self.typeIndicatorViewHC.constant;
     self.keyboardHC.constant = show ? endFrame.size.height : 0.0;
     
@@ -235,47 +239,38 @@
     CGFloat currentYOffset = self.tableView.contentOffset.y;
     CGFloat maxYOffset = self.tableView.contentSize.height-(CGRectGetHeight(self.view.frame)-CGRectGetHeight(inputFrame));
     
-    BOOL scroll = ((!show && offsetY != currentYOffset && offsetY > (minYOffset-delta) && offsetY < (maxYOffset-delta+minYOffset)) || show);
+    BOOL scroll = (((!show && offsetY != currentYOffset && offsetY > (minYOffset-delta) && offsetY < (maxYOffset-delta+minYOffset)) || show) && [self.tableView canScrollToBottom]);
     
-    [UIView animateWithDuration:duration*3
-                          delay:0.0
-                        options:(curve << 16)|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews
-                     animations:^{
-                         [self.view layoutIfNeeded];
-                         
-                         if (scroll) {
-                             SCKLog(@"%s setContentOffset : %f",__FUNCTION__, offsetY);
-                             [self.tableView setContentOffset:CGPointMake(0, offsetY)];
-                         }
-                     }
-                     completion:NULL];
+    if (!show && self.autoCompleteViewHC.constant > 0) {
+        [self hideAutoCompleteView];
+    }
+    
+    [self.view animateLayoutIfNeededWithDuration:duration*2 bounce:NO curve:curve
+                          animations:^{
+                              if (scroll && offsetY >= 0) {
+                                  [self.tableView setContentOffset:CGPointMake(0, offsetY)];
+                              }
+                          }];
 }
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
 {
-    SCKLog(@"%s",__FUNCTION__);
-    
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     endFrame = adjustEndFrame(endFrame, self.interfaceOrientation);
     
     if (!isKeyboardFrameValid(endFrame)) return;
-
-    CGRect inputFrame = self.textContainerView.frame;
-    inputFrame.origin.y  = CGRectGetMinY(endFrame)-CGRectGetHeight(inputFrame);
     
-    self.tableViewHC.constant = CGRectGetMinY(inputFrame);
+    // Checks if it's showing or hidding the keyboard
+    BOOL show = [notification.name isEqualToString:UIKeyboardDidShowNotification];
     
-    if (self.typeIndicatorView.isVisible) {
-        self.tableViewHC.constant -= self.typeIndicatorViewHC.constant;
+    // After showing keyboard, check if the current cursor position could diplay auto-completion
+    if (show) {
+        [self processAutoCompletion];
     }
-    
-    [self.view layoutIfNeeded];
 }
 
 - (void)didChangeKeyboardFrame:(NSNotification *)notification
 {
-    SCKLog(@"%s",__FUNCTION__);
-    
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect inputFrame = self.textContainerView.frame;
     
@@ -298,7 +293,7 @@
     }
 }
 
-- (void)didChangeTextView:(NSNotification *)notification
+- (void)didChangeTextViewText:(NSNotification *)notification
 {
     SCKTextView *textView = (SCKTextView *)notification.object;
     
@@ -308,7 +303,7 @@
         return;
     }
     
-    [self processAutoCompletion];
+    self.rightButton.enabled = [self canPressSendButton];
     
     CGSize textContentSize = textView.contentSize;
     
@@ -338,28 +333,24 @@
         if (containerNewHeight != self.containerViewHC.constant)
         {
             CGFloat offsetDelta = roundf(self.containerViewHC.constant-containerNewHeight);
+            CGFloat offsetY = self.tableView.contentOffset.y-offsetDelta;
             
             self.containerViewHC.constant = containerNewHeight;
             self.tableViewHC.constant = (self.keyboardHC.constant-containerNewHeight)-self.typeIndicatorViewHC.constant;
             
-            CGFloat offsetY = self.tableView.contentOffset.y-offsetDelta;
+            BOOL scroll = [self.tableView canScrollToBottom];
             
-            [UIView animateWithDuration:0.5
-                                  delay:0.0
-                 usingSpringWithDamping:[self damping]
-                  initialSpringVelocity:[self velocity]
-                                options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews
-                             animations:^{
-                                 [self.view layoutIfNeeded];
-                                 
-                                 SCKLog(@"%s setContentOffset : %f",__FUNCTION__, offsetY);
-                                 [self.tableView setContentOffset:CGPointMake(0.0, offsetY)];
-                                 
-                                 if (self.textView.selectedRange.length == 0) {
-                                     [self.textView scrollRangeToBottom];
-                                 }
-                             }
-                             completion:NULL];
+            [self.view animateLayoutIfNeeded:self.allowElasticity
+                                       curve:UIViewAnimationOptionCurveEaseInOut
+                                  animations:^{
+                                      if (scroll && offsetY >= 0) {
+                                          [self.tableView setContentOffset:CGPointMake(0.0, offsetY)];
+                                      }
+                                      
+                                      if (self.textView.selectedRange.length == 0) {
+                                          [self.textView scrollRangeToBottom];
+                                      }
+                                  }];
         }
         else {
             SCKLog(@"The self.containerViewHC didn't change (%f): return", containerNewHeight);
@@ -384,22 +375,33 @@
     
     self.typeIndicatorViewHC.constant = indicatorView.isVisible ? indicatorView.height : 0.0;
     self.tableViewHC.constant -= self.typeIndicatorViewHC.constant;
+    
+    CGFloat offsetDelta = indicatorView.isVisible ? indicatorView.height : -indicatorView.height;
+    CGFloat offsetY = self.tableView.contentOffset.y+offsetDelta;
+    
+    BOOL scroll = [self.tableView canScrollToBottom];
+    
+    [self.view animateLayoutIfNeeded:self.allowElasticity
+                               curve:UIViewAnimationOptionCurveEaseInOut
+                          animations:^{
+                              if (scroll && offsetY >= 0) {
+                                  [self.tableView setContentOffset:CGPointMake(0.0, offsetY)];
+                              }
+                          }];
+}
 
-    [UIView animateWithDuration:0.2
-                          delay:0.0
-         usingSpringWithDamping:[self damping]
-          initialSpringVelocity:[self velocity]
-                        options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews
-                     animations:^{
-                         [self.view layoutIfNeeded];
-                         
-                         CGFloat offsetDelta = indicatorView.isVisible ? indicatorView.height : -indicatorView.height;
-                         CGFloat offsetY = self.tableView.contentOffset.y+offsetDelta;
-                         
-                         SCKLog(@"%s setContentOffset : %f",__FUNCTION__, offsetY);
-                         [self.tableView setContentOffset:CGPointMake(0.0, offsetY)];
-                     }
-                     completion:NULL];
+- (void)didChangeTextViewContentSize:(NSNotification *)notification
+{
+    NSLog(@"%s",__FUNCTION__);
+}
+
+- (void)didChangeTextViewSelection:(NSNotification *)notification
+{
+    NSRange selectedRange = [notification.userInfo[@"range"] rangeValue];
+    
+    if (selectedRange.length == 0) {
+        [self processAutoCompletion];
+    }
 }
 
 
@@ -415,56 +417,41 @@
 - (void)processAutoCompletion
 {
     NSString *text = self.textView.text;
-    
     if (text.length == 0) {
         [self cancelAutoCompletion];
         return;
     }
 
     NSRange range;
-    self.currentWord = [self.textView closerWord:&range];
+    NSString *word = [self.textView closerWord:&range];
 
-    NSLog(@"text : %@", text);
-    NSLog(@"currentWord : %@", self.currentWord);
-    NSLog(@"currentWord range : %@", NSStringFromRange(range));
-    NSLog(@"currentWord.length : %d", self.currentWord.length);
-    
-    for (NSString *sign in self.signLookup) {
-        if ([self.currentWord rangeOfString:sign].location == 0) {
+    for (NSString *sign in self.keysLookup) {
+        
+        NSRange keyRange = [word rangeOfString:sign];
+        
+        if (keyRange.location == 0 || (keyRange.length == 1)) {
             self.keyString = sign;
             self.keyRange = NSMakeRange(range.location, sign.length);
-            
-            NSLog(@"keyRange : %@", NSStringFromRange(self.keyRange));
         }
     }
     
-    NSLog(@"currentWord has \\n : %@", [self.currentWord rangeOfString:@"\n"].location != NSNotFound ? @"YES" : @"NO");
-    
     if (self.keyString.length > 0) {
-        if (range.length == 0 || [self.currentWord rangeOfString:@"\n"].location != NSNotFound || range.length != self.currentWord.length) {
+        if (range.length == 0 || range.length != word.length) {
             [self cancelAutoCompletion];
         }
     }
     
-    BOOL show = NO;
-    
-    if (self.autoCompletionDelegate && [self.autoCompletionDelegate respondsToSelector:@selector(tableView:shouldShowAutoCompletionForSearchString:withSign:)]) {
-        
-        NSString *word = nil;
-        if (self.keyString.length > 0) {
-            word = [self.currentWord stringByReplacingOccurrencesOfString:self.keyString withString:@""];
-        }
-        
-        show = [self.autoCompletionDelegate tableView:self.autoCompleteView shouldShowAutoCompletionForSearchString:word withSign:self.keyString];
+    if (self.keyString.length > 0) {
+        self.currentWord = [word stringByReplacingOccurrencesOfString:self.keyString withString:@""];
     }
+    
+    BOOL show = [self canShowAutoCompletion];
     
     [self showAutoCompletionView:show];
 }
 
-- (void)replaceFoundStringWithString:(NSString *)string
+- (void)didSelectAutoCompletionSuggestion:(NSString *)string
 {
-    NSLog(@"%s",__FUNCTION__);
-    
     if (string.length == 0) {
         return;
     }
@@ -474,22 +461,16 @@
         word = [self.currentWord stringByReplacingOccurrencesOfString:self.keyString withString:@""];
     }
     
-    NSRange insertionRange;
+    SCKTextView *textView = self.textView;
     
     if (word.length > 0) {
         NSRange range = [self.textView.text rangeOfString:word];
-        NSLog(@"word range : %@", NSStringFromRange(range));
-        
-        insertionRange = [self.textView insertText:string inRange:range];
+        textView.selectedRange = [textView insertText:string inRange:range];
     }
     else {
         NSRange range = NSMakeRange(self.keyRange.location+1, 0.0);
-        NSLog(@"sign range : %@", NSStringFromRange(range));
-
-        insertionRange = [self.textView insertText:string inRange:range];
+        textView.selectedRange = [textView insertText:string inRange:range];
     }
-
-    NSLog(@"insertionRange : %@", NSStringFromRange(insertionRange));
 }
 
 - (void)hideAutoCompleteView
@@ -499,29 +480,28 @@
 
 - (void)showAutoCompletionView:(BOOL)show
 {
-    CGFloat autoCompleteViewHeight = 0.0;
+    CGFloat viewHeight = show ? [self heightForAutoCompletionView] : 0.0;
     
-    if (show && self.autoCompletionDelegate && [self.autoCompletionDelegate respondsToSelector:@selector(tableView:heightForSearchString:withSign:)]) {
-        autoCompleteViewHeight = [self.autoCompletionDelegate tableView:self.autoCompleteView heightForSearchString:self.currentWord withSign:self.keyString];
-        
-        if (autoCompleteViewHeight > 140.0) {
-            autoCompleteViewHeight = 140.0;
-        }
+    if (viewHeight > 140.0) {
+        viewHeight = 140.0;
     }
     
-    if (self.autoCompleteViewHC.constant != autoCompleteViewHeight)
+    if (self.autoCompleteViewHC.constant != viewHeight)
     {
-        self.autoCompleteViewHC.constant = autoCompleteViewHeight;
+        CGFloat offsetDelta = show ? viewHeight : -self.autoCompleteViewHC.constant;
+        CGFloat offsetY = self.tableView.contentOffset.y+offsetDelta;
         
-        [UIView animateWithDuration:0.2
-                              delay:0.0
-             usingSpringWithDamping:[self damping]
-              initialSpringVelocity:[self velocity]
-                            options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews
-                         animations:^{
-                             [self.view layoutIfNeeded];
-                         }
-                         completion:NULL];
+        self.autoCompleteViewHC.constant = viewHeight;
+        
+        BOOL scroll = [self.tableView canScrollToBottom];
+        
+        [self.view animateLayoutIfNeeded:self.allowElasticity
+                                   curve:UIViewAnimationOptionCurveEaseInOut
+                              animations:^{
+                                  if (scroll && offsetY >= 0) {
+                                      [self.tableView setContentOffset:CGPointMake(0.0, offsetY)];
+                                  }
+                              }];
     }
     
     [self.autoCompleteView reloadData];
@@ -566,10 +546,9 @@
     
     // TextView notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willChangeTextView:) name:SCKTextViewTextWillChangeNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidBeginEditingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidEndEditingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:SCKTextViewContentSizeDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewContentSize:) name:SCKTextViewContentSizeDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewSelection:) name:SCKTextViewSelectionDidChangeNotification object:nil];
     
     // TypeIndicator notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SCKTypeIndicatorViewWillShowNotification object:nil];
@@ -587,12 +566,10 @@
     
     // TextView notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewTextWillChangeNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidBeginEditingNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidEndEditingNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewContentSizeDidChangeNotification object:nil];
     
-    // TextView notifications
+    // TypeIndicator notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTypeIndicatorViewWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTypeIndicatorViewWillHideNotification object:nil];
 }
@@ -627,6 +604,8 @@
     self.keyboardHC = bottomConstraints[0];
     
     self.containerViewHC.constant = self.textContainerView.minHeight;
+    
+    [self.view layoutIfNeeded];
 }
 
 - (NSArray *)constraintsForAttribute:(NSLayoutAttribute)attribute

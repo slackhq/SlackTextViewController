@@ -70,28 +70,46 @@
     
     NSString *frontString = [text substringToIndex:location];
     NSString *backString = [text substringFromIndex:location];
-    
-    NSArray *frontComponents = [frontString componentsSeparatedByString:@" "];
-    NSArray *backComponents = [backString componentsSeparatedByString:@" "];
+
+    NSArray *frontComponents = [frontString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    frontComponents = [frontComponents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
     
     NSString *frontWordPart = [frontComponents lastObject];
+    
+    NSArray *backComponents = [backString componentsSeparatedByString:@" "];
     NSString *backWordPart = [backComponents firstObject];
-
+    
     if (location > 0) {
         NSString *characterBeforeCursor = [text substringWithRange:NSMakeRange(location-1, 1)];
         
         if ([characterBeforeCursor isEqualToString:@" "]) {
             // At the start of a word, just use the word behind the cursor for the current word
             *range = NSMakeRange(location, backWordPart.length);
-            return [backWordPart stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+            return backWordPart;
         }
     }
     
     // In the middle of a word, so combine the part of the word before the cursor, and after the cursor to get the current word
+    NSString *word = [frontWordPart stringByAppendingString:backWordPart];
     *range = NSMakeRange(location-frontWordPart.length, frontWordPart.length+backWordPart.length);
-    NSString *currentWord = [frontWordPart stringByAppendingString:backWordPart];
+
+    if ([word rangeOfString:@"\n"].location != NSNotFound) {
+        word = [[word componentsSeparatedByString:@"\n"] lastObject];
+        
+        *range = [text rangeOfString:word];
+    }
+
+    return word;
+}
+
+- (void)disableQuickTypeBar:(BOOL)disable
+{
+    self.autocorrectionType = disable ? UITextAutocorrectionTypeNo : UITextAutocorrectionTypeDefault;
     
-    return [currentWord stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    if (self.isFirstResponder) {
+        [self resignFirstResponder];
+        [self becomeFirstResponder];
+    }
 }
 
 @end

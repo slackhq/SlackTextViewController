@@ -44,12 +44,12 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     
     [self setupViewConstraints];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
 }
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
     
     _leftButton = nil;
     _rightButton = nil;
@@ -152,6 +152,17 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     self.textView.inputAccessoryView.backgroundColor = color;
 }
 
+- (void)setAutoHideRightButton:(BOOL)hide
+{
+    if (self.autoHideRightButton != hide) {
+        _autoHideRightButton = hide;
+    }
+    
+    self.rightButtonWC.constant = [self rightButtonWidth];
+    [self layoutIfNeeded];
+}
+
+
 #pragma mark - UITextViewDelegate
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -162,19 +173,20 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     return YES;
 }
 
-- (void)didChangeTextView:(NSNotification *)notification
+- (void)textViewDidChangeSelection:(UITextView *)textView
 {
-    SCKTextView *textView = (SCKTextView *)notification.object;
+    NSDictionary *userInfo = @{@"range": [NSValue valueWithRange:textView.selectedRange]};
+    [[NSNotificationCenter defaultCenter] postNotificationName:SCKTextViewSelectionDidChangeNotification object:self.textView userInfo:userInfo];
+}
+
+- (void)textViewDidChange:(UITextView *)textView;
+//- (void)didChangeTextView:(NSNotification *)notification
+{
+//    SCKTextView *textView = (SCKTextView *)notification.object;
     
     // If it's not the expected textView, return.
     if (![textView isEqual:self.textView]) {
         return;
-    }
-    
-    BOOL enableRightButton = (self.textView.text.length > 0) ? YES : NO;
-    
-    if (self.rightButton.enabled != enableRightButton) {
-        [self.rightButton setEnabled:enableRightButton];
     }
     
     if (self.autoHideRightButton)

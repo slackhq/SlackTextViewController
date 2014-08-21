@@ -12,36 +12,29 @@
 
 - (void)scrollToBottomAnimated:(BOOL)animated
 {
-    CGPoint bottomOffset = CGPointMake(0, self.contentSize.height - self.bounds.size.height);
-    [self setContentOffset:bottomOffset animated:YES];
+    if ([self canScrollToBottom] && ![self isAtBottom]) {
+        CGPoint bottomOffset = CGPointMake(0.0, self.contentSize.height - self.bounds.size.height);
+        [self setContentOffset:bottomOffset animated:YES];
+    }
 }
 
 - (BOOL)isAtTop
 {
-    return (self.contentOffset.y <= 0) ? YES : NO;
+    return (self.contentOffset.y == 0.0) ? YES : NO;
 }
 
 - (BOOL)isAtBottom
 {
-//    CGPoint offset = self.contentOffset;
-//    CGRect bounds = self.bounds;
-//    CGSize size = self.contentSize;
-//    UIEdgeInsets inset = self.contentInset;
-//    float y = offset.y + bounds.size.height - inset.bottom;
-//    float h = size.height;
-//    
-//    NSLog(@"y : %f", y);
-//    NSLog(@"h : %f", h);
-//
-//    if (y >= h) {
-//        NSLog(@"At the bottom...");
-//    }
-//    
-//    return (y >= h) ? YES : NO;
-    
-    NSLog(@"self.bounds : %@", NSStringFromCGRect(self.bounds));
-    return (self.contentOffset.y >= self.contentSize.height-self.bounds.size.height) ? YES : NO;
+    CGFloat bottomOffset = self.contentSize.height-self.bounds.size.height;
+    return (self.contentOffset.y == bottomOffset) ? YES : NO;
 }
 
+- (BOOL)canScrollToBottom
+{
+    if (self.contentSize.height > self.bounds.size.height) {
+        return YES;
+    }
+    return NO;
+}
 
 @end

@@ -21,6 +21,8 @@
 @interface ChatRoomViewController ()
 @property (nonatomic, getter = isReachable) BOOL reachable;
 
+@property (nonatomic, strong) NSMutableArray *messages;
+
 @property (nonatomic, strong) NSArray *users;
 @property (nonatomic, strong) NSArray *channels;
 @property (nonatomic, strong) NSArray *commands;
@@ -32,14 +34,11 @@
 
 @implementation ChatRoomViewController
 
-- (instancetype)init
+- (id)init
 {
-    if (self = [super init]) {
+    self = [super init];
+    if (self) {
         
-        self.users = @[@"ignacio", @"michael", @"brady", @"everyone", @"channel", @"ali"];
-        self.channels = @[@"general", @"ios", @"random", @"ssb", @"mobile", @"ui", @"released", @"SF"];
-        self.commands = @[@"help", @"away", @"close", @"color", @"colors", @"feedback", @"invite", @"me", @"msg", @"dm", @"open"];
-        self.emojis = @[@"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
     }
     return self;
 }
@@ -50,6 +49,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.messages = [[NSMutableArray alloc] initWithArray:@[@"Hello World!"]];
+    
+    self.users = @[@"ignacio", @"michael", @"brady", @"everyone", @"channel", @"ali"];
+    self.channels = @[@"general", @"ios", @"random", @"ssb", @"mobile", @"ui", @"released", @"SF"];
+    self.commands = @[@"help", @"away", @"close", @"color", @"colors", @"feedback", @"invite", @"me", @"msg", @"dm", @"open"];
+    self.emojis = @[@"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
     
     self.title = @"SlackChatKit";
     
@@ -72,7 +78,7 @@
     self.textContainerView.backgroundColor = [UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:1.0];
     
     [self.rightButton addTarget:self action:@selector(didTapRighttButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
+    [self.rightButton setTitle:NSLocalizedString(@"Enviar", nil) forState:UIControlStateNormal];
     [self.rightButton setTintColor:[UIColor colorWithRed:0/255.0 green:136.0/255.0 blue:204.0/255.0 alpha:1.0]];
     [self.leftButton setAccessibilityLabel:@"Send button"];
 
@@ -81,7 +87,7 @@
     [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
     [self.leftButton setAccessibilityLabel:@"Upload image"];
     
-    self.signLookup = [@[@"@", @"#", @"/", @":"] mutableCopy];
+    self.keysLookup = [@[@"@", @"#", @"/", @":"] mutableCopy];
 }
 
 
@@ -94,9 +100,15 @@
 
 - (void)didTapRighttButton:(id)sender
 {
-    NSLog(@"%s",__FUNCTION__);
+    [self.messages addObject:self.textView.text];
+    
+    [self.tableView reloadData];
     
     self.textView.text = @"";
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.tableView scrollToBottomAnimated:YES];
+    });
 }
 
 - (void)fillWithText
@@ -140,31 +152,30 @@
 
 - (BOOL)canPressSendButton
 {
-    return self.isReachable;
+    return self.isReachable && self.textView.text.length > 0;
 }
 
-
-#pragma mark - SCKAutoCompletionDelegate Methods
-
-- (BOOL)tableView:(UITableView *)tableView shouldShowAutoCompletionForSearchString:(NSString *)string withSign:(NSString *)sign
+- (BOOL)canShowAutoCompletion
 {
-    NSLog(@"%s string: %@ sign: %@",__FUNCTION__, string, sign);
-    
     NSArray *array = nil;
+    NSString *key = self.keyString;
+    NSString *string = self.currentWord;
+    
+    NSLog(@"%s string: %@ sign: %@",__FUNCTION__, string, key);
     
     self.searchResult = [SearchResult new];
-    self.searchResult.key = sign;
-
-    if ([sign isEqualToString:@"@"]) {
+    self.searchResult.key = key;
+    
+    if ([key isEqualToString:@"@"]) {
         array = self.users;
     }
-    else if ([sign isEqualToString:@"#"]) {
+    else if ([key isEqualToString:@"#"]) {
         array = self.channels;
     }
-    else if ([sign isEqualToString:@"/"]) {
+    else if ([key isEqualToString:@"/"]) {
         array = self.commands;
     }
-    else if ([sign isEqualToString:@":"]) {
+    else if ([key isEqualToString:@":"]) {
         array = self.emojis;
     }
     else {
@@ -183,26 +194,14 @@
     }
     
     self.searchResult.list = [array sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-
+    
     return self.searchResult.list.count > 0;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForSearchString:(NSString *)string withSign:(NSString *)sign
+- (CGFloat)heightForAutoCompletionView
 {
-    CGFloat cellHeight = [self.autoCompleteView.delegate tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    CGFloat cellHeight = [self.autoCompleteView.delegate tableView:self.autoCompleteView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     return cellHeight*self.searchResult.list.count;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectStringRepresentation:(NSString *)string withSign:(NSString *)sign
-{
-    NSLog(@"%s",__FUNCTION__);
-}
-
-- (NSString *)tableView:(UITableView *)tableView stringToAppendAfterSelectingSearchString:(NSString *)string withSign:(NSString *)sign
-{
-    NSLog(@"%s",__FUNCTION__);
-    
-    return nil;
 }
 
 
@@ -216,7 +215,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if ([tableView isEqual:self.tableView]) {
-        return 30;
+        return self.messages.count;
     }
     else {
         return self.searchResult.list.count;
@@ -235,7 +234,10 @@
     if ([tableView isEqual:self.tableView]) {
         cell.backgroundColor = [UIColor whiteColor];
         
-        cell.textLabel.text = [NSString stringWithFormat:@"cell %ld", (long)indexPath.row];
+        NSString *message = self.messages[indexPath.row];
+        cell.textLabel.text = message;
+        cell.textLabel.font = [UIFont systemFontOfSize:16.0];
+        cell.textLabel.numberOfLines = 0;
     }
     else {
         cell.backgroundColor = [UIColor clearColor];
@@ -251,6 +253,7 @@
         }
         
         cell.textLabel.text = item;
+        cell.textLabel.font = [UIFont systemFontOfSize:14.0];
     }
     
     return cell;
@@ -259,7 +262,18 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([tableView isEqual:self.tableView]) {
-        return 60.0;
+        NSString *message = self.messages[indexPath.row];
+        
+        NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
+        paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+        paragraphStyle.alignment = NSTextAlignmentLeft;
+        
+        NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:16.0],
+                                     NSParagraphStyleAttributeName: paragraphStyle};
+        
+        CGRect bounds = [message boundingRectWithSize:CGSizeMake(CGRectGetWidth(tableView.frame)-40.0, 0.0) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
+        
+        return CGRectGetHeight(bounds)+20.0;
     }
     else {
         return 40.0;
@@ -306,7 +320,7 @@
         
         NSLog(@"item : %@", item);
         
-        [self replaceFoundStringWithString:item];
+        [self didSelectAutoCompletionSuggestion:item];
         
         [self hideAutoCompleteView];
     }

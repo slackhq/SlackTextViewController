@@ -9,7 +9,8 @@
 #import "SCKTextView.h"
 
 NSString * const SCKTextViewTextWillChangeNotification = @"com.slack.chatkit.SCKTextView.willChangeText";
-NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatkit.SCKTextView.contentSizeDidChange";
+NSString * const SCKTextViewSelectionDidChangeNotification = @"com.slack.chatkit.SCKTextView.didChangeSelection";
+NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatkit.SCKTextView.didChangeContentSize";
 
 @interface SCKTextView ()
 {
@@ -34,7 +35,7 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
 {
     self.placeholderColor = [UIColor lightGrayColor];
     
-    self.font = [UIFont systemFontOfSize:14.0];
+    self.font = [UIFont systemFontOfSize:14.0f];
     self.editable = YES;
     self.selectable = YES;
     self.scrollEnabled = YES;
@@ -113,9 +114,6 @@ NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatk
     
     self.placeholderLabel.textAlignment = textAlignment;
 }
-
-
-#pragma mark - TextView Extensions
 
 - (void)flashScrollIndicatorsIfNeeded
 {
