@@ -23,10 +23,12 @@
 //    }
 }
 
-- (void)insertTextAtCursor:(NSString *)text
+- (void)insertTextAtCaretRange:(NSString *)text
 {
     NSRange range = [self insertText:text inRange:self.selectedRange];
     self.selectedRange = NSMakeRange(range.location, 0);
+    
+    [self scrollRangeToVisible:self.selectedRange];
 }
 
 - (NSRange)insertText:(NSString *)text inRange:(NSRange)range
@@ -57,7 +59,7 @@
     return self.selectedRange;
 }
 
-- (BOOL)isCursorAtEnd
+- (BOOL)isCaretAtEnd
 {
     if (self.selectedRange.location == self.text.length && self.selectedRange.length == 0) {
         return YES;
@@ -66,7 +68,7 @@
     return NO;
 }
 
-- (NSString *)getWordAtCursor:(NSRangePointer)range
+- (NSString *)wordAtCaretRange:(NSRangePointer)range
 {
     NSString *text = self.text;
     NSInteger location = self.selectedRange.location;

@@ -11,7 +11,7 @@
 @interface UITextView (SCKHelpers)
 
 /** YES if the cursor is positionned at the very end. */
-@property (nonatomic, readonly) BOOL isCursorAtEnd;
+@property (nonatomic, readonly) BOOL isCaretAtEnd;
 
 /**
  Scrolls animated to the very end of the content size.
@@ -23,7 +23,7 @@
  
  @param text The string to be appended to the current text.
  */
-- (void)insertTextAtCursor:(NSString *)text;
+- (void)insertTextAtCaretRange:(NSString *)text;
 
 /**
  Adds a string to a specific range.
@@ -36,12 +36,12 @@
 - (NSRange)insertText:(NSString *)text inRange:(NSRange)range;
 
 /**
- Finds the word close to the cursor's position, if any.
+ Finds the word close to the caret's position, if any.
  
  @param range Returns the range of the found word.
  @returns The found word.
  */
-- (NSString *)getWordAtCursor:(NSRangePointer)range;
+- (NSString *)wordAtCaretRange:(NSRangePointer)range;
 
 /**
  Disables iOS8's Quick Type bar.
