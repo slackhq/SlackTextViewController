@@ -7,6 +7,10 @@
 //
 
 #import "UIScrollView+SCKHelpers.h"
+#import <objc/runtime.h>
+
+static NSString * const kKeyScrollViewVerticalIndicator = @"_verticalScrollIndicator";
+static NSString * const kKeyScrollViewHorizontalIndicator = @"_horizontalScrollIndicator";
 
 @implementation UIScrollView (SCKHelpers)
 
@@ -35,6 +39,30 @@
         return YES;
     }
     return NO;
+}
+
+- (UIView *)verticalScroller
+{
+    if(objc_getAssociatedObject(self, _cmd) == nil) {
+        objc_setAssociatedObject(self, _cmd, [self safeValueForKey:kKeyScrollViewVerticalIndicator], OBJC_ASSOCIATION_ASSIGN);
+    }
+    
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (UIView *)horizontalScroller
+{
+    if(objc_getAssociatedObject(self, _cmd) == nil) {
+        objc_setAssociatedObject(self, _cmd, [self safeValueForKey:kKeyScrollViewHorizontalIndicator], OBJC_ASSOCIATION_ASSIGN);
+    }
+    
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (id)safeValueForKey:(NSString *)key
+{
+    Ivar instanceVariable = class_getInstanceVariable([self class], [key cStringUsingEncoding:NSUTF8StringEncoding]);
+    return object_getIvar(self, instanceVariable);
 }
 
 @end

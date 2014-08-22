@@ -17,10 +17,15 @@
 - (void)scrollToBottomAnimated:(BOOL)animated;
 
 /** YES if the scrollView's offset is at the very top. */
-- (BOOL)isAtTop;
+@property (nonatomic, readonly) BOOL isAtTop;
 /** YES if the scrollView's offset is at the very bottom. */
-- (BOOL)isAtBottom;
+@property (nonatomic, readonly) BOOL isAtBottom;
 /** YES if the scrollView can scroll from it's current offset position to the bottom. */
-- (BOOL)canScrollToBottom;
+@property (nonatomic, readonly) BOOL canScrollToBottom;
+
+/** The vertical scroll indicator view. */
+@property (nonatomic, readonly) UIView *verticalScroller;
+/** The horizontal scroll indicator view. */
+@property (nonatomic, readonly) UIView *horizontalScroller;
 
 @end

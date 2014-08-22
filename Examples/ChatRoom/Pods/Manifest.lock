@@ -1,6 +1,10 @@
 PODS:
   - LoremIpsum (1.0.0)
-  - SlackChatKit (0.0.1)
+  - SlackChatKit (0.0.1):
+    - SlackChatKit/Helpers
+    - SlackChatKit/Helpers
+  - SlackChatKit/Helpers (0.0.1):
+    - SlackChatKit/Helpers
 
 DEPENDENCIES:
   - LoremIpsum (~> 1.0)
@@ -12,6 +16,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   LoremIpsum: a4d378ecaffcb08c7e40cdba3fb935dc41b2272c
-  SlackChatKit: 1ee4d0d1c8aed7b444e574cdf85e84c78ec3650a
+  SlackChatKit: 43b7b06f7efe784eb42a291a2647bfa2cee748e7
 
 COCOAPODS: 0.33.1
