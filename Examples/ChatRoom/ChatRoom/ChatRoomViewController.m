@@ -212,6 +212,11 @@
     NSLog(@"%s : %@",__FUNCTION__, image);
 }
 
+- (void)willRequestUndo
+{
+    [super willRequestUndo];
+}
+
 - (void)didAcceptTextEditing:(id)sender
 {
     NSString *message = [self.textView.text copy];
@@ -346,10 +351,10 @@
     else {
         cell.backgroundColor = [UIColor clearColor];
         
-        NSLog(@"%s: %d",__FUNCTION__, indexPath.row);
+        NSLog(@"%s: %ld",__FUNCTION__, (long)indexPath.row);
         
         NSLog(@"self.searchResult.key : %@", self.searchResult.key);
-        NSLog(@"self.searchResult.list.count : %d", self.searchResult.list.count);
+        NSLog(@"self.searchResult.list.count : %ld", self.searchResult.list.count);
 
         NSString *sign = self.searchResult.key;
         NSString *item = self.searchResult.list[indexPath.row];

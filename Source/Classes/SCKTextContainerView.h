@@ -11,12 +11,18 @@
 
 #define kTextViewVerticalPadding 5
 #define kTextViewHorizontalPadding 8
+#define kTextContainerViewHeight 44.0
+#define kTextViewHeight 32.0
+#define kEditingViewHeight 38.0
 
 extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
+///------------------------------------------------------------------------
+/// @name A custom text input container used to encapsulate controls.
+///------------------------------------------------------------------------
 @interface SCKTextContainerView : UIToolbar
 
-/** The centered text view. */
+/** The centered text input view. */
 @property (nonatomic, strong) SCKTextView *textView;
 /** The left action button action. */
 @property (nonatomic, strong) UIButton *leftButton;
@@ -32,34 +38,35 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 @property (nonatomic, assign) BOOL bounces;
 
 ///------------------------------------------------
-/// Text editing
+/// @name Text Editing
 ///------------------------------------------------
 
 /** The view displayed on top of the text view container when editing a message. */
 @property (nonatomic, strong) UIView *promptHeaderView;
-/**  */
-@property (nonatomic, getter = isEditing) BOOL editing;
-/**  */
-@property (nonatomic, readonly) CGFloat editingViewHeight;
 /**  */
 @property (nonatomic, strong) UILabel *promptTitle;
 /**  */
 @property (nonatomic, strong) UIButton *promptLeftButton;
 /**  */
 @property (nonatomic, strong) UIButton *promptRightButton;
+/**  */
+@property (nonatomic, getter = isEditing) BOOL editing;
 
 /** 
+ Verifies if the text can be edited.
  
+ @param text The text to be edited.
+ @return YES if the text is editable.
  */
 - (BOOL)canEditText:(NSString *)text;
 
 /**
- 
+ Begins editing the text, by updating the 'editing' flag and the view constraints.
  */
 - (void)beginTextEditing;
 
 /**
- 
+ Begins editing the text, by updating the 'editing' flag and the view constraints.
  */
 - (void)endTextEdition;
 

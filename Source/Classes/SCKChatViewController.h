@@ -15,9 +15,9 @@
 
 @protocol SCKAutoCompletionDelegate;
 
-///------------------------------------------------------------------------------------------------
-/// A drop-in replacement of UITableViewController with chat features.
-///------------------------------------------------------------------------------------------------
+///------------------------------------------------------------------------
+/// @name A drop-in replacement of UITableViewController with chat features.
+///------------------------------------------------------------------------
 @interface SCKChatViewController : UIViewController
 
 /** The main table view managed by the controller object. */
@@ -28,6 +28,8 @@
 @property (nonatomic, readonly) SCKTypeIndicatorView *typeIndicatorView;
 /** YES if control's animation should have bouncy effects. Default is NO. */
 @property (nonatomic, assign) BOOL bounces;
+/** YES if text view's content can be cleaned with a shake gesture. Default is YES. */
+@property (nonatomic, assign) BOOL allowUndo;
 
 // Convenience accessors (access through the text container view)
 @property (nonatomic, readonly) SCKTextView *textView;
@@ -57,9 +59,9 @@
 - (void)dismissKeyboard:(BOOL)animated;
 
 
-///------------------------------------------------------------------------------------------------
-/// Text typing Notifications
-///------------------------------------------------------------------------------------------------
+///------------------------------------------------
+/// @name Text Typing Notifications
+///------------------------------------------------
 
 /**
  Notifies the view controller that the text input will be updated.
@@ -99,10 +101,16 @@
  */
 - (void)didPasteImage:(UIImage *)image;
 
+/**
+ Notifies the view controller when the user has shaked the device for undoing text typing.
+ @discussion You can override this method to perform additional tasks associated with the shake gesture. Calling super will show a system alert view with undo option. This will not be called if 'allowUndo' is set to NO and/or if the text view's content is empty.
+ */
+- (void)willRequestUndo;
 
-///------------------------------------------------------------------------------------------------
-/// Text typing Edition
-///------------------------------------------------------------------------------------------------
+
+///------------------------------------------------
+/// @name Text Edition
+///------------------------------------------------
 
 /** YES if the text editing mode is active. */
 @property (nonatomic, readonly, getter = isEditing) BOOL editing;
@@ -132,7 +140,7 @@
 
 
 ///------------------------------------------------
-/// Text typing Auto-Completion
+/// @name Text Typing Auto-Completion
 ///------------------------------------------------
 
 /** The table view used to display auto-completion results. */

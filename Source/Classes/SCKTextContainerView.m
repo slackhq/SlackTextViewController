@@ -11,10 +11,6 @@
 
 NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.chatkit.SCKTextContainerView.frameDidChange";
 
-#define kTextContainerViewHeight 44.0
-#define kTextViewHeight 32.0
-#define kEditingViewHeight 38.0
-
 @interface SCKInputAccessoryView : UIView
 @end
 
@@ -223,11 +219,6 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     }
     
     return kTextViewHorizontalPadding;
-}
-
-- (CGFloat)editingViewHeight
-{
-    return kEditingViewHeight;
 }
 
 

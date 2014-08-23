@@ -12,6 +12,7 @@ NSString * const SCKTextViewTextWillChangeNotification = @"com.slack.chatkit.SCK
 NSString * const SCKTextViewSelectionDidChangeNotification = @"com.slack.chatkit.SCKTextView.didChangeSelection";
 NSString * const SCKTextViewContentSizeDidChangeNotification = @"com.slack.chatkit.SCKTextView.didChangeContentSize";
 NSString * const SCKTextViewDidPasteImageNotification = @"com.slack.chatkit.SCKTextView.didPasteImage";
+NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextView.didShake";
 
 @interface SCKTextView ()
 {
@@ -53,6 +54,22 @@ NSString * const SCKTextViewDidPasteImageNotification = @"com.slack.chatkit.SCKT
     
     [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
 }
+
+
+#pragma mark - Rendering
+
+- (void)drawRect:(CGRect)rect
+{
+    [super drawRect:rect];
+    
+    if (self.text.length == 0 && self.placeholder.length > 0) {
+        self.placeholderLabel.frame = CGRectInset(rect, 5.0f, 5.0f);
+        self.placeholderLabel.textColor = self.placeholderColor;
+        self.placeholderLabel.hidden = NO;
+        [self sendSubviewToBack:self.placeholderLabel];
+    }
+}
+
 
 #pragma mark - Getters
 
@@ -165,7 +182,7 @@ NSString * const SCKTextViewDidPasteImageNotification = @"com.slack.chatkit.SCKT
 }
 
 
-#pragma mark - Notifications
+#pragma mark - Observers & Notifications
 
 - (void)didChangeTextView:(NSNotification *)notification
 {
@@ -176,26 +193,21 @@ NSString * const SCKTextViewDidPasteImageNotification = @"com.slack.chatkit.SCKT
 //    [self flashScrollIndicatorsIfNeeded];
 }
 
-
-#pragma mark - Rendering
-
-- (void)drawRect:(CGRect)rect
-{
-    [super drawRect:rect];
-        
-    if (self.text.length == 0 && self.placeholder.length > 0) {
-        self.placeholderLabel.frame = CGRectInset(rect, 5.0f, 5.0f);
-        self.placeholderLabel.textColor = self.placeholderColor;
-        self.placeholderLabel.hidden = NO;
-        [self sendSubviewToBack:self.placeholderLabel];
-    }
-}
-
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ([object isEqual:self] && [keyPath isEqualToString:NSStringFromSelector(@selector(contentSize))]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:SCKTextViewContentSizeDidChangeNotification object:self userInfo:nil];
     }
+}
+
+
+#pragma mark - Motion
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    if (event.type == UIEventTypeMotion && event.subtype == UIEventSubtypeMotionShake) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:SCKTextViewDidShakeNotification object:self];
+	}
 }
 
 @end

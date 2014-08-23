@@ -13,8 +13,11 @@ extern NSString * const SCKTextViewTextWillChangeNotification;
 extern NSString * const SCKTextViewSelectionDidChangeNotification;
 extern NSString * const SCKTextViewContentSizeDidChangeNotification;
 extern NSString * const SCKTextViewDidPasteImageNotification;
+extern NSString * const SCKTextViewDidShakeNotification;
 
-/** A custom text view with placeholder text. */
+///------------------------------------------------
+/// @name A custom text input view.
+///------------------------------------------------
 @interface SCKTextView : UITextView
 
 /** The placeholder text string. */

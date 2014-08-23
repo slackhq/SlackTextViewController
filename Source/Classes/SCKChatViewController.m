@@ -9,7 +9,7 @@
 #import "SCKChatViewController.h"
 #import "UIView+SCKHelpers.h"
 
-@interface SCKChatViewController () <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
+@interface SCKChatViewController () <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
     CGFloat minYOffset;
 }
@@ -41,6 +41,7 @@
     if (self = [super init])
     {
         self.bounces = NO;
+        self.allowUndo = YES;
         
         [self.view addSubview:self.tableView];
         [self.view addSubview:self.autoCompletionView];
@@ -216,7 +217,7 @@
     }
     
     if (self.isEditing) {
-        height += self.textContainerView.editingViewHeight;
+        height += kEditingViewHeight;
 //        height += kTextViewVerticalPadding*2;
     }
     
@@ -302,7 +303,7 @@
 
 - (void)textWillUpdate
 {
-    NSLog(@"%s",__FUNCTION__);
+    // No implementation. Meant to be overriden in subclass.
 }
 
 - (CGFloat)tableHeight
@@ -361,7 +362,7 @@
 
 - (void)didPressLeftButton:(id)sender
 {
-    
+    // No implementation. Meant to be overriden in subclass.
 }
 
 - (void)didPressRightButton:(id)sender
@@ -371,7 +372,18 @@
 
 - (void)didPasteImage:(UIImage *)image
 {
-    
+    // No implementation. Meant to be overriden in subclass.
+}
+
+- (void)willRequestUndo
+{
+    UIAlertView *alert = [UIAlertView new];
+    [alert setTitle:NSLocalizedString(@"Undo Typing", nil)];
+    [alert addButtonWithTitle:NSLocalizedString(@"Undo", nil)];
+    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+    [alert setCancelButtonIndex:1];
+    [alert setDelegate:self];
+    [alert show];
 }
 
 
@@ -601,6 +613,13 @@
     }
 }
 
+- (void)didShakeTextView:(NSNotification *)notification
+{
+    if (self.allowUndo && self.textView.text.length > 0) {
+        [self willRequestUndo];
+    }
+}
+
 
 #pragma mark - Auto-Completion Text Processing
 
@@ -777,6 +796,16 @@
 }
 
 
+#pragma mark - UIAlertViewDelegate Methods
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != [alertView cancelButtonIndex] ) {
+        [self.textView setText:nil];
+    }
+}
+
+
 #pragma mark - NSNotificationCenter register/unregister
 
 - (void)registerNotifications
@@ -794,6 +823,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewContentSize:) name:SCKTextViewContentSizeDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewSelection:) name:SCKTextViewSelectionDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewPasteboard:) name:SCKTextViewDidPasteImageNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShakeTextView:) name:SCKTextViewDidShakeNotification object:nil];
+
     
     // TypeIndicator notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SCKTypeIndicatorViewWillShowNotification object:nil];
@@ -814,6 +845,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewContentSizeDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewDidPasteImageNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewDidShakeNotification object:nil];
 
     // TypeIndicator notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTypeIndicatorViewWillShowNotification object:nil];
@@ -853,7 +885,7 @@
     self.tableViewHC.constant = [self tableHeight];
     
     if (self.isEditing) {
-        self.containerViewHC.constant += self.textContainerView.editingViewHeight;
+        self.containerViewHC.constant += kEditingViewHeight;
     }
     
     [self.view layoutIfNeeded];

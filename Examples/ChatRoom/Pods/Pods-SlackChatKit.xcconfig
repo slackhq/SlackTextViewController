@@ -1,1 +1,1 @@
-PODS_SLACKCHATKIT_OTHER_LDFLAGS = -framework UIKit
+PODS_SLACKCHATKIT_OTHER_LDFLAGS = -framework CoreMotion -framework UIKit

@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
 
   s.header_mappings_dir = 'Source'
   s.source_files 		= "Classes", "Source/Classes/*.{h,m}"
-  s.frameworks   		= 'UIKit'
+  s.frameworks   		= 'UIKit', 'CoreMotion'
 
   s.dependency     		'SlackChatKit/Helpers'
 
