@@ -10,16 +10,30 @@
 
 @interface UITextView (SCKHelpers)
 
-/** YES if the cursor is positionned at the very end. */
+/** YES if the caret is positionned at the very end. */
 @property (nonatomic, readonly) BOOL isCaretAtEnd;
 
 /**
- Scrolls animated to the very end of the content size.
+ Scrolls to the very end of the content size, animated.
+ 
+ @param animated YES if the scrolling should be animated.
  */
-- (void)scrollToBottom:(BOOL)animated;
+- (void)scrollToBottomAnimated:(BOOL)animated;
 
 /**
- Adds a string at the cursor's position.
+ Scrolls to the caret position, animated.
+ 
+ @param animated YES if the scrolling should be animated.
+ */
+- (void)scrollToCaretPositonAnimated:(BOOL)animated;
+
+/**
+ Inserts a line break at the caret's position.
+ */
+- (void)insertNewLineBreak;
+
+/**
+ Inserts a string at the caret's position.
  
  @param text The string to be appended to the current text.
  */

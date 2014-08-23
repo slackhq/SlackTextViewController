@@ -50,87 +50,108 @@
 {
     [super viewDidLoad];
     
-    self.messages = [[NSMutableArray alloc] initWithArray:@[@"Hello World!"]];
+    self.messages = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < 40; i++) {
+        [self.messages addObject:[NSString stringWithFormat:@"Dummy message #%d", i+1]];
+    }
     
     self.users = @[@"ignacio", @"michael", @"brady", @"everyone", @"channel", @"ali"];
     self.channels = @[@"general", @"ios", @"random", @"ssb", @"mobile", @"ui", @"released", @"SF"];
     self.commands = @[@"help", @"away", @"close", @"color", @"colors", @"feedback", @"invite", @"me", @"msg", @"dm", @"open"];
     self.emojis = @[@"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
     
-    self.title = @"SlackChatKit";
-    
-    UIBarButtonItem *reachItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_network"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateReachability)];
-    UIBarButtonItem *typeItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_typing"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateUserTyping)];
-    UIBarButtonItem *appendItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_append"] style:UIBarButtonItemStylePlain target:self action:@selector(fillWithText)];
+    UIBarButtonItem *reachItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_network"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateReachability:)];
+    UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"] style:UIBarButtonItemStylePlain target:self action:@selector(editRandomMessage:)];
 
-    self.navigationItem.leftBarButtonItems = @[reachItem];
-    self.navigationItem.rightBarButtonItems = @[appendItem,typeItem];
+    UIBarButtonItem *typeItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_typing"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateUserTyping:)];
+    UIBarButtonItem *appendItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_append"] style:UIBarButtonItemStylePlain target:self action:@selector(fillWithText:)];
+
+    self.navigationItem.leftBarButtonItems = @[reachItem, editItem];
+    self.navigationItem.rightBarButtonItems = @[appendItem, typeItem];
     
     self.reachable = YES;
     
-    self.allowElasticity = YES;
+    self.bounces = NO;
     
     self.textContainerView.autoHideRightButton = YES;
     
     self.textView.placeholder = NSLocalizedString(@"Message", nil);
     self.textView.placeholderColor = [UIColor lightGrayColor];
-    self.textView.layer.borderColor = [UIColor colorWithRed:217/255.0 green:217/255.0 blue:217/255.0 alpha:1.0].CGColor;
-    self.textContainerView.backgroundColor = [UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:1.0];
-    
-    [self.rightButton addTarget:self action:@selector(didTapRighttButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
-    [self.rightButton setTintColor:[UIColor colorWithRed:0/255.0 green:136.0/255.0 blue:204.0/255.0 alpha:1.0]];
-    [self.leftButton setAccessibilityLabel:@"Send button"];
+    self.textContainerView.backgroundColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1.0];
+    self.textView.layer.borderColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0].CGColor;
 
-    [self.leftButton addTarget:self action:@selector(didTapLeftButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.leftButton setTintColor:[UIColor colorWithRed:154/255.0 green:159/255.0 blue:166/255.0 alpha:1.0]];
+//    [self.leftButton setTintColor:[UIColor colorWithRed:154.0/255.0 green:159.0/255.0 blue:166.0/255.0 alpha:1.0]];
     [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
     [self.leftButton setAccessibilityLabel:@"Upload image"];
     
+//    [self.rightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:136.0/255.0 blue:204.0/255.0 alpha:1.0]];
+    [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
+    [self.leftButton setAccessibilityLabel:@"Send button"];
+    
+    [self.textContainerView.promptTitle setTextColor:[UIColor darkGrayColor]];
+    [self.textContainerView.promptLeftButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
+    [self.textContainerView.promptRightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
+    
     [self registerKeysForAutoCompletion:@[@"@", @"#", @"/", @":"]];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 }
 
 
 #pragma mark - Action Methods
 
-- (void)didTapLeftButton:(id)sender
-{
-    NSLog(@"%s",__FUNCTION__);
-}
-
-- (void)didTapRighttButton:(id)sender
-{
-    [self.messages addObject:self.textView.text];
-    
-    [self.tableView reloadData];
-    
-    self.textView.text = @"";
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.tableView scrollToBottomAnimated:YES];
-    });
-}
-
-- (void)fillWithText
+- (void)fillWithText:(id)sender
 {
     if (self.textView.text.length == 0) {
         self.textView.text = [LoremIpsum sentencesWithNumber:4];
     }
     else {
-        [self.textView insertTextAtCursor:[LoremIpsum word]];
+        [self.textView insertTextAtCaretRange:[LoremIpsum word]];
     }
 }
 
-- (void)simulateUserTyping
+- (void)simulateUserTyping:(id)sender
 {
-    [self.typeIndicatorView insertUsername:@"Ignacio"];
+    if (!self.isEditing && !self.isAutoCompleting) {
+        [self.typeIndicatorView insertUsername:@"Ignacio"];
+    }
 }
 
-- (void)simulateReachability
+- (void)simulateReachability:(id)sender
 {
     _reachable = !self.isReachable;
     
     [self didChangeReachability];
+}
+
+- (void)editRandomMessage:(id)sender
+{
+    int sentences = (arc4random() % 10);
+    if (sentences <= 1) sentences = 1;
+    
+    [self editText:[LoremIpsum sentencesWithNumber:sentences]];
+}
+
+- (void)editLastMessage:(id)sender
+{
+    NSString *lastMessage = [self.messages lastObject];
+    [self editText:lastMessage];
+    
+    [self.tableView scrollToBottomAnimated:YES];
+}
+
+- (void)didSaveLastMessageEditing:(id)sender
+{
+    NSString *message = [self.textView.text copy];
+    
+    [self.messages removeLastObject];
+    [self.messages addObject:message];
+    
+    [self.tableView reloadData];
 }
 
 
@@ -145,24 +166,70 @@
     self.textView.backgroundColor = textViewColor;
     
     self.rightButton.enabled = self.isReachable;
+    self.textContainerView.promptRightButton.enabled = self.isReachable;
 }
 
 
 #pragma mark - Overriden Methods
 
-//- (void)presentKeyboard:(BOOL)animated
-//{
-//    [super presentKeyboard:animated];
-//}
-//
-//- (void)dismissKeyboard:(BOOL)animated
-//{
-//    [super presentKeyboard:animated];
-//}
+- (void)textWillUpdate
+{
+    [super textWillUpdate];
+    
+    //Useful to sending a pong message to notify that the user is typing...
+}
+
+- (void)textDidUpdate:(BOOL)animated
+{
+    [super textDidUpdate:animated];
+    
+    
+}
+
+- (void)didPressLeftButton:(id)sender
+{
+    [super didPressLeftButton:sender];
+}
+
+- (void)didPressRightButton:(id)sender
+{
+    [self.messages addObject:self.textView.text];
+    [self.tableView reloadData];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.tableView scrollToBottomAnimated:YES];
+    });
+    
+    [super didPressRightButton:sender];
+}
+
+- (void)didPasteImage:(UIImage *)image
+{
+    NSLog(@"%s : %@",__FUNCTION__, image);
+}
+
+- (void)didAcceptTextEditing:(id)sender
+{
+    NSString *message = [self.textView.text copy];
+    
+    [self.messages removeLastObject];
+    [self.messages addObject:message];
+    
+    [self.tableView reloadData];
+    
+    [super didAcceptTextEditing:sender];
+}
+
+- (void)didCancelTextEditing:(id)sender
+{
+    NSLog(@"%s",__FUNCTION__);
+    
+    [super didCancelTextEditing:sender];
+}
 
 - (BOOL)canPressRightButton
 {
-    return self.isReachable && self.textView.text.length > 0;
+    return self.isReachable && [super canPressRightButton];
 }
 
 - (BOOL)canShowAutoCompletion
@@ -184,13 +251,16 @@
         array = self.commands;
     }
     else if ([key isEqualToString:@":"]) {
-        array = self.emojis;
+        if (string.length >= 2) {
+            array = self.emojis;
+        }
     }
     else {
         array = nil;
     }
     
     if (array.count == 0) {
+        self.searchResult.list = nil;
         return NO;
     }
     
@@ -208,18 +278,30 @@
 
 - (CGFloat)heightForAutoCompletionView
 {
-    CGFloat cellHeight = [self.autoCompleteView.delegate tableView:self.autoCompleteView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    CGFloat cellHeight = [self.autoCompletionView.delegate tableView:self.autoCompletionView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     return cellHeight*self.searchResult.list.count;
 }
 
-- (void)textWillUpdate
-{
-    [super textWillUpdate];
-}
+//- (void)presentKeyboard:(BOOL)animated
+//{
+//    [super presentKeyboard:animated];
+//}
+//
+//- (void)dismissKeyboard:(BOOL)animated
+//{
+//    [super presentKeyboard:animated];
+//}
 
-- (void)textDidUpdate:(BOOL)animated
+- (NSArray *)keyCommands
 {
-    [super textDidUpdate:animated];
+    NSMutableArray *commands = [NSMutableArray arrayWithArray:[super keyCommands]];
+    
+    // Edit last message
+    [commands addObject:[UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow
+                                           modifierFlags:0
+                                                   action:@selector(editLastMessage:)]];
+    
+    return commands;
 }
 
 
@@ -260,6 +342,11 @@
     else {
         cell.backgroundColor = [UIColor clearColor];
         
+        NSLog(@"%s: %d",__FUNCTION__, indexPath.row);
+        
+        NSLog(@"self.searchResult.key : %@", self.searchResult.key);
+        NSLog(@"self.searchResult.list.count : %d", self.searchResult.list.count);
+
         NSString *sign = self.searchResult.key;
         NSString *item = self.searchResult.list[indexPath.row];
 
@@ -304,9 +391,9 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if ([tableView isEqual:self.autoCompleteView]) {
+    if ([tableView isEqual:self.autoCompletionView]) {
         UIView *topView = [UIView new];
-        topView.backgroundColor = self.autoCompleteView.separatorColor;
+        topView.backgroundColor = self.autoCompletionView.separatorColor;
         return topView;
     }
     return nil;
@@ -314,7 +401,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if ([tableView isEqual:self.autoCompleteView]) {
+    if ([tableView isEqual:self.autoCompletionView]) {
         return 0.5;
     }
     return 0.0;
@@ -325,7 +412,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([tableView isEqual:self.autoCompleteView]) {
+    if ([tableView isEqual:self.autoCompletionView]) {
         
         NSString *sign = self.searchResult.key;
         NSString *item = self.searchResult.list[indexPath.row];

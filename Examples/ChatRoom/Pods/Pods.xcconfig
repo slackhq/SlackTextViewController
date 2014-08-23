@@ -1,5 +1,5 @@
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/LoremIpsum" "${PODS_ROOT}/Headers/SlackChatKit"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers" -isystem "${PODS_ROOT}/Headers/LoremIpsum" -isystem "${PODS_ROOT}/Headers/SlackChatKit"
-OTHER_LDFLAGS = -ObjC
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/LoremIpsum" "${PODS_ROOT}/Headers/SlackChatKit" "${PODS_ROOT}/Headers/SlackChatKit/Classes" "${PODS_ROOT}/Headers/SlackChatKit/Helpers"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers" -isystem "${PODS_ROOT}/Headers/LoremIpsum" -isystem "${PODS_ROOT}/Headers/SlackChatKit" -isystem "${PODS_ROOT}/Headers/SlackChatKit/Classes" -isystem "${PODS_ROOT}/Headers/SlackChatKit/Helpers"
+OTHER_LDFLAGS = -ObjC -framework UIKit
 PODS_ROOT = ${SRCROOT}/Pods

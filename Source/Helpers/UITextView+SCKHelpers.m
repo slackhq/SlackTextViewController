@@ -10,10 +10,33 @@
 
 @implementation UITextView (SCKHelpers)
 
-- (void)scrollToBottom:(BOOL)animated
+- (BOOL)isCaretAtEnd
+{
+    if (self.selectedRange.location == self.text.length && self.selectedRange.length == 0) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (void)scrollToBottomAnimated:(BOOL)animated
 {
     CGRect caretRect = [self caretRectForPosition:self.endOfDocument];
-    [self scrollRectToVisible:caretRect animated:animated];
+    
+    if (!animated)
+    {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.0];
+        [UIView setAnimationDelay:0.0];
+        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+        
+        [self scrollRectToVisible:caretRect animated:NO];
+        
+        [UIView commitAnimations];
+    }
+    else {
+        [self scrollRectToVisible:caretRect animated:animated];
+    }
     
 //    NSUInteger lenght = self.text.length;
 //    
@@ -21,6 +44,29 @@
 //        NSRange bottom = NSMakeRange(lenght-1.0, 1.0);
 //        [self scrollRangeToVisible:bottom];
 //    }
+}
+
+- (void)scrollToCaretPositonAnimated:(BOOL)animated
+{
+    if (!animated)
+    {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.0];
+        [UIView setAnimationDelay:0.0];
+        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+        
+        [self scrollRangeToVisible:self.selectedRange];
+        
+        [UIView commitAnimations];
+    }
+    else {
+        [self scrollRangeToVisible:self.selectedRange];
+    }
+}
+
+- (void)insertNewLineBreak
+{
+    [self insertTextAtCaretRange:@"\n"];
 }
 
 - (void)insertTextAtCaretRange:(NSString *)text
@@ -56,24 +102,22 @@
         return NSMakeRange(range.location+[self.text rangeOfString:text].length, text.length);
     }
     
+    // No text has been inserted, but still return the caret range
     return self.selectedRange;
-}
-
-- (BOOL)isCaretAtEnd
-{
-    if (self.selectedRange.location == self.text.length && self.selectedRange.length == 0) {
-        return YES;
-    }
-    
-    return NO;
 }
 
 - (NSString *)wordAtCaretRange:(NSRangePointer)range
 {
+    return [self wordAtRange:self.selectedRange rangeInText:range];
+}
+
+- (NSString *)wordAtRange:(NSRange)range rangeInText:(NSRangePointer)rangePointer
+{
     NSString *text = self.text;
-    NSInteger location = self.selectedRange.location;
+    NSInteger location = range.location;
     
     if (text.length == 0) {
+        *rangePointer = NSMakeRange(0.0, 0.0);
         return nil;
     }
     
@@ -90,19 +134,20 @@
         
         if ([characterBeforeCursor isEqualToString:@" "]) {
             // At the start of a word, just use the word behind the cursor for the current word
-            *range = NSMakeRange(location, rightPart.length);
+            *rangePointer = NSMakeRange(location, rightPart.length);
             return rightPart;
         }
     }
     
     // In the middle of a word, so combine the part of the word before the cursor, and after the cursor to get the current word
+    *rangePointer = NSMakeRange(location-leftWordPart.length, leftWordPart.length+rightPart.length);
     NSString *word = [leftWordPart stringByAppendingString:rightPart];
-    *range = NSMakeRange(location-leftWordPart.length, leftWordPart.length+rightPart.length);
 
+    // If a break is detected, return the last component of the string
     if ([word rangeOfString:@"\n"].location != NSNotFound) {
-        word = [[word componentsSeparatedByString:@"\n"] lastObject];
         
-        *range = [text rangeOfString:word];
+        *rangePointer = [text rangeOfString:word];
+        word = [[word componentsSeparatedByString:@"\n"] lastObject];
     }
 
     return word;
