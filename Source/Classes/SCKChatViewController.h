@@ -103,7 +103,7 @@
 
 /**
  Notifies the view controller when the user has shaked the device for undoing text typing.
- @discussion You can override this method to perform additional tasks associated with the shake gesture. Calling super will show a system alert view with undo option. This will not be called if 'allowUndo' is set to NO and/or if the text view's content is empty.
+ @discussion You can override this method to perform additional tasks associated with the shake gesture. Calling super will prompt a system alert view with undo option. This will not be called if 'allowUndo' is set to NO and/or if the text view's content is empty.
  */
 - (void)willRequestUndo;
 
@@ -128,7 +128,7 @@
  
  @param sender The object calling this method.
  */
-- (void)didAcceptTextEditing:(id)sender;
+- (void)didCommitTextEditing:(id)sender;
 
 /**
  Notifies the view controller when the editing bar's right button's action has been triggered, manually or by using the external keyboard's Esc key.

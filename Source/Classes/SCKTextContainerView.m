@@ -23,7 +23,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 @property (nonatomic, strong) NSLayoutConstraint *bottomMarginWC;
 @property (nonatomic, strong) NSLayoutConstraint *rightButtonWC;
 @property (nonatomic, strong) NSLayoutConstraint *rightMarginWC;
-@property (nonatomic, strong) NSLayoutConstraint *promptHeaderViewHC;
+@property (nonatomic, strong) NSLayoutConstraint *accessoryViewHC;
 
 @end
 
@@ -47,7 +47,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     self.bounces = NO;
     self.editing = NO;
     
-    [self addSubview:self.promptHeaderView];
+    [self addSubview:self.accessoryView];
     [self addSubview:self.leftButton];
     [self addSubview:self.rightButton];
     [self addSubview:self.textView];
@@ -131,53 +131,53 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     return _rightButton;
 }
 
-- (UIView *)promptHeaderView
+- (UIView *)accessoryView
 {
-    if (!_promptHeaderView)
+    if (!_accessoryView)
     {
-        _promptHeaderView = [UIView new];
-        _promptHeaderView.translatesAutoresizingMaskIntoConstraints = NO;
-        _promptHeaderView.backgroundColor = self.backgroundColor;
-        _promptHeaderView.clipsToBounds = YES;
+        _accessoryView = [UIView new];
+        _accessoryView.translatesAutoresizingMaskIntoConstraints = NO;
+        _accessoryView.backgroundColor = self.backgroundColor;
+        _accessoryView.clipsToBounds = YES;
         
-        _promptTitle = [UILabel new];
-        _promptTitle.translatesAutoresizingMaskIntoConstraints = NO;
-        _promptTitle.text = NSLocalizedString(@"Editing Message", nil);
-        _promptTitle.textAlignment = NSTextAlignmentCenter;
-        _promptTitle.backgroundColor = [UIColor clearColor];
-        _promptTitle.font = [UIFont boldSystemFontOfSize:15.0];
-        [_promptHeaderView addSubview:self.promptTitle];
+        _editorTitle = [UILabel new];
+        _editorTitle.translatesAutoresizingMaskIntoConstraints = NO;
+        _editorTitle.text = NSLocalizedString(@"Editing Message", nil);
+        _editorTitle.textAlignment = NSTextAlignmentCenter;
+        _editorTitle.backgroundColor = [UIColor clearColor];
+        _editorTitle.font = [UIFont boldSystemFontOfSize:15.0];
+        [_accessoryView addSubview:self.editorTitle];
         
-        _promptLeftButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        _promptLeftButton.translatesAutoresizingMaskIntoConstraints = NO;
-        _promptLeftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        _promptLeftButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
-        [_promptLeftButton setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
-        [_promptHeaderView addSubview:self.promptLeftButton];
+        _editortLeftButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        _editortLeftButton.translatesAutoresizingMaskIntoConstraints = NO;
+        _editortLeftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _editortLeftButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
+        [_editortLeftButton setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
+        [_accessoryView addSubview:self.editortLeftButton];
         
-        _promptRightButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        _promptRightButton.translatesAutoresizingMaskIntoConstraints = NO;
-        _promptRightButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        _promptRightButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
-        _promptRightButton.enabled = NO;
-        [_promptRightButton setTitle:NSLocalizedString(@"Save", nil) forState:UIControlStateNormal];
-        [_promptHeaderView addSubview:self.promptRightButton];
+        _editortRightButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        _editortRightButton.translatesAutoresizingMaskIntoConstraints = NO;
+        _editortRightButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        _editortRightButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
+        _editortRightButton.enabled = NO;
+        [_editortRightButton setTitle:NSLocalizedString(@"Save", nil) forState:UIControlStateNormal];
+        [_accessoryView addSubview:self.editortRightButton];
         
-        NSDictionary *views = @{@"label": self.promptTitle,
-                                @"leftButton": self.promptLeftButton,
-                                @"rightButton": self.promptRightButton,
+        NSDictionary *views = @{@"label": self.editorTitle,
+                                @"leftButton": self.editortLeftButton,
+                                @"rightButton": self.editortRightButton,
                                 };
         
         NSDictionary *metrics = @{@"hor" : @(kTextViewHorizontalPadding+1),
                                   @"ver" : @(kTextViewVerticalPadding),
                                   };
         
-        [_promptHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==hor)-[leftButton(60)]-(==hor)-[label(>=0)]-(==hor)-[rightButton(60)]-(==hor)-|" options:0 metrics:metrics views:views]];
-        [_promptHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[leftButton]|" options:0 metrics:metrics views:views]];
-        [_promptHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[rightButton]|" options:0 metrics:metrics views:views]];
-        [_promptHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[label]|" options:0 metrics:metrics views:views]];
+        [_accessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==hor)-[leftButton(60)]-(==hor)-[label(>=0)]-(==hor)-[rightButton(60)]-(==hor)-|" options:0 metrics:metrics views:views]];
+        [_accessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[leftButton]|" options:0 metrics:metrics views:views]];
+        [_accessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[rightButton]|" options:0 metrics:metrics views:views]];
+        [_accessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[label]|" options:0 metrics:metrics views:views]];
     }
-    return _promptHeaderView;
+    return _accessoryView;
 }
 
 - (CGFloat)minHeight
@@ -228,7 +228,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 {
     self.barTintColor = color;
     self.textView.inputAccessoryView.backgroundColor = color;
-    self.promptHeaderView.backgroundColor = color;
+    self.accessoryView.backgroundColor = color;
 }
 
 - (void)setAutoHideRightButton:(BOOL)hide
@@ -348,7 +348,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     NSDictionary *views = @{@"textView": self.textView,
                             @"leftButton": self.leftButton,
                             @"rightButton": self.rightButton,
-                            @"promptHeaderView": self.promptHeaderView
+                            @"accessoryView": self.accessoryView
                             };
     
     NSDictionary *metrics = @{@"hor" : @(kTextViewHorizontalPadding),
@@ -360,14 +360,14 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==hor)-[leftButton(0)]-(==hor)-[textView]-(==hor)-[rightButton(0)]-(==hor)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[leftButton(0)]-(0)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=rightVerMargin)-[rightButton]-(==rightVerMargin)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[promptHeaderView(0)]-(==ver)-[textView(==34@750)]-(==ver)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[promptHeaderView]|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[accessoryView(0)]-(==ver)-[textView(==34@750)]-(==ver)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[accessoryView]|" options:0 metrics:metrics views:views]];
 
     NSArray *heightConstraints = [self constraintsForAttribute:NSLayoutAttributeHeight];
     NSArray *widthConstraints = [self constraintsForAttribute:NSLayoutAttributeWidth];
     NSArray *bottomConstraints = [self constraintsForAttribute:NSLayoutAttributeBottom];
 
-    self.promptHeaderViewHC = heightConstraints[1];
+    self.accessoryViewHC = heightConstraints[1];
 
     self.leftButtonWC = widthConstraints[0];
     self.leftButtonHC = heightConstraints[0];
@@ -384,7 +384,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
     if (self.isEditing)
     {
-        self.promptHeaderViewHC.constant = kEditingViewHeight;
+        self.accessoryViewHC.constant = kEditingViewHeight;
         self.leftButtonWC.constant = null;
         self.leftButtonHC.constant = null;
         self.leftMarginWC.constant = null;
@@ -394,7 +394,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     }
     else
     {
-        self.promptHeaderViewHC.constant = null;
+        self.accessoryViewHC.constant = null;
 
         CGSize leftButtonSize = [self.leftButton imageForState:UIControlStateNormal].size;
         

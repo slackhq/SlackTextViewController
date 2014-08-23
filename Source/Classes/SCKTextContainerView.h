@@ -42,13 +42,13 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 ///------------------------------------------------
 
 /** The view displayed on top of the text view container when editing a message. */
-@property (nonatomic, strong) UIView *promptHeaderView;
+@property (nonatomic, strong) UIView *accessoryView;
 /**  */
-@property (nonatomic, strong) UILabel *promptTitle;
+@property (nonatomic, strong) UILabel *editorTitle;
 /**  */
-@property (nonatomic, strong) UIButton *promptLeftButton;
+@property (nonatomic, strong) UIButton *editortLeftButton;
 /**  */
-@property (nonatomic, strong) UIButton *promptRightButton;
+@property (nonatomic, strong) UIButton *editortRightButton;
 /**  */
 @property (nonatomic, getter = isEditing) BOOL editing;
 

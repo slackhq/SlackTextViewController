@@ -142,8 +142,8 @@
         
         [_textContainerView.leftButton addTarget:self action:@selector(didPressLeftButton:) forControlEvents:UIControlEventTouchUpInside];
         [_textContainerView.rightButton addTarget:self action:@selector(didPressRightButton:) forControlEvents:UIControlEventTouchUpInside];
-        [_textContainerView.promptLeftButton addTarget:self action:@selector(didCancelTextEditing:) forControlEvents:UIControlEventTouchUpInside];
-        [_textContainerView.promptRightButton addTarget:self action:@selector(didAcceptTextEditing:) forControlEvents:UIControlEventTouchUpInside];
+        [_textContainerView.editortLeftButton addTarget:self action:@selector(didCancelTextEditing:) forControlEvents:UIControlEventTouchUpInside];
+        [_textContainerView.editortRightButton addTarget:self action:@selector(didCommitTextEditing:) forControlEvents:UIControlEventTouchUpInside];
         
 //        textContentHeight = self.textView.contentSize.height;
     }
@@ -321,7 +321,7 @@
 - (void)textDidUpdate:(BOOL)animated
 {
     self.textContainerView.rightButton.enabled = [self canPressRightButton];
-    self.textContainerView.promptRightButton.enabled = [self canPressRightButton];
+    self.textContainerView.editortRightButton.enabled = [self canPressRightButton];
 
     CGFloat containeHeight = [self appropriateContainerViewHeight];
     NSLog(@"containeHeight : %f", containeHeight);
@@ -411,7 +411,7 @@
     }
 }
 
-- (void)didAcceptTextEditing:(id)sender
+- (void)didCommitTextEditing:(id)sender
 {
     if (!self.isEditing) {
         return;
@@ -434,7 +434,7 @@
 - (void)shouldHitReturn:(id)sender
 {
     if (self.isEditing) {
-        [self didAcceptTextEditing:sender];
+        [self didCommitTextEditing:sender];
         return;
     }
     

@@ -93,9 +93,9 @@
     [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
     [self.leftButton setAccessibilityLabel:@"Send button"];
     
-    [self.textContainerView.promptTitle setTextColor:[UIColor darkGrayColor]];
-    [self.textContainerView.promptLeftButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
-    [self.textContainerView.promptRightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
+    [self.textContainerView.editorTitle setTextColor:[UIColor darkGrayColor]];
+    [self.textContainerView.editortLeftButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
+    [self.textContainerView.editortRightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
     
     [self registerKeysForAutoCompletion:@[@"@", @"#", @"/", @":"]];
 }
@@ -170,7 +170,7 @@
     self.textView.backgroundColor = textViewColor;
     
     self.rightButton.enabled = self.isReachable;
-    self.textContainerView.promptRightButton.enabled = self.isReachable;
+    self.textContainerView.editortRightButton.enabled = self.isReachable;
 }
 
 
@@ -217,7 +217,7 @@
     [super willRequestUndo];
 }
 
-- (void)didAcceptTextEditing:(id)sender
+- (void)didCommitTextEditing:(id)sender
 {
     NSString *message = [self.textView.text copy];
     
@@ -226,7 +226,7 @@
     
     [self.tableView reloadData];
     
-    [super didAcceptTextEditing:sender];
+    [super didCommitTextEditing:sender];
 }
 
 - (void)didCancelTextEditing:(id)sender
