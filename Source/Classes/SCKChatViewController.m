@@ -722,7 +722,7 @@
         viewHeight = [self maximumHeightForAutoCompletionView];
     }
     
-    CGFloat tableHeight = [self tableHeight];
+    CGFloat tableHeight = self.tableViewHC.constant;
     
     // If the the view controller extends it layout beneath it navigation bar and/or status bar, we then reduce it from the table view height
     if (self.edgesForExtendedLayout == UIRectEdgeAll || self.edgesForExtendedLayout == UIRectEdgeTop) {
