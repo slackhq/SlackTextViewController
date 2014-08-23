@@ -190,12 +190,8 @@
 
 - (CGFloat)appropriateContainerViewHeight
 {
-    NSLog(@"%s",__FUNCTION__);
-    
     CGFloat delta = self.textView.intrinsicContentSize.height-self.textView.font.lineHeight;
     CGFloat height = delta;
-    
-    NSLog(@"self.textView.numberOfLines : %ld", self.textView.numberOfLines);
     
     if (self.textView.numberOfLines == 1) {
         height = self.textContainerView.minHeight;
@@ -203,13 +199,10 @@
     else if (self.textView.numberOfLines < self.textView.maxNumberOfLines) {
         height += roundf(self.textView.font.lineHeight*self.textView.numberOfLines);
         height += (kTextViewVerticalPadding*2.0);
-        
-//        height = textContentHeight+delta+(kTextViewVerticalPadding*2.0);
     }
-    else /*if (self.containerViewHC.constant < self.textContainerView.maxHeight)*/ {
+    else {
         height += roundf(self.textView.font.lineHeight*self.textView.maxNumberOfLines);
         height += (kTextViewVerticalPadding*2.0);
-//        height = self.textContainerView.maxHeight;
     }
     
     if (height < self.textContainerView.minHeight) {
@@ -218,10 +211,7 @@
     
     if (self.isEditing) {
         height += kEditingViewHeight;
-//        height += kTextViewVerticalPadding*2;
     }
-    
-    NSLog(@"height : %f", height);
     
     return roundf(height);
 }
@@ -303,7 +293,7 @@
 
 - (void)textWillUpdate
 {
-    // No implementation. Meant to be overriden in subclass.
+    // No implementation here. Meant to be overriden in subclass.
 }
 
 - (CGFloat)tableHeight
@@ -324,7 +314,6 @@
     self.textContainerView.editortRightButton.enabled = [self canPressRightButton];
 
     CGFloat containeHeight = [self appropriateContainerViewHeight];
-    NSLog(@"containeHeight : %f", containeHeight);
     
     if (containeHeight != self.containerViewHC.constant)
     {
@@ -362,7 +351,7 @@
 
 - (void)didPressLeftButton:(id)sender
 {
-    // No implementation. Meant to be overriden in subclass.
+    // No implementation here. Meant to be overriden in subclass.
 }
 
 - (void)didPressRightButton:(id)sender
@@ -372,7 +361,7 @@
 
 - (void)didPasteImage:(UIImage *)image
 {
-    // No implementation. Meant to be overriden in subclass.
+    // No implementation here. Meant to be overriden in subclass.
 }
 
 - (void)willRequestUndo
@@ -431,17 +420,17 @@
     [self.textView setText:nil];
 }
 
-- (void)shouldHitReturn:(id)sender
+- (void)shouldHitReturnKey:(id)sender
 {
     if (self.isEditing) {
         [self didCommitTextEditing:sender];
         return;
     }
     
-    [self simulateReturnKey];
+    [self performRightAction];
 }
 
-- (void)simulateReturnKey
+- (void)performRightAction
 {
     NSArray *actions = [self.rightButton actionsForTarget:self forControlEvent:UIControlEventTouchUpInside];
     
@@ -642,7 +631,14 @@
 
 - (void)processAutoCompletion
 {
+    // No need to process for auto-completion if the key lookup list is empty
+    if (self.keysLookupList.count == 0) {
+        return;
+    }
+    
     NSString *text = self.textView.text;
+    
+    // No need to process for auto-completion if there is no text to process
     if (text.length == 0) {
         [self cancelAutoCompletion];
         return;
@@ -900,7 +896,7 @@
              // Pressing Return key
              [UIKeyCommand keyCommandWithInput:@"\r"
                                  modifierFlags:0
-                                        action:@selector(shouldHitReturn:)],
+                                        action:@selector(shouldHitReturnKey:)],
              [UIKeyCommand keyCommandWithInput:@"\r"
                                  modifierFlags:UIKeyModifierShift
                                         action:@selector(insertNewLineBreak)],
