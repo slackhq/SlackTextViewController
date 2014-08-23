@@ -16,7 +16,6 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 
 @property (nonatomic, strong) NSMutableArray *usernames;
 @property (nonatomic, strong) NSMutableArray *timers;
-
 @property (nonatomic, strong) UILabel *indicatorLabel;
 
 @end
@@ -83,9 +82,15 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
     
     NSString *text = nil;
     
-    if (_usernames.count == 1) text = [NSString stringWithFormat:@"%@ is typing", [_usernames firstObject]];
-    else if (_usernames.count == 2) text = [NSString stringWithFormat:@"%@ & %@ are typing", [_usernames firstObject], [_usernames lastObject]];
-    else if (_usernames.count > 2) text = @"several people are typing";
+    if (_usernames.count == 1) {
+        text = [NSString stringWithFormat:NSLocalizedString(@"%@ is typing", nil), [_usernames firstObject]];
+    }
+    else if (_usernames.count == 2) {
+        text = [NSString stringWithFormat:NSLocalizedString(@"%@ & %@ are typing", nil), [_usernames firstObject], [_usernames lastObject]];
+    }
+    else if (_usernames.count > 2) {
+        text = NSLocalizedString(@"several people are typing", nil);
+    }
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
     
@@ -199,7 +204,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 }
 
 
-#pragma mark - Dimissing methods
+#pragma mark - Dimissing Methods
 
 - (void)shouldRemoveUsername:(NSTimer *)timer
 {
@@ -210,7 +215,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 }
 
 
-#pragma mark - Cleaning methods
+#pragma mark - Cleaning Methods
 
 - (void)invalidateTimer:(NSTimer *)timer
 {
@@ -240,7 +245,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 }
 
 
-#pragma mark - Auto-Layout
+#pragma mark - View Auto-Layout
 
 - (void)setupConstraints
 {

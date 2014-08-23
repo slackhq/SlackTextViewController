@@ -15,6 +15,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 @end
 
 @interface SCKTextContainerView () <UITextViewDelegate>
+
 @property (nonatomic, copy) NSString *rightButtonTitle;
 
 @property (nonatomic, strong) NSLayoutConstraint *leftButtonWC;
