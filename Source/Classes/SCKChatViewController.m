@@ -110,7 +110,7 @@
         
         _tableView.tableFooterView = [UIView new];
 
-        _singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+        _singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapTableView)];
         _singleTapGesture.delegate = self;
         [_tableView addGestureRecognizer:self.singleTapGesture];
     }
@@ -378,7 +378,7 @@
 
 #pragma mark - Private Actions
 
-- (void)dismissKeyboard
+- (void)didTapTableView
 {
     [self dismissKeyboard:YES];
 }
@@ -428,6 +428,16 @@
     }
     
     [self performRightAction];
+}
+
+- (void)shouldHitEscapeKey:(id)sender
+{
+    if (self.isEditing) {
+        [self didCancelTextEditing:sender];
+        return;
+    }
+    
+    [self dismissKeyboard:YES];
 }
 
 - (void)performRightAction
@@ -498,7 +508,7 @@
     
     // After showing keyboard, check if the current cursor position could diplay auto-completion
     if (show) {
-        [self processAutoCompletion];
+        [self processTextForAutoCompletion];
     }
 }
 
@@ -589,7 +599,7 @@
     NSRange selectedRange = [notification.userInfo[@"range"] rangeValue];
     
     if (selectedRange.length == 0 && [self.textView isFirstResponder]) {
-        [self processAutoCompletion];
+        [self processTextForAutoCompletion];
     }
 }
 
@@ -629,9 +639,9 @@
     }
 }
 
-- (void)processAutoCompletion
+- (void)processTextForAutoCompletion
 {
-    // No need to process for auto-completion if the key lookup list is empty
+    // Avoids text processing for auto-completion if the key lookup list is empty.
     if (self.keysLookupList.count == 0) {
         return;
     }
@@ -910,13 +920,13 @@
              // Pressing Esc key
              [UIKeyCommand keyCommandWithInput:UIKeyInputEscape
                                  modifierFlags:0
-                                        action:@selector(didCancelTextEditing:)],
+                                        action:@selector(shouldHitEscapeKey:)],
              [UIKeyCommand keyCommandWithInput:UIKeyInputEscape
                                  modifierFlags:UIKeyModifierShift
-                                        action:@selector(didCancelTextEditing:)],
+                                        action:@selector(shouldHitEscapeKey:)],
              [UIKeyCommand keyCommandWithInput:UIKeyInputEscape
                                  modifierFlags:UIKeyModifierControl
-                                        action:@selector(didCancelTextEditing:)],
+                                        action:@selector(shouldHitEscapeKey:)],
              ];
 }
 
