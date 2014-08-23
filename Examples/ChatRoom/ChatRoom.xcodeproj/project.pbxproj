@@ -21,6 +21,7 @@
 		4F3EDB79199ED00F004C15D6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EDB77199ED00F004C15D6 /* InfoPlist.strings */; };
 		4F3EDB7B199ED00F004C15D6 /* ChatRoomTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB7A199ED00F004C15D6 /* ChatRoomTests.m */; };
 		4F3EDB90199ED091004C15D6 /* ChatRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB8F199ED091004C15D6 /* ChatRoomViewController.m */; };
+		4F6328E719A82C47005AA606 /* emojis.json in Resources */ = {isa = PBXBuildFile; fileRef = 4F6328E619A82C47005AA606 /* emojis.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		4F3EDB7A199ED00F004C15D6 /* ChatRoomTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatRoomTests.m; sourceTree = "<group>"; };
 		4F3EDB8E199ED091004C15D6 /* ChatRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatRoomViewController.h; sourceTree = "<group>"; };
 		4F3EDB8F199ED091004C15D6 /* ChatRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatRoomViewController.m; sourceTree = "<group>"; };
+		4F6328E619A82C47005AA606 /* emojis.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = emojis.json; sourceTree = "<group>"; };
 		8522B79647AD437F85843A28 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -133,6 +135,7 @@
 				4F3EDB55199ED00F004C15D6 /* InfoPlist.strings */,
 				4F3EDB58199ED00F004C15D6 /* main.m */,
 				4F3EDB5A199ED00F004C15D6 /* ChatRoom-Prefix.pch */,
+				4F6328E619A82C47005AA606 /* emojis.json */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -233,6 +236,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F6328E719A82C47005AA606 /* emojis.json in Resources */,
 				4F3EDB68199ED00F004C15D6 /* Images.xcassets in Resources */,
 				4F3EDB57199ED00F004C15D6 /* InfoPlist.strings in Resources */,
 			);

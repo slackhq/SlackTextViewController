@@ -61,6 +61,10 @@
     self.commands = @[@"help", @"away", @"close", @"color", @"colors", @"feedback", @"invite", @"me", @"msg", @"dm", @"open"];
     self.emojis = @[@"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
     
+//    NSString *path = [[NSBundle mainBundle] pathForResource:@"emojis" ofType:@"json"];
+//    NSData *data = [NSData dataWithContentsOfFile:path];
+//    self.emojis = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions|NSJSONWritingPrettyPrinted error:nil];
+    
     UIBarButtonItem *reachItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_network"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateReachability:)];
     UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"] style:UIBarButtonItemStylePlain target:self action:@selector(editRandomMessage:)];
 
