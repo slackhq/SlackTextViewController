@@ -41,7 +41,7 @@
     if (self = [super init])
     {
         self.bounces = NO;
-        self.allowUndo = YES;
+        self.allowUndo = NO;
         
         [self.view addSubview:self.tableView];
         [self.view addSubview:self.autoCompletionView];
@@ -78,9 +78,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    NSLog(@"bounces : %@", self.bounces ? @"YES" : @"NO");
-    NSLog(@"textContainerView bounces : %@", self.textContainerView.bounces ? @"YES" : @"NO");
 }
 
 - (void)viewWillDisappear:(BOOL)animated

@@ -28,7 +28,7 @@
 @property (nonatomic, readonly) SCKTypeIndicatorView *typeIndicatorView;
 /** YES if control's animation should have bouncy effects. Default is NO. */
 @property (nonatomic, assign) BOOL bounces;
-/** YES if text view's content can be cleaned with a shake gesture. Default is YES. */
+/** YES if text view's content can be cleaned with a shake gesture. Default is NO. */
 @property (nonatomic, assign) BOOL allowUndo;
 
 // Convenience accessors (access through the text container view)
