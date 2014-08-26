@@ -307,7 +307,7 @@
     self.textContainerView.editortRightButton.enabled = [self canPressRightButton];
 
     CGFloat containeHeight = [self appropriateContainerViewHeight];
-
+    
     if (containeHeight != self.containerViewHC.constant)
     {
         CGFloat offsetDelta = roundf(self.containerViewHC.constant-containeHeight);
@@ -382,11 +382,10 @@
         return;
     }
     
-    [self.textContainerView beginTextEditing];
-    
     [self.textView setText:text];
-    
-    [self.textView scrollToCaretPositonAnimated:NO];
+    [self.textView scrollToCaretPositonAnimated:YES];
+
+    [self.textContainerView beginTextEditing];
     
     if (![self.textView isFirstResponder]) {
         [self presentKeyboard:YES];
@@ -843,7 +842,7 @@
                             @"textContainerView": self.textContainerView,
                             };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView(==0@250)][autoCompletionView(0)][typeIndicatorView(0)][textContainerView(==0)]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView(==0@250)][autoCompletionView(0)][typeIndicatorView(0)][textContainerView(>=0)]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[autoCompletionView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[typeIndicatorView]|" options:0 metrics:nil views:views]];
