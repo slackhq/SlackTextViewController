@@ -46,6 +46,28 @@
 //    }
 }
 
+//- (void)scrollToCaretPositonAnimated:(BOOL)animated
+//{
+//    UITextPosition *position = self.selectedTextRange.end;
+//    CGRect caretRect = [self caretRectForPosition:position];
+//    caretRect.size.height += self.textContainerInset.bottom;
+//    
+//    if (!animated)
+//    {
+//        [UIView beginAnimations:nil context:nil];
+//        [UIView setAnimationDuration:0.0];
+//        [UIView setAnimationDelay:0.0];
+//        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+//        
+//        [self scrollRectToVisible:caretRect animated:NO];
+//        
+//        [UIView commitAnimations];
+//    }
+//    else {
+//        [self scrollRectToVisible:caretRect animated:NO];
+//    }
+//}
+
 - (void)scrollToCaretPositonAnimated:(BOOL)animated
 {
     if (!animated)

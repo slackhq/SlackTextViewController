@@ -512,6 +512,10 @@
 
 - (void)didChangeKeyboardFrame:(NSNotification *)notification
 {
+    if (self.keyboardHC.constant == 0) {
+        return;
+    }
+
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect inputFrame = self.textContainerView.frame;
     

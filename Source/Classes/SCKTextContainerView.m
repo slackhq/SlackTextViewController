@@ -97,6 +97,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.returnKeyType = UIReturnKeyDefault;
         _textView.enablesReturnKeyAutomatically = YES;
         _textView.scrollIndicatorInsets = UIEdgeInsetsMake(0, -1, 0, 1);
+        _textView.accessibilityLabel = NSLocalizedString(@"Text Input", nil);
         _textView.inputAccessoryView = [SCKInputAccessoryView new];
         _textView.delegate = self;
         
@@ -145,6 +146,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _editorTitle = [UILabel new];
         _editorTitle.translatesAutoresizingMaskIntoConstraints = NO;
         _editorTitle.text = NSLocalizedString(@"Editing Message", nil);
+        _editorTitle.accessibilityLabel = NSLocalizedString(@"Editing Message", nil);
         _editorTitle.textAlignment = NSTextAlignmentCenter;
         _editorTitle.backgroundColor = [UIColor clearColor];
         _editorTitle.font = [UIFont boldSystemFontOfSize:15.0];
@@ -172,7 +174,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
                                 @"rightButton": self.editortRightButton,
                                 };
         
-        NSDictionary *metrics = @{@"hor" : @(kTextViewHorizontalPadding+1),
+        NSDictionary *metrics = @{@"hor" : @(kTextViewHorizontalPadding),
                                   @"ver" : @(kTextViewVerticalPadding),
                                   };
         
