@@ -13,8 +13,6 @@
 #import "UIScrollView+ChatKitAdditions.h"
 #import "UITextView+ChatKitAdditions.h"
 
-@protocol SCKAutoCompletionDelegate;
-
 ///------------------------------------------------------------------------
 /// @name A drop-in replacement of UITableViewController with chat features.
 ///------------------------------------------------------------------------
