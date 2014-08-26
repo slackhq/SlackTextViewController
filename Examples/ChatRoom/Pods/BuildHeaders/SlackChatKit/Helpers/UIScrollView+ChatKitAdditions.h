@@ -1,0 +1,1 @@
+../../../../../../Source/Helpers/UIScrollView+ChatKitAdditions.h

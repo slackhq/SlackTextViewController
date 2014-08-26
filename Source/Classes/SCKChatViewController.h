@@ -10,8 +10,8 @@
 #import "SCKTextContainerView.h"
 #import "SCKTypeIndicatorView.h"
 
-#import "UIScrollView+SCKHelpers.h"
-#import "UITextView+SCKHelpers.h"
+#import "UIScrollView+ChatKitAdditions.h"
+#import "UITextView+ChatKitAdditions.h"
 
 @protocol SCKAutoCompletionDelegate;
 
@@ -26,6 +26,7 @@
 @property (nonatomic, readonly) SCKTextContainerView *textContainerView;
 /** The typing indicator. */
 @property (nonatomic, readonly) SCKTypeIndicatorView *typeIndicatorView;
+@property (nonatomic, assign) BOOL animated;
 /** YES if control's animation should have bouncy effects. Default is NO. */
 @property (nonatomic, assign) BOOL bounces;
 /** YES if text view's content can be cleaned with a shake gesture. Default is NO. */

@@ -2,7 +2,7 @@
 //  SCKTypeIndicatorView.m
 //  Slack
 //
-//  Created by Ignacio on 5/13/14.
+//  Created by Ignacio Romero Z. on 5/13/14.
 //  Copyright (c) 2014 Tiny Speck, Inc. All rights reserved.
 //
 

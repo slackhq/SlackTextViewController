@@ -1,14 +1,14 @@
 //
-//  UIView+SCKHelpers.h
+//  UIView+ChatKitAdditions.h
 //  Slack
 //
-//  Created by Ignacio on 8/20/14.
+//  Created by Ignacio Romero Z. on 8/20/14.
 //  Copyright (c) 2014 Tiny Speck, Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface UIView (SCKHelpers)
+@interface UIView (ChatKitAdditions)
 
 /**
  

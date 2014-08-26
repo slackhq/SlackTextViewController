@@ -147,6 +147,9 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
         [[NSNotificationCenter defaultCenter] postNotificationName:SCKTextViewDidPasteImageNotification object:image];
     }
     else if (text.length > 0){
+        
+        // Inserting the text fixes a UITextView bug whitch automatically scrolls to the bottom
+        // and beyond scroll content size sometimes when the text is too long
         [self insertTextAtCaretRange:text];
     }
 }
@@ -155,6 +158,7 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
 {
     [super setFont:font];
     
+    // Updates the placeholder font too
     self.placeholderLabel.font = self.font;
 }
 
@@ -162,6 +166,7 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
 {
     [super setTextAlignment:textAlignment];
     
+    // Updates the placeholder text alignment too
     self.placeholderLabel.textAlignment = textAlignment;
 }
 

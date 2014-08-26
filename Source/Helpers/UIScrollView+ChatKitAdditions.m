@@ -1,18 +1,18 @@
 //
-//  UIScrollView+SCKHelpers.m
+//  UIScrollView+ChatKitAdditions.m
 //  Slack
 //
-//  Created by Ignacio on 8/19/14.
+//  Created by Ignacio Romero Z. on 8/19/14.
 //  Copyright (c) 2014 Tiny Speck, Inc. All rights reserved.
 //
 
-#import "UIScrollView+SCKHelpers.h"
+#import "UIScrollView+ChatKitAdditions.h"
 #import <objc/runtime.h>
 
 static NSString * const kKeyScrollViewVerticalIndicator = @"_verticalScrollIndicator";
 static NSString * const kKeyScrollViewHorizontalIndicator = @"_horizontalScrollIndicator";
 
-@implementation UIScrollView (SCKHelpers)
+@implementation UIScrollView (ChatKitAdditions)
 
 - (void)scrollToBottomAnimated:(BOOL)animated
 {

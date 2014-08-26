@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UITextView+SCKHelpers.h"
+#import "UITextView+ChatKitAdditions.h"
 
 extern NSString * const SCKTextViewTextWillChangeNotification;
 extern NSString * const SCKTextViewSelectionDidChangeNotification;

@@ -232,8 +232,6 @@
 
 - (void)didCancelTextEditing:(id)sender
 {
-    NSLog(@"%s",__FUNCTION__);
-    
     [super didCancelTextEditing:sender];
 }
 
@@ -291,16 +289,6 @@
     CGFloat cellHeight = [self.autoCompletionView.delegate tableView:self.autoCompletionView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     return cellHeight*self.searchResult.list.count;
 }
-
-//- (void)presentKeyboard:(BOOL)animated
-//{
-//    [super presentKeyboard:animated];
-//}
-//
-//- (void)dismissKeyboard:(BOOL)animated
-//{
-//    [super presentKeyboard:animated];
-//}
 
 - (NSArray *)keyCommands
 {

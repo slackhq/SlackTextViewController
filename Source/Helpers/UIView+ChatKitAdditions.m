@@ -1,14 +1,14 @@
 //
-//  UIView+SCKHelpers.m
+//  UIView+ChatKitAdditions.m
 //  Slack
 //
-//  Created by Ignacio on 8/20/14.
+//  Created by Ignacio Romero Z. on 8/20/14.
 //  Copyright (c) 2014 Tiny Speck, Inc. All rights reserved.
 //
 
-#import "UIView+SCKHelpers.h"
+#import "UIView+ChatKitAdditions.h"
 
-@implementation UIView (SCKHelpers)
+@implementation UIView (ChatKitAdditions)
 
 - (void)animateLayoutIfNeededWithBounce:(BOOL)bounce curve:(NSInteger)curve animations:(void (^)(void))animations
 {
