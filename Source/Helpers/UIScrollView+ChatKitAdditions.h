@@ -10,12 +10,6 @@
 
 @interface UIScrollView (ChatKitAdditions)
 
-/**
- Sets the offset from the content view’s origin to the very bottom.
- @param animated YES to animate the transition at a constant velocity to the new offset, NO to make the transition immediate.
- */
-- (void)scrollToBottomAnimated:(BOOL)animated;
-
 /** YES if the scrollView's offset is at the very top. */
 @property (nonatomic, readonly) BOOL isAtTop;
 /** YES if the scrollView's offset is at the very bottom. */
@@ -27,5 +21,11 @@
 @property (nonatomic, readonly) UIView *verticalScroller;
 /** The horizontal scroll indicator view. */
 @property (nonatomic, readonly) UIView *horizontalScroller;
+
+/**
+ Sets the offset from the content view’s origin to the very bottom.
+ @param animated YES to animate the transition at a constant velocity to the new offset, NO to make the transition immediate.
+ */
+- (void)scrollToBottomAnimated:(BOOL)animated;
 
 @end
