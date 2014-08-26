@@ -173,7 +173,10 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
     
     [_usernames addObject:username];
     
-    _indicatorLabel.attributedText = [self attributedString];
+    NSAttributedString *text = [self attributedString];
+    
+    _indicatorLabel.attributedText = text;
+    _indicatorLabel.accessibilityLabel = text.string;
     
     if (!self.isVisible) {
         [self setVisible:YES];

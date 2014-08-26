@@ -141,8 +141,6 @@
         [_textContainerView.rightButton addTarget:self action:@selector(didPressRightButton:) forControlEvents:UIControlEventTouchUpInside];
         [_textContainerView.editortLeftButton addTarget:self action:@selector(didCancelTextEditing:) forControlEvents:UIControlEventTouchUpInside];
         [_textContainerView.editortRightButton addTarget:self action:@selector(didCommitTextEditing:) forControlEvents:UIControlEventTouchUpInside];
-        
-//        textContentHeight = self.textView.contentSize.height;
     }
     return _textContainerView;
 }

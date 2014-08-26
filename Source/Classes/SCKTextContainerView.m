@@ -128,6 +128,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _rightButton.enabled = NO;
         
         [_rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
+        [_rightButton setAccessibilityLabel:NSLocalizedString(@"Send", nil)];
     }
     return _rightButton;
 }
@@ -154,6 +155,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _editortLeftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         _editortLeftButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
         [_editortLeftButton setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
+        [_editortLeftButton setAccessibilityLabel:NSLocalizedString(@"Cancel", nil)];
         [_accessoryView addSubview:self.editortLeftButton];
         
         _editortRightButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -162,6 +164,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _editortRightButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
         _editortRightButton.enabled = NO;
         [_editortRightButton setTitle:NSLocalizedString(@"Save", nil) forState:UIControlStateNormal];
+        [_editortLeftButton setAccessibilityLabel:NSLocalizedString(@"Save", nil)];
         [_accessoryView addSubview:self.editortRightButton];
         
         NSDictionary *views = @{@"label": self.editorTitle,
