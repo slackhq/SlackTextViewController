@@ -96,17 +96,6 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
 
 - (NSUInteger)numberOfLines
 {
-//    NSLog(@"%s",__FUNCTION__);
-//    
-//    UIFont *font = [UIFont boldSystemFontOfSize:11.0];
-//    CGSize size = [self.text sizeWithFont:font
-//                     constrainedToSize:CGSizeMake(self.contentSize.width, CGFLOAT_MAX)
-//                         lineBreakMode:NSLineBreakByWordWrapping];
-//    
-//    NSLog(@"self.text : %@", self.text);
-//
-//    return abs(size.height / font.lineHeight);
-    
     return abs(self.contentSize.height/self.font.lineHeight);
 }
 
@@ -170,14 +159,6 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
     self.placeholderLabel.textAlignment = textAlignment;
 }
 
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    BOOL shouldChange = YES;
-    
-    NSLog(@"%s",__FUNCTION__);
-    
-    return shouldChange;
-}
 
 #pragma mark - Custom Actions
 

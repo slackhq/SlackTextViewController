@@ -36,7 +36,7 @@
 
 #pragma mark - Initializer
 
-- (instancetype)init
+- (id)init
 {
     if (self = [super init])
     {

@@ -38,7 +38,21 @@
 {
     self = [super init];
     if (self) {
+        self.users = @[@"ignacio", @"michael", @"brady", @"everyone", @"channel", @"ali"];
+        self.channels = @[@"general", @"ios", @"random", @"ssb", @"mobile", @"ui", @"released", @"SF"];
+        self.commands = @[@"help", @"away", @"close", @"color", @"colors", @"feedback", @"invite", @"me", @"msg", @"dm", @"open"];
+        self.emojis = @[@"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
         
+        UIBarButtonItem *reachItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_network"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateReachability:)];
+        UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"] style:UIBarButtonItemStylePlain target:self action:@selector(editRandomMessage:)];
+        
+        UIBarButtonItem *typeItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_typing"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateUserTyping:)];
+        UIBarButtonItem *appendItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_append"] style:UIBarButtonItemStylePlain target:self action:@selector(fillWithText:)];
+        
+        self.navigationItem.leftBarButtonItems = @[reachItem, editItem];
+        self.navigationItem.rightBarButtonItems = @[appendItem, typeItem];
+        
+        self.reachable = YES;
     }
     return self;
 }
@@ -55,26 +69,6 @@
     for (int i = 0; i < 40; i++) {
         [self.messages addObject:[NSString stringWithFormat:@"Dummy message #%d", i+1]];
     }
-    
-    self.users = @[@"ignacio", @"michael", @"brady", @"everyone", @"channel", @"ali"];
-    self.channels = @[@"general", @"ios", @"random", @"ssb", @"mobile", @"ui", @"released", @"SF"];
-    self.commands = @[@"help", @"away", @"close", @"color", @"colors", @"feedback", @"invite", @"me", @"msg", @"dm", @"open"];
-    self.emojis = @[@"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
-    
-//    NSString *path = [[NSBundle mainBundle] pathForResource:@"emojis" ofType:@"json"];
-//    NSData *data = [NSData dataWithContentsOfFile:path];
-//    self.emojis = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions|NSJSONWritingPrettyPrinted error:nil];
-    
-    UIBarButtonItem *reachItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_network"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateReachability:)];
-    UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"] style:UIBarButtonItemStylePlain target:self action:@selector(editRandomMessage:)];
-
-    UIBarButtonItem *typeItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_typing"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateUserTyping:)];
-    UIBarButtonItem *appendItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_append"] style:UIBarButtonItemStylePlain target:self action:@selector(fillWithText:)];
-
-    self.navigationItem.leftBarButtonItems = @[reachItem, editItem];
-    self.navigationItem.rightBarButtonItems = @[appendItem, typeItem];
-    
-    self.reachable = YES;
     
     self.bounces = NO;
     self.allowUndo = YES;
@@ -104,7 +98,6 @@
 {
     [super viewDidAppear:animated];
 }
-
 
 #pragma mark - Action Methods
 
@@ -180,14 +173,14 @@
 {
     [super textWillUpdate];
     
-    //Useful to sending a pong message to notify that the user is typing...
+    // Useful to sending a pong message to notify that the user is typing...
 }
 
 - (void)textDidUpdate:(BOOL)animated
 {
     [super textDidUpdate:animated];
     
-    
+    // Useful to sending a pong message to notify that the user is typing...
 }
 
 - (void)didPressLeftButton:(id)sender
@@ -209,7 +202,7 @@
 
 - (void)didPasteImage:(UIImage *)image
 {
-    NSLog(@"%s : %@",__FUNCTION__, image);
+    // Useful for sending an image
 }
 
 - (void)willRequestUndo
@@ -339,11 +332,6 @@
     else {
         cell.backgroundColor = [UIColor clearColor];
         
-        NSLog(@"%s: %ld",__FUNCTION__, (long)indexPath.row);
-        
-        NSLog(@"self.searchResult.key : %@", self.searchResult.key);
-        NSLog(@"self.searchResult.list.count : %ld", self.searchResult.list.count);
-
         NSString *sign = self.searchResult.key;
         NSString *item = self.searchResult.list[indexPath.row];
 
