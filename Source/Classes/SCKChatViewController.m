@@ -151,11 +151,9 @@
 {
     if (!_typeIndicatorView)
     {
-        _typeIndicatorView = [[SCKTypeIndicatorView alloc] init];
+        _typeIndicatorView = [SCKTypeIndicatorView new];
         _typeIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
-        _typeIndicatorView.layer.shadowOpacity = 0.8;
-        _typeIndicatorView.layer.shadowColor = [UIColor whiteColor].CGColor;
-        _typeIndicatorView.layer.shadowOffset = CGSizeMake(0.0, 0.0);
+        _typeIndicatorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
     }
     return _typeIndicatorView;
 }
@@ -327,9 +325,9 @@
                                                  curve:UIViewAnimationOptionCurveEaseInOut
                                             animations:^{
                                                 
-//                                                if (self.isEditing) {
-//                                                    [self.textView scrollToCaretPositonAnimated:NO];
-//                                                }
+                                                if (self.isEditing) {
+                                                    [self.textView scrollToCaretPositonAnimated:NO];
+                                                }
                                                 
                                                 if (scroll && offsetY >= 0) {
                                                     [self.tableView setContentOffset:CGPointMake(0.0, offsetY)];
@@ -429,6 +427,11 @@
 
 - (void)shouldHitEscapeKey:(id)sender
 {
+    if (self.isAutoCompleting) {
+        [self cancelAutoCompletion];
+        return;
+    }
+    
     if (self.isEditing) {
         [self didCancelTextEditing:sender];
         return;
@@ -595,6 +598,8 @@
 {
     NSRange selectedRange = [notification.userInfo[@"range"] rangeValue];
     
+    // Updates auto-completion if the caret is not selecting just re-positioning
+    // The text view must be first responder too
     if (selectedRange.length == 0 && [self.textView isFirstResponder]) {
         [self processTextForAutoCompletion];
     }
@@ -604,6 +609,7 @@
 {
     UIImage *image = notification.object;
     
+    // Notifies only if the pasted object is a valid UIImage instance
     if ([image isKindOfClass:[UIImage class]]) {
         [self didPasteImage:image];
     }
@@ -611,6 +617,7 @@
 
 - (void)didShakeTextView:(NSNotification *)notification
 {
+    // Notifies of the shake gesture if undo mode is on and the text view is not empty
     if (self.allowUndo && self.textView.text.length > 0) {
         [self willRequestUndo];
     }
@@ -621,15 +628,18 @@
 
 - (void)registerKeysForAutoCompletion:(NSArray *)keys
 {
+    // Creates the array if not exitent
     if (!self.keysLookupList) {
         self.keysLookupList = [[NSMutableArray alloc] initWithCapacity:keys.count];
     }
     
     for (NSString *key in keys) {
+        // Skips if the key is not a valid string or longer than 1 letter
         if (![key isKindOfClass:[NSString class]] || key.length == 0 || key.length > 1) {
             continue;
         }
         
+        // Adds the key if not contained already
         if (![self.keysLookupList containsObject:key]) {
             [self.keysLookupList addObject:key];
         }
@@ -663,10 +673,6 @@
             self.detectedKeyRange = NSMakeRange(range.location, sign.length);
         }
     }
-    
-    NSLog(@"self.detectedKey : %@", self.detectedKey);
-    NSLog(@"self.detectedWord : %@", self.detectedWord);
-    NSLog(@"word : %@", word);
     
     if (self.detectedKey.length > 0) {
         if (range.length == 0 || range.length != word.length) {
@@ -869,7 +875,7 @@
                             @"textContainerView": self.textContainerView,
                             };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView(==0@250)][autoCompletionView(0)][typeIndicatorView(0)][textContainerView(==0)]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView(==0@250)][autoCompletionView(0)][typeIndicatorView(0)][textContainerView(>=0)]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[autoCompletionView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[typeIndicatorView]|" options:0 metrics:nil views:views]];

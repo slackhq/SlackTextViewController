@@ -77,6 +77,7 @@
     self.reachable = YES;
     
     self.bounces = NO;
+    self.allowUndo = YES;
     
     self.textContainerView.autoHideRightButton = YES;
     

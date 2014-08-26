@@ -147,7 +147,7 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
         [[NSNotificationCenter defaultCenter] postNotificationName:SCKTextViewDidPasteImageNotification object:image];
     }
     else if (text.length > 0){
-        [super paste:sender];
+        [self insertTextAtCaretRange:text];
     }
 }
 
