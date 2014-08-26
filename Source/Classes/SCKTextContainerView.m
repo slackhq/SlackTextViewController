@@ -203,7 +203,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     }
 }
 
-- (CGFloat)rightBtnWidth
+- (CGFloat)appropriaterightButtonWidth
 {
     NSString *title = [self.rightButton titleForState:UIControlStateNormal];
     CGSize rigthButtonSize = [title sizeWithAttributes:@{NSFontAttributeName: self.rightButton.titleLabel.font}];
@@ -216,7 +216,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     return rigthButtonSize.width+kTextViewHorizontalPadding;
 }
 
-- (CGFloat)rightBtnMargin
+- (CGFloat)appropriaterightButtonMargin
 {
     if (self.autoHideRightButton) {
         if (self.textView.text.length == 0) {
@@ -243,7 +243,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _autoHideRightButton = hide;
     }
     
-    self.rightButtonWC.constant = [self rightBtnWidth];
+    self.rightButtonWC.constant = [self appropriaterightButtonWidth];
     [self layoutIfNeeded];
 }
 
@@ -319,14 +319,14 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     
     if (self.autoHideRightButton && !self.isEditing)
     {
-        CGFloat rightButtonNewWidth = [self rightBtnWidth];
+        CGFloat rightButtonNewWidth = [self appropriaterightButtonWidth];
         
         if (self.rightButtonWC.constant == rightButtonNewWidth) {
             return;
         }
         
         self.rightButtonWC.constant = rightButtonNewWidth;
-        self.rightMarginWC.constant = [self rightBtnMargin];
+        self.rightMarginWC.constant = [self appropriaterightButtonMargin];
         
         if (rightButtonNewWidth > 0) {
             [self.rightButton sizeToFit];
@@ -409,8 +409,8 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         self.leftMarginWC.constant = (leftButtonSize.width > 0) ? kTextViewHorizontalPadding : null;
         self.bottomMarginWC.constant = roundf((self.minHeight - leftButtonSize.height) / 2.0f);
         
-        self.rightButtonWC.constant = [self rightBtnWidth];
-        self.rightMarginWC.constant = [self rightBtnMargin];
+        self.rightButtonWC.constant = [self appropriaterightButtonWidth];
+        self.rightMarginWC.constant = [self appropriaterightButtonMargin];
     }
 }
 

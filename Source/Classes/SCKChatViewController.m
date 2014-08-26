@@ -307,7 +307,7 @@
     self.textContainerView.editortRightButton.enabled = [self canPressRightButton];
 
     CGFloat containeHeight = [self appropriateContainerViewHeight];
-    
+
     if (containeHeight != self.containerViewHC.constant)
     {
         CGFloat offsetDelta = roundf(self.containerViewHC.constant-containeHeight);
@@ -457,6 +457,11 @@
 
 - (void)willShowOrHideKeyboard:(NSNotification *)notification
 {
+    // Skips this if it's not the expected textView.
+    if (![self.textView isFirstResponder]) {
+        return;
+    }
+    
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     
@@ -496,11 +501,6 @@
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
 {
-    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    endFrame = adjustEndFrame(endFrame, self.interfaceOrientation);
-    
-    if (!isKeyboardFrameValid(endFrame)) return;
-    
     // Checks if it's showing or hidding the keyboard
     BOOL show = [notification.name isEqualToString:UIKeyboardDidShowNotification];
     
@@ -512,7 +512,9 @@
 
 - (void)didChangeKeyboardFrame:(NSNotification *)notification
 {
-    if (self.keyboardHC.constant == 0) {
+    // Skips this if it's not the expected textView.
+    // Checking the keyboard height constant helps to disable the view constraints update on iPad when the keyboard is undocked.
+    if (![self.textView isFirstResponder] || self.keyboardHC.constant == 0) {
         return;
     }
 
@@ -543,7 +545,7 @@
 {
     SCKTextView *textView = (SCKTextView *)notification.object;
     
-    // If it's not the expected textView, return.
+    // Skips this it's not the expected textView.
     if (![textView isEqual:self.textView]) {
         return;
     }
@@ -555,11 +557,12 @@
 {
     SCKTypeIndicatorView *indicatorView = (SCKTypeIndicatorView *)notification.object;
     
-    // If it's not the expected textView, return.
+    // Skips this it's not the expected typing indicator view.
     if (![indicatorView isEqual:self.typeIndicatorView]) {
         return;
     }
     
+    // Doesn't show the typing indicator if the text is being edited or auto-completed.
     if (self.isEditing || self.isAutoCompleting) {
         return;
     }
@@ -609,6 +612,11 @@
 
 - (void)didChangeTextViewPasteboard:(NSNotification *)notification
 {
+    // Skips this if it's not the expected textView.
+    if (![self.textView isFirstResponder]) {
+        return;
+    }
+    
     UIImage *image = notification.object;
     
     // Notifies only if the pasted object is a valid UIImage instance
@@ -619,6 +627,11 @@
 
 - (void)didShakeTextView:(NSNotification *)notification
 {
+    // Skips this if it's not the expected textView.
+    if (![self.textView isFirstResponder]) {
+        return;
+    }
+    
     // Notifies of the shake gesture if undo mode is on and the text view is not empty
     if (self.allowUndo && self.textView.text.length > 0) {
         [self willRequestUndo];
@@ -817,53 +830,6 @@
 }
 
 
-#pragma mark - NSNotificationCenter register/unregister
-
-- (void)registerNotifications
-{
-    // Keyboard notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideKeyboard:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideKeyboard:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
-    
-    // TextView notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willChangeTextView:) name:SCKTextViewTextWillChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewContentSize:) name:SCKTextViewContentSizeDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewSelection:) name:SCKTextViewSelectionDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewPasteboard:) name:SCKTextViewDidPasteImageNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShakeTextView:) name:SCKTextViewDidShakeNotification object:nil];
-
-    
-    // TypeIndicator notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SCKTypeIndicatorViewWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SCKTypeIndicatorViewWillHideNotification object:nil];
-}
-
-- (void)unregisterNotifications
-{
-    // Keyboard notifications
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
-    
-    // TextView notifications
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewTextWillChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewContentSizeDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewDidPasteImageNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewDidShakeNotification object:nil];
-
-    // TypeIndicator notifications
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTypeIndicatorViewWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTypeIndicatorViewWillHideNotification object:nil];
-}
-
-
 #pragma mark - View Auto-Layout
 
 - (void)setupViewConstraints
@@ -877,7 +843,7 @@
                             @"textContainerView": self.textContainerView,
                             };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView(==0@250)][autoCompletionView(0)][typeIndicatorView(0)][textContainerView(>=0)]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView(==0@250)][autoCompletionView(0)][typeIndicatorView(0)][textContainerView(==0)]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[autoCompletionView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[typeIndicatorView]|" options:0 metrics:nil views:views]];
@@ -933,6 +899,53 @@
                                  modifierFlags:UIKeyModifierControl
                                         action:@selector(shouldHitEscapeKey:)],
              ];
+}
+
+
+#pragma mark - NSNotificationCenter register/unregister
+
+- (void)registerNotifications
+{
+    // Keyboard notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideKeyboard:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideKeyboard:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
+
+    // TextView notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willChangeTextView:) name:SCKTextViewTextWillChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewContentSize:) name:SCKTextViewContentSizeDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewSelection:) name:SCKTextViewSelectionDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewPasteboard:) name:SCKTextViewDidPasteImageNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShakeTextView:) name:SCKTextViewDidShakeNotification object:nil];
+    
+    
+    // TypeIndicator notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SCKTypeIndicatorViewWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SCKTypeIndicatorViewWillHideNotification object:nil];
+}
+
+- (void)unregisterNotifications
+{
+    // Keyboard notifications
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
+
+    // TextView notifications
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewTextWillChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewContentSizeDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewDidPasteImageNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewDidShakeNotification object:nil];
+    
+    // TypeIndicator notifications
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTypeIndicatorViewWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTypeIndicatorViewWillHideNotification object:nil];
 }
 
 

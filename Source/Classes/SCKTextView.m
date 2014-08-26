@@ -171,6 +171,14 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
 }
 
 
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    BOOL shouldChange = YES;
+    
+    NSLog(@"%s",__FUNCTION__);
+    
+    return shouldChange;
+}
+
 #pragma mark - Custom Actions
 
 - (void)flashScrollIndicatorsIfNeeded
