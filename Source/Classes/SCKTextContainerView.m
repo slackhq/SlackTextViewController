@@ -283,10 +283,18 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    NSDictionary *userInfo = @{@"text": text, @"range": [NSValue valueWithRange:range]};
-    [[NSNotificationCenter defaultCenter] postNotificationName:SCKTextViewTextWillChangeNotification object:self.textView userInfo:userInfo];
-    
-    return YES;
+    if ([text isEqualToString:@"\n"]) {
+        //Detected break. Should insert new line break manually.
+        [textView insertNewLineBreak];
+        
+        return NO;
+    }
+    else {
+        NSDictionary *userInfo = @{@"text": text, @"range": [NSValue valueWithRange:range]};
+        [[NSNotificationCenter defaultCenter] postNotificationName:SCKTextViewTextWillChangeNotification object:self.textView userInfo:userInfo];
+        
+        return YES;
+    }
 }
 
 - (void)textViewDidChangeSelection:(UITextView *)textView

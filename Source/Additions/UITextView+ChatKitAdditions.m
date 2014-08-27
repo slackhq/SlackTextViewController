@@ -21,7 +21,7 @@
 
 - (void)scrollToBottomAnimated:(BOOL)animated
 {
-    CGRect caretRect = [self caretRectForPosition:self.endOfDocument];
+    CGRect endRect = [self caretRectForPosition:self.endOfDocument];
     
     if (!animated)
     {
@@ -30,12 +30,12 @@
         [UIView setAnimationDelay:0.0];
         [UIView setAnimationCurve:UIViewAnimationCurveLinear];
         
-        [self scrollRectToVisible:caretRect animated:NO];
+        [self scrollRectToVisible:endRect animated:NO];
         
         [UIView commitAnimations];
     }
     else {
-        [self scrollRectToVisible:caretRect animated:animated];
+        [self scrollRectToVisible:endRect animated:animated];
     }
     
 //    NSUInteger lenght = self.text.length;
@@ -48,6 +48,8 @@
 
 //- (void)scrollToCaretPositonAnimated:(BOOL)animated
 //{
+//    NSLog(@"%s",__FUNCTION__);
+//    
 //    UITextPosition *position = self.selectedTextRange.end;
 //    CGRect caretRect = [self caretRectForPosition:position];
 //    caretRect.size.height += self.textContainerInset.bottom;
@@ -89,6 +91,8 @@
 - (void)insertNewLineBreak
 {
     [self insertTextAtCaretRange:@"\n"];
+    
+    //Detected break. Should scroll to bottom if needed.
 }
 
 - (void)insertTextAtCaretRange:(NSString *)text
