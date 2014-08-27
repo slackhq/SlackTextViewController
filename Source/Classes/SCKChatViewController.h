@@ -106,6 +106,8 @@
  */
 - (void)willRequestUndo;
 
+- (void)didPressReturnKey:(id)sender;
+- (void)didPressEscapeKey:(id)sender;
 
 ///------------------------------------------------
 /// @name Text Edition

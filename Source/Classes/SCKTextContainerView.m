@@ -89,7 +89,6 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.returnKeyType = UIReturnKeyDefault;
         _textView.enablesReturnKeyAutomatically = YES;
         _textView.scrollIndicatorInsets = UIEdgeInsetsMake(0, -1, 0, 1);
-        _textView.accessibilityLabel = NSLocalizedString(@"Text Input", nil);
         _textView.inputAccessoryView = [SCKInputAccessoryView new];
         _textView.delegate = self;
         
@@ -121,7 +120,6 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _rightButton.enabled = NO;
         
         [_rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
-        [_rightButton setAccessibilityLabel:NSLocalizedString(@"Send", nil)];
     }
     return _rightButton;
 }
@@ -138,7 +136,6 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _editorTitle = [UILabel new];
         _editorTitle.translatesAutoresizingMaskIntoConstraints = NO;
         _editorTitle.text = NSLocalizedString(@"Editing Message", nil);
-        _editorTitle.accessibilityLabel = NSLocalizedString(@"Editing Message", nil);
         _editorTitle.textAlignment = NSTextAlignmentCenter;
         _editorTitle.backgroundColor = [UIColor clearColor];
         _editorTitle.font = [UIFont boldSystemFontOfSize:15.0];
@@ -149,7 +146,6 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _editortLeftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         _editortLeftButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
         [_editortLeftButton setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
-        [_editortLeftButton setAccessibilityLabel:NSLocalizedString(@"Cancel", nil)];
         [_accessoryView addSubview:self.editortLeftButton];
         
         _editortRightButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -158,7 +154,6 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _editortRightButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
         _editortRightButton.enabled = NO;
         [_editortRightButton setTitle:NSLocalizedString(@"Save", nil) forState:UIControlStateNormal];
-        [_editortLeftButton setAccessibilityLabel:NSLocalizedString(@"Save", nil)];
         [_accessoryView addSubview:self.editortRightButton];
         
         NSDictionary *views = @{@"label": self.editorTitle,

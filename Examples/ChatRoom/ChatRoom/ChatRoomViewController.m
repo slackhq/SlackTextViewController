@@ -53,6 +53,8 @@
         self.navigationItem.rightBarButtonItems = @[appendItem, typeItem];
         
         self.reachable = YES;
+        
+        self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     return self;
 }
@@ -82,7 +84,6 @@
 
     //    [self.leftButton setTintColor:[UIColor colorWithRed:154.0/255.0 green:159.0/255.0 blue:166.0/255.0 alpha:1.0]];
     [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
-    [self.leftButton setAccessibilityLabel:@"Upload"];
 
     //    [self.rightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:136.0/255.0 blue:204.0/255.0 alpha:1.0]];
     [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];

@@ -98,7 +98,7 @@
 {
     if (!_tableView)
     {
-        _tableView = [UITableView new];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         _tableView.translatesAutoresizingMaskIntoConstraints = NO;
         _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
         _tableView.backgroundColor = [UIColor whiteColor];
@@ -152,7 +152,6 @@
     {
         _typeIndicatorView = [SCKTypeIndicatorView new];
         _typeIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
-        _typeIndicatorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
     }
     return _typeIndicatorView;
 }
@@ -413,7 +412,7 @@
     [self.textView setText:nil];
 }
 
-- (void)shouldHitReturnKey:(id)sender
+- (void)didPressReturnKey:(id)sender
 {
     if (self.isEditing) {
         [self didCommitTextEditing:sender];
@@ -423,7 +422,7 @@
     [self performRightAction];
 }
 
-- (void)shouldHitEscapeKey:(id)sender
+- (void)didPressEscapeKey:(id)sender
 {
     if (self.isAutoCompleting) {
         [self cancelAutoCompletion];
@@ -877,7 +876,7 @@
              // Pressing Return key
              [UIKeyCommand keyCommandWithInput:@"\r"
                                  modifierFlags:0
-                                        action:@selector(shouldHitReturnKey:)],
+                                        action:@selector(didPressReturnKey:)],
              [UIKeyCommand keyCommandWithInput:@"\r"
                                  modifierFlags:UIKeyModifierShift
                                         action:@selector(insertNewLineBreak)],
@@ -891,13 +890,13 @@
              // Pressing Esc key
              [UIKeyCommand keyCommandWithInput:UIKeyInputEscape
                                  modifierFlags:0
-                                        action:@selector(shouldHitEscapeKey:)],
+                                        action:@selector(didPressEscapeKey:)],
              [UIKeyCommand keyCommandWithInput:UIKeyInputEscape
                                  modifierFlags:UIKeyModifierShift
-                                        action:@selector(shouldHitEscapeKey:)],
+                                        action:@selector(didPressEscapeKey:)],
              [UIKeyCommand keyCommandWithInput:UIKeyInputEscape
                                  modifierFlags:UIKeyModifierControl
-                                        action:@selector(shouldHitEscapeKey:)],
+                                        action:@selector(didPressEscapeKey:)],
              ];
 }
 
