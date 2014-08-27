@@ -48,13 +48,6 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
     [self addObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize)) options:NSKeyValueObservingOptionNew context:NULL];
 }
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
-    
-    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
-}
-
 
 #pragma mark - Rendering
 
@@ -202,6 +195,18 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
     if (event.type == UIEventTypeMotion && event.subtype == UIEventSubtypeMotionShake) {
 		[[NSNotificationCenter defaultCenter] postNotificationName:SCKTextViewDidShakeNotification object:self];
 	}
+}
+
+
+#pragma mark - Lifeterm
+
+- (void)dealloc
+{
+    _placeholderLabel = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+    
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
 }
 
 @end

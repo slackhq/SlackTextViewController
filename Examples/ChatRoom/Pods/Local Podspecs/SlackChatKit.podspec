@@ -1,4 +1,4 @@
-@version = "0.0.1"
+@version = "1.0"
 
 Pod::Spec.new do |s|
   s.name         		= "SlackChatKit"
@@ -13,9 +13,9 @@ Pod::Spec.new do |s|
   s.source_files 		= "Classes", "Source/Classes/*.{h,m}"
   s.frameworks   		= 'UIKit'
 
-  s.dependency     		'SlackChatKit/Helpers'
+  s.dependency     		'SlackChatKit/Additions'
 
-  s.subspec 'Helpers' do |he|
-    he.source_files     = 'Source/Helpers/*.{h,m}'
+  s.subspec 'Additions' do |he|
+    he.source_files     = 'Source/Additions/*.{h,m}'
   end
 end

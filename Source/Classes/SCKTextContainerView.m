@@ -16,8 +16,6 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 @interface SCKTextContainerView () <UITextViewDelegate>
 
-@property (nonatomic, copy) NSString *rightButtonTitle;
-
 @property (nonatomic, strong) NSLayoutConstraint *leftButtonWC;
 @property (nonatomic, strong) NSLayoutConstraint *leftButtonHC;
 @property (nonatomic, strong) NSLayoutConstraint *leftMarginWC;
@@ -58,14 +56,8 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
 }
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
-    
-    _leftButton = nil;
-    _rightButton = nil;
-    _textView = nil;
-}
+
+#pragma mark - UIView Overrides
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
@@ -412,6 +404,33 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         self.rightButtonWC.constant = [self appropriaterightButtonWidth];
         self.rightMarginWC.constant = [self appropriaterightButtonMargin];
     }
+}
+
+
+#pragma mark - Lifeterm
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+    
+    _leftButton = nil;
+    _rightButton = nil;
+    
+    _textView.delegate = nil;
+    _textView = nil;
+    
+    _accessoryView = nil;
+    _editorTitle = nil;
+    _editortLeftButton = nil;
+    _editortRightButton = nil;
+    
+    _leftButtonWC = nil;
+    _leftButtonHC = nil;
+    _leftMarginWC = nil;
+    _bottomMarginWC = nil;
+    _rightButtonWC = nil;
+    _rightMarginWC = nil;
+    _accessoryViewHC = nil;
 }
 
 @end

@@ -48,15 +48,6 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
     [self setupConstraints];
 }
 
-- (void)dealloc
-{
-    [self clean];
-    
-    _indicatorLabel = nil;
-    _usernames = nil;
-    _timers = nil;
-}
-
 
 #pragma mark - Getters
 
@@ -278,6 +269,18 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
         return view;
     }
     return view;
+}
+
+
+#pragma mark - Lifeterm
+
+- (void)dealloc
+{
+    [self clean];
+    
+    _indicatorLabel = nil;
+    _usernames = nil;
+    _timers = nil;
 }
 
 @end

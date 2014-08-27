@@ -14,13 +14,13 @@
 
 // SlackChatKit
 #define COCOAPODS_POD_AVAILABLE_SlackChatKit
-#define COCOAPODS_VERSION_MAJOR_SlackChatKit 0
+#define COCOAPODS_VERSION_MAJOR_SlackChatKit 1
 #define COCOAPODS_VERSION_MINOR_SlackChatKit 0
-#define COCOAPODS_VERSION_PATCH_SlackChatKit 1
+#define COCOAPODS_VERSION_PATCH_SlackChatKit 0
 
-// SlackChatKit/Helpers
-#define COCOAPODS_POD_AVAILABLE_SlackChatKit_Helpers
-#define COCOAPODS_VERSION_MAJOR_SlackChatKit_Helpers 0
-#define COCOAPODS_VERSION_MINOR_SlackChatKit_Helpers 0
-#define COCOAPODS_VERSION_PATCH_SlackChatKit_Helpers 1
+// SlackChatKit/Additions
+#define COCOAPODS_POD_AVAILABLE_SlackChatKit_Additions
+#define COCOAPODS_VERSION_MAJOR_SlackChatKit_Additions 1
+#define COCOAPODS_VERSION_MINOR_SlackChatKit_Additions 0
+#define COCOAPODS_VERSION_PATCH_SlackChatKit_Additions 0
 

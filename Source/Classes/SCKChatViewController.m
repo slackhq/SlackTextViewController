@@ -9,7 +9,7 @@
 #import "SCKChatViewController.h"
 #import "UIView+ChatKitAdditions.h"
 
-@interface SCKChatViewController () <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, UIAlertViewDelegate>
+@interface SCKChatViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
     CGFloat minYOffset;
 }
@@ -54,6 +54,7 @@
     }
     return self;
 }
+
 
 #pragma mark - View lifecycle
 
@@ -1006,6 +1007,23 @@ BOOL isKeyboardFrameValid(CGRect frame) {
 
 - (void)dealloc
 {
+    _tableView.delegate = nil;
+    _tableView.dataSource = nil;
+    _tableView = nil;
+    
+    _textContainerView = nil;
+    _typeIndicatorView = nil;
+    
+    _keysLookupList = nil;
+    
+    _singleTapGesture = nil;
+    _tableViewHC = nil;
+    _containerViewHC = nil;
+    _containerViewHC = nil;
+    _typeIndicatorViewHC = nil;
+    _autoCompletionViewHC = nil;
+    _keyboardHC = nil;
+    
     [self unregisterNotifications];
 }
 
