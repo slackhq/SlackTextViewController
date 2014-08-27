@@ -36,6 +36,15 @@
 @property (nonatomic, readonly) UIButton *rightButton;
 
 /**
+ Initializes a chat-view controller to manage a table view of a given style.
+ If you use the standard init method to initialize a SCKChatViewController object, a table view in the plain style is created.
+ 
+ @param style A constant that specifies the style of main table view that the controller object is to manage (UITableViewStylePlain or UITableViewStyleGrouped).
+ @return An initialized SCKChatViewController object or nil if the object couldn’t be created.
+ */
+- (instancetype)initWithStyle:(UITableViewStyle)style;
+
+/**
  Verifies if the right button can be pressed. If NO, the button is disabled.
  @discussion You can override this method to perform additional tasks.
  

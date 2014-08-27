@@ -12,6 +12,7 @@
 @interface SCKChatViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
     CGFloat minYOffset;
+    UITableViewStyle _style;
 }
 
 @property (nonatomic, strong) UIGestureRecognizer *singleTapGesture;
@@ -37,25 +38,38 @@
 
 #pragma mark - Initializer
 
-- (id)init
+- (instancetype)initWithStyle:(UITableViewStyle)style
 {
-    if (self = [super init])
-    {
-        self.bounces = NO;
-        self.allowUndo = NO;
-        
-        [self.view addSubview:self.tableView];
-        [self.view addSubview:self.autoCompletionView];
-        [self.view addSubview:self.typeIndicatorView];
-        [self.view addSubview:self.textContainerView];
-        
-        self.view.backgroundColor = [UIColor whiteColor];
-
-        [self setupViewConstraints];
-        
-        [self registerNotifications];
+    if (self = [super init]) {
+        _style = style;
+        [self commonInit];
     }
     return self;
+}
+
+- (id)init
+{
+    if (self = [super init]) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit
+{
+    self.bounces = NO;
+    self.allowUndo = NO;
+    
+    [self.view addSubview:self.tableView];
+    [self.view addSubview:self.autoCompletionView];
+    [self.view addSubview:self.typeIndicatorView];
+    [self.view addSubview:self.textContainerView];
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    [self setupViewConstraints];
+    
+    [self registerNotifications];
 }
 
 
@@ -101,7 +115,7 @@
 {
     if (!_tableView)
     {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:_style];
         _tableView.translatesAutoresizingMaskIntoConstraints = NO;
         _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
         _tableView.backgroundColor = [UIColor whiteColor];
@@ -207,6 +221,18 @@
     return roundf(height);
 }
 
+- (CGFloat)appropriateTableViewHeight
+{
+    CGFloat height = self.view.bounds.size.height;
+    height -= self.keyboardHC.constant;
+    height -= self.containerViewHC.constant;
+    height -= self.autoCompletionViewHC.constant;
+    height -= self.typeIndicatorViewHC.constant;
+    
+    if (height < 0) return 0;
+    else return roundf(height);
+}
+
 
 #pragma mark - Setters
 
@@ -229,21 +255,6 @@
 
 
 #pragma mark - Subclassable Methods
-
-- (BOOL)canShowAutoCompletion
-{
-    return NO;
-}
-
-- (CGFloat)heightForAutoCompletionView
-{
-    return 0.0;
-}
-
-- (CGFloat)maximumHeightForAutoCompletionView
-{
-    return 140.0;
-}
 
 - (BOOL)canPressRightButton
 {
@@ -298,18 +309,6 @@
     // No implementation here. Meant to be overriden in subclass.
 }
 
-- (CGFloat)tableHeight
-{
-    CGFloat height = self.view.bounds.size.height;
-    height -= self.keyboardHC.constant;
-    height -= self.containerViewHC.constant;
-    height -= self.autoCompletionViewHC.constant;
-    height -= self.typeIndicatorViewHC.constant;
-    
-    if (height < 0) return 0;
-    else return roundf(height);
-}
-
 - (void)textDidUpdate:(BOOL)animated
 {
     self.textContainerView.rightButton.enabled = [self canPressRightButton];
@@ -323,7 +322,7 @@
         CGFloat offsetY = self.tableView.contentOffset.y-offsetDelta;
         
         self.containerViewHC.constant = containeHeight;
-        self.tableViewHC.constant = [self tableHeight];
+        self.tableViewHC.constant = [self appropriateTableViewHeight];
         
         BOOL scroll = [self.tableView canScrollToBottom];
         
@@ -359,6 +358,46 @@
 - (void)didPressRightButton:(id)sender
 {
     [self.textView setText:nil];
+}
+
+- (BOOL)canShowAutoCompletion
+{
+    return NO;
+}
+
+- (CGFloat)heightForAutoCompletionView
+{
+    return 0.0;
+}
+
+- (CGFloat)maximumHeightForAutoCompletionView
+{
+    return 140.0;
+}
+
+- (void)didPressReturnKey:(id)sender
+{
+    if (self.isEditing) {
+        [self didCommitTextEditing:sender];
+        return;
+    }
+    
+    [self performRightAction];
+}
+
+- (void)didPressEscapeKey:(id)sender
+{
+    if (self.isAutoCompleting) {
+        [self cancelAutoCompletion];
+        return;
+    }
+    
+    if (self.isEditing) {
+        [self didCancelTextEditing:sender];
+        return;
+    }
+    
+    [self dismissKeyboard:YES];
 }
 
 - (void)didPasteImage:(UIImage *)image
@@ -421,31 +460,6 @@
     [self.textView setText:nil];
 }
 
-- (void)didPressReturnKey:(id)sender
-{
-    if (self.isEditing) {
-        [self didCommitTextEditing:sender];
-        return;
-    }
-    
-    [self performRightAction];
-}
-
-- (void)didPressEscapeKey:(id)sender
-{
-    if (self.isAutoCompleting) {
-        [self cancelAutoCompletion];
-        return;
-    }
-    
-    if (self.isEditing) {
-        [self didCancelTextEditing:sender];
-        return;
-    }
-    
-    [self dismissKeyboard:YES];
-}
-
 - (void)performRightAction
 {
     NSArray *actions = [self.rightButton actionsForTarget:self forControlEvent:UIControlEventTouchUpInside];
@@ -485,7 +499,7 @@
     
     // Updates the height constraints' constants
     self.keyboardHC.constant = show ? endFrame.size.height : 0.0;
-    self.tableViewHC.constant = [self tableHeight];
+    self.tableViewHC.constant = [self appropriateTableViewHeight];
     
     CGFloat delta = CGRectGetHeight(endFrame);
     CGFloat offsetY = self.tableView.contentOffset.y+(show ? delta : -delta);
@@ -529,7 +543,7 @@
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
 
     self.keyboardHC.constant = CGRectGetHeight([UIScreen mainScreen].bounds)-endFrame.origin.y;
-    self.tableViewHC.constant = [self tableHeight];
+    self.tableViewHC.constant = [self appropriateTableViewHeight];
 
     [self.view layoutIfNeeded];
 }
@@ -756,7 +770,7 @@
     if (self.autoCompletionViewHC.constant == viewHeight) {
         return;
     }
-    
+
     // If the auto-completion view height is bigger than the maximum height allows, it is reduce to that size. Default 140 pts.
     if (viewHeight > [self maximumHeightForAutoCompletionView]) {
         viewHeight = [self maximumHeightForAutoCompletionView];
@@ -856,7 +870,7 @@
     self.keyboardHC = bottomConstraints[0];
     
     self.containerViewHC.constant = self.textContainerView.minHeight;
-    self.tableViewHC.constant = [self tableHeight];
+    self.tableViewHC.constant = [self appropriateTableViewHeight];
     
     if (self.isEditing) {
         self.containerViewHC.constant += kEditingViewHeight;

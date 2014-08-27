@@ -36,7 +36,7 @@
 
 - (id)init
 {
-    self = [super init];
+    self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
         self.users = @[@"ignacio", @"michael", @"brady", @"everyone", @"channel", @"ali"];
         self.channels = @[@"general", @"ios", @"random", @"ssb", @"mobile", @"ui", @"released", @"SF"];
