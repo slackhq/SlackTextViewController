@@ -106,7 +106,16 @@
  */
 - (void)willRequestUndo;
 
+/**
+ Notifies the view controller when the user has pressed the Return key (↵) with an external keyboard.
+ @discussion You can override this method to perform additional tasks.
+ */
 - (void)didPressReturnKey:(id)sender;
+
+/**
+ Notifies the view controller when the user has pressed the Escape key (Esc) with an external keyboard.
+ @discussion You can override this method to perform additional tasks.
+ */
 - (void)didPressEscapeKey:(id)sender;
 
 ///------------------------------------------------

@@ -47,6 +47,8 @@
         [self.view addSubview:self.autoCompletionView];
         [self.view addSubview:self.typeIndicatorView];
         [self.view addSubview:self.textContainerView];
+        
+        self.view.backgroundColor = [UIColor whiteColor];
 
         [self setupViewConstraints];
         
@@ -518,13 +520,10 @@
     }
 
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGRect inputFrame = self.textContainerView.frame;
-    
-    inputFrame.origin.y  = CGRectGetMinY(endFrame)-CGRectGetHeight(inputFrame);
 
-    self.keyboardHC.constant = CGRectGetHeight(self.view.frame)-endFrame.origin.y;
+    self.keyboardHC.constant = CGRectGetHeight([UIScreen mainScreen].bounds)-endFrame.origin.y;
     self.tableViewHC.constant = [self tableHeight];
-    
+
     [self.view layoutIfNeeded];
 }
 
@@ -585,16 +584,6 @@
 
 - (void)didChangeTextViewContentSize:(NSNotification *)notification
 {
-//    NSString *text = self.textView.text;
-//    
-//    if (text.length > 0) {
-//        NSString *lastString = [text substringWithRange:NSMakeRange(text.length-1, 1)];
-//        
-//        if ([lastString isEqualToString:@"\n"] || self.isEditing) {
-//            [self textDidUpdate:YES];
-//        }
-//    }
-    
     [self textDidUpdate:YES];
 }
 
