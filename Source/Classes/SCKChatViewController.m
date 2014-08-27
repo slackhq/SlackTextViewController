@@ -33,6 +33,7 @@
 @synthesize typeIndicatorView = _typeIndicatorView;
 @synthesize textContainerView = _textContainerView;
 @synthesize autoCompletionView = _autoCompletionView;
+@synthesize autoCompleting = _autoCompleting;
 
 #pragma mark - Initializer
 
@@ -158,11 +159,6 @@
     return _typeIndicatorView;
 }
 
-- (BOOL)isAutoCompleting
-{
-    return self.autoCompletionViewHC.constant > 0 ? YES : NO;
-}
-
 - (BOOL)isEditing
 {
     return self.textContainerView.isEditing;
@@ -218,6 +214,17 @@
 {
     _bounces = bounces;
     _textContainerView.bounces = self.bounces;
+}
+
+- (void)setAutoCompleting:(BOOL)autoCompleting
+{
+    if (self.autoCompleting == autoCompleting) {
+        return;
+    }
+    
+    _autoCompleting = autoCompleting;
+    
+    self.tableView.userInteractionEnabled = !autoCompleting;
 }
 
 
@@ -743,6 +750,8 @@
 - (void)showAutoCompletionView:(BOOL)show
 {
     CGFloat viewHeight = show ? [self heightForAutoCompletionView] : 0.0;
+    
+    self.autoCompleting = show;
     
     if (self.autoCompletionViewHC.constant == viewHeight) {
         return;
