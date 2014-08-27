@@ -489,7 +489,7 @@
     
     endFrame = adjustEndFrame(endFrame, self.interfaceOrientation);
     
-    if (!isKeyboardFrameValid(endFrame)) return;
+    if (!isValidKeyboardFrame(endFrame)) return;
 
     // Checks if it's showing or hidding the keyboard
     BOOL show = [notification.name isEqualToString:UIKeyboardWillShowNotification];
@@ -951,27 +951,6 @@
     // TypeIndicator notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTypeIndicatorViewWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTypeIndicatorViewWillHideNotification object:nil];
-}
-
-
-#pragma mark - Convenience Methods
-
-CGRect adjustEndFrame(CGRect endFrame, UIInterfaceOrientation orientation) {
-    
-    // Inverts the end rect for landscape orientation
-    if (UIInterfaceOrientationIsLandscape(orientation)) {
-        endFrame = CGRectMake(0.0, endFrame.origin.x, endFrame.size.height, endFrame.size.width);
-    }
-    
-    return endFrame;
-}
-
-BOOL isKeyboardFrameValid(CGRect frame) {
-    if ((frame.origin.y > CGRectGetHeight([UIScreen mainScreen].bounds)) ||
-        (frame.size.height < 1) || (frame.size.width < 1) || (frame.origin.y < 0)) {
-        return NO;
-    }
-    return YES;
 }
 
 

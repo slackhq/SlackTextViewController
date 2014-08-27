@@ -37,4 +37,7 @@
  */
 - (NSArray *)constraintsForAttribute:(NSLayoutAttribute)attribute;
 
+CGRect adjustEndFrame(CGRect endFrame, UIInterfaceOrientation orientation);
+BOOL isValidKeyboardFrame(CGRect frame);
+
 @end
