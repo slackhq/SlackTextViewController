@@ -888,13 +888,7 @@
              // Pressing Esc key
              [UIKeyCommand keyCommandWithInput:UIKeyInputEscape
                                  modifierFlags:0
-                                        action:@selector(didPressEscapeKey:)],
-             [UIKeyCommand keyCommandWithInput:UIKeyInputEscape
-                                 modifierFlags:UIKeyModifierShift
-                                        action:@selector(didPressEscapeKey:)],
-             [UIKeyCommand keyCommandWithInput:UIKeyInputEscape
-                                 modifierFlags:UIKeyModifierControl
-                                        action:@selector(didPressEscapeKey:)],
+                                        action:@selector(didPressEscapeKey:)]
              ];
 }
 

@@ -54,7 +54,7 @@
         
         self.reachable = YES;
         
-        self.edgesForExtendedLayout = UIRectEdgeNone;
+        self.edgesForExtendedLayout = UIRectEdgeNone; //UIRectEdgeAll
     }
     return self;
 }
