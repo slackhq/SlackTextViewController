@@ -16,7 +16,7 @@
 ///------------------------------------------------------------------------
 /// @name A drop-in replacement of UITableViewController with chat features.
 ///------------------------------------------------------------------------
-@interface SCKChatViewController : UIViewController
+@interface SCKChatViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 /** The main table view managed by the controller object. */
 @property (nonatomic, readonly) UITableView *tableView;
@@ -136,7 +136,8 @@
 
 /**
  Re-uses the text layout for edition, displaying a header view on top of the text container vier with options (cancel & save).
- 
+ @discussion You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
+
  @param text The string text to edit.
  */
 - (void)editText:(NSString *)text;

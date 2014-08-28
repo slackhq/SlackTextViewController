@@ -9,10 +9,10 @@
 #import "SCKChatViewController.h"
 #import "UIView+ChatKitAdditions.h"
 
-@interface SCKChatViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIAlertViewDelegate>
+@interface SCKChatViewController () <UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
-    CGFloat minYOffset;
     UITableViewStyle _style;
+    CGFloat _minYOffset;
 }
 
 @property (nonatomic, strong) UIGestureRecognizer *singleTapGesture;
@@ -90,7 +90,7 @@
     [super viewWillAppear:animated];
     
     // We save the minimum offset of the tableView
-    minYOffset = self.tableView.contentOffset.y;
+    _minYOffset = self.tableView.contentOffset.y;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -256,12 +256,6 @@
 
 #pragma mark - Subclassable Methods
 
-- (BOOL)canPressRightButton
-{
-    NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    return text.length > 0 ? YES : NO;
-}
-
 - (void)presentKeyboard:(BOOL)animated
 {
     if (![self.textView isFirstResponder])
@@ -350,6 +344,12 @@
     }
 }
 
+- (BOOL)canPressRightButton
+{
+    NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    return text.length > 0 ? YES : NO;
+}
+
 - (void)didPressLeftButton:(id)sender
 {
     // No implementation here. Meant to be overriden in subclass.
@@ -357,6 +357,26 @@
 
 - (void)didPressRightButton:(id)sender
 {
+    [self.textView setText:nil];
+}
+
+- (void)didCommitTextEditing:(id)sender
+{
+    if (!self.isEditing) {
+        return;
+    }
+    
+    [self didCancelTextEditing:sender];
+}
+
+- (void)didCancelTextEditing:(id)sender
+{
+    if (!self.isEditing) {
+        return;
+    }
+    
+    [self.textContainerView endTextEdition];
+    
     [self.textView setText:nil];
 }
 
@@ -440,26 +460,6 @@
     }
 }
 
-- (void)didCommitTextEditing:(id)sender
-{
-    if (!self.isEditing) {
-        return;
-    }
-    
-    [self didCancelTextEditing:sender];
-}
-
-- (void)didCancelTextEditing:(id)sender
-{
-    if (!self.isEditing) {
-        return;
-    }
-
-    [self.textContainerView endTextEdition];
-
-    [self.textView setText:nil];
-}
-
 - (void)performRightAction
 {
     NSArray *actions = [self.rightButton actionsForTarget:self forControlEvent:UIControlEventTouchUpInside];
@@ -507,7 +507,7 @@
     CGFloat currentYOffset = self.tableView.contentOffset.y;
     CGFloat maxYOffset = self.tableView.contentSize.height-(CGRectGetHeight(self.view.frame)-CGRectGetHeight(inputFrame));
     
-    BOOL scroll = (((!show && offsetY != currentYOffset && offsetY > (minYOffset-delta) && offsetY < (maxYOffset-delta+minYOffset)) || show) && [self.tableView canScrollToBottom]);
+    BOOL scroll = (((!show && offsetY != currentYOffset && offsetY > (_minYOffset-delta) && offsetY < (maxYOffset-delta+_minYOffset)) || show) && [self.tableView canScrollToBottom]);
     
     if (!show && self.isAutoCompleting) {
         [self hideautoCompletionView];
