@@ -59,6 +59,7 @@
 {
     self.bounces = NO;
     self.allowUndo = NO;
+    self.allowKeyboardPanning = YES;
     
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.autoCompletionView];
@@ -117,7 +118,6 @@
     {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:_style];
         _tableView.translatesAutoresizingMaskIntoConstraints = NO;
-        _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.scrollsToTop = YES;
         _tableView.dataSource = self;
@@ -251,6 +251,26 @@
     _autoCompleting = autoCompleting;
     
     self.tableView.userInteractionEnabled = !autoCompleting;
+}
+
+- (void)setAllowKeyboardPanning:(BOOL)allow
+{
+    if (self.allowKeyboardPanning == allow) {
+        return;
+    }
+    
+    _allowKeyboardPanning = allow;
+    
+    if (allow) {
+        self.textView.inputAccessoryView = [SCKInputAccessoryView new];
+        self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
+    }
+    else {
+        self.textView.inputAccessoryView = nil;
+        self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
+    }
 }
 
 
@@ -916,7 +936,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideKeyboard:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
 
     // TextView notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willChangeTextView:) name:SCKTextViewTextWillChangeNotification object:nil];
@@ -939,7 +958,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
 
     // TextView notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKTextViewTextWillChangeNotification object:nil];

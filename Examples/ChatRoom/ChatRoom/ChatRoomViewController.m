@@ -74,6 +74,7 @@
     
     self.bounces = NO;
     self.allowUndo = YES;
+//    self.allowKeyboardPanning = NO;
     
     self.textContainerView.autoHideRightButton = YES;
     
@@ -291,6 +292,8 @@
     [commands addObject:[UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow
                                            modifierFlags:0
                                                    action:@selector(editLastMessage:)]];
+    
+    NSLog(@"commands : %@", commands);
     
     return commands;
 }

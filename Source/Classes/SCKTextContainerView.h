@@ -17,6 +17,9 @@
 
 extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
+@interface SCKInputAccessoryView : UIView
+@end
+
 ///------------------------------------------------------------------------
 /// @name A custom text input container used to encapsulate controls.
 ///------------------------------------------------------------------------

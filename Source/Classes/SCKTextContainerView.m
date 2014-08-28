@@ -11,9 +11,6 @@
 
 NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.chatkit.SCKTextContainerView.frameDidChange";
 
-@interface SCKInputAccessoryView : UIView
-@end
-
 @interface SCKTextContainerView () <UITextViewDelegate>
 
 @property (nonatomic, strong) NSLayoutConstraint *leftButtonWC;
@@ -89,7 +86,6 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.returnKeyType = UIReturnKeyDefault;
         _textView.enablesReturnKeyAutomatically = YES;
         _textView.scrollIndicatorInsets = UIEdgeInsetsMake(0, -1, 0, 1);
-        _textView.inputAccessoryView = [SCKInputAccessoryView new];
         _textView.delegate = self;
         
         _textView.layer.cornerRadius = 5.0f;

@@ -29,6 +29,8 @@
 @property (nonatomic, assign) BOOL bounces;
 /** YES if text view's content can be cleaned with a shake gesture. Default is NO. */
 @property (nonatomic, assign) BOOL allowUndo;
+/** YES if keyboard can be dismissed gradually with a vertical panning gesture. Default is YES. */
+@property (nonatomic, assign) BOOL allowKeyboardPanning;
 
 // Convenience accessors (access through the text container view)
 @property (nonatomic, readonly) SCKTextView *textView;
