@@ -257,9 +257,6 @@
             array = self.emojis;
         }
     }
-    else {
-        array = nil;
-    }
     
     if (array.count == 0) {
         self.searchResult.list = nil;
@@ -292,8 +289,6 @@
     [commands addObject:[UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow
                                            modifierFlags:0
                                                    action:@selector(editLastMessage:)]];
-    
-    NSLog(@"commands : %@", commands);
     
     return commands;
 }
@@ -334,7 +329,7 @@
         cell.textLabel.numberOfLines = 0;
     }
     else {
-        cell.backgroundColor = [UIColor clearColor];
+        cell.backgroundColor = [UIColor whiteColor];
         
         NSString *sign = self.searchResult.key;
         NSString *item = self.searchResult.list[indexPath.row];

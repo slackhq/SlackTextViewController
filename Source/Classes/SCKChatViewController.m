@@ -138,10 +138,11 @@
     {
         _autoCompletionView = [UITableView new];
         _autoCompletionView.translatesAutoresizingMaskIntoConstraints = NO;
-        _autoCompletionView.backgroundColor = [UIColor colorWithWhite:0.96 alpha:1.0];
+        _autoCompletionView.backgroundColor = [UIColor colorWithWhite:0.97 alpha:1.0];
         _autoCompletionView.dataSource = self;
         _autoCompletionView.delegate = self;
         
+        _autoCompletionView.tableHeaderView = [UIView new];
         _autoCompletionView.tableFooterView = [UIView new];
     }
     return _autoCompletionView;
