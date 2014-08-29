@@ -752,7 +752,7 @@
 
 - (void)acceptAutoCompletionWithString:(NSString *)string
 {
-    if (string.length == 0 || self.detectedWord.length == 0) {
+    if (string.length == 0) {
         return;
     }
 
