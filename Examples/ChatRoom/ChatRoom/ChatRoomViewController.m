@@ -10,14 +10,6 @@
 
 #import <LoremIpsum/LoremIpsum.h>
 
-@interface SearchResult : NSObject
-@property (nonatomic, strong) NSString *key;
-@property (nonatomic, strong) NSArray *list;
-@end
-
-@implementation SearchResult
-@end
-
 @interface ChatRoomViewController ()
 @property (nonatomic, getter = isReachable) BOOL reachable;
 
@@ -28,7 +20,7 @@
 @property (nonatomic, strong) NSArray *commands;
 @property (nonatomic, strong) NSArray *emojis;
 
-@property (nonatomic, strong) SearchResult *searchResult;
+@property (nonatomic, strong) NSArray *searchResult;
 
 @end
 
@@ -41,7 +33,7 @@
         self.users = @[@"ignacio", @"michael", @"brady", @"everyone", @"channel", @"ali"];
         self.channels = @[@"general", @"ios", @"random", @"ssb", @"mobile", @"ui", @"released", @"SF"];
         self.commands = @[@"help", @"away", @"close", @"color", @"colors", @"feedback", @"invite", @"me", @"msg", @"dm", @"open"];
-        self.emojis = @[@"block-a", @"block-b", @"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
+        self.emojis = @[@"m", @"man", @"machine", @"block-a", @"block-b", @"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
         
         UIBarButtonItem *reachItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_network"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateReachability:)];
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"] style:UIBarButtonItemStylePlain target:self action:@selector(editRandomMessage:)];
@@ -75,6 +67,7 @@
     self.bounces = NO;
     self.allowUndo = YES;
     self.allowKeyboardPanning = NO;
+    self.allowOffsetCorrection = YES;
     
     self.textContainerView.autoHideRightButton = YES;
     
@@ -240,45 +233,54 @@
     NSString *key = self.detectedKey;
     NSString *string = self.detectedWord;
     
-    self.searchResult = [SearchResult new];
-    self.searchResult.key = key;
+    NSLog(@"key : %@", key);
+    NSLog(@"string : %@", string);
+
+    self.searchResult = nil;
     
-    if ([key isEqualToString:@"@"]) {
+    if ([key isEqualToString:@"@"])
+    {
         array = self.users;
+        
+        if (string.length > 0) {
+            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self != %@", string, string]];
+        }
+        
+        // Ignores 'me'
+        NSString *me = @"ignacio";
+        array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self != %@", me]];
     }
-    else if ([key isEqualToString:@"#"]) {
+    else if ([key isEqualToString:@"#"])
+    {
         array = self.channels;
-    }
-    else if ([key isEqualToString:@"/"]) {
-        array = self.commands;
-    }
-    else if ([key isEqualToString:@":"]) {
-        if (string.length >= 2) {
-            array = self.emojis;
+        if (string.length > 0) {
+            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self != %@", string, string]];
         }
     }
-    
-    if (array.count == 0) {
-        self.searchResult.list = nil;
-        return NO;
+    else if ([key isEqualToString:@"/"])
+    {
+        array = self.commands;
+        if (string.length > 0) {
+            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self != %@", string, string]];
+        }
+    }
+    else if ([key isEqualToString:@":"] && string.length > 0) {
+        array = [self.emojis filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND NOT (self CONTAINS[cd] %@)", string, key]];
     }
     
-    //TODO: not include user_me in the list (like web app)
-    
-    if (string.length > 0) {
-        array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self != %@", string, string]];
-        self.searchResult.list = [array sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    if (array.count > 0) {
+        array = [array sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     }
     
-    self.searchResult.list = [array sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    self.searchResult = [[NSMutableArray alloc] initWithArray:array];
     
-    return self.searchResult.list.count > 0;
+    return array.count > 0;
 }
 
 - (CGFloat)heightForAutoCompletionView
 {
     CGFloat cellHeight = [self.autoCompletionView.delegate tableView:self.autoCompletionView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    return cellHeight*self.searchResult.list.count;
+    return cellHeight*self.searchResult.count;
 }
 
 - (NSArray *)keyCommands
@@ -307,7 +309,7 @@
         return self.messages.count;
     }
     else {
-        return self.searchResult.list.count;
+        return self.searchResult.count;
     }
 }
 
@@ -331,13 +333,12 @@
     else {
         cell.backgroundColor = [UIColor whiteColor];
         
-        NSString *sign = self.searchResult.key;
-        NSString *item = self.searchResult.list[indexPath.row];
+        NSString *item = self.searchResult[indexPath.row];
 
-        if ([sign isEqualToString:@"#"]) {
+        if ([self.detectedKey isEqualToString:@"#"]) {
             item = [NSString stringWithFormat:@"# %@", item];
         }
-        else if ([sign isEqualToString:@":"]) {
+        else if ([self.detectedKey isEqualToString:@":"]) {
             item = [NSString stringWithFormat:@":%@:", item];
         }
         
@@ -398,18 +399,13 @@
 {
     if ([tableView isEqual:self.autoCompletionView]) {
         
-        NSString *sign = self.searchResult.key;
-        NSString *item = self.searchResult.list[indexPath.row];
+        NSMutableString *item = self.searchResult[indexPath.row];
         
-        if ([sign isEqualToString:@"@"]) {
-            item = [NSString stringWithFormat:@"%@: ", item];
+        if ([self.detectedKey isEqualToString:@"@"] || [self.detectedKey isEqualToString:@":"]) {
+            [item appendString:@":"];
         }
-        else if ([sign isEqualToString:@":"]) {
-            item = [NSString stringWithFormat:@"%@: ", item];
-        }
-        else {
-            item = [NSString stringWithFormat:@"%@ ", item];
-        }
+        
+        [item appendString:@" "];
         
         [self acceptAutoCompletionWithString:item];
     }

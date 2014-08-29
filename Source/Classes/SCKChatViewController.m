@@ -709,13 +709,17 @@
 
     NSRange range;
     NSString *word = [self.textView wordAtCaretRange:&range];
-        
+    
     for (NSString *sign in self.keysLookupList) {
         
         NSRange keyRange = [word rangeOfString:sign];
         
         if (keyRange.location == 0 || (keyRange.length == 1)) {
+            
+            // Captures the detected symbol prefix
             self.detectedKey = sign;
+            
+            // Used later for replacing the detected range with a new string alias returned in -acceptAutoCompletionWithString:
             self.detectedKeyRange = NSMakeRange(range.location, sign.length);
         }
     }
@@ -726,7 +730,8 @@
         }
         
         if (word.length > 0) {
-            self.detectedWord = [word stringByReplacingOccurrencesOfString:self.detectedKey withString:@""];
+            // Removes the first character, containing the symbol prefix
+            self.detectedWord = [word substringFromIndex:1];
         }
         else {
             [self cancelAutoCompletion];
