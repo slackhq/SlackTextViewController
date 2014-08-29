@@ -86,7 +86,7 @@
     [self.textContainerView.editortLeftButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
     [self.textContainerView.editortRightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
     
-    [self registerKeysForAutoCompletion:@[@"@", @"#", @"/", @":"]];
+    [self registerPrefixesForAutoCompletion:@[@"@", @"#", @"/", @":"]];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -230,42 +230,42 @@
 - (BOOL)canShowAutoCompletion
 {
     NSArray *array = nil;
-    NSString *key = self.detectedKey;
-    NSString *string = self.detectedWord;
+    NSString *prefix = self.foundPrefix;
+    NSString *word = self.foundWord;
     
-    NSLog(@"key : %@", key);
-    NSLog(@"string : %@", string);
+    NSLog(@"prefix : %@", prefix);
+    NSLog(@"string : %@", word);
 
     self.searchResult = nil;
     
-    if ([key isEqualToString:@"@"])
+    if ([prefix isEqualToString:@"@"])
     {
         array = self.users;
         
-        if (string.length > 0) {
-            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self != %@", string, string]];
+        if (word.length > 0) {
+            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self != %@", word, word]];
         }
         
         // Ignores 'me'
         NSString *me = @"ignacio";
         array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self != %@", me]];
     }
-    else if ([key isEqualToString:@"#"])
+    else if ([prefix isEqualToString:@"#"])
     {
         array = self.channels;
-        if (string.length > 0) {
-            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self != %@", string, string]];
+        if (word.length > 0) {
+            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self != %@", word, word]];
         }
     }
-    else if ([key isEqualToString:@"/"])
+    else if ([prefix isEqualToString:@"/"])
     {
         array = self.commands;
-        if (string.length > 0) {
-            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self != %@", string, string]];
+        if (word.length > 0) {
+            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self != %@", word, word]];
         }
     }
-    else if ([key isEqualToString:@":"] && string.length > 0) {
-        array = [self.emojis filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND NOT (self CONTAINS[cd] %@)", string, key]];
+    else if ([prefix isEqualToString:@":"] && word.length > 0) {
+        array = [self.emojis filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND NOT (self CONTAINS[cd] %@)", word, prefix]];
     }
     
     if (array.count > 0) {
@@ -335,10 +335,10 @@
         
         NSString *item = self.searchResult[indexPath.row];
 
-        if ([self.detectedKey isEqualToString:@"#"]) {
+        if ([self.foundPrefix isEqualToString:@"#"]) {
             item = [NSString stringWithFormat:@"# %@", item];
         }
-        else if ([self.detectedKey isEqualToString:@":"]) {
+        else if ([self.foundPrefix isEqualToString:@":"]) {
             item = [NSString stringWithFormat:@":%@:", item];
         }
         
@@ -401,7 +401,7 @@
         
         NSMutableString *item = self.searchResult[indexPath.row];
         
-        if ([self.detectedKey isEqualToString:@"@"] || [self.detectedKey isEqualToString:@":"]) {
+        if ([self.foundPrefix isEqualToString:@"@"] || [self.foundPrefix isEqualToString:@":"]) {
             [item appendString:@":"];
         }
         

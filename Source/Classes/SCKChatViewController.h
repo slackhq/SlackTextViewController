@@ -169,10 +169,10 @@
 
 /** The table view used to display auto-completion results. */
 @property (nonatomic, readonly) UITableView *autoCompletionView;
-/** The recently detected key symbol used as prefix for auto-completion mode. */
-@property (nonatomic, strong) NSString *detectedKey;
-/** The recently detected word at the textView caret position. */
-@property (nonatomic, strong) NSString *detectedWord;
+/** The recently found prefix symbol used as prefix for auto-completion mode. */
+@property (nonatomic, readonly) NSString *foundPrefix;
+/** The recently found word at the textView caret position. */
+@property (nonatomic, readonly) NSString *foundWord;
 /** YES if the auto-completion mode is active. */
 @property (nonatomic, readonly, getter = isAutoCompleting) BOOL autoCompleting;
 
@@ -183,13 +183,13 @@
  
  @param keys An array of string keys.
  */
-- (void)registerKeysForAutoCompletion:(NSArray *)keys;
+- (void)registerPrefixesForAutoCompletion:(NSArray *)keys;
 
 /**
- Verifies that the auto-completion can be shown. Default is NO.
- @discussion You can override this method to perform additional tasks.
+ Verifies that the auto-completion view should be shown. Default is NO.
+ @discussion You must override this method to perform additional tasks, before auto-completion is shown, like populating the data source.
  
- @return YES if the auto-completion view can be shown.
+ @return YES if the auto-completion view should be shown.
  */
 - (BOOL)canShowAutoCompletion;
 

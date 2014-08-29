@@ -24,8 +24,8 @@
 @property (nonatomic, strong) NSLayoutConstraint *keyboardHC;
 
 // Used for auto-completion
-@property (nonatomic, strong) NSMutableArray *keysLookupList;
-@property (nonatomic) NSRange detectedKeyRange;
+@property (nonatomic, strong) NSMutableArray *registeredPrefixes;
+@property (nonatomic, readonly) NSRange foundPrefixRange;
 
 @end
 
@@ -672,30 +672,30 @@
 
 #pragma mark - Auto-Completion Text Processing
 
-- (void)registerKeysForAutoCompletion:(NSArray *)keys
+- (void)registerPrefixesForAutoCompletion:(NSArray *)keys
 {
     // Creates the array if not exitent
-    if (!self.keysLookupList) {
-        self.keysLookupList = [[NSMutableArray alloc] initWithCapacity:keys.count];
+    if (!self.registeredPrefixes) {
+        self.registeredPrefixes = [[NSMutableArray alloc] initWithCapacity:keys.count];
     }
     
     for (NSString *key in keys) {
-        // Skips if the key is not a valid string or longer than 1 letter
+        // Skips if the prefix is not a valid string or longer than 1 letter
         if (![key isKindOfClass:[NSString class]] || key.length == 0 || key.length > 1) {
             continue;
         }
         
-        // Adds the key if not contained already
-        if (![self.keysLookupList containsObject:key]) {
-            [self.keysLookupList addObject:key];
+        // Adds the prefix if not contained already
+        if (![self.registeredPrefixes containsObject:key]) {
+            [self.registeredPrefixes addObject:key];
         }
     }
 }
 
 - (void)processTextForAutoCompletion
 {
-    // Avoids text processing for auto-completion if the key lookup list is empty.
-    if (self.keysLookupList.count == 0) {
+    // Avoids text processing for auto-completion if the registered prefix list is empty.
+    if (self.registeredPrefixes.count == 0) {
         return;
     }
     
@@ -710,28 +710,28 @@
     NSRange range;
     NSString *word = [self.textView wordAtCaretRange:&range];
     
-    for (NSString *sign in self.keysLookupList) {
+    for (NSString *sign in self.registeredPrefixes) {
         
         NSRange keyRange = [word rangeOfString:sign];
         
         if (keyRange.location == 0 || (keyRange.length == 1)) {
             
             // Captures the detected symbol prefix
-            self.detectedKey = sign;
+            _foundPrefix = sign;
             
             // Used later for replacing the detected range with a new string alias returned in -acceptAutoCompletionWithString:
-            self.detectedKeyRange = NSMakeRange(range.location, sign.length);
+            _foundPrefixRange = NSMakeRange(range.location, sign.length);
         }
     }
     
-    if (self.detectedKey.length > 0) {
+    if (self.foundPrefix.length > 0) {
         if (range.length == 0 || range.length != word.length) {
             [self cancelAutoCompletion];
         }
         
         if (word.length > 0) {
             // Removes the first character, containing the symbol prefix
-            self.detectedWord = [word substringFromIndex:1];
+            _foundWord = [word substringFromIndex:1];
         }
         else {
             [self cancelAutoCompletion];
@@ -747,8 +747,8 @@
 
 - (void)cancelAutoCompletion
 {
-    self.detectedKey = nil;
-    self.detectedKeyRange = NSRangeFromString(nil);
+    _foundPrefix = nil;
+    _foundPrefixRange = NSRangeFromString(nil);
     
     if (self.isAutoCompleting) {
         [self showAutoCompletionView:NO];
@@ -764,7 +764,7 @@
     SCKTextView *textView = self.textView;
     NSRange insertionRange = textView.selectedRange;
     
-    NSRange range = NSMakeRange(self.detectedKeyRange.location+1, self.detectedWord.length);
+    NSRange range = NSMakeRange(self.foundPrefixRange.location+1, self.foundWord.length);
     insertionRange = [textView insertText:string inRange:range];
     
     textView.selectedRange = NSMakeRange(insertionRange.location, 0);
@@ -1012,7 +1012,7 @@
     _textContainerView = nil;
     _typeIndicatorView = nil;
     
-    _keysLookupList = nil;
+    _registeredPrefixes = nil;
     
     _singleTapGesture = nil;
     _tableViewHC = nil;
