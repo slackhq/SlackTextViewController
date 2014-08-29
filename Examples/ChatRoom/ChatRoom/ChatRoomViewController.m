@@ -58,16 +58,19 @@
 {
     [super viewDidLoad];
     
-    self.messages = [[NSMutableArray alloc] init];
+    NSMutableArray *array = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < 40; i++) {
-        [self.messages addObject:[NSString stringWithFormat:@"Dummy message #%d", i+1]];
+        [array addObject:[NSString stringWithFormat:@"Dummy message #%d", i+1]];
     }
     
-    self.bounces = NO;
+    NSArray *reversed = [[array reverseObjectEnumerator] allObjects];
+    
+    self.messages = [[NSMutableArray alloc] initWithArray:reversed];
+    
+    self.bounces = YES;
     self.allowUndo = YES;
-    self.allowKeyboardPanning = NO;
-    self.allowOffsetCorrection = YES;
+    self.allowKeyboardPanning = YES;
     
     self.textContainerView.autoHideRightButton = YES;
     
@@ -130,10 +133,10 @@
 
 - (void)editLastMessage:(id)sender
 {
-    NSString *lastMessage = [self.messages lastObject];
+    NSString *lastMessage = [self.messages firstObject];
     [self editText:lastMessage];
     
-    [self.tableView scrollToBottomAnimated:YES];
+    [self.tableView scrollToTopAnimated:YES];
 }
 
 - (void)didSaveLastMessageEditing:(id)sender
@@ -185,12 +188,10 @@
 
 - (void)didPressRightButton:(id)sender
 {
-    [self.messages addObject:self.textView.text];
-    [self.tableView reloadData];
+    NSString *message = [self.textView.text copy];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.tableView scrollToBottomAnimated:YES];
-    });
+    [self.messages insertObject:message atIndex:0];
+    [self.tableView reloadData];
     
     [super didPressRightButton:sender];
 }
@@ -209,9 +210,8 @@
 {
     NSString *message = [self.textView.text copy];
     
-    [self.messages removeLastObject];
-    [self.messages addObject:message];
-    
+    [self.messages removeObjectAtIndex:0];
+    [self.messages insertObject:message atIndex:0];
     [self.tableView reloadData];
     
     [super didCommitTextEditing:sender];
@@ -233,9 +233,6 @@
     NSString *prefix = self.foundPrefix;
     NSString *word = self.foundWord;
     
-    NSLog(@"prefix : %@", prefix);
-    NSLog(@"string : %@", word);
-
     self.searchResult = nil;
     
     if ([prefix isEqualToString:@"@"])
@@ -346,6 +343,10 @@
         cell.textLabel.font = [UIFont systemFontOfSize:14.0];
     }
     
+    // Cells must inherit the table view's transform
+    // This is very important, since the main table view may be inverted
+    cell.transform = tableView.transform;
+    
     return cell;
 }
 
@@ -399,7 +400,7 @@
 {
     if ([tableView isEqual:self.autoCompletionView]) {
         
-        NSMutableString *item = self.searchResult[indexPath.row];
+        NSMutableString *item = [self.searchResult[indexPath.row] mutableCopy];
         
         if ([self.foundPrefix isEqualToString:@"@"] || [self.foundPrefix isEqualToString:@":"]) {
             [item appendString:@":"];

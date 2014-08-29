@@ -14,11 +14,19 @@ static NSString * const kKeyScrollViewHorizontalIndicator = @"_horizontalScrollI
 
 @implementation UIScrollView (ChatKitAdditions)
 
+- (void)scrollToTopAnimated:(BOOL)animated
+{
+    if (![self isAtTop]) {
+        CGPoint bottomOffset = CGPointZero;
+        [self setContentOffset:bottomOffset animated:animated];
+    }
+}
+
 - (void)scrollToBottomAnimated:(BOOL)animated
 {
     if ([self canScrollToBottom] && ![self isAtBottom]) {
         CGPoint bottomOffset = CGPointMake(0.0, self.contentSize.height - self.bounds.size.height);
-        [self setContentOffset:bottomOffset animated:YES];
+        [self setContentOffset:bottomOffset animated:animated];
     }
 }
 

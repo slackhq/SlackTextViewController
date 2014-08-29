@@ -22,6 +22,8 @@
 /** The horizontal scroll indicator view. */
 @property (nonatomic, readonly) UIView *horizontalScroller;
 
+- (void)scrollToTopAnimated:(BOOL)animated;
+
 /**
  Sets the offset from the content view’s origin to the very bottom.
  @param animated YES to animate the transition at a constant velocity to the new offset, NO to make the transition immediate.

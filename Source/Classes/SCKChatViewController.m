@@ -60,7 +60,7 @@
     self.bounces = NO;
     self.allowUndo = NO;
     self.allowKeyboardPanning = YES;
-    self.allowOffsetCorrection = YES;
+    self.inverted = YES;
     
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.autoCompletionView];
@@ -252,7 +252,7 @@
     
     _autoCompleting = autoCompleting;
     
-    self.tableView.userInteractionEnabled = !autoCompleting;
+    self.tableView.scrollEnabled = !autoCompleting;
 }
 
 - (void)setAllowKeyboardPanning:(BOOL)allow
@@ -273,6 +273,17 @@
         self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
         [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
     }
+}
+
+- (void)setInverted:(BOOL)inverted
+{
+    if (self.isInverted == inverted) {
+        return;
+    }
+    
+    _inverted = inverted;
+    
+    self.tableView.transform = CGAffineTransformMake(1, 0, 0, inverted ? -1 : 1, 0, 0);
 }
 
 
@@ -334,34 +345,20 @@
     
     if (containeHeight != self.containerViewHC.constant)
     {
-        CGFloat offsetDelta = roundf(self.containerViewHC.constant-containeHeight);
-        CGFloat offsetY = self.allowOffsetCorrection ? self.tableView.contentOffset.y-offsetDelta : -1.0;
-        
         self.containerViewHC.constant = containeHeight;
         self.tableViewHC.constant = [self appropriateTableViewHeight];
-        
-        BOOL scroll = [self.tableView canScrollToBottom];
         
         if (animated) {
             [self.view animateLayoutIfNeededWithBounce:self.bounces
                                                  curve:UIViewAnimationOptionCurveEaseInOut
                                             animations:^{
-                                                
                                                 if (self.isEditing) {
                                                     [self.textView scrollToCaretPositonAnimated:NO];
-                                                }
-                                                
-                                                if (scroll && offsetY >= 0) {
-                                                    [self.tableView setContentOffset:CGPointMake(0.0, offsetY)];
                                                 }
                                             }];
         }
         else {
             [self.view layoutIfNeeded];
-            
-            if (scroll && offsetY >= 0) {
-                [self.tableView setContentOffset:CGPointMake(0.0, offsetY) animated:animated];
-            }
         }
     }
 }
@@ -523,24 +520,12 @@
     self.keyboardHC.constant = show ? endFrame.size.height : 0.0;
     self.tableViewHC.constant = [self appropriateTableViewHeight];
     
-    CGFloat delta = CGRectGetHeight(endFrame);
-    CGFloat offsetY = self.allowOffsetCorrection ? self.tableView.contentOffset.y+(show ? delta : -delta) : -1.0;
-    
-    CGFloat currentYOffset = self.tableView.contentOffset.y;
-    CGFloat maxYOffset = self.tableView.contentSize.height-(CGRectGetHeight(self.view.frame)-CGRectGetHeight(inputFrame));
-    
-    BOOL scroll = (((!show && offsetY != currentYOffset && offsetY > (_minYOffset-delta) && offsetY < (maxYOffset-delta+_minYOffset)) || show) && [self.tableView canScrollToBottom]);
-    
     if (!show && self.isAutoCompleting) {
         [self hideautoCompletionView];
     }
     
     // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
-    [self.view animateLayoutIfNeededWithBounce:NO curve:curve animations:^{
-        if (scroll && offsetY >= 0) {
-            [self.tableView setContentOffset:CGPointMake(0, offsetY)];
-        }
-    }];
+    [self.view animateLayoutIfNeededWithBounce:NO curve:curve animations:NULL];
 }
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
@@ -611,18 +596,9 @@
     self.typeIndicatorViewHC.constant = indicatorView.isVisible ? indicatorView.height : 0.0;
     self.tableViewHC.constant -= self.typeIndicatorViewHC.constant;
     
-    CGFloat offsetDelta = indicatorView.isVisible ? indicatorView.height : -indicatorView.height;
-    CGFloat offsetY = self.allowOffsetCorrection ? self.tableView.contentOffset.y+offsetDelta : -1.0;
-    
-    BOOL scroll = [self.tableView canScrollToBottom];
-    
     [self.view animateLayoutIfNeededWithBounce:self.bounces
                                curve:UIViewAnimationOptionCurveEaseInOut
-                          animations:^{
-                              if (scroll && offsetY >= 0) {
-                                  [self.tableView setContentOffset:CGPointMake(0.0, offsetY)];
-                              }
-                          }];
+                          animations:NULL];
 }
 
 - (void)didChangeTextViewContentSize:(NSNotification *)notification
@@ -805,20 +781,11 @@
         viewHeight = tableHeight;
     }
     
-    CGFloat offsetDelta = show ? viewHeight : -self.autoCompletionViewHC.constant;
-    CGFloat offsetY = self.allowOffsetCorrection ? self.tableView.contentOffset.y+offsetDelta : -1.0;
-    
     self.autoCompletionViewHC.constant = viewHeight;
-    
-    BOOL scroll = [self.tableView canScrollToBottom];
     
     [self.view animateLayoutIfNeededWithBounce:self.bounces
                                          curve:UIViewAnimationOptionCurveEaseInOut
-                                    animations:^{
-                                        if (scroll && offsetY >= 0) {
-                                            [self.tableView setContentOffset:CGPointMake(0.0, offsetY)];
-                                        }
-                                    }];
+                                    animations:NULL];
 }
 
 

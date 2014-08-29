@@ -24,17 +24,21 @@
 @property (nonatomic, readonly) SCKTextContainerView *textContainerView;
 /** The typing indicator. */
 @property (nonatomic, readonly) SCKTypeIndicatorView *typeIndicatorView;
-@property (nonatomic, assign) BOOL animated;
 /** YES if control's animation should have bouncy effects. Default is NO. */
 @property (nonatomic, assign) BOOL bounces;
 /** YES if text view's content can be cleaned with a shake gesture. Default is NO. */
 @property (nonatomic, assign) BOOL allowUndo;
 /** YES if keyboard can be dismissed gradually with a vertical panning gesture. Default is YES. */
 @property (nonatomic, assign) BOOL allowKeyboardPanning;
-/** YES if table view will correct its offset when resizing, animatedly. Default is YES. */
-@property (nonatomic, assign) BOOL allowOffsetCorrection;
 
-// Convenience accessors (access through the text container view)
+/** YES if the main table view is inverted. Default is YES.
+ @discussion This allows the table view to start from the bottom like any typical chat interface.
+ If inverted, you must assign the same transform property to your cells to match the orientation (ie: cell.transform = tableView.transform;)
+ Inverting the table view will enable some great features such as content offset corrections automatically when resizing the text input and/or showing auto-completion.
+ */
+@property (nonatomic, assign, getter = isInverted) BOOL inverted;
+
+/** Convenience accessors (accessed through the text container view) */
 @property (nonatomic, readonly) SCKTextView *textView;
 @property (nonatomic, readonly) UIButton *leftButton;
 @property (nonatomic, readonly) UIButton *rightButton;
