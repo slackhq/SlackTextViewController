@@ -31,6 +31,8 @@
 @property (nonatomic, assign) BOOL allowUndo;
 /** YES if keyboard can be dismissed gradually with a vertical panning gesture. Default is YES. */
 @property (nonatomic, assign) BOOL allowKeyboardPanning;
+/** YES if table view will correct its offset when resizing, animatedly. Default is YES. */
+@property (nonatomic, assign) BOOL allowOffsetCorrection;
 
 // Convenience accessors (access through the text container view)
 @property (nonatomic, readonly) SCKTextView *textView;

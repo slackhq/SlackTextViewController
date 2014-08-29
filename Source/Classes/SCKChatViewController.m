@@ -60,6 +60,7 @@
     self.bounces = NO;
     self.allowUndo = NO;
     self.allowKeyboardPanning = YES;
+    self.allowOffsetCorrection = YES;
     
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.autoCompletionView];
@@ -334,7 +335,7 @@
     if (containeHeight != self.containerViewHC.constant)
     {
         CGFloat offsetDelta = roundf(self.containerViewHC.constant-containeHeight);
-        CGFloat offsetY = self.tableView.contentOffset.y-offsetDelta;
+        CGFloat offsetY = self.allowOffsetCorrection ? self.tableView.contentOffset.y-offsetDelta : -1.0;
         
         self.containerViewHC.constant = containeHeight;
         self.tableViewHC.constant = [self appropriateTableViewHeight];
@@ -523,7 +524,7 @@
     self.tableViewHC.constant = [self appropriateTableViewHeight];
     
     CGFloat delta = CGRectGetHeight(endFrame);
-    CGFloat offsetY = self.tableView.contentOffset.y+(show ? delta : -delta);
+    CGFloat offsetY = self.allowOffsetCorrection ? self.tableView.contentOffset.y+(show ? delta : -delta) : -1.0;
     
     CGFloat currentYOffset = self.tableView.contentOffset.y;
     CGFloat maxYOffset = self.tableView.contentSize.height-(CGRectGetHeight(self.view.frame)-CGRectGetHeight(inputFrame));
@@ -611,7 +612,7 @@
     self.tableViewHC.constant -= self.typeIndicatorViewHC.constant;
     
     CGFloat offsetDelta = indicatorView.isVisible ? indicatorView.height : -indicatorView.height;
-    CGFloat offsetY = self.tableView.contentOffset.y+offsetDelta;
+    CGFloat offsetY = self.allowOffsetCorrection ? self.tableView.contentOffset.y+offsetDelta : -1.0;
     
     BOOL scroll = [self.tableView canScrollToBottom];
     
@@ -751,26 +752,15 @@
 
 - (void)acceptAutoCompletionWithString:(NSString *)string
 {
-    if (string.length == 0) {
+    if (string.length == 0 || self.detectedWord.length == 0) {
         return;
     }
-    
-    NSString *word = nil;
-    if (self.detectedKey.length > 0) {
-        word = [self.detectedWord stringByReplacingOccurrencesOfString:self.detectedKey withString:@""];
-    }
-    
+
     SCKTextView *textView = self.textView;
     NSRange insertionRange = textView.selectedRange;
     
-    if (word.length > 0) {
-        NSRange range = [self.textView.text rangeOfString:word];
-        insertionRange = [textView insertText:string inRange:range];
-    }
-    else {
-        NSRange range = NSMakeRange(self.detectedKeyRange.location+1, 0.0);
-        insertionRange = [textView insertText:string inRange:range];
-    }
+    NSRange range = NSMakeRange(self.detectedKeyRange.location+1, self.detectedWord.length);
+    insertionRange = [textView insertText:string inRange:range];
     
     textView.selectedRange = NSMakeRange(insertionRange.location, 0);
     
@@ -811,7 +801,7 @@
     }
     
     CGFloat offsetDelta = show ? viewHeight : -self.autoCompletionViewHC.constant;
-    CGFloat offsetY = self.tableView.contentOffset.y+offsetDelta;
+    CGFloat offsetY = self.allowOffsetCorrection ? self.tableView.contentOffset.y+offsetDelta : -1.0;
     
     self.autoCompletionViewHC.constant = viewHeight;
     

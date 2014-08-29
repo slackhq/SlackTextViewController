@@ -41,7 +41,7 @@
         self.users = @[@"ignacio", @"michael", @"brady", @"everyone", @"channel", @"ali"];
         self.channels = @[@"general", @"ios", @"random", @"ssb", @"mobile", @"ui", @"released", @"SF"];
         self.commands = @[@"help", @"away", @"close", @"color", @"colors", @"feedback", @"invite", @"me", @"msg", @"dm", @"open"];
-        self.emojis = @[@"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
+        self.emojis = @[@"block-a", @"block-b", @"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
         
         UIBarButtonItem *reachItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_network"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateReachability:)];
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"] style:UIBarButtonItemStylePlain target:self action:@selector(editRandomMessage:)];
@@ -74,7 +74,7 @@
     
     self.bounces = NO;
     self.allowUndo = YES;
-//    self.allowKeyboardPanning = NO;
+    self.allowKeyboardPanning = NO;
     
     self.textContainerView.autoHideRightButton = YES;
     
