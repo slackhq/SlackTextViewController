@@ -45,7 +45,7 @@
 
 /**
  Initializes a chat-view controller to manage a table view of a given style.
- If you use the standard init method to initialize a SCKChatViewController object, a table view in the plain style is created.
+ @discussion If you use the standard init method to initialize a SCKChatViewController object, a table view in the plain style is created.
  
  @param style A constant that specifies the style of main table view that the controller object is to manage (UITableViewStylePlain or UITableViewStyleGrouped).
  @return An initialized SCKChatViewController object or nil if the object couldn’t be created.
@@ -63,14 +63,14 @@
 /**
  Presents the keyboard, if not already, animated.
  
- @animated YES if the keyboard should show using an animation.
+ @param animated YES if the keyboard should show using an animation.
  */
 - (void)presentKeyboard:(BOOL)animated;
 
 /**
  Dimisses the keyboard, if not already, animated.
  
- @animated YES if the keyboard should be dismissed using an animation.
+ @param animated YES if the keyboard should be dismissed using an animation.
  */
 - (void)dismissKeyboard:(BOOL)animated;
 
