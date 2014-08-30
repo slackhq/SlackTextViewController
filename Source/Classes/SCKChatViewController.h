@@ -27,9 +27,9 @@
 /** YES if control's animation should have bouncy effects. Default is NO. */
 @property (nonatomic, assign) BOOL bounces;
 /** YES if text view's content can be cleaned with a shake gesture. Default is NO. */
-@property (nonatomic, assign) BOOL allowUndo;
+@property (nonatomic, assign) BOOL undoShakingEnabled;
 /** YES if keyboard can be dismissed gradually with a vertical panning gesture. Default is YES. */
-@property (nonatomic, assign) BOOL allowKeyboardPanning;
+@property (nonatomic, assign) BOOL keyboardPanningEnabled;
 
 /** YES if the main table view is inverted. Default is YES.
  @discussion This allows the table view to start from the bottom like any typical chat interface.
@@ -119,7 +119,7 @@
 
 /**
  Notifies the view controller when the user has shaked the device for undoing text typing.
- @discussion You can override this method to perform additional tasks associated with the shake gesture. Calling super will prompt a system alert view with undo option. This will not be called if 'allowUndo' is set to NO and/or if the text view's content is empty.
+ @discussion You can override this method to perform additional tasks associated with the shake gesture. Calling super will prompt a system alert view with undo option. This will not be called if 'undoShakingEnabled' is set to NO and/or if the text view's content is empty.
  */
 - (void)willRequestUndo;
 

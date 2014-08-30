@@ -69,8 +69,8 @@
     self.messages = [[NSMutableArray alloc] initWithArray:reversed];
     
     self.bounces = YES;
-    self.allowUndo = YES;
-    self.allowKeyboardPanning = YES;
+    self.undoShakingEnabled = YES;
+    self.keyboardPanningEnabled = YES;
     self.inverted = YES;
     
     self.textContainerView.autoHideRightButton = YES;

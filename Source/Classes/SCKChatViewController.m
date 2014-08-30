@@ -60,8 +60,8 @@
 - (void)commonInit
 {
     self.bounces = NO;
-    self.allowUndo = NO;
-    self.allowKeyboardPanning = YES;
+    self.undoShakingEnabled = NO;
+    self.keyboardPanningEnabled = YES;
     self.inverted = YES;
     
     [self.view addSubview:self.tableView];
@@ -254,13 +254,13 @@
     self.tableView.scrollEnabled = !autoCompleting;
 }
 
-- (void)setAllowKeyboardPanning:(BOOL)allow
+- (void)setkeyboardPanningEnabled:(BOOL)allow
 {
-    if (self.allowKeyboardPanning == allow) {
+    if (self.keyboardPanningEnabled == allow) {
         return;
     }
     
-    _allowKeyboardPanning = allow;
+    _keyboardPanningEnabled = allow;
     
     if (allow) {
         self.textView.inputAccessoryView = [SCKInputAccessoryView new];
@@ -645,7 +645,7 @@
     }
     
     // Notifies of the shake gesture if undo mode is on and the text view is not empty
-    if (self.allowUndo && self.textView.text.length > 0) {
+    if (self.undoShakingEnabled && self.textView.text.length > 0) {
         [self willRequestUndo];
     }
 }
