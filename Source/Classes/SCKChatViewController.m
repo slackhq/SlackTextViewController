@@ -12,7 +12,7 @@
 @interface SCKChatViewController () <UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
     UITableViewStyle _style;
-    CGFloat _minYOffset;
+    CGPoint _draggingOffset;
 }
 
 @property (nonatomic, strong) UIGestureRecognizer *singleTapGesture;
@@ -22,6 +22,8 @@
 @property (nonatomic, strong) NSLayoutConstraint *typeIndicatorViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *autoCompletionViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *keyboardHC;
+
+@property (nonatomic, readonly, getter = isPanningKeyboard) BOOL panningKeyboard;
 
 // Used for auto-completion
 @property (nonatomic, strong) NSMutableArray *registeredPrefixes;
@@ -90,9 +92,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    // We save the minimum offset of the tableView
-    _minYOffset = self.tableView.contentOffset.y;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -548,9 +547,15 @@
     }
 
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-
+    
     self.keyboardHC.constant = CGRectGetHeight([UIScreen mainScreen].bounds)-endFrame.origin.y;
     self.tableViewHC.constant = [self appropriateTableViewHeight];
+    
+    _panningKeyboard = self.tableView.isDragging;
+    
+    if (self.isInverted && self.isPanningKeyboard && !CGPointEqualToPoint(self.tableView.contentOffset, _draggingOffset)) {
+        self.tableView.contentOffset = _draggingOffset;
+    }
 
     [self.view layoutIfNeeded];
 }
@@ -799,6 +804,16 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return nil;
+}
+
+
+#pragma mark - UIScrollViewDelegate Methods
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (!self.isPanningKeyboard) {
+        _draggingOffset = scrollView.contentOffset;
+    }
 }
 
 

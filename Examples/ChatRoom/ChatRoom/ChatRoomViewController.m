@@ -71,6 +71,7 @@
     self.bounces = YES;
     self.allowUndo = YES;
     self.allowKeyboardPanning = YES;
+    self.inverted = YES;
     
     self.textContainerView.autoHideRightButton = YES;
     
@@ -192,6 +193,8 @@
     
     [self.messages insertObject:message atIndex:0];
     [self.tableView reloadData];
+    
+    [self.tableView scrollToTopAnimated:YES];
     
     [super didPressRightButton:sender];
 }
