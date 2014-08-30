@@ -719,9 +719,7 @@
         }
     }
     else {
-        _foundPrefix = nil;
-        _foundWord = nil;
-        return;
+        return [self cancelAutoCompletion];
     }
 
     BOOL canShow = [self canShowAutoCompletion];
@@ -734,7 +732,10 @@
 - (void)cancelAutoCompletion
 {
     _foundPrefix = nil;
+    _foundWord = nil;
     _foundPrefixRange = NSRangeFromString(nil);
+    
+    [self.autoCompletionView setContentOffset:CGPointZero];
     
     if (self.isAutoCompleting) {
         [self showAutoCompletionView:NO];
