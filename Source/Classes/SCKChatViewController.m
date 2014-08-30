@@ -707,7 +707,7 @@
     
     if (self.foundPrefix.length > 0) {
         if (range.length == 0 || range.length != word.length) {
-            [self cancelAutoCompletion];
+            return [self cancelAutoCompletion];
         }
         
         if (word.length > 0) {
@@ -715,8 +715,13 @@
             _foundWord = [word substringFromIndex:1];
         }
         else {
-            [self cancelAutoCompletion];
+            return [self cancelAutoCompletion];
         }
+    }
+    else {
+        _foundPrefix = nil;
+        _foundWord = nil;
+        return;
     }
 
     BOOL canShow = [self canShowAutoCompletion];
