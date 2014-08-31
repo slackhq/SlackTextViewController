@@ -117,6 +117,8 @@
  */
 - (void)didPasteImage:(UIImage *)image;
 
+- (BOOL)canShowTypeIndicator;
+
 /**
  Notifies the view controller when the user has shaked the device for undoing text typing.
  @discussion You can override this method to perform additional tasks associated with the shake gesture. Calling super will prompt a system alert view with undo option. This will not be called if 'undoShakingEnabled' is set to NO and/or if the text view's content is empty.

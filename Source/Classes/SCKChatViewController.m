@@ -170,6 +170,8 @@
     {
         _typeIndicatorView = [SCKTypeIndicatorView new];
         _typeIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
+        _typeIndicatorView.canResignByTouch = NO;
+        
     }
     return _typeIndicatorView;
 }
@@ -398,6 +400,21 @@
     [self.textView setText:nil];
 }
 
+- (BOOL)canShowTypeIndicator
+{
+    // Don't show if the text is being edited or auto-completed.
+    if (self.isEditing || self.isAutoCompleting) {
+        return NO;
+    }
+    
+    // Don't show if the content offset is not at top (when inverted) or at bottom (when not inverted)
+    if ((self.isInverted && ![self.tableView isAtTop]) || (!self.isInverted && ![self.tableView isAtBottom])) {
+        return NO;
+    }
+    
+    return YES;
+}
+
 - (BOOL)canShowAutoCompletion
 {
     return NO;
@@ -593,8 +610,7 @@
         return;
     }
     
-    // Doesn't show the typing indicator if the text is being edited or auto-completed.
-    if (self.isEditing || self.isAutoCompleting) {
+    if (![self canShowTypeIndicator]) {
         return;
     }
     

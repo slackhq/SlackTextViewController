@@ -15,7 +15,7 @@ extern NSString * const SCKTypeIndicatorViewWillHideNotification;
 
 /** The amount of time a name should keep visible. If is zero, the indicator will not remove nor disappear automatically. Default is 6.0 seconds*/
 @property (nonatomic) NSTimeInterval interval;
-/** The height of the rows. Default is 26.0 */
+/** The height of the view. Default is 26.0 */
 @property (nonatomic) CGFloat height;
 /** If YES, the user can dismiss the indicator by tapping on it. Default is YES. */
 @property (nonatomic) BOOL canResignByTouch;
