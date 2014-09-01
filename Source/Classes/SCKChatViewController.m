@@ -286,6 +286,7 @@
     _inverted = inverted;
     
     self.scrollViewProxy.transform = CGAffineTransformMake(1, 0, 0, inverted ? -1 : 1, 0, 0);
+    self.edgesForExtendedLayout = inverted ? UIRectEdgeNone : UIRectEdgeAll;
 }
 
 

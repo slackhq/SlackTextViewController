@@ -22,7 +22,7 @@
 @property (nonatomic, readonly) UICollectionView *collectionView;
 /** The bottom text container view, wrapping the text view and buttons. */
 @property (nonatomic, readonly) SCKTextContainerView *textContainerView;
-/** The typing indicator. */
+/** The typing indicator used to display user names horizontally. */
 @property (nonatomic, readonly) SCKTypeIndicatorView *typeIndicatorView;
 /** YES if control's animation should have bouncy effects. Default is YES. */
 @property (nonatomic, assign) BOOL bounces;
@@ -35,6 +35,8 @@
  @discussion This allows the table view to start from the bottom like any typical chat interface.
  If inverted, you must assign the same transform property to your cells to match the orientation (ie: cell.transform = tableView.transform;)
  Inverting the table view will enable some great features such as content offset corrections automatically when resizing the text input and/or showing auto-completion.
+ 
+ Updating this value also changes 'edgesForExtendedLayout' value. When inverted, it must be UIRectEdgeNone, to display correctly all the elements. Otherwise, UIRectEdgeAll is set.
  */
 @property (nonatomic, assign, getter = isInverted) BOOL inverted;
 
