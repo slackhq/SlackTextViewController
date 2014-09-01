@@ -257,15 +257,15 @@
     self.scrollViewProxy.scrollEnabled = !autoCompleting;
 }
 
-- (void)setkeyboardPanningEnabled:(BOOL)allow
+- (void)setKeyboardPanningEnabled:(BOOL)enabled
 {
-    if (self.keyboardPanningEnabled == allow) {
+    if (self.keyboardPanningEnabled == enabled) {
         return;
     }
     
-    _keyboardPanningEnabled = allow;
+    _keyboardPanningEnabled = enabled;
     
-    if (allow) {
+    if (enabled) {
         self.textView.inputAccessoryView = [SCKInputAccessoryView new];
         self.scrollViewProxy.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
