@@ -78,7 +78,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     {
         _textView = [[SCKTextView alloc] init];
         _textView.translatesAutoresizingMaskIntoConstraints = NO;
-        _textView.font = [UIFont systemFontOfSize:15.0f];
+        _textView.font = [UIFont systemFontOfSize:15.0];
         _textView.maxNumberOfLines = 6;
         _textView.autocorrectionType = UITextAutocorrectionTypeDefault;
         _textView.spellCheckingType = UITextSpellCheckingTypeDefault;
@@ -88,9 +88,9 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.scrollIndicatorInsets = UIEdgeInsetsMake(0, -1, 0, 1);
         _textView.delegate = self;
         
-        _textView.layer.cornerRadius = 5.0f;
-        _textView.layer.borderWidth = 1.0f;
-        _textView.layer.borderColor =  [UIColor colorWithRed:200.0f/255.0f green:200.0f/255.0f blue:205.0f/255.0f alpha:1.0f].CGColor;
+        _textView.layer.cornerRadius = 5.0;
+        _textView.layer.borderWidth = 1.0;
+        _textView.layer.borderColor =  [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:205.0/255.0 alpha:1.0].CGColor;
     }
     return _textView;
 }
@@ -339,8 +339,8 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     
     [self.rightButton sizeToFit];
     
-    CGFloat leftVerMargin = (self.minHeight - leftButtonImg.size.height) / 2.0f;
-    CGFloat rightVerMargin = (self.minHeight - CGRectGetHeight(self.rightButton.frame)) / 2.0f;
+    CGFloat leftVerMargin = (self.minHeight - leftButtonImg.size.height) / 2.0;
+    CGFloat rightVerMargin = (self.minHeight - CGRectGetHeight(self.rightButton.frame)) / 2.0;
 
     NSDictionary *views = @{@"textView": self.textView,
                             @"leftButton": self.leftButton,
@@ -398,7 +398,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         self.leftButtonWC.constant = roundf(leftButtonSize.width);
         self.leftButtonHC.constant = roundf(leftButtonSize.height);
         self.leftMarginWC.constant = (leftButtonSize.width > 0) ? kTextViewHorizontalPadding : null;
-        self.bottomMarginWC.constant = roundf((self.minHeight - leftButtonSize.height) / 2.0f);
+        self.bottomMarginWC.constant = roundf((self.minHeight - leftButtonSize.height) / 2.0);
         
         self.rightButtonWC.constant = [self appropriaterightButtonWidth];
         self.rightMarginWC.constant = [self appropriaterightButtonMargin];

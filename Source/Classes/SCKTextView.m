@@ -37,7 +37,7 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
 {
     self.placeholderColor = [UIColor lightGrayColor];
     
-    self.font = [UIFont systemFontOfSize:14.0f];
+    self.font = [UIFont systemFontOfSize:14.0];
     self.editable = YES;
     self.selectable = YES;
     self.scrollEnabled = YES;
@@ -56,7 +56,7 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
     [super drawRect:rect];
     
     if (self.text.length == 0 && self.placeholder.length > 0) {
-        self.placeholderLabel.frame = CGRectInset(rect, 5.0f, 5.0f);
+        self.placeholderLabel.frame = CGRectInset(rect, 5.0, 5.0);
         self.placeholderLabel.textColor = self.placeholderColor;
         self.placeholderLabel.hidden = NO;
         [self sendSubviewToBack:self.placeholderLabel];

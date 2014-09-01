@@ -36,7 +36,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 - (void)configure
 {
     self.height = 30.0;
-    self.interval = 6.0f;
+    self.interval = 6.0;
     self.canResignByTouch = YES;
     self.usernames = [NSMutableArray new];
     self.timers = [NSMutableArray new];
@@ -57,7 +57,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
     {
         _indicatorLabel = [UILabel new];
         _indicatorLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        _indicatorLabel.font = [UIFont systemFontOfSize:12.0f];
+        _indicatorLabel.font = [UIFont systemFontOfSize:12.0];
         _indicatorLabel.textColor =[UIColor grayColor];
         _indicatorLabel.backgroundColor = [UIColor clearColor];
         _indicatorLabel.userInteractionEnabled = NO;
@@ -94,8 +94,8 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
     [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0.0, text.length)];
     
     if (_usernames.count <= 2) {
-        [attributedString addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:12.0f] range:[text rangeOfString:[_usernames firstObject]]];
-        [attributedString addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:12.0f] range:[text rangeOfString:[_usernames lastObject]]];
+        [attributedString addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:12.0] range:[text rangeOfString:[_usernames firstObject]]];
+        [attributedString addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:12.0] range:[text rangeOfString:[_usernames lastObject]]];
     }
     
     return attributedString;
@@ -243,7 +243,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 - (void)setupConstraints
 {
     NSNumber *lineHeight = @(roundf(self.indicatorLabel.font.lineHeight));
-    NSNumber *padding = @(roundf((self.height-[lineHeight floatValue]) / 2.0f));
+    NSNumber *padding = @(roundf((self.height-[lineHeight floatValue]) / 2.0));
     
     NSDictionary *views = @{@"label": self.indicatorLabel};
     NSDictionary *metrics = @{@"lineHeight": lineHeight, @"padding": padding};
