@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+#define kAvatarSize 30.0
+#define kMinimumHeight 40.0
+
 @interface ChatViewCell : UITableViewCell
+
+@property (nonatomic) BOOL hasPlaceholder;
 
 @end

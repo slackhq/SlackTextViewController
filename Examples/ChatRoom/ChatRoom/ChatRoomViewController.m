@@ -49,8 +49,6 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
         self.navigationItem.rightBarButtonItems = @[appendItem, typeItem];
         
         self.reachable = YES;
-        
-        self.edgesForExtendedLayout = UIRectEdgeNone; //UIRectEdgeAll
     }
     return self;
 }
@@ -78,7 +76,7 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     self.keyboardPanningEnabled = YES;
     self.inverted = YES;
     
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[ChatViewCell class] forCellReuseIdentifier:chatCellIdentifier];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:autoCompletionCellIdentifier];
     
@@ -336,31 +334,21 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (UITableViewCell *)chatCellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:chatCellIdentifier];
+    ChatViewCell *cell = (ChatViewCell *)[self.tableView dequeueReusableCellWithIdentifier:chatCellIdentifier];
     
     NSString *message = self.messages[indexPath.row];
     cell.textLabel.text = message;
-    cell.textLabel.font = [UIFont systemFontOfSize:16.0];
-    cell.textLabel.numberOfLines = 0;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-    if (!cell.imageView.image)
+    if (cell.hasPlaceholder)
     {
-        CGFloat width = 30.0;
         CGFloat scale = [UIScreen mainScreen].scale;
-        
-        CGSize imgSize = CGSizeMake(width*scale, width*scale);
-        
-        cell.imageView.image = [self blankImageForSize:CGSizeMake(width, width)];
-        cell.imageView.layer.cornerRadius = roundf(width/2.0);
-        cell.imageView.layer.masksToBounds = YES;
-        cell.imageView.layer.shouldRasterize = YES;
-        cell.imageView.layer.rasterizationScale = scale;
+        CGSize imgSize = CGSizeMake(kAvatarSize*scale, kAvatarSize*scale);
         
         [LoremIpsum asyncPlaceholderImageWithSize:imgSize
                                        completion:^(UIImage *image) {
                                            image = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
                                            cell.imageView.image = image;
+                                           cell.hasPlaceholder = NO;
                                        }];
     }
     
@@ -404,7 +392,7 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
         NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:16.0],
                                      NSParagraphStyleAttributeName: paragraphStyle};
         
-        CGFloat width = CGRectGetWidth(tableView.frame)-(15.0*4);
+        CGFloat width = CGRectGetWidth(tableView.frame)-(kAvatarSize*1.5);
         
         CGRect bounds = [message boundingRectWithSize:CGSizeMake(width, 0.0) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
         
@@ -412,16 +400,16 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
             return 0.0;
         }
         
-        CGFloat height = roundf(CGRectGetHeight(bounds)+30.0);
+        CGFloat height = roundf(CGRectGetHeight(bounds)+kAvatarSize);
         
-        if (height < 40.0) {
-            height = 40.0;
+        if (height < kMinimumHeight) {
+            height = kMinimumHeight;
         }
         
         return height;
     }
     else {
-        return 40.0;
+        return kMinimumHeight;
     }
 }
 
@@ -460,18 +448,6 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
         
         [self acceptAutoCompletionWithString:item];
     }
-}
-
-
-#pragma mark - Helpers
-
-- (UIImage *)blankImageForSize:(CGSize)size
-{
-    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
-    UIImage *blank = UIGraphicsGetImageFromCurrentImageContext();
-    [[UIColor lightGrayColor] set];
-    UIGraphicsEndImageContext();
-    return blank;
 }
 
 
