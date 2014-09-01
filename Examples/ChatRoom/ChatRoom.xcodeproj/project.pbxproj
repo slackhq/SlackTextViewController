@@ -21,6 +21,7 @@
 		4F3EDB79199ED00F004C15D6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EDB77199ED00F004C15D6 /* InfoPlist.strings */; };
 		4F3EDB7B199ED00F004C15D6 /* ChatRoomTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB7A199ED00F004C15D6 /* ChatRoomTests.m */; };
 		4F3EDB90199ED091004C15D6 /* ChatRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB8F199ED091004C15D6 /* ChatRoomViewController.m */; };
+		4F72F3CC19B4E51A009CD8F4 /* ChatViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F72F3CB19B4E51A009CD8F4 /* ChatViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 		4F3EDB7A199ED00F004C15D6 /* ChatRoomTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatRoomTests.m; sourceTree = "<group>"; };
 		4F3EDB8E199ED091004C15D6 /* ChatRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatRoomViewController.h; sourceTree = "<group>"; };
 		4F3EDB8F199ED091004C15D6 /* ChatRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatRoomViewController.m; sourceTree = "<group>"; };
+		4F72F3CA19B4E51A009CD8F4 /* ChatViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewCell.h; sourceTree = "<group>"; };
+		4F72F3CB19B4E51A009CD8F4 /* ChatViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewCell.m; sourceTree = "<group>"; };
 		8522B79647AD437F85843A28 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -120,6 +123,8 @@
 				4F3EDB5C199ED00F004C15D6 /* AppDelegate.m */,
 				4F3EDB8E199ED091004C15D6 /* ChatRoomViewController.h */,
 				4F3EDB8F199ED091004C15D6 /* ChatRoomViewController.m */,
+				4F72F3CA19B4E51A009CD8F4 /* ChatViewCell.h */,
+				4F72F3CB19B4E51A009CD8F4 /* ChatViewCell.m */,
 				4F3EDB67199ED00F004C15D6 /* Images.xcassets */,
 				4F3EDB53199ED00F004C15D6 /* Supporting Files */,
 			);
@@ -286,6 +291,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F72F3CC19B4E51A009CD8F4 /* ChatViewCell.m in Sources */,
 				4F3EDB5D199ED00F004C15D6 /* AppDelegate.m in Sources */,
 				4F3EDB90199ED091004C15D6 /* ChatRoomViewController.m in Sources */,
 				4F3EDB59199ED00F004C15D6 /* main.m in Sources */,

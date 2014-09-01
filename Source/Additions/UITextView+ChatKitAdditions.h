@@ -10,8 +10,8 @@
 
 @interface UITextView (ChatKitAdditions)
 
-/** YES if the caret is positionned at the very end. */
-@property (nonatomic, readonly) BOOL isCaretAtEnd;
+/** The current displayed number of lines. */
+@property (nonatomic, readonly) NSUInteger numberOfLines;
 
 /**
  Scrolls to the very end of the content size, animated.

@@ -87,9 +87,12 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
     return _placeholderLabel;
 }
 
-- (NSUInteger)numberOfLines
+- (BOOL)isExpanding
 {
-    return abs(self.contentSize.height/self.font.lineHeight);
+    if (self.numberOfLines >= self.maxNumberOfLines) {
+        return YES;
+    }
+    return NO;
 }
 
 

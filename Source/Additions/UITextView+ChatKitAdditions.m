@@ -10,65 +10,10 @@
 
 @implementation UITextView (ChatKitAdditions)
 
-- (BOOL)isCaretAtEnd
+- (NSUInteger)numberOfLines
 {
-    if (self.selectedRange.location == self.text.length && self.selectedRange.length == 0) {
-        return YES;
-    }
-    
-    return NO;
+    return abs(self.contentSize.height/self.font.lineHeight);
 }
-
-- (void)scrollToBottomAnimated:(BOOL)animated
-{
-    CGRect endRect = [self caretRectForPosition:self.endOfDocument];
-    
-    if (!animated)
-    {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.0];
-        [UIView setAnimationDelay:0.0];
-        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
-        
-        [self scrollRectToVisible:endRect animated:NO];
-        
-        [UIView commitAnimations];
-    }
-    else {
-        [self scrollRectToVisible:endRect animated:animated];
-    }
-    
-//    NSUInteger lenght = self.text.length;
-//    
-//    if (lenght > 0) {
-//        NSRange bottom = NSMakeRange(lenght-1.0, 1.0);
-//        [self scrollRangeToVisible:bottom];
-//    }
-}
-
-//- (void)scrollToCaretPositonAnimated:(BOOL)animated
-//{
-//    NSLog(@"%s",__FUNCTION__);
-//    
-//    UITextPosition *position = self.selectedTextRange.end;
-//    CGRect caretRect = [self caretRectForPosition:position];
-//    caretRect.size.height += self.textContainerInset.bottom;
-//    
-//    if (!animated)
-//    {
-//        [UIView beginAnimations:nil context:nil];
-//        [UIView setAnimationDuration:0.0];
-//        [UIView setAnimationDelay:0.0];
-//        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
-//        
-//        [self scrollRectToVisible:caretRect animated:NO];
-//        
-//        [UIView commitAnimations];
-//    }
-//    else {
-//        [self scrollRectToVisible:caretRect animated:NO];
-//    }
-//}
 
 - (void)scrollToCaretPositonAnimated:(BOOL)animated
 {
@@ -88,23 +33,60 @@
     }
 }
 
+- (void)scrollToBottomAnimated:(BOOL)animated
+{
+    CGRect rect = [self caretRectForPosition:self.selectedTextRange.end];
+    rect.size.height += self.textContainerInset.bottom;
+    
+    if (!animated)
+    {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.0];
+        [UIView setAnimationDelay:0.0];
+        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+        
+        [self scrollRectToVisible:rect animated:animated];
+        
+        [UIView commitAnimations];
+    }
+    else {
+        [self scrollRectToVisible:rect animated:animated];
+    }
+}
+
 - (void)insertNewLineBreak
 {
     [self insertTextAtCaretRange:@"\n"];
     
+    BOOL animated = YES;
+    SEL expandingSelector = NSSelectorFromString(@"isExpanding");
+    
+    if ([self respondsToSelector:expandingSelector]) {
+        
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        BOOL isExpanding = (BOOL)[self performSelector:expandingSelector withObject:nil];
+#pragma clang diagnostic pop
+        
+        // if the text view cannot expand anymore, scrolling to bottom are not animated to fix a UITextView issue scrolling twice.
+        animated = !isExpanding;
+    }
+    
     //Detected break. Should scroll to bottom if needed.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0025 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self scrollToBottomAnimated:animated];
+    });
 }
 
 - (void)insertTextAtCaretRange:(NSString *)text
 {
     NSRange range = [self insertText:text inRange:self.selectedRange];
     self.selectedRange = NSMakeRange(range.location, 0);
-    
-    [self scrollRangeToVisible:self.selectedRange];
 }
 
 - (NSRange)insertText:(NSString *)text inRange:(NSRange)range
 {
+    // Skip if the text is empty
     if (text.length == 0) {
         return NSMakeRange(0, 0);
     }
