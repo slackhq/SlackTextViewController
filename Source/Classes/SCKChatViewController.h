@@ -117,6 +117,12 @@
  */
 - (void)didPasteImage:(UIImage *)image;
 
+/**
+ Verifies that the typing indicator view should be shown. Default is YES, if meeting some requierements.
+ @discussion You must override this method to perform perform additional verifications before displaying the typing indicator.
+ 
+ @return YES if the typing indicator view should be shown.
+ */
 - (BOOL)canShowTypeIndicator;
 
 /**

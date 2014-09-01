@@ -32,9 +32,9 @@
     if (self) {
         self.users = @[@"ignacio", @"michael", @"brady", @"everyone", @"channel", @"ali"];
         self.channels = @[@"general", @"ios", @"random", @"ssb", @"mobile", @"ui", @"released", @"SF"];
-        self.commands = @[@"help", @"away", @"close", @"color", @"colors", @"feedback", @"invite", @"me", @"msg", @"dm", @"open"];
         self.emojis = @[@"m", @"man", @"machine", @"block-a", @"block-b", @"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
-        
+        self.commands = @[@"help", @"away", @"close", @"color", @"colors", @"feedback", @"invite", @"me", @"msg", @"dm", @"open"];
+
         UIBarButtonItem *reachItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_network"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateReachability:)];
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"] style:UIBarButtonItemStylePlain target:self action:@selector(editRandomMessage:)];
         
@@ -61,7 +61,8 @@
     NSMutableArray *array = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < 40; i++) {
-        [array addObject:[NSString stringWithFormat:@"Dummy message #%d", i+1]];
+        NSInteger words = (arc4random() % 15)+1;
+        [array addObject:[LoremIpsum wordsWithNumber:words]];
     }
     
     NSArray *reversed = [[array reverseObjectEnumerator] allObjects];
@@ -102,8 +103,11 @@
 
 - (void)fillWithText:(id)sender
 {
-    if (self.textView.text.length == 0) {
-        self.textView.text = [LoremIpsum sentencesWithNumber:4];
+    if (self.textView.text.length == 0)
+    {
+        int sentences = (arc4random() % 4);
+        if (sentences <= 1) sentences = 1;
+        self.textView.text = [LoremIpsum sentencesWithNumber:sentences];
     }
     else {
         [self.textView insertTextAtCaretRange:[LoremIpsum word]];
@@ -247,7 +251,7 @@
         }
         
         // Ignores 'me'
-        NSString *me = @"ignacio";
+        NSString *me = [self.users firstObject];
         array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self != %@", me]];
     }
     else if ([prefix isEqualToString:@"#"])
@@ -323,16 +327,34 @@
     }
     
     if ([tableView isEqual:self.tableView]) {
-        cell.backgroundColor = [UIColor whiteColor];
         
         NSString *message = self.messages[indexPath.row];
         cell.textLabel.text = message;
         cell.textLabel.font = [UIFont systemFontOfSize:16.0];
         cell.textLabel.numberOfLines = 0;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        if (!cell.imageView.image)
+        {
+            CGFloat width = 30.0;
+            CGFloat scale = [UIScreen mainScreen].scale;
+            
+            CGSize imgSize = CGSizeMake(width*scale, width*scale);
+            
+            cell.imageView.image = [self blankImageForSize:CGSizeMake(width, width)];
+            cell.imageView.layer.cornerRadius = roundf(width/2.0);
+            cell.imageView.layer.masksToBounds = YES;
+            cell.imageView.layer.shouldRasterize = YES;
+            cell.imageView.layer.rasterizationScale = scale;
+            
+            [LoremIpsum asyncPlaceholderImageWithSize:imgSize
+                                           completion:^(UIImage *image) {
+                                               image = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
+                                               cell.imageView.image = image;
+                                           }];
+        }
     }
     else {
-        cell.backgroundColor = [UIColor whiteColor];
-        
         NSString *item = self.searchResult[indexPath.row];
 
         if ([self.foundPrefix isEqualToString:@"#"]) {
@@ -344,6 +366,8 @@
         
         cell.textLabel.text = item;
         cell.textLabel.font = [UIFont systemFontOfSize:14.0];
+        cell.textLabel.numberOfLines = 1;
+        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     }
     
     // Cells must inherit the table view's transform
@@ -365,13 +389,21 @@
         NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:16.0],
                                      NSParagraphStyleAttributeName: paragraphStyle};
         
-        CGRect bounds = [message boundingRectWithSize:CGSizeMake(CGRectGetWidth(tableView.frame)-40.0, 0.0) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
+        CGFloat width = CGRectGetWidth(tableView.frame)-(15.0*4);
+        
+        CGRect bounds = [message boundingRectWithSize:CGSizeMake(width, 0.0) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
         
         if (message.length == 0) {
             return 0.0;
         }
         
-        return CGRectGetHeight(bounds)+20.0;
+        CGFloat height = roundf(CGRectGetHeight(bounds)+20.0);
+        
+        if (height < 40.0) {
+            height = 40.0;
+        }
+        
+        return height;
     }
     else {
         return 40.0;
@@ -415,6 +447,17 @@
     }
 }
 
+
+#pragma mark - Helpers
+
+- (UIImage *)blankImageForSize:(CGSize)size
+{
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    UIImage *blank = UIGraphicsGetImageFromCurrentImageContext();
+    [[UIColor lightGrayColor] set];
+    UIGraphicsEndImageContext();
+    return blank;
+}
 
 
 #pragma mark - View lifeterm
