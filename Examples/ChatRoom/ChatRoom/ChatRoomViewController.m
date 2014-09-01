@@ -76,7 +76,6 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     self.keyboardPanningEnabled = YES;
     self.inverted = YES;
     
-//    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[ChatViewCell class] forCellReuseIdentifier:chatCellIdentifier];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:autoCompletionCellIdentifier];
     
@@ -198,10 +197,18 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (void)didPressRightButton:(id)sender
 {
+    // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button (in iOS7)
+    if ([self.textView isFirstResponder]) {
+        [self.textView resignFirstResponder];
+        [self.textView becomeFirstResponder];
+    }
+    
     NSString *message = [self.textView.text copy];
     
+    [self.tableView beginUpdates];
     [self.messages insertObject:message atIndex:0];
-    [self.tableView reloadData];
+    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+    [self.tableView endUpdates];
     
     [self.tableView scrollToTopAnimated:YES];
     
