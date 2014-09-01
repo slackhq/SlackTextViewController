@@ -14,6 +14,7 @@
     CGPoint _draggingOffset;
 }
 
+// Used for Auto-Layout constraints, and update its constants
 @property (nonatomic, strong) NSLayoutConstraint *scrollViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *containerViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *typeIndicatorViewHC;
@@ -24,7 +25,7 @@
 
 @property (nonatomic, readonly, getter = isPanningKeyboard) BOOL panningKeyboard;
 
-// Used for auto-completion
+// Used for Auto-Completion
 @property (nonatomic, strong) NSMutableArray *registeredPrefixes;
 @property (nonatomic, readonly) NSRange foundPrefixRange;
 
@@ -72,7 +73,7 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    [self.view addSubview:self.scrollView];
+    [self.view addSubview:self.scrollViewProxy];
     [self.view addSubview:self.autoCompletionView];
     [self.view addSubview:self.typeIndicatorView];
     [self.view addSubview:self.textContainerView];
@@ -80,39 +81,6 @@
     [self setupViewConstraints];
     
     [self registerNotifications];
-}
-
-
-#pragma mark - View lifecycle
-
-- (void)loadView
-{
-    [super loadView];
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
 }
 
 
@@ -156,7 +124,7 @@
     return _collectionView;
 }
 
-- (UIScrollView *)scrollView
+- (UIScrollView *)scrollViewProxy
 {
     if (_tableView) {
         return _tableView;
@@ -171,14 +139,12 @@
 {
     if (!_autoCompletionView)
     {
-        _autoCompletionView = [UITableView new];
+        _autoCompletionView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         _autoCompletionView.translatesAutoresizingMaskIntoConstraints = NO;
         _autoCompletionView.backgroundColor = [UIColor colorWithWhite:0.97 alpha:1.0];
+        _autoCompletionView.scrollsToTop = NO;
         _autoCompletionView.dataSource = self;
         _autoCompletionView.delegate = self;
-        
-        _autoCompletionView.tableHeaderView = [UIView new];
-        _autoCompletionView.tableFooterView = [UIView new];
     }
     return _autoCompletionView;
 }
@@ -288,7 +254,7 @@
     
     _autoCompleting = autoCompleting;
     
-    self.scrollView.scrollEnabled = !autoCompleting;
+    self.scrollViewProxy.scrollEnabled = !autoCompleting;
 }
 
 - (void)setkeyboardPanningEnabled:(BOOL)allow
@@ -301,12 +267,12 @@
     
     if (allow) {
         self.textView.inputAccessoryView = [SCKInputAccessoryView new];
-        self.scrollView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
+        self.scrollViewProxy.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
     }
     else {
         self.textView.inputAccessoryView = nil;
-        self.scrollView.keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
+        self.scrollViewProxy.keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
         [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
     }
 }
@@ -319,9 +285,7 @@
     
     _inverted = inverted;
     
-    self.scrollView.transform = CGAffineTransformMake(1, 0, 0, inverted ? -1 : 1, 0, 0);
-    
-    NSLog(@"self.scrollView : %@", self.scrollView);
+    self.scrollViewProxy.transform = CGAffineTransformMake(1, 0, 0, inverted ? -1 : 1, 0, 0);
 }
 
 
@@ -445,7 +409,7 @@
     }
     
     // Don't show if the content offset is not at top (when inverted) or at bottom (when not inverted)
-    if ((self.isInverted && ![self.scrollView isAtTop]) || (!self.isInverted && ![self.scrollView isAtBottom])) {
+    if ((self.isInverted && ![self.scrollViewProxy isAtTop]) || (!self.isInverted && ![self.scrollViewProxy isAtBottom])) {
         return NO;
     }
     
@@ -605,10 +569,10 @@
     self.keyboardHC.constant = CGRectGetHeight([UIScreen mainScreen].bounds)-endFrame.origin.y;
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
-    _panningKeyboard = self.scrollView.isDragging;
+    _panningKeyboard = self.scrollViewProxy.isDragging;
     
-    if (self.isInverted && self.isPanningKeyboard && !CGPointEqualToPoint(self.scrollView.contentOffset, _draggingOffset)) {
-        self.scrollView.contentOffset = _draggingOffset;
+    if (self.isInverted && self.isPanningKeyboard && !CGPointEqualToPoint(self.scrollViewProxy.contentOffset, _draggingOffset)) {
+        self.scrollViewProxy.contentOffset = _draggingOffset;
     }
 
     [self.view layoutIfNeeded];
@@ -918,7 +882,7 @@
     // Removes all constraints
     [self.view removeConstraints:self.view.constraints];
     
-    NSDictionary *views = @{@"scrollView": self.scrollView,
+    NSDictionary *views = @{@"scrollView": self.scrollViewProxy,
                             @"autoCompletionView": self.autoCompletionView,
                             @"typeIndicatorView": self.typeIndicatorView,
                             @"textContainerView": self.textContainerView,
