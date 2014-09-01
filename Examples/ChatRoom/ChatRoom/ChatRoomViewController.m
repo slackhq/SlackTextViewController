@@ -397,7 +397,7 @@
             return 0.0;
         }
         
-        CGFloat height = roundf(CGRectGetHeight(bounds)+20.0);
+        CGFloat height = roundf(CGRectGetHeight(bounds)+30.0);
         
         if (height < 40.0) {
             height = 40.0;

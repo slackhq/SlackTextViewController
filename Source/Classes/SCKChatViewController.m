@@ -11,17 +11,16 @@
 
 @interface SCKChatViewController () <UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
-    UITableViewStyle _style;
     CGPoint _draggingOffset;
 }
 
-@property (nonatomic, strong) UIGestureRecognizer *singleTapGesture;
-
-@property (nonatomic, strong) NSLayoutConstraint *tableViewHC;
+@property (nonatomic, strong) NSLayoutConstraint *scrollViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *containerViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *typeIndicatorViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *autoCompletionViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *keyboardHC;
+
+@property (nonatomic, strong) UIGestureRecognizer *singleTapGesture;
 
 @property (nonatomic, readonly, getter = isPanningKeyboard) BOOL panningKeyboard;
 
@@ -33,6 +32,7 @@
 
 @implementation SCKChatViewController
 @synthesize tableView = _tableView;
+@synthesize collectionView = _collectionView;
 @synthesize typeIndicatorView = _typeIndicatorView;
 @synthesize textContainerView = _textContainerView;
 @synthesize autoCompletionView = _autoCompletionView;
@@ -40,18 +40,24 @@
 
 #pragma mark - Initializer
 
+- (id)init
+{
+    return [self initWithStyle:UITableViewStylePlain];
+}
+
 - (instancetype)initWithStyle:(UITableViewStyle)style
 {
     if (self = [super init]) {
-        _style = style;
+        [self tableViewWithStyle:style];
         [self commonInit];
     }
     return self;
 }
 
-- (id)init
+- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
     if (self = [super init]) {
+        [self collectionViewWithLayout:layout];
         [self commonInit];
     }
     return self;
@@ -59,17 +65,17 @@
 
 - (void)commonInit
 {
-    self.bounces = NO;
+    self.bounces = YES;
     self.undoShakingEnabled = NO;
     self.keyboardPanningEnabled = YES;
     self.inverted = YES;
     
-    [self.view addSubview:self.tableView];
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    [self.view addSubview:self.scrollView];
     [self.view addSubview:self.autoCompletionView];
     [self.view addSubview:self.typeIndicatorView];
     [self.view addSubview:self.textContainerView];
-    
-    self.view.backgroundColor = [UIColor whiteColor];
     
     [self setupViewConstraints];
     
@@ -112,11 +118,11 @@
 
 #pragma mark - Getters
 
-- (UITableView *)tableView
+- (UITableView *)tableViewWithStyle:(UITableViewStyle)style
 {
     if (!_tableView)
     {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:_style];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:style];
         _tableView.translatesAutoresizingMaskIntoConstraints = NO;
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.scrollsToTop = YES;
@@ -125,11 +131,40 @@
         
         _tableView.tableFooterView = [UIView new];
 
-        _singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapTableView)];
+        _singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapScrollView)];
         _singleTapGesture.delegate = self;
         [_tableView addGestureRecognizer:self.singleTapGesture];
     }
     return _tableView;
+}
+
+- (UICollectionView *)collectionViewWithLayout:(UICollectionViewLayout *)layout
+{
+    if (!_collectionView)
+    {
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.translatesAutoresizingMaskIntoConstraints = NO;
+        _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.scrollsToTop = YES;
+        _collectionView.dataSource = self;
+        _collectionView.delegate = self;
+        
+        _singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapScrollView)];
+        _singleTapGesture.delegate = self;
+        [_collectionView addGestureRecognizer:self.singleTapGesture];
+    }
+    return _collectionView;
+}
+
+- (UIScrollView *)scrollView
+{
+    if (_tableView) {
+        return _tableView;
+    }
+    else if (_collectionView) {
+        return _collectionView;
+    }
+    return nil;
 }
 
 - (UITableView *)autoCompletionView
@@ -224,7 +259,7 @@
     return roundf(height);
 }
 
-- (CGFloat)appropriateTableViewHeight
+- (CGFloat)appropriateScrollViewHeight
 {
     CGFloat height = self.view.bounds.size.height;
     height -= self.keyboardHC.constant;
@@ -253,7 +288,7 @@
     
     _autoCompleting = autoCompleting;
     
-    self.tableView.scrollEnabled = !autoCompleting;
+    self.scrollView.scrollEnabled = !autoCompleting;
 }
 
 - (void)setkeyboardPanningEnabled:(BOOL)allow
@@ -266,12 +301,12 @@
     
     if (allow) {
         self.textView.inputAccessoryView = [SCKInputAccessoryView new];
-        self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
+        self.scrollView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
     }
     else {
         self.textView.inputAccessoryView = nil;
-        self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
+        self.scrollView.keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
         [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
     }
 }
@@ -284,7 +319,9 @@
     
     _inverted = inverted;
     
-    self.tableView.transform = CGAffineTransformMake(1, 0, 0, inverted ? -1 : 1, 0, 0);
+    self.scrollView.transform = CGAffineTransformMake(1, 0, 0, inverted ? -1 : 1, 0, 0);
+    
+    NSLog(@"self.scrollView : %@", self.scrollView);
 }
 
 
@@ -347,7 +384,7 @@
     if (containeHeight != self.containerViewHC.constant)
     {
         self.containerViewHC.constant = containeHeight;
-        self.tableViewHC.constant = [self appropriateTableViewHeight];
+        self.scrollViewHC.constant = [self appropriateScrollViewHeight];
         
         if (animated) {
             [self.view animateLayoutIfNeededWithBounce:self.bounces
@@ -408,7 +445,7 @@
     }
     
     // Don't show if the content offset is not at top (when inverted) or at bottom (when not inverted)
-    if ((self.isInverted && ![self.tableView isAtTop]) || (!self.isInverted && ![self.tableView isAtBottom])) {
+    if ((self.isInverted && ![self.scrollView isAtTop]) || (!self.isInverted && ![self.scrollView isAtBottom])) {
         return NO;
     }
     
@@ -474,7 +511,7 @@
 
 #pragma mark - Private Actions
 
-- (void)didTapTableView
+- (void)didTapScrollView
 {
     [self dismissKeyboard:YES];
 }
@@ -534,7 +571,7 @@
     
     // Updates the height constraints' constants
     self.keyboardHC.constant = show ? endFrame.size.height : 0.0;
-    self.tableViewHC.constant = [self appropriateTableViewHeight];
+    self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     if (!show && self.isAutoCompleting) {
         [self hideautoCompletionView];
@@ -566,12 +603,12 @@
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
     self.keyboardHC.constant = CGRectGetHeight([UIScreen mainScreen].bounds)-endFrame.origin.y;
-    self.tableViewHC.constant = [self appropriateTableViewHeight];
+    self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
-    _panningKeyboard = self.tableView.isDragging;
+    _panningKeyboard = self.scrollView.isDragging;
     
-    if (self.isInverted && self.isPanningKeyboard && !CGPointEqualToPoint(self.tableView.contentOffset, _draggingOffset)) {
-        self.tableView.contentOffset = _draggingOffset;
+    if (self.isInverted && self.isPanningKeyboard && !CGPointEqualToPoint(self.scrollView.contentOffset, _draggingOffset)) {
+        self.scrollView.contentOffset = _draggingOffset;
     }
 
     [self.view layoutIfNeeded];
@@ -615,7 +652,7 @@
     }
     
     self.typeIndicatorViewHC.constant = indicatorView.isVisible ? indicatorView.height : 0.0;
-    self.tableViewHC.constant -= self.typeIndicatorViewHC.constant;
+    self.scrollViewHC.constant -= self.typeIndicatorViewHC.constant;
     
     [self.view animateLayoutIfNeededWithBounce:self.bounces
                                curve:UIViewAnimationOptionCurveEaseInOut
@@ -795,7 +832,7 @@
         viewHeight = [self maximumHeightForAutoCompletionView];
     }
     
-    CGFloat tableHeight = self.tableViewHC.constant;
+    CGFloat tableHeight = self.scrollViewHC.constant;
     
     // If the the view controller extends it layout beneath it navigation bar and/or status bar, we then reduce it from the table view height
     if (self.edgesForExtendedLayout == UIRectEdgeAll || self.edgesForExtendedLayout == UIRectEdgeTop) {
@@ -824,6 +861,19 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return nil;
+}
+
+
+#pragma mark - UICollectionViewDataSource Methods
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section;
+{
+    return 0;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return nil;
 }
@@ -868,14 +918,14 @@
     // Removes all constraints
     [self.view removeConstraints:self.view.constraints];
     
-    NSDictionary *views = @{@"tableView": self.tableView,
+    NSDictionary *views = @{@"scrollView": self.scrollView,
                             @"autoCompletionView": self.autoCompletionView,
                             @"typeIndicatorView": self.typeIndicatorView,
                             @"textContainerView": self.textContainerView,
                             };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView(==0@250)][autoCompletionView(0)][typeIndicatorView(0)][textContainerView(>=0)]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView(==0@250)][autoCompletionView(0)][typeIndicatorView(0)][textContainerView(>=0)]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[autoCompletionView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[typeIndicatorView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[textContainerView]|" options:0 metrics:nil views:views]];
@@ -883,14 +933,14 @@
     NSArray *heightConstraints = [self.view constraintsForAttribute:NSLayoutAttributeHeight];
     NSArray *bottomConstraints = [self.view constraintsForAttribute:NSLayoutAttributeBottom];
     
-    self.tableViewHC = heightConstraints[0];
+    self.scrollViewHC = heightConstraints[0];
     self.autoCompletionViewHC = heightConstraints[1];
     self.typeIndicatorViewHC = heightConstraints[2];
     self.containerViewHC = heightConstraints[3];
     self.keyboardHC = bottomConstraints[0];
     
     self.containerViewHC.constant = self.textContainerView.minHeight;
-    self.tableViewHC.constant = [self appropriateTableViewHeight];
+    self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     if (self.isEditing) {
         self.containerViewHC.constant += kEditingViewHeight;
@@ -1013,13 +1063,21 @@
     _tableView.dataSource = nil;
     _tableView = nil;
     
+    _collectionView.delegate = nil;
+    _collectionView.dataSource = nil;
+    _collectionView = nil;
+    
+    _autoCompletionView.delegate = nil;
+    _autoCompletionView.dataSource = nil;
+    _autoCompletionView = nil;
+    
     _textContainerView = nil;
     _typeIndicatorView = nil;
     
     _registeredPrefixes = nil;
     
     _singleTapGesture = nil;
-    _tableViewHC = nil;
+    _scrollViewHC = nil;
     _containerViewHC = nil;
     _containerViewHC = nil;
     _typeIndicatorViewHC = nil;

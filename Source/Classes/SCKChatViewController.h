@@ -14,17 +14,19 @@
 #import "UITextView+ChatKitAdditions.h"
 
 ///------------------------------------------------------------------------
-/// @name A drop-in replacement of UITableViewController with chat features.
+/// @name A drop-in replacement of UITableViewController & UICollectionViewController with chat features.
 ///------------------------------------------------------------------------
-@interface SCKChatViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
+@interface SCKChatViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
 
-/** The main table view managed by the controller object. */
+/** The main table view managed by the controller object. Default view if initialized with -init */
 @property (nonatomic, readonly) UITableView *tableView;
+/** The main collection view managed by the controller object. Not nil if the controller is initialised with -initWithCollectionViewLayout: */
+@property (nonatomic, readonly) UICollectionView *collectionView;
 /** The bottom text container view, wrapping the text view and buttons. */
 @property (nonatomic, readonly) SCKTextContainerView *textContainerView;
 /** The typing indicator. */
 @property (nonatomic, readonly) SCKTypeIndicatorView *typeIndicatorView;
-/** YES if control's animation should have bouncy effects. Default is NO. */
+/** YES if control's animation should have bouncy effects. Default is YES. */
 @property (nonatomic, assign) BOOL bounces;
 /** YES if text view's content can be cleaned with a shake gesture. Default is NO. */
 @property (nonatomic, assign) BOOL undoShakingEnabled;
@@ -44,13 +46,22 @@
 @property (nonatomic, readonly) UIButton *rightButton;
 
 /**
- Initializes a chat-view controller to manage a table view of a given style.
- @discussion If you use the standard init method to initialize a SCKChatViewController object, a table view in the plain style is created.
+ Initializes a chat view controller to manage a table view of a given style.
+ @discussion If you use the standard -init method, a table view with plain style will be created.
  
  @param style A constant that specifies the style of main table view that the controller object is to manage (UITableViewStylePlain or UITableViewStyleGrouped).
- @return An initialized SCKChatViewController object or nil if the object couldn’t be created.
+ @return An initialized SCKChatViewController object or nil if the object could not be created.
  */
 - (instancetype)initWithStyle:(UITableViewStyle)style;
+
+/**
+ Initializes a chat view controller controller and configures the collection view with the provided layout.
+ @discussion If you use the standard -init method, a table view with plain style will be created.
+
+ @param layout The layout object to associate with the collection view. The layout controls how the collection view presents its cells and supplementary views.
+ @return An initialized SCKChatViewController object or nil if the object could not be created.
+ */
+- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout;
 
 /**
  Verifies if the right button can be pressed. If NO, the button is disabled.
