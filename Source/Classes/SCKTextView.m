@@ -28,12 +28,12 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
 - (id)init
 {
     if (self = [super init]) {
-        [self configure];
+        [self commonInit];
     }
     return self;
 }
 
-- (void)configure
+- (void)commonInit
 {
     self.placeholderColor = [UIColor lightGrayColor];
     

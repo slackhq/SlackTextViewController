@@ -28,12 +28,12 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 {
     self = [super init];
     if (self) {
-        [self configure];
+        [self commonInit];
     }
     return self;
 }
 
-- (void)configure
+- (void)commonInit
 {
     self.height = 30.0;
     self.interval = 6.0;

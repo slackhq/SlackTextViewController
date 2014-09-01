@@ -31,12 +31,12 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 {
     self = [super init];
     if (self) {
-        [self configure];
+        [self commonInit];
     }
     return self;
 }
 
-- (void)configure
+- (void)commonInit
 {
     self.translucent = NO;
     self.autoHideRightButton = YES;
