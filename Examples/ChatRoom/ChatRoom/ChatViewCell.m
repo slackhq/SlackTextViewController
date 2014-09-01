@@ -35,7 +35,7 @@
     [super layoutSubviews];
     
     CGRect avatarFrame = self.imageView.frame;
-    avatarFrame.origin = CGPointMake(15, 10);
+    avatarFrame.origin = CGPointMake(kAvatarSize/2.0, kAvatarSize/3.0);
     self.imageView.frame = avatarFrame;
 }
 
