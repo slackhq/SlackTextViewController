@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+/** @name UIView additional features used for Slack Chat Kit. */
 @interface UIView (ChatKitAdditions)
 
 /**

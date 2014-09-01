@@ -13,9 +13,7 @@
 #import "UIScrollView+ChatKitAdditions.h"
 #import "UITextView+ChatKitAdditions.h"
 
-///------------------------------------------------------------------------
-/// @name A drop-in replacement of UITableViewController & UICollectionViewController with chat features.
-///------------------------------------------------------------------------
+/** @name A drop-in replacement of UITableViewController & UICollectionViewController with chat features. */
 @interface SCKChatViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
 
 /** The main table view managed by the controller object. Default view if initialized with -init */

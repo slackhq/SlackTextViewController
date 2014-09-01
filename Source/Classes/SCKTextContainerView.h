@@ -20,9 +20,7 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 @interface SCKInputAccessoryView : UIView
 @end
 
-///------------------------------------------------------------------------
-/// @name A custom text input container used to encapsulate controls.
-///------------------------------------------------------------------------
+/** @name A custom text input container used to encapsulate controls. */
 @interface SCKTextContainerView : UIToolbar
 
 /** The centered text input view. */
@@ -32,13 +30,13 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 /** The right action button action. */
 @property (nonatomic, strong) UIButton *rightButton;
 /** YES if the right button should be hidden animatedly in case the text view has no text in it. Default is YES. */
-@property (nonatomic) BOOL autoHideRightButton;
+@property (nonatomic, readwrite) BOOL autoHideRightButton;
 /** The minimum height of the view. Relies on the intrinsicContentSize values. */
 @property (nonatomic, readonly) CGFloat minHeight;
 /** The maximum height of the view. Relies on maximum amount of lines of the textView. */
 @property (nonatomic, readonly) CGFloat maxHeight;
-/** YES if control's animation should have bouncy effects. Default is NO. */
-@property (nonatomic, assign) BOOL bounces;
+/** YES if the control's animation should have bouncy effects. Default is NO. */
+@property (nonatomic, readwrite) BOOL bounces;
 
 ///------------------------------------------------
 /// @name Text Editing
@@ -46,13 +44,13 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 /** The view displayed on top of the text view container when editing a message. */
 @property (nonatomic, strong) UIView *accessoryView;
-/**  */
+/** The title label displayed in the middle of the accessoryView. */
 @property (nonatomic, strong) UILabel *editorTitle;
-/**  */
+/** The 'cancel' button displayed left in the accessoryView. */
 @property (nonatomic, strong) UIButton *editortLeftButton;
-/**  */
+/** The 'accept' button displayed right in the accessoryView. */
 @property (nonatomic, strong) UIButton *editortRightButton;
-/**  */
+/** A Boolean value indicating whether the control is in edit mode. */
 @property (nonatomic, getter = isEditing) BOOL editing;
 
 /** 

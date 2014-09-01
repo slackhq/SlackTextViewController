@@ -7,8 +7,12 @@
 //
 
 #import "ChatRoomViewController.h"
+#import "ChatViewCell.h"
 
 #import <LoremIpsum/LoremIpsum.h>
+
+static NSString *chatCellIdentifier = @"ChatCell";
+static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
 
 @interface ChatRoomViewController ()
 @property (nonatomic, getter = isReachable) BOOL reachable;
@@ -74,6 +78,10 @@
     self.keyboardPanningEnabled = YES;
     self.inverted = YES;
     
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.tableView registerClass:[ChatViewCell class] forCellReuseIdentifier:chatCellIdentifier];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:autoCompletionCellIdentifier];
+    
     self.textContainerView.autoHideRightButton = YES;
     
     self.textView.placeholder = NSLocalizedString(@"Message", nil);
@@ -81,10 +89,9 @@
     self.textContainerView.backgroundColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1.0];
     self.textView.layer.borderColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0].CGColor;
 
-    //    [self.leftButton setTintColor:[UIColor colorWithRed:154.0/255.0 green:159.0/255.0 blue:166.0/255.0 alpha:1.0]];
+    [self.leftButton setTintColor:[UIColor colorWithRed:154.0/255.0 green:159.0/255.0 blue:166.0/255.0 alpha:1.0]];
     [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
 
-    //    [self.rightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:136.0/255.0 blue:204.0/255.0 alpha:1.0]];
     [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
     
     [self.textContainerView.editorTitle setTextColor:[UIColor darkGrayColor]];
@@ -319,60 +326,68 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    
     if ([tableView isEqual:self.tableView]) {
-        
-        NSString *message = self.messages[indexPath.row];
-        cell.textLabel.text = message;
-        cell.textLabel.font = [UIFont systemFontOfSize:16.0];
-        cell.textLabel.numberOfLines = 0;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        if (!cell.imageView.image)
-        {
-            CGFloat width = 30.0;
-            CGFloat scale = [UIScreen mainScreen].scale;
-            
-            CGSize imgSize = CGSizeMake(width*scale, width*scale);
-            
-            cell.imageView.image = [self blankImageForSize:CGSizeMake(width, width)];
-            cell.imageView.layer.cornerRadius = roundf(width/2.0);
-            cell.imageView.layer.masksToBounds = YES;
-            cell.imageView.layer.shouldRasterize = YES;
-            cell.imageView.layer.rasterizationScale = scale;
-            
-            [LoremIpsum asyncPlaceholderImageWithSize:imgSize
-                                           completion:^(UIImage *image) {
-                                               image = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
-                                               cell.imageView.image = image;
-                                           }];
-        }
+        return [self chatCellForRowAtIndexPath:indexPath];
     }
     else {
-        NSString *item = self.searchResult[indexPath.row];
+        return [self autoCompletionCellForRowAtIndexPath:indexPath];
+    }
+}
 
-        if ([self.foundPrefix isEqualToString:@"#"]) {
-            item = [NSString stringWithFormat:@"# %@", item];
-        }
-        else if ([self.foundPrefix isEqualToString:@":"]) {
-            item = [NSString stringWithFormat:@":%@:", item];
-        }
+- (UITableViewCell *)chatCellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:chatCellIdentifier];
+    
+    NSString *message = self.messages[indexPath.row];
+    cell.textLabel.text = message;
+    cell.textLabel.font = [UIFont systemFontOfSize:16.0];
+    cell.textLabel.numberOfLines = 0;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+    if (!cell.imageView.image)
+    {
+        CGFloat width = 30.0;
+        CGFloat scale = [UIScreen mainScreen].scale;
         
-        cell.textLabel.text = item;
-        cell.textLabel.font = [UIFont systemFontOfSize:14.0];
-        cell.textLabel.numberOfLines = 1;
-        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+        CGSize imgSize = CGSizeMake(width*scale, width*scale);
+        
+        cell.imageView.image = [self blankImageForSize:CGSizeMake(width, width)];
+        cell.imageView.layer.cornerRadius = roundf(width/2.0);
+        cell.imageView.layer.masksToBounds = YES;
+        cell.imageView.layer.shouldRasterize = YES;
+        cell.imageView.layer.rasterizationScale = scale;
+        
+        [LoremIpsum asyncPlaceholderImageWithSize:imgSize
+                                       completion:^(UIImage *image) {
+                                           image = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
+                                           cell.imageView.image = image;
+                                       }];
     }
     
     // Cells must inherit the table view's transform
     // This is very important, since the main table view may be inverted
-    cell.transform = tableView.transform;
+    cell.transform = self.tableView.transform;
+    
+    return cell;
+}
+
+- (UITableViewCell *)autoCompletionCellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:autoCompletionCellIdentifier];
+    
+    NSString *item = self.searchResult[indexPath.row];
+    
+    if ([self.foundPrefix isEqualToString:@"#"]) {
+        item = [NSString stringWithFormat:@"# %@", item];
+    }
+    else if ([self.foundPrefix isEqualToString:@":"]) {
+        item = [NSString stringWithFormat:@":%@:", item];
+    }
+    
+    cell.textLabel.text = item;
+    cell.textLabel.font = [UIFont systemFontOfSize:14.0];
+    cell.textLabel.numberOfLines = 1;
+    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     
     return cell;
 }

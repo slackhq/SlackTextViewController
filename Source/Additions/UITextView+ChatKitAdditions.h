@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+/** @name UITextView additional features used for Slack Chat Kit. */
 @interface UITextView (ChatKitAdditions)
 
 /** The current displayed number of lines. */

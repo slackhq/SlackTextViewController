@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+/** @name UIScrollView additional features used for Slack Chat Kit. */
 @interface UIScrollView (ChatKitAdditions)
 
 /** YES if the scrollView's offset is at the very top. */

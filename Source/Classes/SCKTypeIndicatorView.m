@@ -126,14 +126,14 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
         return;
     }
     
+    NSString *notificationName = visible ? SCKTypeIndicatorViewWillShowNotification : SCKTypeIndicatorViewWillHideNotification;
+    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
+    
     _visible = visible;
     
     if (!visible) {
         [self clean];
     }
-    
-    NSString *notificationName = visible ? SCKTypeIndicatorViewWillShowNotification : SCKTypeIndicatorViewWillHideNotification;
-    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
 }
 
 #pragma mark - Public Methods

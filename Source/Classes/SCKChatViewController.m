@@ -171,7 +171,7 @@
     {
         _typeIndicatorView = [SCKTypeIndicatorView new];
         _typeIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
-        _typeIndicatorView.canResignByTouch = NO;
+        _typeIndicatorView.canResignByTouch = YES;
         
     }
     return _typeIndicatorView;
@@ -606,16 +606,17 @@
 {
     SCKTypeIndicatorView *indicatorView = (SCKTypeIndicatorView *)notification.object;
     
-    // Skips this it's not the expected typing indicator view.
+    // Skips if it's not the expected typing indicator view.
     if (![indicatorView isEqual:self.typeIndicatorView]) {
         return;
     }
     
-    if (![self canShowTypeIndicator]) {
+    // Skips if the typing indicator should not show. Ignores the checking if it's trying to hide.
+    if (![self canShowTypeIndicator] && !self.typeIndicatorView.isVisible) {
         return;
     }
     
-    self.typeIndicatorViewHC.constant = indicatorView.isVisible ? indicatorView.height : 0.0;
+    self.typeIndicatorViewHC.constant = indicatorView.isVisible ?  0.0 : indicatorView.height;
     self.scrollViewHC.constant -= self.typeIndicatorViewHC.constant;
     
     [self.view animateLayoutIfNeededWithBounce:self.bounces
