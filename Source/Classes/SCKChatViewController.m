@@ -531,6 +531,9 @@
     // Checks if it's showing or hidding the keyboard
     BOOL show = [notification.name isEqualToString:UIKeyboardWillShowNotification];
     
+    // Programatically stops scrolling before updating the view constraints (to avoid scrolling glitch)
+    [self.scrollViewProxy stopScrolling];
+    
     CGRect inputFrame = self.textContainerView.frame;
     inputFrame.origin.y  = CGRectGetMinY(endFrame)-CGRectGetHeight(inputFrame);
     

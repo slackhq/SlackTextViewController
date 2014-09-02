@@ -49,9 +49,23 @@ static NSString * const kKeyScrollViewHorizontalIndicator = @"_horizontalScrollI
     return NO;
 }
 
+- (void)stopScrolling
+{
+    if (!self.isDragging) {
+        return;
+    }
+    
+    CGPoint offset = self.contentOffset;
+    offset.y -= 1.0;
+    [self setContentOffset:offset animated:NO];
+    
+    offset.y += 1.0;
+    [self setContentOffset:offset animated:NO];
+}
+
 - (UIView *)verticalScroller
 {
-    if(objc_getAssociatedObject(self, _cmd) == nil) {
+    if (objc_getAssociatedObject(self, _cmd) == nil) {
         objc_setAssociatedObject(self, _cmd, [self safeValueForKey:kKeyScrollViewVerticalIndicator], OBJC_ASSOCIATION_ASSIGN);
     }
     
@@ -60,7 +74,7 @@ static NSString * const kKeyScrollViewHorizontalIndicator = @"_horizontalScrollI
 
 - (UIView *)horizontalScroller
 {
-    if(objc_getAssociatedObject(self, _cmd) == nil) {
+    if (objc_getAssociatedObject(self, _cmd) == nil) {
         objc_setAssociatedObject(self, _cmd, [self safeValueForKey:kKeyScrollViewHorizontalIndicator], OBJC_ASSOCIATION_ASSIGN);
     }
     

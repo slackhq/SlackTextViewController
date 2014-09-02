@@ -31,4 +31,9 @@
  */
 - (void)scrollToBottomAnimated:(BOOL)animated;
 
+/**
+ Stops scrolling, if it was scrolling.
+ */
+- (void)stopScrolling;
+
 @end
