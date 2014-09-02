@@ -76,6 +76,7 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     self.keyboardPanningEnabled = YES;
     self.inverted = YES;
     
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[ChatViewCell class] forCellReuseIdentifier:chatCellIdentifier];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:autoCompletionCellIdentifier];
     

@@ -80,8 +80,15 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.translatesAutoresizingMaskIntoConstraints = NO;
         _textView.font = [UIFont systemFontOfSize:15.0];
         _textView.maxNumberOfLines = 6;
+        
+#if DEBUG
+        _textView.autocorrectionType = UITextAutocorrectionTypeNo;
+        _textView.spellCheckingType = UITextSpellCheckingTypeNo;
+#else
         _textView.autocorrectionType = UITextAutocorrectionTypeDefault;
         _textView.spellCheckingType = UITextSpellCheckingTypeDefault;
+#endif
+        
         _textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
         _textView.keyboardType = UIKeyboardTypeTwitter;
         _textView.returnKeyType = UIReturnKeyDefault;
