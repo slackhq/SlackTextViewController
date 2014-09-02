@@ -42,6 +42,8 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
     self.selectable = YES;
     self.scrollEnabled = YES;
     self.scrollsToTop = NO;
+    self.directionalLockEnabled = YES;
+    self.dataDetectorTypes = UIDataDetectorTypeNone;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
     
@@ -123,6 +125,15 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
     [super setAttributedText:attributedText];
 }
 
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    if (action == @selector(delete:)) {
+        return NO;
+    }
+    
+    return [super canPerformAction:action withSender:sender];
+}
+
 - (void)paste:(id)sender
 {
     UIImage *image = [[UIPasteboard generalPasteboard] image];
@@ -180,7 +191,7 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
         self.placeholderLabel.hidden = (self.text.length > 0) ? YES : NO;
     }
     
-//    [self flashScrollIndicatorsIfNeeded];
+    [self flashScrollIndicatorsIfNeeded];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

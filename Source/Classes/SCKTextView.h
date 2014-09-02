@@ -25,6 +25,6 @@ extern NSString * const SCKTextViewDidShakeNotification;
 /** The maximum number of lines before enabling scrolling. Default is 0 wich means limitless. */
 @property (nonatomic, readwrite) NSUInteger maxNumberOfLines;
 /** YES if the text view is and can still expand it self, depending if the maximum number of lines are reached. */
-@property (nonatomic, readonly, getter = isExpanding) BOOL expanding;
+@property (nonatomic, readonly) BOOL isExpanding;
 
 @end
