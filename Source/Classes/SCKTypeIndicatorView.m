@@ -114,7 +114,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 
 - (CGSize)intrinsicContentSize
 {
-    return CGSizeMake(CGRectGetWidth(self.superview.frame), self.height);
+    return CGSizeMake(UIViewNoIntrinsicMetric, self.height);
 }
 
 

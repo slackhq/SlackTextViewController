@@ -19,9 +19,9 @@ extern NSString * const SCKTextViewDidShakeNotification;
 @interface SCKTextView : UITextView
 
 /** The placeholder text string. */
-@property (nonatomic, strong) NSString *placeholder;
+@property (nonatomic, readwrite) NSString *placeholder;
 /** The placeholder color. */
-@property (nonatomic, strong) UIColor *placeholderColor;
+@property (nonatomic, readwrite) UIColor *placeholderColor;
 /** The maximum number of lines before enabling scrolling. Default is 0 wich means limitless. */
 @property (nonatomic, readwrite) NSUInteger maxNumberOfLines;
 /** YES if the text view is and can still expand it self, depending if the maximum number of lines are reached. */

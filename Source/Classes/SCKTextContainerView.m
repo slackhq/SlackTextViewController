@@ -69,7 +69,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (CGSize)intrinsicContentSize
 {
-    return CGSizeMake(CGRectGetWidth(self.superview.frame), kTextContainerViewHeight);
+    return CGSizeMake(UIViewNoIntrinsicMetric, kTextContainerViewHeight);
 }
 
 - (SCKTextView *)textView

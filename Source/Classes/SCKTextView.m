@@ -58,8 +58,6 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
     [super drawRect:rect];
     
     if (self.text.length == 0 && self.placeholder.length > 0) {
-        self.placeholderLabel.frame = CGRectInset(rect, 5.0, 5.0);
-        self.placeholderLabel.textColor = self.placeholderColor;
         self.placeholderLabel.hidden = NO;
         [self sendSubviewToBack:self.placeholderLabel];
     }
@@ -70,23 +68,40 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
 
 - (CGSize)intrinsicContentSize
 {
-    return CGSizeMake(CGRectGetWidth(self.superview.frame), 32.0);
+    return CGSizeMake(UIViewNoIntrinsicMetric, 32.0);
 }
 
 - (UILabel *)placeholderLabel
 {
-    if (!_placeholderLabel && _placeholder) {
+    if (!_placeholderLabel)
+    {
         _placeholderLabel = [UILabel new];
+        _placeholderLabel.translatesAutoresizingMaskIntoConstraints = NO;
         _placeholderLabel.lineBreakMode = NSLineBreakByWordWrapping;
         _placeholderLabel.numberOfLines = 0;
         _placeholderLabel.font = self.font;
         _placeholderLabel.backgroundColor = [UIColor clearColor];
-        _placeholderLabel.textColor = _placeholderColor;
+        _placeholderLabel.textColor = self.placeholderColor;
         _placeholderLabel.hidden = YES;
         
         [self addSubview:_placeholderLabel];
+        
+        NSDictionary *views = @{@"label": _placeholderLabel};
+        
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[label]-5-|" options:0 metrics:nil views:views]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[label]-8-|" options:0 metrics:nil views:views]];
     }
     return _placeholderLabel;
+}
+
+- (NSString *)placeholder
+{
+    return self.placeholderLabel.text;
+}
+
+- (UIColor *)placeholderColor
+{
+    return self.placeholderLabel.textColor;
 }
 
 - (BOOL)isExpanding
@@ -102,12 +117,12 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
 
 - (void)setPlaceholder:(NSString *)placeholder
 {
-    if ([placeholder isEqualToString:self.placeholder]) {
-        return;
-    }
-    
-    _placeholder = placeholder;
     self.placeholderLabel.text = placeholder;
+}
+
+- (void)setPlaceholderColor:(UIColor *)color
+{
+    self.placeholderLabel.textColor = color;
 }
 
 
