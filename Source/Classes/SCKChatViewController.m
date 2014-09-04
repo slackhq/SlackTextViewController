@@ -534,9 +534,6 @@
     // Programatically stops scrolling before updating the view constraints (to avoid scrolling glitch)
     [self.scrollViewProxy stopScrolling];
     
-    CGRect inputFrame = self.textContainerView.frame;
-    inputFrame.origin.y  = CGRectGetMinY(endFrame)-CGRectGetHeight(inputFrame);
-    
     // Updates the height constraints' constants
     self.keyboardHC.constant = show ? endFrame.size.height : 0.0;
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
