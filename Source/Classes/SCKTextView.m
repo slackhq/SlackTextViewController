@@ -2,8 +2,8 @@
 //  SCKTextView.h
 //  SlackChatKit
 //
-//  Created by Ignacio Romero Z. on 8/15/14.
-//  Copyright (c) 2014 Tiny Speck, Inc. All rights reserved.
+//  Created by Ignacio Romero Zurbuchen on 8/15/14.
+//  Copyright (c) 2014 Slack Technologies, Inc. All rights reserved.
 //
 
 #import "SCKTextView.h"
@@ -56,7 +56,8 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
 - (void)drawRect:(CGRect)rect
 {
     [super drawRect:rect];
-    
+
+    // This covers a few edge cases where the hidden status hasn't yet changed before -setNeedsDisplay is called
     if (self.text.length == 0 && self.placeholder.length > 0) {
         self.placeholderLabel.hidden = NO;
         [self sendSubviewToBack:self.placeholderLabel];

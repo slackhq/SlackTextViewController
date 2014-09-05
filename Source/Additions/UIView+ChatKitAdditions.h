@@ -2,14 +2,18 @@
 //  UIView+ChatKitAdditions.h
 //  Slack
 //
-//  Created by Ignacio Romero Z. on 8/20/14.
-//  Copyright (c) 2014 Tiny Speck, Inc. All rights reserved.
+//  Created by Ignacio Romero Zurbuchen on 8/20/14.
+//  Copyright (c) 2014 Slack Technologies, Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 /** @name UIView additional features used for Slack Chat Kit. */
 @interface UIView (ChatKitAdditions)
+
+// Convenience methods for CGRect calculation
+CGRect adjustEndFrame(CGRect endFrame, UIInterfaceOrientation orientation);
+BOOL isValidKeyboardFrame(CGRect frame);
 
 /**
  Animates the view's constraints by calling layoutIfNeeded.
@@ -37,8 +41,5 @@
  @return An array of matching constraints.
  */
 - (NSArray *)constraintsForAttribute:(NSLayoutAttribute)attribute;
-
-CGRect adjustEndFrame(CGRect endFrame, UIInterfaceOrientation orientation);
-BOOL isValidKeyboardFrame(CGRect frame);
 
 @end

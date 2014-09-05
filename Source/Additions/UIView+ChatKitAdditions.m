@@ -2,13 +2,31 @@
 //  UIView+ChatKitAdditions.m
 //  Slack
 //
-//  Created by Ignacio Romero Z. on 8/20/14.
-//  Copyright (c) 2014 Tiny Speck, Inc. All rights reserved.
+//  Created by Ignacio Romero Zurbuchen on 8/20/14.
+//  Copyright (c) 2014 Slack Technologies, Inc. All rights reserved.
 //
 
 #import "UIView+ChatKitAdditions.h"
 
 @implementation UIView (ChatKitAdditions)
+
+CGRect adjustEndFrame(CGRect endFrame, UIInterfaceOrientation orientation) {
+    
+    // Inverts the end rect for landscape orientation
+    if (UIInterfaceOrientationIsLandscape(orientation)) {
+        endFrame = CGRectMake(0.0, endFrame.origin.x, endFrame.size.height, endFrame.size.width);
+    }
+    
+    return endFrame;
+}
+
+BOOL isValidKeyboardFrame(CGRect frame) {
+    if ((frame.origin.y > CGRectGetHeight([UIScreen mainScreen].bounds)) ||
+        (frame.size.height < 1) || (frame.size.width < 1) || (frame.origin.y < 0)) {
+        return NO;
+    }
+    return YES;
+}
 
 - (void)animateLayoutIfNeededWithBounce:(BOOL)bounce curve:(NSInteger)curve animations:(void (^)(void))animations
 {
@@ -52,27 +70,6 @@
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstAttribute = %d", attribute];
     return [self.constraints filteredArrayUsingPredicate:predicate];
-}
-
-
-#pragma mark - Convenience Methods
-
-CGRect adjustEndFrame(CGRect endFrame, UIInterfaceOrientation orientation) {
-    
-    // Inverts the end rect for landscape orientation
-    if (UIInterfaceOrientationIsLandscape(orientation)) {
-        endFrame = CGRectMake(0.0, endFrame.origin.x, endFrame.size.height, endFrame.size.width);
-    }
-    
-    return endFrame;
-}
-
-BOOL isValidKeyboardFrame(CGRect frame) {
-    if ((frame.origin.y > CGRectGetHeight([UIScreen mainScreen].bounds)) ||
-        (frame.size.height < 1) || (frame.size.width < 1) || (frame.origin.y < 0)) {
-        return NO;
-    }
-    return YES;
 }
 
 @end

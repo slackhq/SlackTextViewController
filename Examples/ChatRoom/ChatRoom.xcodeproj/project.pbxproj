@@ -207,7 +207,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0510;
-				ORGANIZATIONNAME = "Tiny Speck, Inc.";
+				ORGANIZATIONNAME = "Slack Technologies, Inc.";
 				TargetAttributes = {
 					4F3EDB6C199ED00F004C15D6 = {
 						TestTargetID = 4F3EDB48199ED00F004C15D6;

@@ -2,8 +2,8 @@
 //  SCKTypeIndicatorView.m
 //  Slack
 //
-//  Created by Ignacio Romero Z. on 5/13/14.
-//  Copyright (c) 2014 Tiny Speck, Inc. All rights reserved.
+//  Created by Ignacio Romero Zurbuchen on 5/13/14.
+//  Copyright (c) 2014 Slack Technologies, Inc. All rights reserved.
 //
 
 #import "SCKTypeIndicatorView.h"

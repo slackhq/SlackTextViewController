@@ -2,8 +2,8 @@
 //  ChatViewCell.h
 //  ChatRoom
 //
-//  Created by Ignacio Romero Z. on 9/1/14.
-//  Copyright (c) 2014 Tiny Speck, Inc. All rights reserved.
+//  Created by Ignacio Romero Zurbuchen on 9/1/14.
+//  Copyright (c) 2014 Slack Technologies, Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
