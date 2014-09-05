@@ -1,9 +1,11 @@
 //
 //  UIView+ChatKitAdditions.m
-//  Slack
+//  SlackChatKit
+//  https://github.com/tinyspeck/slack-chat-kit
 //
 //  Created by Ignacio Romero Zurbuchen on 8/20/14.
 //  Copyright (c) 2014 Slack Technologies, Inc. All rights reserved.
+//  Licence: MIT-Licence
 //
 
 #import "UIView+ChatKitAdditions.h"

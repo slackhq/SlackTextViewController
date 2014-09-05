@@ -1,9 +1,11 @@
 //
 //  SCKChatViewController.m
 //  SlackChatKit
+//  https://github.com/tinyspeck/slack-chat-kit
 //
 //  Created by Ignacio Romero Zurbuchen on 8/15/14.
 //  Copyright (c) 2014 Slack Technologies, Inc. All rights reserved.
+//  Licence: MIT-Licence
 //
 
 #import "SCKChatViewController.h"

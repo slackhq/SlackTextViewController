@@ -1,14 +1,16 @@
 //
 //  UITextView+ChatKitAdditions.h
-//  Slack
+//  SlackChatKit
+//  https://github.com/tinyspeck/slack-chat-kit
 //
 //  Created by Ignacio Romero Zurbuchen on 8/19/14.
 //  Copyright (c) 2014 Slack Technologies, Inc. All rights reserved.
+//  Licence: MIT-Licence
 //
 
 #import <UIKit/UIKit.h>
 
-/** @name UITextView additional features used for Slack Chat Kit. */
+/** @name UITextView additional features used for SlackChatKit. */
 @interface UITextView (ChatKitAdditions)
 
 /** The current displayed number of lines. */
