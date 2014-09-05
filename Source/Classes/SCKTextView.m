@@ -59,8 +59,8 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
 {
     [super drawRect:rect];
 
-    // This covers a few edge cases where the hidden status hasn't yet changed before -setNeedsDisplay is called
     if (self.text.length == 0 && self.placeholder.length > 0) {
+        self.placeholderLabel.frame = CGRectInset(rect, 5.0, 5.0);
         self.placeholderLabel.hidden = NO;
         [self sendSubviewToBack:self.placeholderLabel];
     }
@@ -79,20 +79,15 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
     if (!_placeholderLabel)
     {
         _placeholderLabel = [UILabel new];
-        _placeholderLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        _placeholderLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        _placeholderLabel.numberOfLines = 0;
+        _placeholderLabel.clipsToBounds = NO;
+        _placeholderLabel.autoresizesSubviews = NO;
+        _placeholderLabel.numberOfLines = 1;
         _placeholderLabel.font = self.font;
         _placeholderLabel.backgroundColor = [UIColor clearColor];
         _placeholderLabel.textColor = self.placeholderColor;
         _placeholderLabel.hidden = YES;
         
         [self addSubview:_placeholderLabel];
-        
-        NSDictionary *views = @{@"label": _placeholderLabel};
-        
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[label]-5-|" options:0 metrics:nil views:views]];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[label]-8-|" options:0 metrics:nil views:views]];
     }
     return _placeholderLabel;
 }
