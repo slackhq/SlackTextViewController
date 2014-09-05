@@ -43,12 +43,12 @@
 
 #pragma mark - Initializer
 
-- (id)init
+- (instancetype)init
 {
-    return [self initWithStyle:UITableViewStylePlain];
+    return [self initWithTableViewStyle:UITableViewStylePlain];
 }
 
-- (instancetype)initWithStyle:(UITableViewStyle)style
+- (instancetype)initWithTableViewStyle:(UITableViewStyle)style
 {
     if (self = [super init]) {
         [self tableViewWithStyle:style];

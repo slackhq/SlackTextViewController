@@ -54,7 +54,7 @@
  @param style A constant that specifies the style of main table view that the controller object is to manage (UITableViewStylePlain or UITableViewStyleGrouped).
  @return An initialized SCKChatViewController object or nil if the object could not be created.
  */
-- (instancetype)initWithStyle:(UITableViewStyle)style;
+- (instancetype)initWithTableViewStyle:(UITableViewStyle)style;
 
 /**
  Initializes a chat view controller controller and configures the collection view with the provided layout.
