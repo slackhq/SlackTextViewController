@@ -9,6 +9,7 @@
 //
 
 #import "SCKTextView.h"
+#import "UITextView+ChatKitAdditions.h"
 
 NSString * const SCKTextViewTextWillChangeNotification = @"com.slack.chatkit.SCKTextView.willChangeText";
 NSString * const SCKTextViewSelectionDidChangeNotification = @"com.slack.chatkit.SCKTextView.didChangeSelection";

@@ -9,7 +9,6 @@
 //
 
 #import "SCKChatViewController.h"
-#import "UIView+ChatKitAdditions.h"
 
 @interface SCKChatViewController () <UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
