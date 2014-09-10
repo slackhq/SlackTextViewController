@@ -181,14 +181,14 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     [super textWillUpdate];
     
-    // Useful to sending a pong message to notify that the user is typing...
+    // Useful for notifying when user will type some text
 }
 
 - (void)textDidUpdate:(BOOL)animated
 {
     [super textDidUpdate:animated];
     
-    // Useful to sending a pong message to notify that the user is typing...
+    // Useful for notifying when user did type some text
 }
 
 - (void)didPressLeftButton:(id)sender
