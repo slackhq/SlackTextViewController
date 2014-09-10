@@ -884,9 +884,6 @@
 
 - (void)setupViewConstraints
 {
-    // Removes all constraints
-    [self.view removeConstraints:self.view.constraints];
-    
     NSDictionary *views = @{@"scrollView": self.scrollViewProxy,
                             @"autoCompletionView": self.autoCompletionView,
                             @"typeIndicatorView": self.typeIndicatorView,

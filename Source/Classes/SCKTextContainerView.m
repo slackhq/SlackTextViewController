@@ -351,9 +351,6 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (void)setupViewConstraints
 {
-    // Removes all constraints
-    [self removeConstraints:self.constraints];
-
     UIImage *leftButtonImg = [self.leftButton imageForState:UIControlStateNormal];
     
     [self.rightButton sizeToFit];
@@ -371,12 +368,13 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
                               @"ver" : @(kTextViewVerticalPadding),
                               @"leftVerMargin" : @(leftVerMargin),
                               @"rightVerMargin" : @(rightVerMargin),
+                              @"minTextViewHeight" : @(self.textView.intrinsicContentSize.height),
                               };
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==hor)-[leftButton(0)]-(==hor)-[textView]-(==hor)-[rightButton(0)]-(==hor)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==hor)-[leftButton(0)]-(<=hor)-[textView]-(<=hor)-[rightButton(0)]-(==hor)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[leftButton(0)]-(0)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=rightVerMargin)-[rightButton]-(==rightVerMargin)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[accessoryView(0)]-(==ver)-[textView(==34@750)]-(==ver)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(<=rightVerMargin)-[rightButton]-(<=rightVerMargin)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[accessoryView(0)]-(<=ver)-[textView(>=minTextViewHeight@750)]-(==ver)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[accessoryView]|" options:0 metrics:metrics views:views]];
 
     NSArray *heightConstraints = [self constraintsForAttribute:NSLayoutAttributeHeight];
