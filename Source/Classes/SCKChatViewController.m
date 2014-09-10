@@ -27,7 +27,6 @@
 @property (nonatomic, readonly, getter = isPanningKeyboard) BOOL panningKeyboard;
 
 // Used for Auto-Completion
-@property (nonatomic, strong) NSMutableArray *registeredPrefixes;
 @property (nonatomic, readonly) NSRange foundPrefixRange;
 
 @end
@@ -675,22 +674,25 @@
 
 - (void)registerPrefixesForAutoCompletion:(NSArray *)keys
 {
-    // Creates the array if not exitent
-    if (!self.registeredPrefixes) {
-        self.registeredPrefixes = [[NSMutableArray alloc] initWithCapacity:keys.count];
-    }
+    NSMutableArray *array = [NSMutableArray arrayWithArray:self.registeredPrefixes];
     
     for (NSString *key in keys) {
-        // Skips if the prefix is not a valid string or longer than 1 letter
-        if (![key isKindOfClass:[NSString class]] || key.length == 0 || key.length > 1) {
+        // Skips if the prefix is not a valid string
+        if (![key isKindOfClass:[NSString class]] || key.length == 0) {
             continue;
         }
         
         // Adds the prefix if not contained already
-        if (![self.registeredPrefixes containsObject:key]) {
-            [self.registeredPrefixes addObject:key];
+        if (![array containsObject:key]) {
+            [array addObject:key];
         }
     }
+    
+    if (_registeredPrefixes) {
+        _registeredPrefixes = nil;
+    }
+    
+    _registeredPrefixes = [[NSArray alloc] initWithArray:array];
 }
 
 - (void)processTextForAutoCompletion

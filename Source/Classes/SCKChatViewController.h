@@ -201,6 +201,8 @@
 @property (nonatomic, readonly) NSString *foundWord;
 /** YES if the auto-completion mode is active. */
 @property (nonatomic, readonly, getter = isAutoCompleting) BOOL autoCompleting;
+/** An array containing all the prefix strings registered for auto-completion. */
+@property (nonatomic, readonly) NSArray *registeredPrefixes;
 
 /**
  Registers any string key for auto-completion detection, useful for user mentions and/or hashtags auto-completion.
