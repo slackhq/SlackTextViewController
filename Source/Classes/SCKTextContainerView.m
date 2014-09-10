@@ -68,12 +68,20 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 }
 
 
-#pragma mark - Getters
+#pragma mark - UIView Overrides
 
 - (CGSize)intrinsicContentSize
 {
     return CGSizeMake(UIViewNoIntrinsicMetric, kTextContainerViewHeight);
 }
+
++ (BOOL)requiresConstraintBasedLayout
+{
+    return YES;
+}
+
+
+#pragma mark - Getters
 
 - (SCKTextView *)textView
 {
@@ -172,7 +180,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
                                   @"ver" : @(kTextViewVerticalPadding),
                                   };
         
-        [_accessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==hor)-[leftButton(60)]-(==hor)-[label(>=0)]-(==hor)-[rightButton(60)]-(==hor)-|" options:0 metrics:metrics views:views]];
+        [_accessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==hor)-[leftButton(60)]-(==hor)-[label(>=0)]-(==hor)-[rightButton(60)]-(<=hor)-|" options:0 metrics:metrics views:views]];
         [_accessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[leftButton]|" options:0 metrics:metrics views:views]];
         [_accessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[rightButton]|" options:0 metrics:metrics views:views]];
         [_accessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[label]|" options:0 metrics:metrics views:views]];

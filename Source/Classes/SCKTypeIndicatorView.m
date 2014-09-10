@@ -51,6 +51,19 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
 }
 
 
+#pragma mark - UIView Overrides
+
+- (CGSize)intrinsicContentSize
+{
+    return CGSizeMake(UIViewNoIntrinsicMetric, self.height);
+}
+
++ (BOOL)requiresConstraintBasedLayout
+{
+    return YES;
+}
+
+
 #pragma mark - Getters
 
 - (UILabel *)indicatorLabel
@@ -112,11 +125,6 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
     }
     
     return nil;
-}
-
-- (CGSize)intrinsicContentSize
-{
-    return CGSizeMake(UIViewNoIntrinsicMetric, self.height);
 }
 
 
@@ -251,7 +259,7 @@ NSString * const SCKTypeIndicatorViewIdentifier = @"identifier";
     NSDictionary *metrics = @{@"lineHeight": lineHeight, @"padding": padding};
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=padding)-[label(==lineHeight)]-(<=padding)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==40)-[label]-(==20)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==40)-[label]-(<=20)-|" options:0 metrics:metrics views:views]];
     
     [self layoutIfNeeded];
 }

@@ -68,12 +68,20 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
 }
 
 
-#pragma mark - Getters
+#pragma mark - UIView Overrides
 
 - (CGSize)intrinsicContentSize
 {
     return CGSizeMake(UIViewNoIntrinsicMetric, 32.0);
 }
+
++ (BOOL)requiresConstraintBasedLayout
+{
+    return YES;
+}
+
+
+#pragma mark - Getters
 
 - (UILabel *)placeholderLabel
 {
