@@ -84,6 +84,19 @@
 }
 
 
+#pragma mark - View lifecycle
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
+
+
 #pragma mark - Getters
 
 - (UITableView *)tableViewWithStyle:(UITableViewStyle)style
@@ -228,6 +241,7 @@
 - (CGFloat)appropriateScrollViewHeight
 {
     CGFloat height = self.view.bounds.size.height;
+
     height -= self.keyboardHC.constant;
     height -= self.containerViewHC.constant;
     height -= self.autoCompletionViewHC.constant;
@@ -896,8 +910,8 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[typeIndicatorView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[textContainerView]|" options:0 metrics:nil views:views]];
 
-    NSArray *heightConstraints = [self.view constraintsForAttribute:NSLayoutAttributeHeight];
     NSArray *bottomConstraints = [self.view constraintsForAttribute:NSLayoutAttributeBottom];
+    NSArray *heightConstraints = [self.view constraintsForAttribute:NSLayoutAttributeHeight];
     
     self.scrollViewHC = heightConstraints[0];
     self.autoCompletionViewHC = heightConstraints[1];
@@ -911,8 +925,6 @@
     if (self.isEditing) {
         self.containerViewHC.constant += kEditingViewHeight;
     }
-    
-    [self.view layoutIfNeeded];
 }
 
 
