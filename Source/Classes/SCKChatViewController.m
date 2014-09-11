@@ -277,6 +277,11 @@
         return;
     }
     
+    // Disable this feature for iOS8 until proper fix
+    if ([UIInputViewController class]) {
+        return;
+    }
+    
     _keyboardPanningEnabled = enabled;
     
     if (enabled) {
