@@ -89,7 +89,6 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     {
         _textView = [SCKTextView new];
         _textView.translatesAutoresizingMaskIntoConstraints = NO;
-//        _textView.layoutMargins = UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0);
         _textView.font = [UIFont systemFontOfSize:15.0];
         _textView.maxNumberOfLines = 6;
         
