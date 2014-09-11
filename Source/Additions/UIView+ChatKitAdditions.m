@@ -43,7 +43,7 @@ BOOL isValidKeyboardFrame(CGRect frame) {
                               delay:0.0
              usingSpringWithDamping:0.7
               initialSpringVelocity:0.7
-                            options:(curve << 16)|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews
+                            options:(curve << 16)|UIViewAnimationOptionBeginFromCurrentState
                          animations:^{
                              [self layoutIfNeeded];
                              
