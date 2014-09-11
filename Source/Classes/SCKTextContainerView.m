@@ -87,8 +87,9 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 {
     if (!_textView)
     {
-        _textView = [[SCKTextView alloc] init];
+        _textView = [SCKTextView new];
         _textView.translatesAutoresizingMaskIntoConstraints = NO;
+//        _textView.layoutMargins = UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0);
         _textView.font = [UIFont systemFontOfSize:15.0];
         _textView.maxNumberOfLines = 6;
         
@@ -205,7 +206,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     }
 }
 
-- (CGFloat)appropriaterightButtonWidth
+- (CGFloat)appropriateRightButtonWidth
 {
     NSString *title = [self.rightButton titleForState:UIControlStateNormal];
     CGSize rigthButtonSize = [title sizeWithAttributes:@{NSFontAttributeName: self.rightButton.titleLabel.font}];
@@ -218,7 +219,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     return rigthButtonSize.width+kTextViewHorizontalPadding;
 }
 
-- (CGFloat)appropriaterightButtonMargin
+- (CGFloat)appropriateRightButtonMargin
 {
     if (self.autoHideRightButton) {
         if (self.textView.text.length == 0) {
@@ -245,7 +246,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _autoHideRightButton = hide;
     }
     
-    self.rightButtonWC.constant = [self appropriaterightButtonWidth];
+    self.rightButtonWC.constant = [self appropriateRightButtonWidth];
     [self layoutIfNeeded];
 }
 
@@ -329,14 +330,14 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     
     if (self.autoHideRightButton && !self.isEditing)
     {
-        CGFloat rightButtonNewWidth = [self appropriaterightButtonWidth];
+        CGFloat rightButtonNewWidth = [self appropriateRightButtonWidth];
         
         if (self.rightButtonWC.constant == rightButtonNewWidth) {
             return;
         }
         
         self.rightButtonWC.constant = rightButtonNewWidth;
-        self.rightMarginWC.constant = [self appropriaterightButtonMargin];
+        self.rightMarginWC.constant = [self appropriateRightButtonMargin];
         
         if (rightButtonNewWidth > 0) {
             [self.rightButton sizeToFit];
@@ -373,8 +374,8 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==hor)-[leftButton(0)]-(<=hor)-[textView]-(<=hor)-[rightButton(0)]-(==hor)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[leftButton(0)]-(0)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(<=rightVerMargin)-[rightButton]-(<=rightVerMargin)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[accessoryView(0)]-(<=ver)-[textView(>=minTextViewHeight@750)]-(==ver)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=rightVerMargin)-[rightButton]-(<=rightVerMargin)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[accessoryView(0)]-(==ver)-[textView(>=minTextViewHeight@750)]-(==ver)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[accessoryView]|" options:0 metrics:metrics views:views]];
 
     NSArray *heightConstraints = [self constraintsForAttribute:NSLayoutAttributeHeight];
@@ -394,31 +395,31 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (void)updateConstraintConstants
 {
-    CGFloat null = 0.0;
+    CGFloat zero = 0.0;
 
     if (self.isEditing)
     {
         self.accessoryViewHC.constant = kEditingViewHeight;
-        self.leftButtonWC.constant = null;
-        self.leftButtonHC.constant = null;
-        self.leftMarginWC.constant = null;
-        self.bottomMarginWC.constant = null;
-        self.rightButtonWC.constant = null;
-        self.rightMarginWC.constant = null;
+        self.leftButtonWC.constant = zero;
+        self.leftButtonHC.constant = zero;
+        self.leftMarginWC.constant = zero;
+        self.bottomMarginWC.constant = zero;
+        self.rightButtonWC.constant = zero;
+        self.rightMarginWC.constant = zero;
     }
     else
     {
-        self.accessoryViewHC.constant = null;
+        self.accessoryViewHC.constant = zero;
 
         CGSize leftButtonSize = [self.leftButton imageForState:UIControlStateNormal].size;
         
         self.leftButtonWC.constant = roundf(leftButtonSize.width);
         self.leftButtonHC.constant = roundf(leftButtonSize.height);
-        self.leftMarginWC.constant = (leftButtonSize.width > 0) ? kTextViewHorizontalPadding : null;
+        self.leftMarginWC.constant = (leftButtonSize.width > 0) ? kTextViewHorizontalPadding : zero;
         self.bottomMarginWC.constant = roundf((self.minHeight - leftButtonSize.height) / 2.0);
         
-        self.rightButtonWC.constant = [self appropriaterightButtonWidth];
-        self.rightMarginWC.constant = [self appropriaterightButtonMargin];
+        self.rightButtonWC.constant = [self appropriateRightButtonWidth];
+        self.rightMarginWC.constant = [self appropriateRightButtonMargin];
     }
 }
 

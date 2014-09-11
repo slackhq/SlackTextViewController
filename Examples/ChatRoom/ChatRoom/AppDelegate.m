@@ -21,7 +21,7 @@
     
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[ChatRoomViewController new]];
     
-    [self.window makeKeyAndVisible];
+     [self.window makeKeyAndVisible];
     
     return YES;
 }
