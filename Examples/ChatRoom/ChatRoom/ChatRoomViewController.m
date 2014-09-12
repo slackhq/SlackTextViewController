@@ -254,6 +254,10 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     NSString *prefix = self.foundPrefix;
     NSString *word = self.foundWord;
     
+    NSLog(@"%s",__FUNCTION__);
+    NSLog(@"prefix : %@", prefix);
+    NSLog(@"word : %@", word);
+
     self.searchResult = nil;
     
     if ([prefix isEqualToString:@"@"])

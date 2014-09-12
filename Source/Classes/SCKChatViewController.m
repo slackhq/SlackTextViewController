@@ -756,6 +756,11 @@
         if (word.length > 0) {
             // Removes the first character, containing the symbol prefix
             _foundWord = [word substringFromIndex:1];
+            
+            // If the prefix is still contained in the word, cancels
+            if ([_foundWord rangeOfString:_foundPrefix].location != NSNotFound) {
+                return [self cancelAutoCompletion];
+            }
         }
         else {
             return [self cancelAutoCompletion];
