@@ -188,6 +188,11 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     return _accessoryView;
 }
 
+- (NSUInteger)defaultNumberOfLines
+{
+    
+}
+
 - (CGFloat)minHeight
 {
     return self.intrinsicContentSize.height;
