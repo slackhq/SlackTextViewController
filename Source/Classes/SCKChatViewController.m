@@ -371,7 +371,10 @@
         self.scrollViewHC.constant = [self appropriateScrollViewHeight];
         
         if (animated) {
-            [self.view animateLayoutIfNeededWithBounce:self.bounces
+            
+            BOOL bounces = self.bounces && [self.textView isFirstResponder];
+            
+            [self.view animateLayoutIfNeededWithBounce:bounces
                                                  options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
                                             animations:^{
                                                 if (self.isEditing) {
@@ -542,6 +545,10 @@
     
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    
+    CGFloat duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+
+    
     
     endFrame = adjustEndFrame(endFrame, self.interfaceOrientation);
     

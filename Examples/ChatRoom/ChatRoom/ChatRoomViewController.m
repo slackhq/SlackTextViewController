@@ -134,6 +134,14 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     [self didChangeReachability];
 }
 
+- (void)editCellMessage:(UIGestureRecognizer *)gesture
+{
+    ChatViewCell *cell = (ChatViewCell *)gesture.view;
+    NSString *message = self.messages[cell.indexPath.row];
+    
+    [self editText:message];
+}
+
 - (void)editRandomMessage:(id)sender
 {
     int sentences = (arc4random() % 10);
@@ -341,9 +349,15 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     ChatViewCell *cell = (ChatViewCell *)[self.tableView dequeueReusableCellWithIdentifier:chatCellIdentifier];
     
+    if (!cell.textLabel.text) {
+        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(editCellMessage:)];
+        [cell addGestureRecognizer:longPress];
+    }
+    
     NSString *message = self.messages[indexPath.row];
     cell.textLabel.text = message;
-
+    cell.indexPath = indexPath;
+    
     if (cell.hasPlaceholder)
     {
         CGFloat scale = [UIScreen mainScreen].scale;

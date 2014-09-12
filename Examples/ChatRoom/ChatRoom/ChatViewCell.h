@@ -14,5 +14,6 @@
 @interface ChatViewCell : UITableViewCell
 
 @property (nonatomic) BOOL hasPlaceholder;
+@property (nonatomic, strong) NSIndexPath *indexPath;
 
 @end
