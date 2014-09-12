@@ -508,10 +508,18 @@
         return;
     }
     
+    // Updates the constraints before inserting text, if not first responder yet
+    if (![self.textView isFirstResponder]) {
+        [self.textContainerView beginTextEditing];
+    }
+
     [self.textView setText:text];
     [self.textView scrollToCaretPositonAnimated:YES];
-
-    [self.textContainerView beginTextEditing];
+    
+    // Updates the constraints after inserting text, if already first responder
+    if ([self.textView isFirstResponder]) {
+        [self.textContainerView beginTextEditing];
+    }
     
     if (![self.textView isFirstResponder]) {
         [self presentKeyboard:YES];
