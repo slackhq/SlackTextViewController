@@ -254,10 +254,6 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     NSString *prefix = self.foundPrefix;
     NSString *word = self.foundWord;
     
-    NSLog(@"%s",__FUNCTION__);
-    NSLog(@"prefix : %@", prefix);
-    NSLog(@"word : %@", word);
-
     self.searchResult = nil;
     
     if ([prefix isEqualToString:@"@"])
@@ -265,25 +261,25 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
         array = self.users;
         
         if (word.length > 0) {
-            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self != %@", word, word]];
+            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self !=[c] %@", word, word]];
         }
         
         // Ignores 'me'
         NSString *me = [self.users firstObject];
-        array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self != %@", me]];
+        array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self !=[c] %@", me]];
     }
     else if ([prefix isEqualToString:@"#"])
     {
         array = self.channels;
         if (word.length > 0) {
-            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self != %@", word, word]];
+            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self !=[c] %@", word, word]];
         }
     }
     else if ([prefix isEqualToString:@"/"])
     {
         array = self.commands;
         if (word.length > 0) {
-            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self != %@", word, word]];
+            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self !=[c] %@", word, word]];
         }
     }
     else if ([prefix isEqualToString:@":"] && word.length > 0) {
@@ -293,6 +289,8 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     if (array.count > 0) {
         array = [array sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     }
+    
+    NSLog(@"array : %@", array);
     
     self.searchResult = [[NSMutableArray alloc] initWithArray:array];
     
