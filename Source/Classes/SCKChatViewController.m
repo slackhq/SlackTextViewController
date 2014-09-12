@@ -727,8 +727,7 @@
     
     // No need to process for auto-completion if there is no text to process
     if (text.length == 0) {
-        [self cancelAutoCompletion];
-        return;
+        return [self cancelAutoCompletion];
     }
 
     NSRange range;
@@ -738,7 +737,7 @@
         
         NSRange keyRange = [word rangeOfString:sign];
         
-        if (keyRange.location == 0 || (keyRange.length == 1)) {
+        if (keyRange.location == 0 || (keyRange.length >= 1)) {
             
             // Captures the detected symbol prefix
             _foundPrefix = sign;
@@ -746,6 +745,11 @@
             // Used later for replacing the detected range with a new string alias returned in -acceptAutoCompletionWithString:
             _foundPrefixRange = NSMakeRange(range.location, sign.length);
         }
+    }
+    
+    // Cancel auto-completion if the cursor is placed before the prefix
+    if (self.textView.selectedRange.location <= _foundPrefixRange.location) {
+        return [self cancelAutoCompletion];
     }
     
     if (self.foundPrefix.length > 0) {
@@ -781,7 +785,7 @@
 {
     _foundPrefix = nil;
     _foundWord = nil;
-    _foundPrefixRange = NSRangeFromString(nil);
+    _foundPrefixRange = NSMakeRange(0,0);
     
     [self.autoCompletionView setContentOffset:CGPointZero];
     
@@ -797,10 +801,9 @@
     }
 
     SCKTextView *textView = self.textView;
-    NSRange insertionRange = textView.selectedRange;
     
     NSRange range = NSMakeRange(self.foundPrefixRange.location+1, self.foundWord.length);
-    insertionRange = [textView insertText:string inRange:range];
+    NSRange insertionRange = [textView insertText:string inRange:range];
     
     textView.selectedRange = NSMakeRange(insertionRange.location, 0);
     
