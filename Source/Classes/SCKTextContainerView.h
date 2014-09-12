@@ -9,7 +9,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SCKTextView.h"
+
+@class SCKChatViewController;
+@class SCKTextView;
 
 #define kTextViewVerticalPadding 5
 #define kTextViewHorizontalPadding 8
@@ -24,6 +26,9 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 /** @name A custom text input container used to encapsulate controls. */
 @interface SCKTextContainerView : UIToolbar
+
+/** A weak reference to the core view controller. */
+@property (nonatomic, weak) SCKChatViewController *controller;
 
 /** The centered text input view.
  @discussion The maximum number of lines is configured by default, to best fit each devices dimensions. You can overri
@@ -43,8 +48,6 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 @property (nonatomic, readonly) CGFloat minHeight;
 /** The maximum height of the view. Relies on maximum amount of lines of the textView. */
 @property (nonatomic, readonly) CGFloat maxHeight;
-/** YES if the control's animation should have bouncy effects. Default is NO. */
-@property (nonatomic, readwrite) BOOL bounces;
 
 ///------------------------------------------------
 /// @name Text Editing

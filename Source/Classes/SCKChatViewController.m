@@ -168,7 +168,7 @@
     {
         _textContainerView = [SCKTextContainerView new];
         _textContainerView.translatesAutoresizingMaskIntoConstraints = NO;
-        _textContainerView.bounces = self.bounces;
+        _textContainerView.controller = self;
         
         [_textContainerView.leftButton addTarget:self action:@selector(didPressLeftButton:) forControlEvents:UIControlEventTouchUpInside];
         [_textContainerView.rightButton addTarget:self action:@selector(didPressRightButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -257,7 +257,6 @@
 - (void)setbounces:(BOOL)bounces
 {
     _bounces = bounces;
-    _textContainerView.bounces = self.bounces;
 }
 
 - (void)setAutoCompleting:(BOOL)autoCompleting

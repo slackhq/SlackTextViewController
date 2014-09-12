@@ -9,6 +9,9 @@
 //
 
 #import "SCKTextContainerView.h"
+#import "SCKChatViewController.h"
+#import "SCKTextView.h"
+
 #import "UITextView+ChatKitAdditions.h"
 #import "UIView+ChatKitAdditions.h"
 
@@ -43,7 +46,6 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 {
     self.translucent = NO;
     self.autoHideRightButton = YES;
-    self.bounces = NO;
     self.editing = NO;
     
     [self addSubview:self.accessoryView];
@@ -357,7 +359,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
             [self.rightButton sizeToFit];
         }
         
-        BOOL bounces = self.bounces && [self.textView isFirstResponder];
+        BOOL bounces = self.controller.bounces && [self.textView isFirstResponder];
         
         [self animateLayoutIfNeededWithBounce:bounces
                                       options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState

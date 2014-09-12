@@ -11,6 +11,7 @@
 #import <UIKit/UIKit.h>
 #import "SCKTextContainerView.h"
 #import "SCKTypeIndicatorView.h"
+#import "SCKTextView.h"
 
 #import "UIScrollView+ChatKitAdditions.h"
 #import "UITextView+ChatKitAdditions.h"
