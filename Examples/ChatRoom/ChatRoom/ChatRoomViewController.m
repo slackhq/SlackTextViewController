@@ -35,7 +35,7 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     self = [super initWithTableViewStyle:UITableViewStylePlain];
     if (self) {
         
-        self.users = @[[LoremIpsum firstName], [LoremIpsum firstName], [LoremIpsum firstName], [LoremIpsum firstName], [LoremIpsum firstName], [LoremIpsum firstName]];
+        self.users = @[@"Anna", @"Alicia", @"Arnold", @"Armando", @"Antonio", @"Brad", @"Catalaya", @"Christoph"];
         self.channels = @[[LoremIpsum word], [LoremIpsum word], [LoremIpsum word], [LoremIpsum word], [LoremIpsum word], [LoremIpsum word], [LoremIpsum word], [LoremIpsum word]];
         self.emojis = @[@"m", @"man", @"machine", @"block-a", @"block-b", @"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
         self.commands = @[@"help", @"away", @"close", @"color", @"colors", @"feedback", @"invite", @"me", @"msg", @"dm", @"open"];

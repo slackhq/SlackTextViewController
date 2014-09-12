@@ -342,7 +342,9 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
             [self.rightButton sizeToFit];
         }
         
-        [self animateLayoutIfNeededWithBounce:self.bounces curve:UIViewAnimationOptionCurveEaseInOut animations:NULL];
+        [self animateLayoutIfNeededWithBounce:self.bounces
+                                      options:UIViewAnimationOptionCurveEaseInOut
+                                   animations:NULL];
     }
 }
 
@@ -374,7 +376,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(<=hor)-[leftButton(0)]-(<=hor)-[textView]-(<=hor)-[rightButton(0)]-(<=hor)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[leftButton(0)]-(0)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=rightVerMargin)-[rightButton]-(<=rightVerMargin)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[accessoryView(0)]-(<=ver)-[textView(==minTextViewHeight@750)]-(<=ver)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[accessoryView(0)]-(<=ver)-[textView(==minTextViewHeight@250)]-(==ver)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[accessoryView]|" options:0 metrics:metrics views:views]];
 
     NSArray *heightConstraints = [self constraintsForAttribute:NSLayoutAttributeHeight];

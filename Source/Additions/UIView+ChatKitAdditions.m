@@ -30,20 +30,20 @@ BOOL isValidKeyboardFrame(CGRect frame) {
     return YES;
 }
 
-- (void)animateLayoutIfNeededWithBounce:(BOOL)bounce curve:(NSInteger)curve animations:(void (^)(void))animations
+- (void)animateLayoutIfNeededWithBounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations
 {
     NSTimeInterval duration = bounce ? 0.5 : 0.2;
-    [self animateLayoutIfNeededWithDuration:duration bounce:bounce curve:curve animations:animations];
+    [self animateLayoutIfNeededWithDuration:duration bounce:bounce options:options animations:animations];
 }
 
-- (void)animateLayoutIfNeededWithDuration:(NSTimeInterval)duration bounce:(BOOL)bounce curve:(NSInteger)curve animations:(void (^)(void))animations
+- (void)animateLayoutIfNeededWithDuration:(NSTimeInterval)duration bounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations
 {
     if (bounce) {
         [UIView animateWithDuration:duration
                               delay:0.0
              usingSpringWithDamping:0.7
               initialSpringVelocity:0.7
-                            options:(curve << 16)|UIViewAnimationOptionBeginFromCurrentState
+                            options:options
                          animations:^{
                              [self layoutIfNeeded];
                              
@@ -56,7 +56,7 @@ BOOL isValidKeyboardFrame(CGRect frame) {
     else {
         [UIView animateWithDuration:duration
                               delay:0.0
-                            options:(curve << 16)|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionLayoutSubviews
+                            options:options
                          animations:^{
                              [self layoutIfNeeded];
                              
