@@ -192,6 +192,24 @@
     return _typeIndicatorView;
 }
 
+
+- (UIView *)inputAccessoryView
+{
+    if (_keyboardPanningEnabled) {
+        
+        static dispatch_once_t onceToken;
+        static SCKInputAccessoryView *_inputAccessoryView = nil;
+        
+        dispatch_once(&onceToken, ^{
+            _inputAccessoryView = [SCKInputAccessoryView new];
+        });
+        
+        return _inputAccessoryView;
+    }
+    return nil;
+}
+
+
 - (BOOL)isEditing
 {
     return self.textContainerView.isEditing;
@@ -286,7 +304,7 @@
     _keyboardPanningEnabled = enabled;
     
     if (enabled) {
-        self.textView.inputAccessoryView = [SCKInputAccessoryView new];
+        self.textView.inputAccessoryView = [self inputAccessoryView];
         self.scrollViewProxy.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
     }
