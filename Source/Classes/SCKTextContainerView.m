@@ -90,7 +90,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView = [SCKTextView new];
         _textView.translatesAutoresizingMaskIntoConstraints = NO;
         _textView.font = [UIFont systemFontOfSize:15.0];
-        _textView.maxNumberOfLines = 6;
+        _textView.maxNumberOfLines = [self defaultNumberOfLines];
         
 #if DEBUG
         _textView.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -190,7 +190,17 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (NSUInteger)defaultNumberOfLines
 {
-    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        if (CGRectGetHeight([UIScreen mainScreen].bounds) >= 568.0) {
+            return 6;
+        }
+        else {
+            return 4;
+        }
+    }
+    else {
+        return 8;
+    }
 }
 
 - (CGFloat)minHeight

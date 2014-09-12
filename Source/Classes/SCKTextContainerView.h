@@ -25,8 +25,14 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 /** @name A custom text input container used to encapsulate controls. */
 @interface SCKTextContainerView : UIToolbar
 
-/** The centered text input view. */
+/** The centered text input view.
+ @discussion The maximum number of lines is configured by default, to best fit each devices dimensions. You can overri
+ For iPhone 4       (<=480pts): 4 lines
+ For iPhone 5 & 6   (>=568pts): 6 lines
+ For iPad           (>=768pts): 8 lines: 8 lines
+ */
 @property (nonatomic, strong) SCKTextView *textView;
+
 /** The left action button action. */
 @property (nonatomic, strong) UIButton *leftButton;
 /** The right action button action. */
