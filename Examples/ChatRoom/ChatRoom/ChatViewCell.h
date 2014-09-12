@@ -13,7 +13,7 @@
 
 @interface ChatViewCell : UITableViewCell
 
-@property (nonatomic) BOOL hasPlaceholder;
+@property (nonatomic) BOOL needsPlaceholder;
 @property (nonatomic, strong) NSIndexPath *indexPath;
 
 @end

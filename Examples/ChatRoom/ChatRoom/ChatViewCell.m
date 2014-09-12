@@ -25,7 +25,7 @@
         self.imageView.layer.shouldRasterize = YES;
         self.imageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
         
-        self.hasPlaceholder = YES;
+        self.needsPlaceholder = YES;
     }
     return self;
 }

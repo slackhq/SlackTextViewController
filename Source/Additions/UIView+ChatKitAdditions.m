@@ -32,28 +32,28 @@ BOOL isValidKeyboardFrame(CGRect frame) {
 
 - (void)animateLayoutIfNeededWithBounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations
 {
-    NSTimeInterval duration = 0.2; //bounce ? 0.5 : 0.2;
+    NSTimeInterval duration = bounce ? 0.5 : 0.2;
     [self animateLayoutIfNeededWithDuration:duration bounce:bounce options:options animations:animations];
 }
 
 - (void)animateLayoutIfNeededWithDuration:(NSTimeInterval)duration bounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations
 {
-//    if (bounce) {
-//        [UIView animateWithDuration:duration
-//                              delay:0.0
-//             usingSpringWithDamping:0.7
-//              initialSpringVelocity:0.7
-//                            options:options
-//                         animations:^{
-//                             [self layoutIfNeeded];
-//                             
-//                             if (animations) {
-//                                 animations();
-//                             }
-//                         }
-//                         completion:NULL];
-//    }
-//    else {
+    if (bounce) {
+        [UIView animateWithDuration:duration
+                              delay:0.0
+             usingSpringWithDamping:0.7
+              initialSpringVelocity:0.7
+                            options:options
+                         animations:^{
+                             [self layoutIfNeeded];
+                             
+                             if (animations) {
+                                 animations();
+                             }
+                         }
+                         completion:NULL];
+    }
+    else {
         [UIView animateWithDuration:duration
                               delay:0.0
                             options:options
@@ -65,7 +65,7 @@ BOOL isValidKeyboardFrame(CGRect frame) {
                              }
                          }
                          completion:NULL];
-//    }
+    }
 }
 
 - (NSArray *)constraintsForAttribute:(NSLayoutAttribute)attribute

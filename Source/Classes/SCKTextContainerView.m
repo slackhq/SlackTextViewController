@@ -357,7 +357,9 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
             [self.rightButton sizeToFit];
         }
         
-        [self animateLayoutIfNeededWithBounce:self.bounces
+        BOOL bounces = self.bounces && [self.textView isFirstResponder];
+        
+        [self animateLayoutIfNeededWithBounce:bounces
                                       options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState
                                    animations:NULL];
     }

@@ -358,7 +358,7 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     cell.textLabel.text = message;
     cell.indexPath = indexPath;
     
-    if (cell.hasPlaceholder)
+    if (cell.needsPlaceholder)
     {
         CGFloat scale = [UIScreen mainScreen].scale;
         CGSize imgSize = CGSizeMake(kAvatarSize*scale, kAvatarSize*scale);
@@ -367,7 +367,7 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
                                        completion:^(UIImage *image) {
                                            image = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
                                            cell.imageView.image = image;
-                                           cell.hasPlaceholder = NO;
+                                           cell.needsPlaceholder = NO;
                                        }];
     }
     

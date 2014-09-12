@@ -67,9 +67,9 @@
 - (void)commonInit
 {
     self.bounces = YES;
+    self.inverted = YES;
     self.undoShakingEnabled = NO;
     self.keyboardPanningEnabled = YES;
-    self.inverted = YES;
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -545,11 +545,8 @@
     
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    
-    CGFloat duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
 
-    
-    
     endFrame = adjustEndFrame(endFrame, self.interfaceOrientation);
     
     if (!isValidKeyboardFrame(endFrame)) return;
@@ -569,9 +566,10 @@
     }
     
     // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
-    [self.view animateLayoutIfNeededWithBounce:NO
+    [self.view animateLayoutIfNeededWithDuration:duration
+                                          bounce:NO
                                          options:(curve<<16)|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
-                                    animations:NULL];
+                                      animations:NULL];
 }
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
