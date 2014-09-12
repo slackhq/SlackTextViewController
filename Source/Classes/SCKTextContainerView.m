@@ -343,7 +343,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         }
         
         [self animateLayoutIfNeededWithBounce:self.bounces
-                                      options:UIViewAnimationOptionCurveEaseInOut
+                                      options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState
                                    animations:NULL];
     }
 }

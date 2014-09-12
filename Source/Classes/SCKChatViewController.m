@@ -372,7 +372,7 @@
         
         if (animated) {
             [self.view animateLayoutIfNeededWithBounce:self.bounces
-                                                 options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews
+                                                 options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
                                             animations:^{
                                                 if (self.isEditing) {
                                                     [self.textView scrollToCaretPositonAnimated:NO];
@@ -563,7 +563,7 @@
     
     // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
     [self.view animateLayoutIfNeededWithBounce:NO
-                                         options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews
+                                         options:(curve<<16)|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
                                     animations:NULL];
 }
 
@@ -642,7 +642,7 @@
     self.scrollViewHC.constant -= self.typeIndicatorViewHC.constant;
     
     [self.view animateLayoutIfNeededWithBounce:self.bounces
-                               options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews
+                               options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
                           animations:NULL];
 }
 
@@ -843,7 +843,7 @@
     self.autoCompletionViewHC.constant = viewHeight;
     
     [self.view animateLayoutIfNeededWithBounce:self.bounces
-                                         options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews
+                                         options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
                                     animations:NULL];
 }
 
