@@ -111,6 +111,24 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
     return self.placeholderLabel.textColor;
 }
 
+// Returns a valid pasteboard item (image or text)
+- (id)pasteboardItem
+{
+    UIImage *image = [[UIPasteboard generalPasteboard] image];
+    NSString *text = [[UIPasteboard generalPasteboard] string];
+    
+    // Gives priority to images
+    if (image) {
+        return image;
+    }
+    else if (text.length > 0) {
+        return text;
+    }
+    else {
+        return nil;
+    }
+}
+
 - (BOOL)isExpanding
 {
     if (self.numberOfLines >= self.maxNumberOfLines) {
@@ -153,22 +171,25 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
         return NO;
     }
     
+    if (action == @selector(paste:) && [self pasteboardItem]) {
+        return YES;
+    }
+    
     return [super canPerformAction:action withSender:sender];
 }
 
 - (void)paste:(id)sender
 {
-    UIImage *image = [[UIPasteboard generalPasteboard] image];
-    NSString *text = [[UIPasteboard generalPasteboard] string];
+    id item = [self pasteboardItem];
     
-    if (image) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:SCKTextViewDidPasteImageNotification object:image];
+    if ([item isKindOfClass:[UIImage class]]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:SCKTextViewDidPasteImageNotification object:item];
     }
-    else if (text.length > 0){
+    else if ([item isKindOfClass:[NSString class]]){
         
         // Inserting the text fixes a UITextView bug whitch automatically scrolls to the bottom
         // and beyond scroll content size sometimes when the text is too long
-        [self insertTextAtCaretRange:text];
+        [self insertTextAtCaretRange:item];
     }
 }
 

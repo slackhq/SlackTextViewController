@@ -228,6 +228,8 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)didPasteImage:(UIImage *)image
 {
     // Useful for sending an image
+    
+    NSLog(@"%s",__FUNCTION__);
 }
 
 - (void)willRequestUndo
