@@ -1,5 +1,5 @@
 //
-//  SCKTextContainerView.h
+//  SCKChatToolbar.h
 //  SlackChatKit
 //  https://github.com/tinyspeck/slack-chat-kit
 //
@@ -13,19 +13,18 @@
 @class SCKChatViewController;
 @class SCKTextView;
 
-#define kTextViewVerticalPadding 5
-#define kTextViewHorizontalPadding 8
-#define kTextContainerViewHeight 44.0
-#define kTextViewHeight 32.0
-#define kEditingViewHeight 38.0
+#define kTextViewVerticalPadding 5.0
+#define kTextViewHorizontalPadding 8.0
+#define kChatToolbarMinimumHeight 44.0
+#define kAccessoryViewHeight 38.0
 
 extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 @interface SCKInputAccessoryView : UIView
 @end
 
-/** @name A custom text input container used to encapsulate controls. */
-@interface SCKTextContainerView : UIToolbar
+/** @name A custom tool bar encapsulating chat controls. */
+@interface SCKChatToolbar : UIToolbar
 
 /** A weak reference to the core view controller. */
 @property (nonatomic, weak) SCKChatViewController *controller;
@@ -53,7 +52,7 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 /// @name Text Editing
 ///------------------------------------------------
 
-/** The view displayed on top of the text view container when editing a message. */
+/** The view displayed on top of the below the chat toolbar when editing a message. */
 @property (nonatomic, strong) UIView *accessoryView;
 /** The title label displayed in the middle of the accessoryView. */
 @property (nonatomic, strong) UILabel *editorTitle;

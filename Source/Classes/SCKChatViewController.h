@@ -9,7 +9,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SCKTextContainerView.h"
+#import "SCKChatToolbar.h"
 #import "SCKTypeIndicatorView.h"
 #import "SCKTextView.h"
 
@@ -24,8 +24,8 @@
 @property (nonatomic, readonly) UITableView *tableView;
 /** The main collection view managed by the controller object. Not nil if the controller is initialised with -initWithCollectionViewLayout: */
 @property (nonatomic, readonly) UICollectionView *collectionView;
-/** The bottom text container view, wrapping the text view and buttons. */
-@property (nonatomic, readonly) SCKTextContainerView *textContainerView;
+/** The bottom view containing a text view and buttons. */
+@property (nonatomic, readonly) SCKChatToolbar *chatToolbar;
 /** The typing indicator used to display user names horizontally. */
 @property (nonatomic, readonly) SCKTypeIndicatorView *typeIndicatorView;
 /** YES if control's animation should have bouncy effects. Default is YES. */
@@ -44,7 +44,7 @@
  */
 @property (nonatomic, assign, getter = isInverted) BOOL inverted;
 
-/** Convenience accessors (accessed through the text container view) */
+/** Convenience accessors (accessed through the chat toolbar) */
 @property (nonatomic, readonly) SCKTextView *textView;
 @property (nonatomic, readonly) UIButton *leftButton;
 @property (nonatomic, readonly) UIButton *rightButton;
@@ -104,7 +104,7 @@
  Notifies the view controller that the text input has been updated.
  @discussion You can override this method to perform additional tasks associated with presenting the view. You MUST call super at some point in your implementation.
  
- @param If YES, the text container view was resized using an animation.
+ @param If YES, the chat toolbar was resized using an animation.
  */
 - (void)textDidUpdate:(BOOL)animated;
 
@@ -166,7 +166,7 @@
 @property (nonatomic, readonly, getter = isEditing) BOOL editing;
 
 /**
- Re-uses the text layout for edition, displaying a header view on top of the text container vier with options (cancel & save).
+ Re-uses the text layout for edition, displaying an accessory view on top of the chat toolbar with options (cancel & save).
  @discussion You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
 
  @param text The string text to edit.
@@ -202,7 +202,7 @@
 @property (nonatomic, readonly) NSString *foundWord;
 /** YES if the auto-completion mode is active. */
 @property (nonatomic, readonly, getter = isAutoCompleting) BOOL autoCompleting;
-/** An array containing all the prefix strings registered for auto-completion. */
+/** An array containing all the registered prefix strings for auto-completion. */
 @property (nonatomic, readonly) NSArray *registeredPrefixes;
 
 /**

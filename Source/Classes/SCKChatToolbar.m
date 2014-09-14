@@ -1,5 +1,5 @@
 //
-//  SCKTextContainerView.m
+//  SCKChatToolbar.m
 //  SlackChatKit
 //  https://github.com/tinyspeck/slack-chat-kit
 //
@@ -8,16 +8,16 @@
 //  Licence: MIT-Licence
 //
 
-#import "SCKTextContainerView.h"
+#import "SCKChatToolbar.h"
 #import "SCKChatViewController.h"
 #import "SCKTextView.h"
 
 #import "UITextView+ChatKitAdditions.h"
 #import "UIView+ChatKitAdditions.h"
 
-NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.chatkit.SCKTextContainerView.frameDidChange";
+NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.chatkit.SCKChatToolbar.frameDidChange";
 
-@interface SCKTextContainerView () <UITextViewDelegate>
+@interface SCKChatToolbar () <UITextViewDelegate>
 
 @property (nonatomic, strong) NSLayoutConstraint *leftButtonWC;
 @property (nonatomic, strong) NSLayoutConstraint *leftButtonHC;
@@ -29,7 +29,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 @end
 
-@implementation SCKTextContainerView
+@implementation SCKChatToolbar
 
 #pragma mark - Initialization
 
@@ -74,7 +74,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (CGSize)intrinsicContentSize
 {
-    return CGSizeMake(UIViewNoIntrinsicMetric, kTextContainerViewHeight);
+    return CGSizeMake(UIViewNoIntrinsicMetric, kChatToolbarMinimumHeight);
 }
 
 + (BOOL)requiresConstraintBasedLayout
@@ -419,7 +419,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
     if (self.isEditing)
     {
-        self.accessoryViewHC.constant = kEditingViewHeight;
+        self.accessoryViewHC.constant = kAccessoryViewHeight;
         self.leftButtonWC.constant = zero;
         self.leftButtonHC.constant = zero;
         self.leftMarginWC.constant = zero;

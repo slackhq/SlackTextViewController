@@ -17,7 +17,7 @@
 
 // Used for Auto-Layout constraints, and update its constants
 @property (nonatomic, strong) NSLayoutConstraint *scrollViewHC;
-@property (nonatomic, strong) NSLayoutConstraint *containerViewHC;
+@property (nonatomic, strong) NSLayoutConstraint *chatToolbarHC;
 @property (nonatomic, strong) NSLayoutConstraint *typeIndicatorViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *autoCompletionViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *keyboardHC;
@@ -35,7 +35,7 @@
 @synthesize tableView = _tableView;
 @synthesize collectionView = _collectionView;
 @synthesize typeIndicatorView = _typeIndicatorView;
-@synthesize textContainerView = _textContainerView;
+@synthesize chatToolbar = _chatToolbar;
 @synthesize autoCompletionView = _autoCompletionView;
 @synthesize autoCompleting = _autoCompleting;
 
@@ -76,7 +76,7 @@
     [self.view addSubview:self.scrollViewProxy];
     [self.view addSubview:self.autoCompletionView];
     [self.view addSubview:self.typeIndicatorView];
-    [self.view addSubview:self.textContainerView];
+    [self.view addSubview:self.chatToolbar];
     
     [self setupViewConstraints];
     
@@ -164,20 +164,20 @@
     return _autoCompletionView;
 }
 
-- (SCKTextContainerView *)textContainerView
+- (SCKChatToolbar *)chatToolbar
 {
-    if (!_textContainerView)
+    if (!_chatToolbar)
     {
-        _textContainerView = [SCKTextContainerView new];
-        _textContainerView.translatesAutoresizingMaskIntoConstraints = NO;
-        _textContainerView.controller = self;
+        _chatToolbar = [SCKChatToolbar new];
+        _chatToolbar.translatesAutoresizingMaskIntoConstraints = NO;
+        _chatToolbar.controller = self;
         
-        [_textContainerView.leftButton addTarget:self action:@selector(didPressLeftButton:) forControlEvents:UIControlEventTouchUpInside];
-        [_textContainerView.rightButton addTarget:self action:@selector(didPressRightButton:) forControlEvents:UIControlEventTouchUpInside];
-        [_textContainerView.editortLeftButton addTarget:self action:@selector(didCancelTextEditing:) forControlEvents:UIControlEventTouchUpInside];
-        [_textContainerView.editortRightButton addTarget:self action:@selector(didCommitTextEditing:) forControlEvents:UIControlEventTouchUpInside];
+        [_chatToolbar.leftButton addTarget:self action:@selector(didPressLeftButton:) forControlEvents:UIControlEventTouchUpInside];
+        [_chatToolbar.rightButton addTarget:self action:@selector(didPressRightButton:) forControlEvents:UIControlEventTouchUpInside];
+        [_chatToolbar.editortLeftButton addTarget:self action:@selector(didCancelTextEditing:) forControlEvents:UIControlEventTouchUpInside];
+        [_chatToolbar.editortRightButton addTarget:self action:@selector(didCommitTextEditing:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _textContainerView;
+    return _chatToolbar;
 }
 
 - (SCKTypeIndicatorView *)typeIndicatorView
@@ -212,31 +212,31 @@
 
 - (BOOL)isEditing
 {
-    return self.textContainerView.isEditing;
+    return self.chatToolbar.isEditing;
 }
 
 - (SCKTextView *)textView
 {
-    return self.textContainerView.textView;
+    return self.chatToolbar.textView;
 }
 
 - (UIButton *)leftButton
 {
-    return self.textContainerView.leftButton;
+    return self.chatToolbar.leftButton;
 }
 
 - (UIButton *)rightButton
 {
-    return self.textContainerView.rightButton;
+    return self.chatToolbar.rightButton;
 }
 
-- (CGFloat)appropriateContainerViewHeight
+- (CGFloat)appropriateToolbarHeight
 {
     CGFloat delta = self.textView.intrinsicContentSize.height-self.textView.font.lineHeight;
     CGFloat height = delta;
     
     if (self.textView.numberOfLines == 1) {
-        height = self.textContainerView.minHeight;
+        height = self.chatToolbar.minHeight;
     }
     else if (self.textView.numberOfLines < self.textView.maxNumberOfLines) {
         height += roundf(self.textView.font.lineHeight*self.textView.numberOfLines);
@@ -247,12 +247,12 @@
         height += (kTextViewVerticalPadding*2.0);
     }
     
-    if (height < self.textContainerView.minHeight) {
-        height = self.textContainerView.minHeight;
+    if (height < self.chatToolbar.minHeight) {
+        height = self.chatToolbar.minHeight;
     }
     
     if (self.isEditing) {
-        height += kEditingViewHeight;
+        height += kAccessoryViewHeight;
     }
     
     return roundf(height);
@@ -263,7 +263,7 @@
     CGFloat height = self.view.bounds.size.height;
 
     height -= self.keyboardHC.constant;
-    height -= self.containerViewHC.constant;
+    height -= self.chatToolbarHC.constant;
     height -= self.autoCompletionViewHC.constant;
     height -= self.typeIndicatorViewHC.constant;
     
@@ -379,14 +379,14 @@
 
 - (void)textDidUpdate:(BOOL)animated
 {
-    self.textContainerView.rightButton.enabled = [self canPressRightButton];
-    self.textContainerView.editortRightButton.enabled = [self canPressRightButton];
+    self.chatToolbar.rightButton.enabled = [self canPressRightButton];
+    self.chatToolbar.editortRightButton.enabled = [self canPressRightButton];
 
-    CGFloat containeHeight = [self appropriateContainerViewHeight];
+    CGFloat toolbarHeight = [self appropriateToolbarHeight];
     
-    if (containeHeight != self.containerViewHC.constant)
+    if (toolbarHeight != self.chatToolbarHC.constant)
     {
-        self.containerViewHC.constant = containeHeight;
+        self.chatToolbarHC.constant = toolbarHeight;
         self.scrollViewHC.constant = [self appropriateScrollViewHeight];
         
         if (animated) {
@@ -438,7 +438,7 @@
         return;
     }
     
-    [self.textContainerView endTextEdition];
+    [self.chatToolbar endTextEdition];
     
     [self.textView setText:nil];
 }
@@ -494,7 +494,7 @@
         [self didCancelTextEditing:sender];
         return;
     }
-    
+
     [self dismissKeyboard:YES];
 }
 
@@ -524,13 +524,13 @@
 
 - (void)editText:(NSString *)text
 {
-    if (![self.textContainerView canEditText:text]) {
+    if (![self.chatToolbar canEditText:text]) {
         return;
     }
     
     // Updates the constraints before inserting text, if not first responder yet
     if (![self.textView isFirstResponder]) {
-        [self.textContainerView beginTextEditing];
+        [self.chatToolbar beginTextEditing];
     }
 
     [self.textView setText:text];
@@ -538,7 +538,7 @@
     
     // Updates the constraints after inserting text, if already first responder
     if ([self.textView isFirstResponder]) {
-        [self.textContainerView beginTextEditing];
+        [self.chatToolbar beginTextEditing];
     }
     
     if (![self.textView isFirstResponder]) {
@@ -924,7 +924,7 @@
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
     if ([self.singleTapGesture isEqual:gestureRecognizer]) {
-        return [self.textContainerView.textView isFirstResponder];
+        return [self.chatToolbar.textView isFirstResponder];
     }
     
     return YES;
@@ -948,14 +948,14 @@
     NSDictionary *views = @{@"scrollView": self.scrollViewProxy,
                             @"autoCompletionView": self.autoCompletionView,
                             @"typeIndicatorView": self.typeIndicatorView,
-                            @"textContainerView": self.textContainerView,
+                            @"chatToolbar": self.chatToolbar,
                             };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView(==0@250)][autoCompletionView(0)][typeIndicatorView(0)][textContainerView(>=0)]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView(==0@250)][autoCompletionView(0)][typeIndicatorView(0)][chatToolbar(>=0)]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[autoCompletionView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[typeIndicatorView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[textContainerView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[chatToolbar]|" options:0 metrics:nil views:views]];
 
     NSArray *bottomConstraints = [self.view constraintsForAttribute:NSLayoutAttributeBottom];
     NSArray *heightConstraints = [self.view constraintsForAttribute:NSLayoutAttributeHeight];
@@ -963,14 +963,14 @@
     self.scrollViewHC = heightConstraints[0];
     self.autoCompletionViewHC = heightConstraints[1];
     self.typeIndicatorViewHC = heightConstraints[2];
-    self.containerViewHC = heightConstraints[3];
+    self.chatToolbarHC = heightConstraints[3];
     self.keyboardHC = bottomConstraints[0];
     
-    self.containerViewHC.constant = self.textContainerView.minHeight;
+    self.chatToolbarHC.constant = self.chatToolbar.minHeight;
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     if (self.isEditing) {
-        self.containerViewHC.constant += kEditingViewHeight;
+        self.chatToolbarHC.constant += kAccessoryViewHeight;
     }
 }
 
@@ -1096,15 +1096,15 @@
     _autoCompletionView.dataSource = nil;
     _autoCompletionView = nil;
     
-    _textContainerView = nil;
+    _chatToolbar = nil;
     _typeIndicatorView = nil;
     
     _registeredPrefixes = nil;
     
     _singleTapGesture = nil;
     _scrollViewHC = nil;
-    _containerViewHC = nil;
-    _containerViewHC = nil;
+    _chatToolbarHC = nil;
+    _chatToolbarHC = nil;
     _typeIndicatorViewHC = nil;
     _autoCompletionViewHC = nil;
     _keyboardHC = nil;
