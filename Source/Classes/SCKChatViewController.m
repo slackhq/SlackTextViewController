@@ -187,11 +187,9 @@
         _typeIndicatorView = [SCKTypeIndicatorView new];
         _typeIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
         _typeIndicatorView.canResignByTouch = YES;
-        
     }
     return _typeIndicatorView;
 }
-
 
 - (UIView *)inputAccessoryView
 {
@@ -208,7 +206,6 @@
     }
     return nil;
 }
-
 
 - (BOOL)isEditing
 {

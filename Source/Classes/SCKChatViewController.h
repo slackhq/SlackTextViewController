@@ -223,7 +223,7 @@
 - (BOOL)canShowAutoCompletion;
 
 /**
- Returns a custom height for the auto-completion view. Default and maximum is 0.0.
+ Returns a custom height for the auto-completion view. Default is 0.0.
  @discussion You can override this method to return a custom height.
 
  @return The auto-completion view's height.
