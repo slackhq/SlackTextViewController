@@ -206,13 +206,13 @@
 @property (nonatomic, readonly) NSArray *registeredPrefixes;
 
 /**
- Registers any string key for auto-completion detection, useful for user mentions and/or hashtags auto-completion.
- @discussion The keys must be valid NSString, no longer than 1 character (i.e: '@', '#', '\', and so on)
- This also checks if no repeated key is inserted.
+ Registers any string prefix for auto-completion detection, useful for user mentions and/or hashtags auto-completion.
+ @discussion The prefix must be valid NSString (i.e: '@', '#', '\', and so on)
+ This also checks if no repeated prefix is inserted.
  
- @param keys An array of string keys.
+ @param prefixes An array of prefix strings.
  */
-- (void)registerPrefixesForAutoCompletion:(NSArray *)keys;
+- (void)registerPrefixesForAutoCompletion:(NSArray *)prefixes;
 
 /**
  Verifies that the auto-completion view should be shown. Default is NO.

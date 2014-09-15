@@ -725,19 +725,19 @@
 
 #pragma mark - Auto-Completion Text Processing
 
-- (void)registerPrefixesForAutoCompletion:(NSArray *)keys
+- (void)registerPrefixesForAutoCompletion:(NSArray *)prefixes
 {
     NSMutableArray *array = [NSMutableArray arrayWithArray:self.registeredPrefixes];
     
-    for (NSString *key in keys) {
+    for (NSString *prefix in prefixes) {
         // Skips if the prefix is not a valid string
-        if (![key isKindOfClass:[NSString class]] || key.length == 0) {
+        if (![prefix isKindOfClass:[NSString class]] || prefix.length == 0) {
             continue;
         }
         
         // Adds the prefix if not contained already
-        if (![array containsObject:key]) {
-            [array addObject:key];
+        if (![array containsObject:prefix]) {
+            [array addObject:prefix];
         }
     }
     
