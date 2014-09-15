@@ -186,7 +186,7 @@
     {
         _typeIndicatorView = [SCKTypeIndicatorView new];
         _typeIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
-        _typeIndicatorView.canResignByTouch = YES;
+        _typeIndicatorView.canResignByTouch = NO;
     }
     return _typeIndicatorView;
 }
@@ -1045,16 +1045,6 @@
 
 
 #pragma mark - View Auto-Rotation
-
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-
-}
 
 - (NSUInteger)supportedInterfaceOrientations
 {
