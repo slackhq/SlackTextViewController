@@ -82,12 +82,13 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:autoCompletionCellIdentifier];
     
     self.chatToolbar.autoHideRightButton = YES;
-    
+    self.typeIndicatorView.canResignByTouch = YES;
+
     self.textView.placeholder = NSLocalizedString(@"Message", nil);
     self.textView.placeholderColor = [UIColor lightGrayColor];
     self.chatToolbar.backgroundColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1.0];
     self.textView.layer.borderColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0].CGColor;
-
+    
     [self.leftButton setTintColor:[UIColor colorWithRed:154.0/255.0 green:159.0/255.0 blue:166.0/255.0 alpha:1.0]];
     [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
 
@@ -260,6 +261,8 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (BOOL)canShowAutoCompletion
 {
+    NSLog(@"%s",__FUNCTION__);
+    
     NSArray *array = nil;
     NSString *prefix = self.foundPrefix;
     NSString *word = self.foundWord;
@@ -298,7 +301,9 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     
     self.searchResult = [[NSMutableArray alloc] initWithArray:array];
     
-    return array.count > 0;
+    NSLog(@"self.searchResult : %@", self.searchResult);
+    
+    return self.searchResult.count > 0;
 }
 
 - (CGFloat)heightForAutoCompletionView
