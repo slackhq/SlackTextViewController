@@ -141,6 +141,8 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     NSString *message = self.messages[cell.indexPath.row];
     
     [self editText:message];
+    
+    [self.tableView scrollToRowAtIndexPath:cell.indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (void)editRandomMessage:(id)sender
@@ -261,8 +263,6 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (BOOL)canShowAutoCompletion
 {
-    NSLog(@"%s",__FUNCTION__);
-    
     NSArray *array = nil;
     NSString *prefix = self.foundPrefix;
     NSString *word = self.foundWord;
@@ -300,8 +300,6 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     }
     
     self.searchResult = [[NSMutableArray alloc] initWithArray:array];
-    
-    NSLog(@"self.searchResult : %@", self.searchResult);
     
     return self.searchResult.count > 0;
 }
