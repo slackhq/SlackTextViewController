@@ -36,7 +36,7 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     if (self) {
         
         self.users = @[@"Anna", @"Alicia", @"Arnold", @"Armando", @"Antonio", @"Brad", @"Catalaya", @"Christoph"];
-        self.channels = @[[LoremIpsum word], [LoremIpsum word], [LoremIpsum word], [LoremIpsum word], [LoremIpsum word], [LoremIpsum word], [LoremIpsum word], [LoremIpsum word]];
+        self.channels = @[@"General", @"Random", @"iOS", @"Bugs", @"Sports", @"Android", @"UI", @"SSB"];
         self.emojis = @[@"m", @"man", @"machine", @"block-a", @"block-b", @"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
         self.commands = @[@"help", @"away", @"close", @"color", @"colors", @"feedback", @"invite", @"me", @"msg", @"dm", @"open"];
 
@@ -362,6 +362,8 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     
     if (cell.needsPlaceholder)
     {
+        cell.needsPlaceholder = NO;
+        
         CGFloat scale = [UIScreen mainScreen].scale;
         CGSize imgSize = CGSizeMake(kAvatarSize*scale, kAvatarSize*scale);
         
@@ -369,7 +371,6 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
                                        completion:^(UIImage *image) {
                                            image = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
                                            cell.imageView.image = image;
-                                           cell.needsPlaceholder = NO;
                                        }];
     }
     
@@ -469,32 +470,6 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
         
         [self acceptAutoCompletionWithString:item];
     }
-}
-
-
-#pragma mark - View lifeterm
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-}
-
-
-#pragma mark - View Auto-Rotation
-
-- (NSUInteger)supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAll;
-}
-
-- (BOOL)shouldAutorotate
-{
-    return YES;
 }
 
 @end

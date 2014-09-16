@@ -66,6 +66,8 @@
 
 - (void)commonInit
 {
+    [self registerNotifications];
+    
     self.bounces = YES;
     self.inverted = YES;
     self.undoShakingEnabled = NO;
@@ -79,8 +81,6 @@
     [self.view addSubview:self.chatToolbar];
     
     [self setupViewConstraints];
-    
-    [self registerNotifications];
 }
 
 
@@ -289,11 +289,14 @@
 
 - (void)setKeyboardPanningEnabled:(BOOL)enabled
 {
+    // Disable this feature until proper fix (might need to try another technique less hacky)
+    return;
+    
     if (self.keyboardPanningEnabled == enabled) {
         return;
     }
     
-    // Disable this feature for iOS8 until proper fix
+    // Disable this feature on iOS8
     if ([UIInputViewController class]) {
         return;
     }
@@ -571,10 +574,8 @@
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
 
-    endFrame = adjustEndFrame(endFrame, self.interfaceOrientation);
+    CGFloat keyboardHeight = MIN(CGRectGetWidth(endFrame), CGRectGetHeight(endFrame));
     
-    if (!isValidKeyboardFrame(endFrame)) return;
-
     // Checks if it's showing or hidding the keyboard
     BOOL show = [notification.name isEqualToString:UIKeyboardWillShowNotification];
     
@@ -582,7 +583,7 @@
     [self.scrollViewProxy stopScrolling];
     
     // Updates the height constraints' constants
-    self.keyboardHC.constant = show ? endFrame.size.height : 0.0;
+    self.keyboardHC.constant = show ? keyboardHeight : 0.0;
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     if (!show && self.isAutoCompleting) {
@@ -614,7 +615,7 @@
     if (![self.textView isFirstResponder] || self.keyboardHC.constant == 0) {
         return;
     }
-
+    
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
     self.keyboardHC.constant = CGRectGetHeight([UIScreen mainScreen].bounds)-endFrame.origin.y;
@@ -948,7 +949,7 @@
                             @"chatToolbar": self.chatToolbar,
                             };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView(==0@250)][autoCompletionView(0)][typeIndicatorView(0)][chatToolbar(>=0)]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView(==0@250)]-(<=0)-[autoCompletionView(0)]-(<=0)-[typeIndicatorView(0)]-(<=0)-[chatToolbar(>=0)]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[autoCompletionView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[typeIndicatorView]|" options:0 metrics:nil views:views]];

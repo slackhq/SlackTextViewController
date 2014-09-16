@@ -250,8 +250,13 @@
  */
 - (void)acceptAutoCompletionWithString:(NSString *)string;
 
+
+///------------------------------------------------
+/// @name Miscellaneous
+///------------------------------------------------
+
 /**
- Allows subclasses to use the super implementation of this method
+ Allows subclasses to use the super implementation of this method.
  */
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer;
 
