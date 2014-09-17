@@ -111,6 +111,16 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
     return self.placeholderLabel.textColor;
 }
 
+// Returns a different number of lines when landscape and only on iPhone
+- (NSUInteger)maxNumberOfLines
+{
+    if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) &&
+        [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return 2.0;
+    }
+    return _maxNumberOfLines;
+}
+
 // Returns a valid pasteboard item (image or text)
 - (id)pasteboardItem
 {

@@ -587,6 +587,18 @@
     [self.textView insertNewLineBreak];
 }
 
+- (void)prepareForInterfaceRotation
+{
+    [self.view layoutIfNeeded];
+    
+    if ([self.textView isFirstResponder]) {
+        [self.textView scrollToCaretPositonAnimated:NO];
+    }
+    else {
+        [self.textView scrollToBottomAnimated:NO];
+    }
+}
+
 
 #pragma mark - Notification Events
 
@@ -1079,13 +1091,15 @@
 // iOS7 only
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    if (![self respondsToSelector:@selector(willTransitionToTraitCollection:withTransitionCoordinator:)]) {
+        [self prepareForInterfaceRotation];
+    }
 }
 
 // iOS8 only
 - (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+    [self prepareForInterfaceRotation];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
