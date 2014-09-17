@@ -232,6 +232,7 @@ NSString * const SCKTextViewDidShakeNotification = @"com.slack.chatkit.SCKTextVi
 {
     if (self.placeholder.length > 0) {
         self.placeholderLabel.hidden = (self.text.length > 0) ? YES : NO;
+        [self setNeedsDisplay];
     }
     
     [self flashScrollIndicatorsIfNeeded];
