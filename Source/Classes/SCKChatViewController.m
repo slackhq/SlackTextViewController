@@ -227,25 +227,52 @@
     return self.chatToolbar.rightButton;
 }
 
+- (CGFloat)deltaToolbarHeight
+{
+    return self.textView.intrinsicContentSize.height-self.textView.font.lineHeight;
+}
+
+- (CGFloat)minimumToolbarHeight
+{
+    return self.chatToolbar.intrinsicContentSize.height;
+}
+
+- (CGFloat)maximumToolbarHeight
+{
+    CGFloat height = [self deltaToolbarHeight];
+    
+    height += roundf(self.textView.font.lineHeight*self.textView.maxNumberOfLines);
+    height += (kTextViewVerticalPadding*2.0);
+    
+    return height;
+}
+
+- (CGFloat)currentToolbarHeight
+{
+    CGFloat height = [self deltaToolbarHeight];
+    
+    height += roundf(self.textView.font.lineHeight*self.textView.numberOfLines);
+    height += (kTextViewVerticalPadding*2.0);
+    
+    return height;
+}
+
 - (CGFloat)appropriateToolbarHeight
 {
-    CGFloat delta = self.textView.intrinsicContentSize.height-self.textView.font.lineHeight;
-    CGFloat height = delta;
+    CGFloat height = 0.0;
     
     if (self.textView.numberOfLines == 1) {
-        height = self.chatToolbar.minHeight;
+        height = [self minimumToolbarHeight];
     }
     else if (self.textView.numberOfLines < self.textView.maxNumberOfLines) {
-        height += roundf(self.textView.font.lineHeight*self.textView.numberOfLines);
-        height += (kTextViewVerticalPadding*2.0);
+        height += [self currentToolbarHeight];
     }
     else {
-        height += roundf(self.textView.font.lineHeight*self.textView.maxNumberOfLines);
-        height += (kTextViewVerticalPadding*2.0);
+        height += [self maximumToolbarHeight];
     }
     
-    if (height < self.chatToolbar.minHeight) {
-        height = self.chatToolbar.minHeight;
+    if (height < [self minimumToolbarHeight]) {
+        height = [self minimumToolbarHeight];
     }
     
     if (self.isEditing) {
@@ -966,7 +993,7 @@
     self.chatToolbarHC = heightConstraints[3];
     self.keyboardHC = bottomConstraints[0];
     
-    self.chatToolbarHC.constant = self.chatToolbar.minHeight;
+    self.chatToolbarHC.constant = [self minimumToolbarHeight];
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     if (self.isEditing) {

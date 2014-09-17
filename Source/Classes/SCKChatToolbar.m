@@ -205,23 +205,6 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     }
 }
 
-- (CGFloat)minHeight
-{
-    return self.intrinsicContentSize.height;
-}
-
-- (CGFloat)maxHeight
-{
-    if (self.textView.maxNumberOfLines > 0) {
-        CGFloat height = roundf(self.textView.font.lineHeight*self.textView.maxNumberOfLines);
-        height += (kTextViewVerticalPadding*2.0);
-        return height;
-    }
-    else {
-        return [UIScreen mainScreen].bounds.size.height;
-    }
-}
-
 - (CGFloat)appropriateRightButtonWidth
 {
     NSString *title = [self.rightButton titleForState:UIControlStateNormal];
@@ -376,8 +359,8 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     
     [self.rightButton sizeToFit];
     
-    CGFloat leftVerMargin = (self.minHeight - leftButtonImg.size.height) / 2.0;
-    CGFloat rightVerMargin = (self.minHeight - CGRectGetHeight(self.rightButton.frame)) / 2.0;
+    CGFloat leftVerMargin = (self.intrinsicContentSize.height - leftButtonImg.size.height) / 2.0;
+    CGFloat rightVerMargin = (self.intrinsicContentSize.height - CGRectGetHeight(self.rightButton.frame)) / 2.0;
 
     NSDictionary *views = @{@"textView": self.textView,
                             @"leftButton": self.leftButton,
@@ -436,7 +419,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         self.leftButtonWC.constant = roundf(leftButtonSize.width);
         self.leftButtonHC.constant = roundf(leftButtonSize.height);
         self.leftMarginWC.constant = (leftButtonSize.width > 0) ? kTextViewHorizontalPadding : zero;
-        self.bottomMarginWC.constant = roundf((self.minHeight - leftButtonSize.height) / 2.0);
+        self.bottomMarginWC.constant = roundf((self.intrinsicContentSize.height - leftButtonSize.height) / 2.0);
         
         self.rightButtonWC.constant = [self appropriateRightButtonWidth];
         self.rightMarginWC.constant = [self appropriateRightButtonMargin];
