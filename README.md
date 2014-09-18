@@ -76,10 +76,6 @@ By default, the number of lines is set to best fit each device dimensions:
 
 On iPhone devices, in landscape orientation, the maximum number of lines is changed to 2 to best fit the limited height.
 
-###Right Button
-
-###Left Button
-
 ###Auto-Completion
 
 At Slack we use auto-completion mechanism for many things such as completing user names, channel titles, emoji aliases and more. It is a great tool for users to quickly type repeated thing.
@@ -164,16 +160,107 @@ Auto-completion has been designed to work with local data for now. It hasn't bee
 
 ###Edition Mode
 
-###External Keyboard
+![Edition Mode](Screenshots/screenshot_edit-mode.png)
+
+To enable the edit mode, you simply need to call `[self editText:@"hello"];`, and the text input will automatically adjust to the edition mode, removing both left and right buttons, extending the view a bit higher with a "cancel" and "accept" buttons. Both of this buttons are accessible under `SCKChatToolbar` for customisation.
+
+To capture the events of cancelling or accepting, you must override the following methods.
+
+````
+- (void)didCommitTextEditing:(id)sender
+{
+    NSString *message = [self.textView.text copy];
+    
+    [self.messages removeObjectAtIndex:0];
+    [self.messages insertObject:message atIndex:0];
+    [self.tableView reloadData];
+    
+    [super didCommitTextEditing:sender];
+}
+
+- (void)didCancelTextEditing:(id)sender
+{
+    [super didCancelTextEditing:sender];
+}
+````
+
+Notice there that you must call `super` at some point, so the text input exits the edition mode, re-adjusting the layout and clearing the text view.
+Use the `editing` property to know if the editing mode is on.
+
 
 ###Typing Indicator
 
+![Typing Indicator](Screenshots/screenshot_typing-indicator.png)
+
+Additionaly, you can enable a simple typing indicator to be displayed right above the text input. It shows the name of the users that are typing, and if more than 2, it will display "Several are typing" message.
+
+To enable the typing indicator, just call `[self.typeIndicatorView insertUsername:@"John"];` and the view will automatically be animated on top of the text input. After a default interval of 6 seconds, if the same name hasn't been assigned once more, the view will be dismissed animately.
+
+You can remove user names from the list by calling `[self.typeIndicatorView removeUsername:@"John"];`
+
+You can also dismiss it completly by calling `[self.typeIndicatorView dismissIndicator];`
+
 ###Panning Gesture
+
+As part of the UI patterns for text composing in iOS, dismissing the keyboard with a panning gesture is a very practical feature. It is enabled by default with the `keyboardPanningEnabled` property. You can always disabled it if you'd like.
 
 ###Shake Gesture
 
+![Shake Gesture](Screenshots/screenshot_shake-undo.png)
+
+Another UI pattern in text composing is the shake gesture for clearing a text view's content. This is also enabled by default with the `undoShakingEnabled` property.
+
+You can optionally override `-willRequestUndo`, to implement your UI to ask the users if he would like to clean the text view's text. If there is not text entered, the method will not be called.
+
+If you don't override `-willRequestUndo` and `undoShakingEnabled` is set to `YES`, a system UIAlertView will prompt.
+
 ###Inverted Mode
 
+Some chat UI layouts may requiere that the message show from bottom to top. To enable this, you must use the `inverted` flag property. This will actually invert the UITableView/UICollectionView, so you will need to do a transform adjustment in your UITableViewDataSource method `-tableView:cellForRowAtIndexPath:` for the cells to show correctly.
+
+````
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:chatCellIdentifier];
+    
+    // Cells must inherit the table view's transform
+    // This is very important, since the main table view may be inverted
+    cell.transform = self.tableView.transform;
+}
+````
+
+###External Keyboard
+
+There a few basic key commands enabled by default:
+- return key -> calls `-didPressRightButton:` or `-didCommitTextEditing:` if in edit mode
+- shift/control + return key -> line break
+- escape key -> exits edit mode, or auto-completion mode, or dismisses the keyboard
+
+To add additional key commands, simply override `-keyCommands` and append `super`'s array.
+
+`````
+- (NSArray *)keyCommands
+{
+    NSMutableArray *commands = [NSMutableArray arrayWithArray:[super keyCommands]];
+    
+    // Edit last message
+    [commands addObject:[UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow
+                                           modifierFlags:0
+                                                   action:@selector(editLastMessage:)]];
+    
+    return commands;
+}
+````
+
+##Sample project
+
+Take a look into the sample project. There are more interesting APIs to discover, such as
+* `- (void)presentKeyboard:(BOOL)animated`
+* `- (void)dismissKeyboard:(BOOL)animated`
+
+* `- (void)didPasteImage:(UIImage *)image`
+* `- (void)didPressReturnKey:(id)sender`
+* `- (void)didPressEscapeKey:(id)sender`
 
 ## License
 (The MIT License)
