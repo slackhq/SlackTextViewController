@@ -63,7 +63,9 @@ Protocols like `UITableViewDelegate` and `UITableViewDataSource` are already set
 Calling `[super init]` will call by default `[super initWithStyle:UITableViewStylePlain]`.
 
 
-###Auto-expanding Text View
+###Auto-Expanding Text View
+
+![Auto-Expanding](Screenshots/screenshot_auto-expanding.png)
 
 The text view expands automatically when a new line is requiered, until it reaches its `maxNumberOfLines`value. You may change this property's value in the textView.
 
