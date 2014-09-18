@@ -54,6 +54,4 @@ extern NSString * const SCKTypeIndicatorViewWillHideNotification;
  */
 - (void)dismissIndicator;
 
-- (void)clean;
-
 @end

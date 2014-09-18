@@ -124,7 +124,7 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)simulateUserTyping:(id)sender
 {
     if (!self.isEditing && !self.isAutoCompleting) {
-        [self.typeIndicatorView insertUsername:@"Ignacio"];
+        [self.typeIndicatorView insertUsername:[LoremIpsum name]];
     }
 }
 
