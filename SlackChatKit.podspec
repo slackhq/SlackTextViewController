@@ -3,9 +3,9 @@
 Pod::Spec.new do |s|
   s.name         		= "SlackChatKit"
   s.version      		= @version
-  s.summary      		= "A drop-in replacement of UITableViewController with chat features."
+  s.summary      		= "A drop-in (and non-hacky) replacement of UITableViewController & UICollectionViewController, with growing text view and many other useful chat features."
   s.license      		= "MIT (example)"
-  s.author       		= { "dzenbot" => "ignacio@slack-corp.com" }
+  s.author       		= { "Slack Technologies, Inc." => "hello@slack.com" }
   s.platform     		= :ios, "7.0"
   s.requires_arc 		= true
 
