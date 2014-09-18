@@ -254,13 +254,8 @@ To add additional key commands, simply override `-keyCommands` and append `super
 
 ##Sample project
 
-Take a look into the sample project. There are more interesting APIs to discover, such as
-* `- (void)presentKeyboard:(BOOL)animated`
-* `- (void)dismissKeyboard:(BOOL)animated`
+Take a look into the sample project, everything is there.
 
-* `- (void)didPasteImage:(UIImage *)image`
-* `- (void)didPressReturnKey:(id)sender`
-* `- (void)didPressEscapeKey:(id)sender`
 
 ## License
 (The MIT License)
