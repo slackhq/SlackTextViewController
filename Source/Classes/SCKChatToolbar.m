@@ -460,17 +460,17 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
     if (self.superview) {
-        [self.superview removeObserver:self forKeyPath:NSStringFromSelector(@selector(frame))];
+        [self.superview removeObserver:self forKeyPath:NSStringFromSelector(@selector(center))];
     }
     
-    [newSuperview addObserver:self forKeyPath:NSStringFromSelector(@selector(frame)) options:0 context:NULL];
+    [newSuperview addObserver:self forKeyPath:NSStringFromSelector(@selector(center)) options:0 context:NULL];
     
     [super willMoveToSuperview:newSuperview];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([object isEqual:self.superview] && [keyPath isEqualToString:NSStringFromSelector(@selector(frame))])
+    if ([object isEqual:self.superview] && [keyPath isEqualToString:NSStringFromSelector(@selector(center))])
     {
         NSDictionary *userInfo = @{UIKeyboardFrameEndUserInfoKey:[NSValue valueWithCGRect:[object frame]]};
         [[NSNotificationCenter defaultCenter] postNotificationName:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil userInfo:userInfo];
@@ -480,7 +480,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 - (void)dealloc
 {
     if (self.superview) {
-        [self.superview removeObserver:self forKeyPath:NSStringFromSelector(@selector(frame))];
+        [self.superview removeObserver:self forKeyPath:NSStringFromSelector(@selector(center))];
     }
 }
 

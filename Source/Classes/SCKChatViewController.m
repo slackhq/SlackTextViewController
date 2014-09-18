@@ -316,15 +316,7 @@
 
 - (void)setKeyboardPanningEnabled:(BOOL)enabled
 {
-    // Disable this feature until proper fix (might need to try another technique less hacky)
-    return;
-    
     if (self.keyboardPanningEnabled == enabled) {
-        return;
-    }
-    
-    // Disable this feature on iOS8
-    if ([UIInputViewController class]) {
         return;
     }
     
