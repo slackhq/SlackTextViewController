@@ -233,19 +233,19 @@
     return self.textInputbar.rightButton;
 }
 
-- (CGFloat)deltaToolbarHeight
+- (CGFloat)deltaInputbarHeight
 {
     return self.textView.intrinsicContentSize.height-self.textView.font.lineHeight;
 }
 
-- (CGFloat)minimumToolbarHeight
+- (CGFloat)minimumInputbarHeight
 {
     return self.textInputbar.intrinsicContentSize.height;
 }
 
-- (CGFloat)maximumToolbarHeight
+- (CGFloat)maximumInputbarHeight
 {
-    CGFloat height = [self deltaToolbarHeight];
+    CGFloat height = [self deltaInputbarHeight];
     
     height += roundf(self.textView.font.lineHeight*self.textView.maxNumberOfLines);
     height += (kTextViewVerticalPadding*2.0);
@@ -253,9 +253,9 @@
     return height;
 }
 
-- (CGFloat)currentToolbarHeight
+- (CGFloat)currentInputbarHeight
 {
-    CGFloat height = [self deltaToolbarHeight];
+    CGFloat height = [self deltaInputbarHeight];
     
     height += roundf(self.textView.font.lineHeight*self.textView.numberOfLines);
     height += (kTextViewVerticalPadding*2.0);
@@ -263,22 +263,22 @@
     return height;
 }
 
-- (CGFloat)appropriateToolbarHeight
+- (CGFloat)appropriateInputbarHeight
 {
     CGFloat height = 0.0;
     
     if (self.textView.numberOfLines == 1) {
-        height = [self minimumToolbarHeight];
+        height = [self minimumInputbarHeight];
     }
     else if (self.textView.numberOfLines < self.textView.maxNumberOfLines) {
-        height += [self currentToolbarHeight];
+        height += [self currentInputbarHeight];
     }
     else {
-        height += [self maximumToolbarHeight];
+        height += [self maximumInputbarHeight];
     }
     
-    if (height < [self minimumToolbarHeight]) {
-        height = [self minimumToolbarHeight];
+    if (height < [self minimumInputbarHeight]) {
+        height = [self minimumInputbarHeight];
     }
     
     if (self.isEditing) {
@@ -407,11 +407,11 @@
     self.textInputbar.rightButton.enabled = [self canPressRightButton];
     self.textInputbar.editortRightButton.enabled = [self canPressRightButton];
 
-    CGFloat toolbarHeight = [self appropriateToolbarHeight];
+    CGFloat inputbarHeight = [self appropriateInputbarHeight];
     
-    if (toolbarHeight != self.textInputbarHC.constant)
+    if (inputbarHeight != self.textInputbarHC.constant)
     {
-        self.textInputbarHC.constant = toolbarHeight;
+        self.textInputbarHC.constant = inputbarHeight;
         self.scrollViewHC.constant = [self appropriateScrollViewHeight];
         
         if (animated) {
@@ -1003,7 +1003,7 @@
     self.textInputbarHC = heightConstraints[3];
     self.keyboardHC = bottomConstraints[0];
     
-    self.textInputbarHC.constant = [self minimumToolbarHeight];
+    self.textInputbarHC.constant = [self minimumInputbarHeight];
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     if (self.isEditing) {

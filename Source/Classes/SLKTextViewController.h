@@ -48,7 +48,7 @@
 @property (nonatomic, assign) BOOL keyboardPanningEnabled;
 
 /** YES if the main table view is inverted. Default is YES.
- @discussion This allows the table view to start from the bottom like any typical chat interface.
+ @discussion This allows the table view to start from the bottom like any typical messaging interface.
  If inverted, you must assign the same transform property to your cells to match the orientation (ie: cell.transform = tableView.transform;)
  Inverting the table view will enable some great features such as content offset corrections automatically when resizing the text input and/or showing autocompletion.
  
@@ -56,13 +56,13 @@
  */
 @property (nonatomic, assign, getter = isInverted) BOOL inverted;
 
-/** Convenience accessors (accessed through the chat toolbar) */
+/** Convenience accessors (accessed through the text input bar) */
 @property (nonatomic, readonly) SLKTextView *textView;
 @property (nonatomic, readonly) UIButton *leftButton;
 @property (nonatomic, readonly) UIButton *rightButton;
 
 /**
- Initializes a chat view controller to manage a table view of a given style.
+ Initializes a text view controller to manage a table view of a given style.
  @discussion If you use the standard -init method, a table view with plain style will be created.
  
  @param style A constant that specifies the style of main table view that the controller object is to manage (UITableViewStylePlain or UITableViewStyleGrouped).
@@ -71,7 +71,7 @@
 - (instancetype)initWithTableViewStyle:(UITableViewStyle)style;
 
 /**
- Initializes a chat view controller controller and configures the collection view with the provided layout.
+ Initializes a text view controller controller and configures the collection view with the provided layout.
  @discussion If you use the standard -init method, a table view with plain style will be created.
 
  @param layout The layout object to associate with the collection view. The layout controls how the collection view presents its cells and supplementary views.
@@ -107,16 +107,16 @@
 ///------------------------------------------------
 
 /**
- Notifies the view controller that the text input will be updated.
+ Notifies the view controller that the text will update.
  @discussion You can override this method to perform additional tasks associated with presenting the view. You MUST call super at some point in your implementation.
  */
 - (void)textWillUpdate;
 
 /**
- Notifies the view controller that the text input has been updated.
+ Notifies the view controller that the text did update.
  @discussion You can override this method to perform additional tasks associated with presenting the view. You MUST call super at some point in your implementation.
  
- @param If YES, the chat toolbar was resized using an animation.
+ @param If YES, the text input bar was resized using an animation.
  */
 - (void)textDidUpdate:(BOOL)animated;
 
@@ -178,7 +178,7 @@
 @property (nonatomic, readonly, getter = isEditing) BOOL editing;
 
 /**
- Re-uses the text layout for edition, displaying an accessory view on top of the chat toolbar with options (cancel & save).
+ Re-uses the text layout for edition, displaying an accessory view on top of the text input bar with options (cancel & save).
  @discussion You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
 
  @param text The string text to edit.

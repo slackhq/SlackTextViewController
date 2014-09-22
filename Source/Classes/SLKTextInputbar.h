@@ -29,7 +29,7 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 @interface SCKInputAccessoryView : UIView
 @end
 
-/** @name A custom tool bar encapsulating chat controls. */
+/** @name A custom tool bar encapsulating messaging controls. */
 @interface SLKTextInputbar : UIToolbar
 
 /** A weak reference to the core view controller. */
@@ -56,7 +56,7 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 /// @name Text Editing
 ///------------------------------------------------
 
-/** The view displayed on top of the below the chat toolbar when editing a message. */
+/** The view displayed on top of the below the text input bar when editing a message. */
 @property (nonatomic, strong) UIView *accessoryView;
 
 /** The title label displayed in the middle of the accessoryView. */
