@@ -1,12 +1,12 @@
 @version = "1.0"
 
 Pod::Spec.new do |s|
-  s.name         		= "SlackChatKit"
+  s.name         		= "SlackTextViewController"
   s.version      		= @version
-  s.summary      		= "A drop-in (and non-hacky) replacement of UITableViewController & UICollectionViewController, with growing text view and many other useful chat features."
-  s.license      		= "MIT (example)"
-  s.author       		= { "Slack Technologies, Inc." => "hello@slack.com" }
-    s.source        = { :git => "https://github.com/tinyspeck/slack-chat-kit.git", :tag => "v#{s.version}" }
+  s.summary      		= "A drop-in UIViewController subclass with a custom growing text input and other useful messaging features. A replacement for UITableViewController & UICollectionViewController."
+  s.license      		= "MIT"
+  s.author       		= { "Slack Technologies, Inc." => "ios@slack-corp.com" }
+    s.source        = { :git => "https://github.com/tinyspeck/SlackTextViewController.git", :tag => "v#{s.version}" }
 
   s.platform     		= :ios, "7.0"
   s.requires_arc 		= true
