@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.dependency     		'SlackTextViewController/Additions'
 
-  s.subspec 'Additions' do |he|
-    he.source_files     = 'Source/Additions/*.{h,m}'
+  s.subspec 'Additions' do |add|
+    add.source_files     = 'Source/Additions/*.{h,m}'
   end
 end
