@@ -149,6 +149,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _accessoryView.translatesAutoresizingMaskIntoConstraints = NO;
         _accessoryView.backgroundColor = self.backgroundColor;
         _accessoryView.clipsToBounds = YES;
+        _accessoryView.hidden = YES;
         
         _editorTitle = [UILabel new];
         _editorTitle.translatesAutoresizingMaskIntoConstraints = NO;
@@ -247,6 +248,16 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     
     self.rightButtonWC.constant = [self appropriateRightButtonWidth];
     [self layoutIfNeeded];
+}
+
+- (void)setEditing:(BOOL)editing
+{
+    if (self.isEditing == editing) {
+        return;
+    }
+    
+    _editing = editing;
+    _accessoryView.hidden = !editing;
 }
 
 
@@ -375,7 +386,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
                               @"minTextViewHeight" : @(self.textView.intrinsicContentSize.height),
                               };
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(<=hor)-[leftButton(0)]-(<=hor)-[textView]-(<=hor)-[rightButton(0)]-(<=hor)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==hor)-[leftButton(0)]-(<=hor)-[textView]-(==hor)-[rightButton(0)]-(==hor)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[leftButton(0)]-(0)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=rightVerMargin)-[rightButton]-(<=rightVerMargin)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[accessoryView(0)]-(<=ver)-[textView(==minTextViewHeight@250)]-(==ver)-|" options:0 metrics:metrics views:views]];
