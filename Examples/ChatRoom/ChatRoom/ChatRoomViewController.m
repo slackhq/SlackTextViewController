@@ -81,12 +81,12 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     [self.tableView registerClass:[ChatViewCell class] forCellReuseIdentifier:chatCellIdentifier];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:autoCompletionCellIdentifier];
     
-    self.chatToolbar.autoHideRightButton = YES;
-    self.typeIndicatorView.canResignByTouch = YES;
+    self.textInputbar.autoHideRightButton = YES;
+    self.typingIndicatorView.canResignByTouch = YES;
 
     self.textView.placeholder = NSLocalizedString(@"Message", nil);
     self.textView.placeholderColor = [UIColor lightGrayColor];
-    self.chatToolbar.backgroundColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1.0];
+    self.textInputbar.backgroundColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1.0];
     self.textView.layer.borderColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0].CGColor;
     
     [self.leftButton setTintColor:[UIColor colorWithRed:154.0/255.0 green:159.0/255.0 blue:166.0/255.0 alpha:1.0]];
@@ -94,9 +94,9 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
 
     [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
     
-    [self.chatToolbar.editorTitle setTextColor:[UIColor darkGrayColor]];
-    [self.chatToolbar.editortLeftButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
-    [self.chatToolbar.editortRightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
+    [self.textInputbar.editorTitle setTextColor:[UIColor darkGrayColor]];
+    [self.textInputbar.editortLeftButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
+    [self.textInputbar.editortRightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
     
     [self registerPrefixesForAutoCompletion:@[@"@", @"#", @"/", @":"]];
 }
@@ -124,7 +124,7 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)simulateUserTyping:(id)sender
 {
     if (!self.isEditing && !self.isAutoCompleting) {
-        [self.typeIndicatorView insertUsername:[LoremIpsum name]];
+        [self.typingIndicatorView insertUsername:[LoremIpsum name]];
     }
 }
 
@@ -183,7 +183,7 @@ static NSString *autoCompletionCellIdentifier = @"AutoCompletionCell";
     self.textView.backgroundColor = textViewColor;
     
     self.rightButton.enabled = self.isReachable;
-    self.chatToolbar.editortRightButton.enabled = self.isReachable;
+    self.textInputbar.editortRightButton.enabled = self.isReachable;
 }
 
 

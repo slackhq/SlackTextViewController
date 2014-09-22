@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Slack Technologies, Inc. All rights reserved.
 //
 
-#import "SCKChatViewController.h"
+#import "SLKTextViewController.h"
 
-@interface ChatRoomViewController : SCKChatViewController
+@interface ChatRoomViewController : SLKTextViewController
 
 @end

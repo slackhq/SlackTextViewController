@@ -15,24 +15,9 @@
 		4F3EDB59199ED00F004C15D6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB58199ED00F004C15D6 /* main.m */; };
 		4F3EDB5D199ED00F004C15D6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB5C199ED00F004C15D6 /* AppDelegate.m */; };
 		4F3EDB68199ED00F004C15D6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EDB67199ED00F004C15D6 /* Images.xcassets */; };
-		4F3EDB6F199ED00F004C15D6 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB6E199ED00F004C15D6 /* XCTest.framework */; };
-		4F3EDB70199ED00F004C15D6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB4C199ED00F004C15D6 /* Foundation.framework */; };
-		4F3EDB71199ED00F004C15D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB50199ED00F004C15D6 /* UIKit.framework */; };
-		4F3EDB79199ED00F004C15D6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EDB77199ED00F004C15D6 /* InfoPlist.strings */; };
-		4F3EDB7B199ED00F004C15D6 /* ChatRoomTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB7A199ED00F004C15D6 /* ChatRoomTests.m */; };
 		4F3EDB90199ED091004C15D6 /* ChatRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB8F199ED091004C15D6 /* ChatRoomViewController.m */; };
 		4F72F3CC19B4E51A009CD8F4 /* ChatViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F72F3CB19B4E51A009CD8F4 /* ChatViewCell.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		4F3EDB72199ED00F004C15D6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4F3EDB41199ED00F004C15D6 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4F3EDB48199ED00F004C15D6;
-			remoteInfo = ChatRoom;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1142AE8585EB462B8CC69D35 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -47,11 +32,7 @@
 		4F3EDB5B199ED00F004C15D6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4F3EDB5C199ED00F004C15D6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4F3EDB67199ED00F004C15D6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		4F3EDB6D199ED00F004C15D6 /* ChatRoomTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChatRoomTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F3EDB6E199ED00F004C15D6 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		4F3EDB76199ED00F004C15D6 /* ChatRoomTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ChatRoomTests-Info.plist"; sourceTree = "<group>"; };
-		4F3EDB78199ED00F004C15D6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		4F3EDB7A199ED00F004C15D6 /* ChatRoomTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatRoomTests.m; sourceTree = "<group>"; };
 		4F3EDB8E199ED091004C15D6 /* ChatRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatRoomViewController.h; sourceTree = "<group>"; };
 		4F3EDB8F199ED091004C15D6 /* ChatRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatRoomViewController.m; sourceTree = "<group>"; };
 		4F72F3CA19B4E51A009CD8F4 /* ChatViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewCell.h; sourceTree = "<group>"; };
@@ -71,16 +52,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4F3EDB6A199ED00F004C15D6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4F3EDB6F199ED00F004C15D6 /* XCTest.framework in Frameworks */,
-				4F3EDB71199ED00F004C15D6 /* UIKit.framework in Frameworks */,
-				4F3EDB70199ED00F004C15D6 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -88,7 +59,6 @@
 			isa = PBXGroup;
 			children = (
 				4F3EDB52199ED00F004C15D6 /* ChatRoom */,
-				4F3EDB74199ED00F004C15D6 /* ChatRoomTests */,
 				4F3EDB4B199ED00F004C15D6 /* Frameworks */,
 				4F3EDB4A199ED00F004C15D6 /* Products */,
 				8522B79647AD437F85843A28 /* Pods.xcconfig */,
@@ -99,7 +69,6 @@
 			isa = PBXGroup;
 			children = (
 				4F3EDB49199ED00F004C15D6 /* ChatRoom.app */,
-				4F3EDB6D199ED00F004C15D6 /* ChatRoomTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -142,24 +111,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		4F3EDB74199ED00F004C15D6 /* ChatRoomTests */ = {
-			isa = PBXGroup;
-			children = (
-				4F3EDB7A199ED00F004C15D6 /* ChatRoomTests.m */,
-				4F3EDB75199ED00F004C15D6 /* Supporting Files */,
-			);
-			path = ChatRoomTests;
-			sourceTree = "<group>";
-		};
-		4F3EDB75199ED00F004C15D6 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				4F3EDB76199ED00F004C15D6 /* ChatRoomTests-Info.plist */,
-				4F3EDB77199ED00F004C15D6 /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -182,24 +133,6 @@
 			productReference = 4F3EDB49199ED00F004C15D6 /* ChatRoom.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4F3EDB6C199ED00F004C15D6 /* ChatRoomTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4F3EDB81199ED00F004C15D6 /* Build configuration list for PBXNativeTarget "ChatRoomTests" */;
-			buildPhases = (
-				4F3EDB69199ED00F004C15D6 /* Sources */,
-				4F3EDB6A199ED00F004C15D6 /* Frameworks */,
-				4F3EDB6B199ED00F004C15D6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4F3EDB73199ED00F004C15D6 /* PBXTargetDependency */,
-			);
-			name = ChatRoomTests;
-			productName = ChatRoomTests;
-			productReference = 4F3EDB6D199ED00F004C15D6 /* ChatRoomTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -208,11 +141,6 @@
 			attributes = {
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Slack Technologies, Inc.";
-				TargetAttributes = {
-					4F3EDB6C199ED00F004C15D6 = {
-						TestTargetID = 4F3EDB48199ED00F004C15D6;
-					};
-				};
 			};
 			buildConfigurationList = 4F3EDB44199ED00F004C15D6 /* Build configuration list for PBXProject "ChatRoom" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -228,7 +156,6 @@
 			projectRoot = "";
 			targets = (
 				4F3EDB48199ED00F004C15D6 /* ChatRoom */,
-				4F3EDB6C199ED00F004C15D6 /* ChatRoomTests */,
 			);
 		};
 /* End PBXProject section */
@@ -240,14 +167,6 @@
 			files = (
 				4F3EDB68199ED00F004C15D6 /* Images.xcassets in Resources */,
 				4F3EDB57199ED00F004C15D6 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4F3EDB6B199ED00F004C15D6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4F3EDB79199ED00F004C15D6 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,37 +217,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4F3EDB69199ED00F004C15D6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4F3EDB7B199ED00F004C15D6 /* ChatRoomTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		4F3EDB73199ED00F004C15D6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4F3EDB48199ED00F004C15D6 /* ChatRoom */;
-			targetProxy = 4F3EDB72199ED00F004C15D6 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4F3EDB55199ED00F004C15D6 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				4F3EDB56199ED00F004C15D6 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		4F3EDB77199ED00F004C15D6 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4F3EDB78199ED00F004C15D6 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -436,46 +331,6 @@
 			};
 			name = Release;
 		};
-		4F3EDB82199ED00F004C15D6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ChatRoom.app/ChatRoom";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ChatRoom/ChatRoom-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "ChatRoomTests/ChatRoomTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		4F3EDB83199ED00F004C15D6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ChatRoom.app/ChatRoom";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ChatRoom/ChatRoom-Prefix.pch";
-				INFOPLIST_FILE = "ChatRoomTests/ChatRoomTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -493,15 +348,6 @@
 			buildConfigurations = (
 				4F3EDB7F199ED00F004C15D6 /* Debug */,
 				4F3EDB80199ED00F004C15D6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4F3EDB81199ED00F004C15D6 /* Build configuration list for PBXNativeTarget "ChatRoomTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4F3EDB82199ED00F004C15D6 /* Debug */,
-				4F3EDB83199ED00F004C15D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
