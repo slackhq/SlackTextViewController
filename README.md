@@ -1,7 +1,7 @@
 SlackTextViewController
 =============================================
-[![Pod Version](http://img.shields.io/cocoapods/v/SlackChatKit.svg)](https://cocoadocs.org/docsets/SlackChatKit)
-[![License](http://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+[![Pod Version](http://img.shields.io/cocoapods/v/SlackTextViewController.svg)](https://cocoadocs.org/docsets/SlackTextViewController)
+[![License](http://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://opensource.org/licenses/Apache2.0)
 
 A drop-in UIViewController subclass with a growing text input view and other useful messaging features. Meant to be a replacement for UITableViewController & UICollectionViewController.
 
