@@ -1,5 +1,0 @@
-#include "Pods-SlackChatKit.xcconfig"
-GCC_PREPROCESSOR_DEFINITIONS = COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/SlackChatKit" "${PODS_ROOT}/BuildHeaders/SlackChatKit/Additions" "${PODS_ROOT}/BuildHeaders/SlackChatKit/Classes" "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/LoremIpsum" "${PODS_ROOT}/Headers/SlackChatKit" "${PODS_ROOT}/Headers/SlackChatKit/Additions" "${PODS_ROOT}/Headers/SlackChatKit/Classes"
-OTHER_LDFLAGS = -ObjC ${PODS_SLACKCHATKIT_OTHER_LDFLAGS}
-PODS_ROOT = ${SRCROOT}
