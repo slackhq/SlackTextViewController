@@ -5,9 +5,9 @@ SlackTextViewController
 
 A drop-in UIViewController subclass with a growing text input view and other useful messaging features. Meant to be a replacement for UITableViewController & UICollectionViewController.
 
-This library is used in Slack's iOS app. It was built to fit our needs, but is flexible enough to be reused by others wanting to build great messaging apps for iOS.
+![Demo Gif](Screenshots/slacktextviewcontroller_demo.gif)
 
-![GIF](Screenshots/animated.gif)
+This library is used in Slack's iOS app. It was built to fit our needs, but is flexible enough to be reused by others wanting to build great messaging apps for iOS.
 
 ## Features
 
