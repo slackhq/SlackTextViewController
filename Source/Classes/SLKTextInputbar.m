@@ -100,7 +100,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.font = [UIFont systemFontOfSize:15.0];
         _textView.maxNumberOfLines = [self defaultNumberOfLines];
         
-#if DEBUG
+#if DEBUG && TARGET_IPHONE_SIMULATOR
         _textView.autocorrectionType = UITextAutocorrectionTypeNo;
         _textView.spellCheckingType = UITextSpellCheckingTypeNo;
 #else

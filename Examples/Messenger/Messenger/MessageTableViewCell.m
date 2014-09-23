@@ -34,9 +34,11 @@
 {
     [super layoutSubviews];
     
-    CGRect avatarFrame = self.imageView.frame;
-    avatarFrame.origin = CGPointMake(kAvatarSize/2.0, kAvatarSize/3.0);
-    self.imageView.frame = avatarFrame;
+    if (self.topAligned) {
+        CGRect avatarFrame = self.imageView.frame;
+        avatarFrame.origin = CGPointMake(kAvatarSize/2.0, 10.0);
+        self.imageView.frame = avatarFrame;
+    }
 }
 
 #pragma mark - Helpers

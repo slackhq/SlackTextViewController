@@ -15,13 +15,11 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
 static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 @interface MessageViewController ()
-@property (nonatomic, getter = isReachable) BOOL reachable;
 
 @property (nonatomic, strong) NSMutableArray *messages;
 
 @property (nonatomic, strong) NSArray *users;
 @property (nonatomic, strong) NSArray *channels;
-@property (nonatomic, strong) NSArray *commands;
 @property (nonatomic, strong) NSArray *emojis;
 
 @property (nonatomic, strong) NSArray *searchResult;
@@ -35,21 +33,16 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self = [super initWithTableViewStyle:UITableViewStylePlain];
     if (self) {
         
-        self.users = @[@"Anna", @"Alicia", @"Arnold", @"Armando", @"Antonio", @"Brad", @"Catalaya", @"Christoph"];
+        self.users = @[@"Anna", @"Alicia", @"Arnold", @"Armando", @"Antonio", @"Brad", @"Catalaya", @"Christoph", @"Emerson", @"Eric", @"Everyone"];
         self.channels = @[@"General", @"Random", @"iOS", @"Bugs", @"Sports", @"Android", @"UI", @"SSB"];
         self.emojis = @[@"m", @"man", @"machine", @"block-a", @"block-b", @"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
-        self.commands = @[@"help", @"away", @"close", @"color", @"colors", @"feedback", @"invite", @"me", @"msg", @"dm", @"open"];
 
-        UIBarButtonItem *reachItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_network"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateReachability:)];
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"] style:UIBarButtonItemStylePlain target:self action:@selector(editRandomMessage:)];
         
         UIBarButtonItem *typeItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_typing"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateUserTyping:)];
         UIBarButtonItem *appendItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_append"] style:UIBarButtonItemStylePlain target:self action:@selector(fillWithText:)];
         
-        self.navigationItem.leftBarButtonItems = @[reachItem, editItem];
-        self.navigationItem.rightBarButtonItems = @[appendItem, typeItem];
-        
-        self.reachable = YES;
+        self.navigationItem.rightBarButtonItems = @[editItem, appendItem, typeItem];
     }
     return self;
 }
@@ -79,8 +72,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:MessengerCellIdentifier];
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
-    
+    [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
+
     self.textInputbar.autoHideRightButton = YES;
     self.typingIndicatorView.canResignByTouch = YES;
 
@@ -97,7 +90,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [self.textInputbar.editortLeftButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
     [self.textInputbar.editortRightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
     
-    [self registerPrefixesForAutoCompletion:@[@"@", @"#", @"/", @":"]];
+    [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":"]];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -125,13 +118,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     if (!self.isEditing && !self.isAutoCompleting) {
         [self.typingIndicatorView insertUsername:[LoremIpsum name]];
     }
-}
-
-- (void)simulateReachability:(id)sender
-{
-    _reachable = !self.isReachable;
-    
-    [self didChangeReachability];
 }
 
 - (void)editCellMessage:(UIGestureRecognizer *)gesture
@@ -168,22 +154,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [self.messages addObject:message];
     
     [self.tableView reloadData];
-}
-
-
-#pragma mark - Extension
-
-- (void)didChangeReachability
-{
-    NSString *placeholder = self.isReachable ? NSLocalizedString(@"Message", nil) : NSLocalizedString(@"Connecting...", nil);
-    UIColor *textViewColor = self.isReachable ? [UIColor whiteColor] : [UIColor colorWithRed:253/255.0 green:240/255.0 blue:195/255.0 alpha:1.0];
-    
-    self.textView.placeholder = placeholder;
-    self.textView.backgroundColor = textViewColor;
-    
-    self.rightButton.enabled = self.isReachable;
-    self.leftButton.enabled = self.isReachable;
-    self.textInputbar.editortRightButton.enabled = self.isReachable;
 }
 
 
@@ -258,7 +228,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (BOOL)canPressRightButton
 {
-    return self.isReachable && [super canPressRightButton];
+    return [super canPressRightButton];
 }
 
 - (BOOL)canShowAutoCompletion
@@ -280,13 +250,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     else if ([prefix isEqualToString:@"#"])
     {
         array = self.channels;
-        if (word.length > 0) {
-            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self !=[c] %@", word, word]];
-        }
-    }
-    else if ([prefix isEqualToString:@"/"])
-    {
-        array = self.commands;
         if (word.length > 0) {
             array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self !=[c] %@", word, word]];
         }
@@ -343,14 +306,14 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([tableView isEqual:self.tableView]) {
-        return [self MessengerCellForRowAtIndexPath:indexPath];
+        return [self messageCellForRowAtIndexPath:indexPath];
     }
     else {
         return [self autoCompletionCellForRowAtIndexPath:indexPath];
     }
 }
 
-- (UITableViewCell *)MessengerCellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (MessageTableViewCell *)messageCellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MessageTableViewCell *cell = (MessageTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:MessengerCellIdentifier];
     
@@ -362,12 +325,13 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     NSString *message = self.messages[indexPath.row];
     cell.textLabel.text = message;
     cell.indexPath = indexPath;
-    
+    cell.topAligned = YES;
+
     if (cell.needsPlaceholder)
     {
         cell.needsPlaceholder = NO;
         
-        CGFloat scale = [UIScreen mainScreen].scale;
+        CGFloat scale = [UIScreen mainScreen].nativeScale;
         CGSize imgSize = CGSizeMake(kAvatarSize*scale, kAvatarSize*scale);
         
         [LoremIpsum asyncPlaceholderImageWithSize:imgSize
@@ -384,9 +348,11 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     return cell;
 }
 
-- (UITableViewCell *)autoCompletionCellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (MessageTableViewCell *)autoCompletionCellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:AutoCompletionCellIdentifier];
+    MessageTableViewCell *cell = (MessageTableViewCell *)[self.autoCompletionView dequeueReusableCellWithIdentifier:AutoCompletionCellIdentifier];
+    cell.indexPath = indexPath;
+    cell.topAligned = NO;
     
     NSString *item = self.searchResult[indexPath.row];
     
@@ -399,8 +365,22 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     cell.textLabel.text = item;
     cell.textLabel.font = [UIFont systemFontOfSize:14.0];
-    cell.textLabel.numberOfLines = 1;
     cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+    cell.textLabel.numberOfLines = 1;
+
+    if (cell.needsPlaceholder && [self.foundPrefix isEqualToString:@"@"])
+    {
+        cell.needsPlaceholder = NO;
+        
+        CGFloat scale = [UIScreen mainScreen].nativeScale;
+        CGSize imgSize = CGSizeMake(kAvatarSize*scale, kAvatarSize*scale);
+        
+        [LoremIpsum asyncPlaceholderImageWithSize:imgSize
+                                       completion:^(UIImage *image) {
+                                           image = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
+                                           cell.imageView.image = image;
+                                       }];
+    }
     
     return cell;
 }
@@ -417,7 +397,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:16.0],
                                      NSParagraphStyleAttributeName: paragraphStyle};
         
-        CGFloat width = CGRectGetWidth(tableView.frame)-(kAvatarSize*1.5);
+        CGFloat width = CGRectGetWidth(tableView.frame)-(kAvatarSize*2.0+10);
         
         CGRect bounds = [message boundingRectWithSize:CGSizeMake(width, 0.0) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
         
