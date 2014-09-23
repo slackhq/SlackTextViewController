@@ -352,7 +352,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     MessageTableViewCell *cell = (MessageTableViewCell *)[self.autoCompletionView dequeueReusableCellWithIdentifier:AutoCompletionCellIdentifier];
     cell.indexPath = indexPath;
-    cell.topAligned = NO;
     
     NSString *item = self.searchResult[indexPath.row];
     
@@ -367,20 +366,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     cell.textLabel.font = [UIFont systemFontOfSize:14.0];
     cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     cell.textLabel.numberOfLines = 1;
-
-    if (cell.needsPlaceholder && [self.foundPrefix isEqualToString:@"@"])
-    {
-        cell.needsPlaceholder = NO;
-        
-        CGFloat scale = [UIScreen mainScreen].nativeScale;
-        CGSize imgSize = CGSizeMake(kAvatarSize*scale, kAvatarSize*scale);
-        
-        [LoremIpsum asyncPlaceholderImageWithSize:imgSize
-                                       completion:^(UIImage *image) {
-                                           image = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
-                                           cell.imageView.image = image;
-                                       }];
-    }
     
     return cell;
 }

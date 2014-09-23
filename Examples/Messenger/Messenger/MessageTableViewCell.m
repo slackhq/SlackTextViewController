@@ -19,7 +19,9 @@
         self.textLabel.numberOfLines = 0;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        self.imageView.image = [self blankImageForSize:CGSizeMake(kAvatarSize, kAvatarSize)];
+        UIImage *placeholder = placeholderImage([UIColor colorWithWhite:0.9 alpha:1.0]);
+        
+        self.imageView.image = placeholder;
         self.imageView.layer.cornerRadius = roundf(kAvatarSize/2.0);
         self.imageView.layer.masksToBounds = YES;
         self.imageView.layer.shouldRasterize = YES;
@@ -43,11 +45,13 @@
 
 #pragma mark - Helpers
 
-- (UIImage *)blankImageForSize:(CGSize)size
+UIImage *placeholderImage(UIColor *color)
 {
+    CGSize size = CGSizeMake(kAvatarSize, kAvatarSize);
+    
     UIGraphicsBeginImageContext(size);
 	CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, [UIColor colorWithWhite:0.9 alpha:1.0].CGColor);
+    CGContextSetFillColorWithColor(context, color.CGColor);
     CGContextFillRect(context, CGRectMake(0.0, 0.0, size.width, size.height));
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
