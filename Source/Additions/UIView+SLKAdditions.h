@@ -19,10 +19,6 @@
 /** @name UIView additional features used for SlackTextViewController. */
 @interface UIView (SLKAdditions)
 
-// Convenience methods for CGRect calculation
-CGRect adjustEndFrame(CGRect endFrame, UIInterfaceOrientation orientation);
-BOOL isValidKeyboardFrame(CGRect frame);
-
 /**
  Animates the view's constraints by calling layoutIfNeeded.
  

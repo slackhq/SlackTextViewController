@@ -1,0 +1,43 @@
+
+
+iPhone - Portrait
+
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {320, 216}}"; //SLKTextPredictionModeHidden (0pts)
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {320, 224}}"; //SLKTextPredictionModeMinimised (8pts)
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {320, 253}}"; //SLKTextPredictionModeVisible (37pts)
+
+iPhone - Landscape
+
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {568, 162}}"; //SLKTextPredictionModeHidden (0pts)
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {568, 170}}"; //SLKTextPredictionModeHidden (8pts)
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {568, 193}}"; //SLKTextPredictionModeHidden (31pts)
+
+
+
+
+iPhone6+ - Portrait
+
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {414, 226}}"; //SLKTextPredictionModeHidden (0pts)
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {414, 236}}"; //SLKTextPredictionModeMinimised (9pts)
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {320, 271}}"; //SLKTextPredictionModeVisible (45pts)
+
+iPhone6+ - Landscape
+
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {736, 162}}"; //SLKTextPredictionModeHidden (0pts)
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {736, 171}}"; //SLKTextPredictionModeMinimised (9pts)
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {736, 194}}"; //SLKTextPredictionModeVisible (32pts)
+
+
+
+
+iPad - Portrait
+
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {768, 264}}"; //SLKTextPredictionModeHidden (pts)
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {768, 274}}"; //SLKTextPredictionModeMinimised (10pts)
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {768, 303}}"; //SLKTextPredictionModeVisible (39pts)
+
+iPad - Landscape
+
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {1024, 352}}"; //SLKTextPredictionModeHidden (pts)
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {1024, 362}}"; //SLKTextPredictionModeMinimised (10pts)
+UIKeyboardBoundsUserInfoKey = "NSRect: {{0, 0}, {1024, 391}}"; //SLKTextPredictionModeVisible (39pts)

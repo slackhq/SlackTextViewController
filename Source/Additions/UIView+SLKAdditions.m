@@ -16,25 +16,9 @@
 
 #import "UIView+SLKAdditions.h"
 
+#import "SLKUIConstants.h"
+
 @implementation UIView (SLKAdditions)
-
-CGRect adjustEndFrame(CGRect endFrame, UIInterfaceOrientation orientation) {
-    
-    // Inverts the end rect for landscape orientation
-    if (UIInterfaceOrientationIsLandscape(orientation)) {
-        endFrame = CGRectMake(0.0, endFrame.origin.x, endFrame.size.height, endFrame.size.width);
-    }
-    
-    return endFrame;
-}
-
-BOOL isValidKeyboardFrame(CGRect frame) {
-    if ((frame.origin.y > CGRectGetHeight([UIScreen mainScreen].bounds)) ||
-        (frame.size.height < 1) || (frame.size.width < 1) || (frame.origin.y < 0)) {
-        return NO;
-    }
-    return YES;
-}
 
 - (void)animateLayoutIfNeededWithBounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations
 {

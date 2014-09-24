@@ -66,10 +66,4 @@
  */
 - (NSString *)wordAtCaretRange:(NSRangePointer)range;
 
-/**
- Disables iOS8's Quick Type bar.
- @param disable YES if the bar should be disabled.
- */
-- (void)disableQuickTypeBar:(BOOL)disable;
-
 @end

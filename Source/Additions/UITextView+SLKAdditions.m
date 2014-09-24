@@ -172,14 +172,4 @@
     return word;
 }
 
-- (void)disableQuickTypeBar:(BOOL)disable
-{
-    self.autocorrectionType = disable ? UITextAutocorrectionTypeNo : UITextAutocorrectionTypeDefault;
-    
-    if (self.isFirstResponder) {
-        [self resignFirstResponder];
-        [self becomeFirstResponder];
-    }
-}
-
 @end

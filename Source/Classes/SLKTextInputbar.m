@@ -21,6 +21,8 @@
 #import "UITextView+SLKAdditions.h"
 #import "UIView+SLKAdditions.h"
 
+#import "SLKUIConstants.h"
+
 NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.TextViewController.TextInputbar.FrameDidChange";
 
 @interface SLKTextInputbar () <UITextViewDelegate>
@@ -100,13 +102,13 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.font = [UIFont systemFontOfSize:15.0];
         _textView.maxNumberOfLines = [self defaultNumberOfLines];
         
-#if DEBUG && TARGET_IPHONE_SIMULATOR
-        _textView.autocorrectionType = UITextAutocorrectionTypeNo;
-        _textView.spellCheckingType = UITextSpellCheckingTypeNo;
-#else
+//#if DEBUG && TARGET_IPHONE_SIMULATOR
+//        _textView.autocorrectionType = UITextAutocorrectionTypeNo;
+//        _textView.spellCheckingType = UITextSpellCheckingTypeNo;
+//#else
         _textView.autocorrectionType = UITextAutocorrectionTypeDefault;
         _textView.spellCheckingType = UITextSpellCheckingTypeDefault;
-#endif
+//#endif
         
         _textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
         _textView.keyboardType = UIKeyboardTypeTwitter;
@@ -199,16 +201,14 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (NSUInteger)defaultNumberOfLines
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        if (CGRectGetHeight([UIScreen mainScreen].bounds) >= 568.0) {
-            return 6;
-        }
-        else {
-            return 4;
-        }
+    if (UI_IS_IPAD) {
+        return 8;
+    }
+    if (UI_IS_IPHONE4) {
+        return 4;
     }
     else {
-        return 8;
+        return 6;
     }
 }
 
