@@ -331,7 +331,12 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     {
         cell.needsPlaceholder = NO;
         
-        CGFloat scale = [UIScreen mainScreen].nativeScale;
+        CGFloat scale = [UIScreen mainScreen].scale;
+        
+        if ([[UIScreen mainScreen] respondsToSelector:@selector(nativeScale)]) {
+            scale = [UIScreen mainScreen].nativeScale;
+        }
+        
         CGSize imgSize = CGSizeMake(kAvatarSize*scale, kAvatarSize*scale);
         
         [LoremIpsum asyncPlaceholderImageWithSize:imgSize
