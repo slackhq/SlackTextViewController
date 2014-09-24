@@ -64,6 +64,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [self setupViewConstraints];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
+    [self.leftButton.imageView addObserver:self forKeyPath:NSStringFromSelector(@selector(image)) options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
 }
 
 
@@ -460,7 +461,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     {
         self.accessoryViewHC.constant = zero;
 
-        CGSize leftButtonSize = [self.leftButton imageForState:UIControlStateNormal].size;
+        CGSize leftButtonSize = [self.leftButton imageForState:self.leftButton.state].size;
         
         self.leftButtonWC.constant = roundf(leftButtonSize.width);
         self.leftButtonHC.constant = roundf(leftButtonSize.height);
@@ -472,12 +473,30 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     }
 }
 
+#pragma mark - Observers
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([object isEqual:self.leftButton.imageView] && [keyPath isEqualToString:NSStringFromSelector(@selector(image))]) {
+        UIImage *newImage = change[NSKeyValueChangeNewKey];
+        UIImage *oldImage = change[NSKeyValueChangeOldKey];
+        if ([newImage isEqual:oldImage]) {
+            return;
+        }
+        [self updateConstraintConstants];
+    }
+    else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
 
 #pragma mark - Lifeterm
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+     [self removeObserver:self.leftButton.imageView forKeyPath:NSStringFromSelector(@selector(image))];
     
     _leftButton = nil;
     _rightButton = nil;
