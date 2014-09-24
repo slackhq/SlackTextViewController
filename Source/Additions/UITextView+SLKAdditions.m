@@ -163,9 +163,6 @@
     // If a break is detected, return the last component of the string
     if ([word rangeOfString:@"\n"].location != NSNotFound) {
         *rangePointer = [text rangeOfString:word];
-        
-        NSLog(@"found a break");
-        
         word = [[word componentsSeparatedByString:@"\n"] lastObject];
     }
 

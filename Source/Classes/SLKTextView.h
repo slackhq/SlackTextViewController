@@ -40,6 +40,8 @@ extern NSString * const SLKTextViewDidShakeNotification;
 /** YES if quickly refreshed the textview without the intension to dismiss the keyboard. @view -disableQuicktypeBar: for more details. */
 @property (nonatomic, readonly) BOOL didNotResignFirstResponder;
 
+@property (nonatomic, getter=isLoupeVisible) BOOL loupeVisible;
+
 /**
  Disables iOS8's Quick Type bar.
  The cleanest hack so far is to disable auto-correction and spellingCheck momentarily, while calling -refreshFirstResponder if -isFirstResponder to be able to reflect the property changes in the text view.

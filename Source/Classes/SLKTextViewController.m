@@ -331,7 +331,6 @@
 - (void)updateQuicktypeBarMode
 {
     CGFloat quicktypeBarHeight = self.keyboardHC.constant-minimumKeyboardHeight();
-    NSLog(@"quicktypeBarHeight : %f", quicktypeBarHeight);
     
     // Updates the QuickType bar mode based on the keyboard height constant
     self.quicktypeBarMode = SLKQuicktypeBarModeForHeight(quicktypeBarHeight);
@@ -339,15 +338,9 @@
 
 - (void)setQuicktypeBarMode:(SLKQuicktypeBarMode)quicktypeBarMode
 {
-//    if (self.quicktypeBarMode == quicktypeBarMode) {
-//        return;
-//    }
-    
     _quicktypeBarMode = quicktypeBarMode;
-    NSLog(@"quicktypeBarMode : %@", NSStringFromSLKQuicktypeBarMode(quicktypeBarMode));
     
     BOOL shouldHide = quicktypeBarMode == SLKQuicktypeBarModeExpanded  && self.autoCompleting;
-    NSLog(@"shouldHide : %@", shouldHide ? @"YES" : @"NO");
     
     // Skips if the QuickType Bar is minimised
     if (quicktypeBarMode == SLKQuicktypeBarModeCollapsed) {
