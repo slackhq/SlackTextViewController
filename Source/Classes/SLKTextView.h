@@ -37,4 +37,26 @@ extern NSString * const SLKTextViewDidShakeNotification;
 /** YES if the text view is and can still expand it self, depending if the maximum number of lines are reached. */
 @property (nonatomic, readonly) BOOL isExpanding;
 
+/** YES if quickly refreshed the textview without the intension to dismiss the keyboard. @view -disableQuicktypeBar: for more details. */
+@property (nonatomic, readonly) BOOL didNotResignFirstResponder;
+
+@property (nonatomic, getter=isLoupeVisible) BOOL loupeVisible;
+
+/**
+ Disables iOS8's Quick Type bar.
+ The cleanest hack so far is to disable auto-correction and spellingCheck momentarily, while calling -refreshFirstResponder if -isFirstResponder to be able to reflect the property changes in the text view.
+ 
+ @param disable YES if the bar should be disabled.
+ */
+- (void)disableQuicktypeBar:(BOOL)disable;
+
+/**
+ Some text view properties don't update when it's already firstResponder (auto-correction, spelling-check, etc.)
+ To be able to update the text view while still being first responder, requieres to switch quickly from -resignFirstResponder to -becomeFirstResponder.
+ When doing so, the flag 'didNotResignFirstResponder' is momentarly set to YES before it goes back to -isFirstResponder, to be able to prevent some tasks to be excuted because of UIKeyboard notifications.
+ 
+ You can also use this method to confirm an auto-correction programatically, before the text view resigns first responder.
+ */
+- (void)refreshFirstResponder;
+
 @end

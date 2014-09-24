@@ -163,23 +163,10 @@
     // If a break is detected, return the last component of the string
     if ([word rangeOfString:@"\n"].location != NSNotFound) {
         *rangePointer = [text rangeOfString:word];
-        
-        NSLog(@"found a break");
-        
         word = [[word componentsSeparatedByString:@"\n"] lastObject];
     }
 
     return word;
-}
-
-- (void)disableQuickTypeBar:(BOOL)disable
-{
-    self.autocorrectionType = disable ? UITextAutocorrectionTypeNo : UITextAutocorrectionTypeDefault;
-    
-    if (self.isFirstResponder) {
-        [self resignFirstResponder];
-        [self becomeFirstResponder];
-    }
 }
 
 @end

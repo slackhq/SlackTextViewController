@@ -21,6 +21,8 @@
 #import "UITextView+SLKAdditions.h"
 #import "UIView+SLKAdditions.h"
 
+#import "SLKUIConstants.h"
+
 NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.TextViewController.TextInputbar.FrameDidChange";
 
 @interface SLKTextInputbar () <UITextViewDelegate>
@@ -100,13 +102,13 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.font = [UIFont systemFontOfSize:15.0];
         _textView.maxNumberOfLines = [self defaultNumberOfLines];
         
-#if DEBUG && TARGET_IPHONE_SIMULATOR
-        _textView.autocorrectionType = UITextAutocorrectionTypeNo;
-        _textView.spellCheckingType = UITextSpellCheckingTypeNo;
-#else
+//#if DEBUG && TARGET_IPHONE_SIMULATOR
+//        _textView.autocorrectionType = UITextAutocorrectionTypeNo;
+//        _textView.spellCheckingType = UITextSpellCheckingTypeNo;
+//#else
         _textView.autocorrectionType = UITextAutocorrectionTypeDefault;
         _textView.spellCheckingType = UITextSpellCheckingTypeDefault;
-#endif
+//#endif
         
         _textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
         _textView.keyboardType = UIKeyboardTypeTwitter;
@@ -118,6 +120,13 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.layer.cornerRadius = 5.0;
         _textView.layer.borderWidth = 1.0;
         _textView.layer.borderColor =  [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:205.0/255.0 alpha:1.0].CGColor;
+        
+        // Registers the loupe gesture to detect when it will become visible
+        for (UIGestureRecognizer *gesture in _textView.gestureRecognizers) {
+            if ([gesture isKindOfClass:NSClassFromString(@"UIVariableDelayLoupeGesture")]) {
+                [gesture addTarget:self action:@selector(willShowLoupe:)];
+            }
+        }
     }
     return _textView;
 }
@@ -199,16 +208,14 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (NSUInteger)defaultNumberOfLines
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        if (CGRectGetHeight([UIScreen mainScreen].bounds) >= 568.0) {
-            return 6;
-        }
-        else {
-            return 4;
-        }
+    if (UI_IS_IPAD) {
+        return 8;
+    }
+    if (UI_IS_IPHONE4) {
+        return 4;
     }
     else {
-        return 8;
+        return 6;
     }
 }
 
@@ -301,6 +308,24 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 }
 
 
+#pragma mark - Magnifying Glass handling
+
+- (void)willShowLoupe:(UIGestureRecognizer *)gesture
+{
+    if (gesture.state == UIGestureRecognizerStateChanged) {
+        self.textView.loupeVisible = YES;
+    }
+    else {
+        self.textView.loupeVisible = NO;
+    }
+    
+    // We still need to notify a selection change in the textview after the magnifying class is dismissed
+    if (gesture.state == UIGestureRecognizerStateEnded) {
+        [self textViewDidChangeSelection:self.textView];
+    }
+}
+
+
 #pragma mark - UITextViewDelegate
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
@@ -331,6 +356,10 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (void)textViewDidChangeSelection:(UITextView *)textView
 {
+    if (self.textView.isLoupeVisible) {
+        return;
+    }
+    
     NSDictionary *userInfo = @{@"range": [NSValue valueWithRange:textView.selectedRange]};
     [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewSelectionDidChangeNotification object:self.textView userInfo:userInfo];
 }

@@ -23,7 +23,7 @@
     
     [self.window makeKeyAndVisible];
     
-    return self.window;
+    return YES;
 }
 
 @end

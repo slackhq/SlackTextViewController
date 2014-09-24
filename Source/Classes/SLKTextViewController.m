@@ -15,6 +15,7 @@
 //
 
 #import "SLKTextViewController.h"
+#import "SLKUIConstants.h"
 
 @interface SLKTextViewController () <UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
@@ -34,6 +35,8 @@
 
 // Used for Auto-Completion
 @property (nonatomic, readonly) NSRange foundPrefixRange;
+
+@property (nonatomic) SLKQuicktypeBarMode quicktypeBarMode;
 
 @end
 
@@ -318,6 +321,34 @@
     _autoCompleting = autoCompleting;
     
     self.scrollViewProxy.scrollEnabled = !autoCompleting;
+    
+    // Updates the iOS8 QuickType bar mode based on the keyboard height constant
+    if (UI_IS_IOS8_AND_HIGHER) {
+        [self updateQuicktypeBarMode];
+    }
+}
+
+- (void)updateQuicktypeBarMode
+{
+    CGFloat quicktypeBarHeight = self.keyboardHC.constant-minimumKeyboardHeight();
+    
+    // Updates the QuickType bar mode based on the keyboard height constant
+    self.quicktypeBarMode = SLKQuicktypeBarModeForHeight(quicktypeBarHeight);
+}
+
+- (void)setQuicktypeBarMode:(SLKQuicktypeBarMode)quicktypeBarMode
+{
+    _quicktypeBarMode = quicktypeBarMode;
+    
+    BOOL shouldHide = quicktypeBarMode == SLKQuicktypeBarModeExpanded  && self.autoCompleting;
+    
+    // Skips if the QuickType Bar is minimised
+    if (quicktypeBarMode == SLKQuicktypeBarModeCollapsed) {
+        return;
+    }
+    
+    // Hides the iOS8 QuicktypeBar if visible and auto-completing mode is on
+    [self.textView disableQuicktypeBar:shouldHide];
 }
 
 - (void)setKeyboardPanningEnabled:(BOOL)enabled
@@ -602,6 +633,10 @@
 
 - (void)willShowOrHideKeyboard:(NSNotification *)notification
 {
+    if (self.textView.didNotResignFirstResponder) {
+        return;
+    }
+    
     // Skips this if it's not the expected textView.
     if (![self.textView isFirstResponder]) {
         return;
@@ -637,6 +672,10 @@
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
 {
+    if (self.textView.didNotResignFirstResponder) {
+        return;
+    }
+    
     // Checks if it's showing or hidding the keyboard
     BOOL show = [notification.name isEqualToString:UIKeyboardDidShowNotification];
     
@@ -716,6 +755,11 @@
 
 - (void)didChangeTextViewContentSize:(NSNotification *)notification
 {
+    // Skips this it's not the expected textView.
+    if (![self.textView isEqual:notification.object]) {
+        return;
+    }
+    
     [self textDidUpdate:YES];
 }
 

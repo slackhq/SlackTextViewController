@@ -244,18 +244,18 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         array = self.users;
         
         if (word.length > 0) {
-            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self !=[c] %@", word, word]];
+            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
         }
     }
     else if ([prefix isEqualToString:@"#"])
     {
         array = self.channels;
         if (word.length > 0) {
-            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self !=[c] %@", word, word]];
+            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
         }
     }
     else if ([prefix isEqualToString:@":"] && word.length > 0) {
-        array = [self.emojis filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND NOT (self CONTAINS[cd] %@)", word, prefix]];
+        array = [self.emojis filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
     }
     
     if (array.count > 0) {
