@@ -612,6 +612,7 @@
     NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
 
     CGFloat keyboardHeight = MIN(CGRectGetWidth(endFrame), CGRectGetHeight(endFrame));
+    keyboardHeight -= self.tabBarController.tabBar.frame.size.height;
     
     // Checks if it's showing or hidding the keyboard
     BOOL show = [notification.name isEqualToString:UIKeyboardWillShowNotification];
@@ -655,7 +656,7 @@
     
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
-    self.keyboardHC.constant = CGRectGetHeight([UIScreen mainScreen].bounds)-endFrame.origin.y;
+    self.keyboardHC.constant = MAX(CGRectGetHeight([UIScreen mainScreen].bounds)-endFrame.origin.y-self.tabBarController.tabBar.frame.size.height, 0);
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     _panningKeyboard = self.scrollViewProxy.isDragging;
