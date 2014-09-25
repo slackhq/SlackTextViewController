@@ -733,8 +733,6 @@
     
     CGFloat keyboardHeight = [self appropriateKeyboardHeight:notification];
     
-    NSLog(@"keyboardHeight : %f", keyboardHeight);
-    
     if (keyboardHeight < 0) {
         keyboardHeight = 0.0;
     }
