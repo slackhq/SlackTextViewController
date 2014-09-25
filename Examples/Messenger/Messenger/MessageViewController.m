@@ -175,16 +175,17 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (void)didPressLeftButton:(id)sender
 {
+    NSLog(@"%s",__FUNCTION__);
+    
     [super didPressLeftButton:sender];
 }
 
 - (void)didPressRightButton:(id)sender
 {
-    // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button (in iOS7)
-    if ([self.textView isFirstResponder]) {
-        [self.textView resignFirstResponder];
-        [self.textView becomeFirstResponder];
-    }
+    NSLog(@"%s",__FUNCTION__);
+    
+    // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button
+    [self.textView refreshFirstResponder];
     
     NSString *message = [self.textView.text copy];
     
