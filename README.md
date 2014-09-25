@@ -47,7 +47,7 @@ pod 'SlackTextViewController'
 ###Subclassing
 `SCKChatViewController` is meant to be subclassed, like you would normally do with UITableViewController or UICollectionViewController. This pattern is a convenient way of extending UIViewController. SlackTextViewController manages a lot behind the scenes while still providing the ability to add custom behaviours. You may override methods, and decide to call super and  perform additional logic, or not to call super and override default logic.
 
-Start by creating a new instance subclass of `SCKChatViewController`.
+Start by creating a new subclass of `SCKChatViewController`.
 
 In the init overriding method, if you wish to use a the `UITableView` version, call:
 ```
