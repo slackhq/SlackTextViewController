@@ -720,7 +720,13 @@
         return;
     }
     
-    self.keyboardHC.constant = [self appropriateKeyboardHeight:notification];
+    CGFloat keyboardHeight = [self appropriateKeyboardHeight:notification];
+    
+    if (keyboardHeight < 0) {
+        return;
+    }
+    
+    self.keyboardHC.constant = keyboardHeight;
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     _panningKeyboard = self.scrollViewProxy.isDragging;
