@@ -161,7 +161,7 @@
     if (_tableView) {
         return _tableView;
     }
-    else if (_collectionView) {
+    if (_collectionView) {
         return _collectionView;
     }
     return nil;
@@ -226,7 +226,15 @@
 
 - (BOOL)isEditing
 {
-    return self.textInputbar.isEditing;
+    if (_tableView.isEditing) {
+        return YES;
+    }
+    
+    if (self.textInputbar.isEditing) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (SLKTextView *)textView
