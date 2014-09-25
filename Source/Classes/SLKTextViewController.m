@@ -753,7 +753,7 @@
 {
     SLKTextView *textView = (SLKTextView *)notification.object;
     
-    // If it's not the expected textView, return.
+    // Skips this it's not the expected textView.
     if (![textView isEqual:self.textView]) {
         return;
     }

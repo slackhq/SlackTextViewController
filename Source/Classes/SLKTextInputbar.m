@@ -364,7 +364,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 {
     SLKTextView *textView = (SLKTextView *)notification.object;
     
-    // If it's not the expected textView, return.
+    // Skips this it's not the expected textView.
     if (![textView isEqual:self.textView]) {
         return;
     }
@@ -520,20 +520,30 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 @implementation SCKInputAccessoryView
 
+- (NSString *)keyPathForKeyboardHandling
+{
+    if (UI_IS_IOS8_AND_HIGHER) {
+        return NSStringFromSelector(@selector(center));
+    }
+    else {
+        return NSStringFromSelector(@selector(frame));
+    }
+}
+
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
     if (self.superview) {
-        [self.superview removeObserver:self forKeyPath:NSStringFromSelector(@selector(center))];
+        [self.superview removeObserver:self forKeyPath:[self keyPathForKeyboardHandling]];
     }
     
-    [newSuperview addObserver:self forKeyPath:NSStringFromSelector(@selector(center)) options:0 context:NULL];
+    [newSuperview addObserver:self forKeyPath:[self keyPathForKeyboardHandling] options:0 context:NULL];
     
     [super willMoveToSuperview:newSuperview];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([object isEqual:self.superview] && [keyPath isEqualToString:NSStringFromSelector(@selector(center))])
+    if ([object isEqual:self.superview] && [keyPath isEqualToString:[self keyPathForKeyboardHandling]])
     {
         NSDictionary *userInfo = @{UIKeyboardFrameEndUserInfoKey:[NSValue valueWithCGRect:[object frame]]};
         [[NSNotificationCenter defaultCenter] postNotificationName:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil userInfo:userInfo];
@@ -543,7 +553,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 - (void)dealloc
 {
     if (self.superview) {
-        [self.superview removeObserver:self forKeyPath:NSStringFromSelector(@selector(center))];
+        [self.superview removeObserver:self forKeyPath:[self keyPathForKeyboardHandling]];
     }
 }
 
