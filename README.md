@@ -45,9 +45,9 @@ pod 'SlackTextViewController'
 ##How to use
 
 ###Subclassing
-`SCKChatViewController` is meant to be suclassed, like you would normally do with UITableViewController or UICollectionViewController. This pattern is a convenient way of extending UIViewController. SlackTextViewController manages a lot behind the scenes while still providing the ability to add custom behaviours. You may override methods, and decide to call super and  perform additional logic, or not to call super and override default logic.
+`SCKChatViewController` is meant to be subclassed, like you would normally do with UITableViewController or UICollectionViewController. This pattern is a convenient way of extending UIViewController. SlackTextViewController manages a lot behind the scenes while still providing the ability to add custom behaviours. You may override methods, and decide to call super and  perform additional logic, or not to call super and override default logic.
 
-Start by creating a new instance sublass of `SCKChatViewController`.
+Start by creating a new instance subclass of `SCKChatViewController`.
 
 In the init overriding method, if you wish to use a the `UITableView` version, call:
 ```
@@ -60,7 +60,7 @@ or the `UICollectionView` version:
 ```
 
 
-Protocols like `UITableViewDelegate` and `UITableViewDataSource` are already setup for you. You will be able to call whathever delegate and data source methods you need for customising your control.
+Protocols like `UITableViewDelegate` and `UITableViewDataSource` are already setup for you. You will be able to call whatever delegate and data source methods you need for customising your control.
 
 Calling `[super init]` will call by default `[super initWithStyle:UITableViewStylePlain]`.
 
@@ -74,7 +74,7 @@ The text view expands automatically when a new line is required, until it reache
 By default, the number of lines is set to best fit each device dimensions:
 - iPhone 4      (<=480pts): 4 lines
 - iPhone 5/6    (>=568pts): 6 lines
-- iPad          (>=768pts): 8 lines: 8 lines
+- iPad          (>=768pts): 8 lines
 
 On iPhone devices, in landscape orientation, the maximum number of lines is changed to 2 to best fit the limited height.
 
