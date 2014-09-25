@@ -29,13 +29,16 @@
 @property (nonatomic, strong) NSLayoutConstraint *autoCompletionViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *keyboardHC;
 
+// The single tap gesture used to dismiss the keyboard
 @property (nonatomic, strong) UIGestureRecognizer *singleTapGesture;
 
-@property (nonatomic, readonly, getter = isPanningKeyboard) BOOL panningKeyboard;
+// YES if the user is moving the keyboard with a gesture
+@property (nonatomic, readonly, getter = isMovingKeyboard) BOOL movingKeyboard;
 
 // Used for Auto-Completion
 @property (nonatomic, readonly) NSRange foundPrefixRange;
 
+// The current QuicktypeBar mode (hidden, collapsed or expanded)
 @property (nonatomic) SLKQuicktypeBarMode quicktypeBarMode;
 
 @end
@@ -729,9 +732,9 @@
     self.keyboardHC.constant = keyboardHeight;
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
-    _panningKeyboard = self.scrollViewProxy.isDragging;
+    _movingKeyboard = self.scrollViewProxy.isDragging;
     
-    if (self.isInverted && self.isPanningKeyboard && !CGPointEqualToPoint(self.scrollViewProxy.contentOffset, _draggingOffset)) {
+    if (self.isInverted && self.isMovingKeyboard && !CGPointEqualToPoint(self.scrollViewProxy.contentOffset, _draggingOffset)) {
         self.scrollViewProxy.contentOffset = _draggingOffset;
     }
 
@@ -1026,7 +1029,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (!self.isPanningKeyboard) {
+    if (!self.isMovingKeyboard) {
         _draggingOffset = scrollView.contentOffset;
     }
 }
