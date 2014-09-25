@@ -303,11 +303,11 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 
 - (void)dealloc
 {
-    _placeholderLabel = nil;
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
     
     [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
+    
+    _placeholderLabel = nil;
 }
 
 @end

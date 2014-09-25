@@ -122,7 +122,7 @@
 
 /**
  Notifies the view controller when the left button's action has been triggered, manually.
- @discussion You can override this method to perform additional tasks associated with the left button. You MUST call super at some point in your implementation.
+ @discussion You can override this method to perform additional tasks associated with the left button. You don't need call super since this method doesn't do anything.
  
  @param sender The object calling this method.
  */

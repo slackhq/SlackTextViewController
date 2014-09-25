@@ -64,6 +64,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [self setupViewConstraints];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
+    
     [self.leftButton.imageView addObserver:self forKeyPath:NSStringFromSelector(@selector(image)) options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
 }
 
@@ -102,27 +103,21 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.translatesAutoresizingMaskIntoConstraints = NO;
         _textView.font = [UIFont systemFontOfSize:15.0];
         _textView.maxNumberOfLines = [self defaultNumberOfLines];
+        _textView.delegate = self;
         
-//#if DEBUG && TARGET_IPHONE_SIMULATOR
-//        _textView.autocorrectionType = UITextAutocorrectionTypeNo;
-//        _textView.spellCheckingType = UITextSpellCheckingTypeNo;
-//#else
         _textView.autocorrectionType = UITextAutocorrectionTypeDefault;
         _textView.spellCheckingType = UITextSpellCheckingTypeDefault;
-//#endif
-        
         _textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
         _textView.keyboardType = UIKeyboardTypeTwitter;
         _textView.returnKeyType = UIReturnKeyDefault;
         _textView.enablesReturnKeyAutomatically = YES;
         _textView.scrollIndicatorInsets = UIEdgeInsetsMake(0, -1, 0, 1);
-        _textView.delegate = self;
         
         _textView.layer.cornerRadius = 5.0;
         _textView.layer.borderWidth = 1.0;
         _textView.layer.borderColor =  [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:205.0/255.0 alpha:1.0].CGColor;
         
-        // Registers the loupe gesture to detect when it will become visible
+        // Adds an aditional action to a private gesture to detect when the magnifying glass becomes visible
         for (UIGestureRecognizer *gesture in _textView.gestureRecognizers) {
             if ([gesture isKindOfClass:NSClassFromString(@"UIVariableDelayLoupeGesture")]) {
                 [gesture addTarget:self action:@selector(willShowLoupe:)];
@@ -480,9 +475,11 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     if ([object isEqual:self.leftButton.imageView] && [keyPath isEqualToString:NSStringFromSelector(@selector(image))]) {
         UIImage *newImage = change[NSKeyValueChangeNewKey];
         UIImage *oldImage = change[NSKeyValueChangeOldKey];
+        
         if ([newImage isEqual:oldImage]) {
             return;
         }
+        
         [self updateConstraintConstants];
     }
     else {
@@ -496,7 +493,8 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
-     [self removeObserver:self.leftButton.imageView forKeyPath:NSStringFromSelector(@selector(image))];
+    
+    [_leftButton.imageView removeObserver:self forKeyPath:NSStringFromSelector(@selector(image))];
     
     _leftButton = nil;
     _rightButton = nil;
