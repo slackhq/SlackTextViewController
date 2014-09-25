@@ -296,6 +296,28 @@
     return roundf(height);
 }
 
+- (CGFloat)appropriateKeyboardHeight:(NSNotification *)notification
+{
+    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
+    CGFloat keyboardHeight = 0.0;
+    
+    // The height of the keyboard if showing
+    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+        
+        keyboardHeight = MIN(CGRectGetWidth(endFrame), CGRectGetHeight(endFrame));
+        keyboardHeight -= CGRectGetHeight(self.tabBarController.tabBar.frame);
+    }
+    
+    // The height of the keyboard if sliding
+    if ([notification.name isEqualToString:SCKInputAccessoryViewKeyboardFrameDidChangeNotification]) {
+        keyboardHeight = CGRectGetHeight([UIScreen mainScreen].bounds)-endFrame.origin.y;
+        keyboardHeight -= CGRectGetHeight(self.tabBarController.tabBar.frame);
+    }
+    
+    return keyboardHeight;
+}
+
 - (CGFloat)appropriateScrollViewHeight
 {
     CGFloat height = self.view.bounds.size.height;
@@ -386,6 +408,10 @@
     
     self.scrollViewProxy.transform = CGAffineTransformMake(1, 0, 0, inverted ? -1 : 1, 0, 0);
     self.edgesForExtendedLayout = inverted ? UIRectEdgeNone : UIRectEdgeAll;
+    
+    if (!inverted && ((self.edgesForExtendedLayout & UIRectEdgeBottom) > 0)) {
+        self.edgesForExtendedLayout = self.edgesForExtendedLayout & ~UIRectEdgeBottom;
+    }
 }
 
 
@@ -647,13 +673,9 @@
         return;
     }
     
-    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
 
-    CGFloat keyboardHeight = MIN(CGRectGetWidth(endFrame), CGRectGetHeight(endFrame));
-    keyboardHeight -= self.tabBarController.tabBar.frame.size.height;
-    
     // Checks if it's showing or hidding the keyboard
     BOOL show = [notification.name isEqualToString:UIKeyboardWillShowNotification];
     
@@ -661,7 +683,7 @@
     [self.scrollViewProxy stopScrolling];
     
     // Updates the height constraints' constants
-    self.keyboardHC.constant = show ? keyboardHeight : 0.0;
+    self.keyboardHC.constant = [self appropriateKeyboardHeight:notification];
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     if (!show && self.isAutoCompleting) {
@@ -698,9 +720,7 @@
         return;
     }
     
-    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    
-    self.keyboardHC.constant = MAX(CGRectGetHeight([UIScreen mainScreen].bounds)-endFrame.origin.y-self.tabBarController.tabBar.frame.size.height, 0);
+    self.keyboardHC.constant = [self appropriateKeyboardHeight:notification];
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     _panningKeyboard = self.scrollViewProxy.isDragging;
