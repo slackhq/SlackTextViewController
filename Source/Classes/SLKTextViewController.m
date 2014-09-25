@@ -312,18 +312,18 @@
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
     CGFloat keyboardHeight = 0.0;
+    CGFloat tabBarHeight = (![self.tabBarController.tabBar isHidden]) ? CGRectGetHeight(self.tabBarController.tabBar.frame) : 0.0;
     
     // The height of the keyboard if showing
     if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-        
         keyboardHeight = MIN(CGRectGetWidth(endFrame), CGRectGetHeight(endFrame));
-        keyboardHeight -= CGRectGetHeight(self.tabBarController.tabBar.frame);
+        keyboardHeight -= tabBarHeight;
     }
     
     // The height of the keyboard if sliding
     if ([notification.name isEqualToString:SCKInputAccessoryViewKeyboardFrameDidChangeNotification]) {
         keyboardHeight = CGRectGetHeight([UIScreen mainScreen].bounds)-endFrame.origin.y;
-        keyboardHeight -= CGRectGetHeight(self.tabBarController.tabBar.frame);
+        keyboardHeight -= tabBarHeight;
     }
     
     return keyboardHeight;
@@ -733,8 +733,10 @@
     
     CGFloat keyboardHeight = [self appropriateKeyboardHeight:notification];
     
+    NSLog(@"keyboardHeight : %f", keyboardHeight);
+    
     if (keyboardHeight < 0) {
-        return;
+        keyboardHeight = 0.0;
     }
     
     self.keyboardHC.constant = keyboardHeight;
