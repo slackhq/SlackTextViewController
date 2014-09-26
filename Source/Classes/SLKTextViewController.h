@@ -27,16 +27,16 @@
 @interface SLKTextViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
 
 /** The main table view managed by the controller object. Default view if initialized with -init */
-@property (nonatomic, readonly) UITableView *tableView;
+@property (nonatomic, readonly) IBOutlet UITableView *tableView;
 
 /** The main collection view managed by the controller object. Not nil if the controller is initialised with -initWithCollectionViewLayout: */
-@property (nonatomic, readonly) UICollectionView *collectionView;
+@property (nonatomic, readonly) IBOutlet UICollectionView *collectionView;
 
 /** The bottom toolbar containing a text view and buttons. */
-@property (nonatomic, readonly) SLKTextInputbar *textInputbar;
+@property (nonatomic, readonly) IBOutlet SLKTextInputbar *textInputbar;
 
 /** The typing indicator used to display user names horizontally. */
-@property (nonatomic, readonly) SLKTypingIndicatorView *typingIndicatorView;
+@property (nonatomic, readonly) IBOutlet SLKTypingIndicatorView *typingIndicatorView;
 
 /** YES if control's animation should have bouncy effects. Default is YES. */
 @property (nonatomic, assign) BOOL bounces;
@@ -211,7 +211,7 @@
 ///------------------------------------------------
 
 /** The table view used to display autocompletion results. */
-@property (nonatomic, readonly) UITableView *autoCompletionView;
+@property (nonatomic, readonly) IBOutlet UITableView *autoCompletionView;
 
 /** The recently found prefix symbol used as prefix for autocompletion mode. */
 @property (nonatomic, readonly) NSString *foundPrefix;
