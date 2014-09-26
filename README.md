@@ -49,7 +49,7 @@ pod 'SlackTextViewController'
 
 Start by creating a new subclass of `SCKChatViewController`.
 
-In the init overriding method, if you wish to use a the `UITableView` version, call:
+In the init overriding method, if you wish to use the `UITableView` version, call:
 ```
 [super initWithStyle:UITableViewStylePlain]
 ```
