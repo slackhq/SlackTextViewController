@@ -1,4 +1,6 @@
-platform :ios, "7.0"
+
+workspace 'Messenger.xcworkspace'
+platform :ios, '7.0'
 
 pod 'SlackTextViewController', :path => '../../SlackTextViewController.podspec'
 

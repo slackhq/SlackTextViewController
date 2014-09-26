@@ -17,6 +17,8 @@
 #import "SLKTextViewController.h"
 #import "SLKUIConstants.h"
 
+#import <objc/runtime.h>
+
 @interface SLKTextViewController () <UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
     CGPoint _draggingOffset;
@@ -50,6 +52,7 @@
 @synthesize textInputbar = _textInputbar;
 @synthesize autoCompletionView = _autoCompletionView;
 @synthesize autoCompleting = _autoCompleting;
+@synthesize presentedInPopover = _presentedInPopover;
 
 #pragma mark - Initializer
 
@@ -234,6 +237,16 @@
         return YES;
     }
     
+    return NO;
+}
+
+- (BOOL)isPresentedInPopover
+{
+    return _presentedInPopover && UI_IS_IPAD;
+}
+
++ (BOOL)accessInstanceVariablesDirectly
+{
     return NO;
 }
 
@@ -617,6 +630,11 @@
 
 - (void)didTapScrollView
 {
+    // Skips if it is presented inside of a popover
+    if (self.isPresentedInPopover) {
+        return;
+    }
+    
     [self dismissKeyboard:YES];
 }
 
@@ -675,6 +693,12 @@
 
 - (void)willShowOrHideKeyboard:(NSNotification *)notification
 {
+    // Skips if it is presented inside of a popover
+    if (self.isPresentedInPopover) {
+        return;
+    }
+    
+    // Skips if textview did refresh only
     if (self.textView.didNotResignFirstResponder) {
         return;
     }
@@ -710,6 +734,12 @@
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
 {
+    // Skips if it is presented inside of a popover
+    if (self.isPresentedInPopover) {
+        return;
+    }
+    
+    // Skips if textview did refresh only
     if (self.textView.didNotResignFirstResponder) {
         return;
     }
@@ -725,6 +755,11 @@
 
 - (void)didChangeKeyboardFrame:(NSNotification *)notification
 {
+    // Skips if it is presented inside of a popover
+    if (self.isPresentedInPopover) {
+        return;
+    }
+    
     // Skips this if it's not the expected textView.
     // Checking the keyboard height constant helps to disable the view constraints update on iPad when the keyboard is undocked.
     if (![self.textView isFirstResponder] || self.keyboardHC.constant == 0) {
