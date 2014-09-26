@@ -294,7 +294,7 @@
 {
     CGFloat height = [self deltaInputbarHeight];
     
-    height += roundf(self.textView.font.lineHeight*self.textView.numberOfLines);
+    height += roundf(self.textView.font.lineHeight*self.textView.slk_numberOfLines);
     height += (kTextViewVerticalPadding*2.0);
     
     return height;
@@ -304,10 +304,10 @@
 {
     CGFloat height = 0.0;
     
-    if (self.textView.numberOfLines == 1) {
+    if (self.textView.slk_numberOfLines == 1) {
         height = [self minimumInputbarHeight];
     }
-    else if (self.textView.numberOfLines < self.textView.maxNumberOfLines) {
+    else if (self.textView.slk_numberOfLines < self.textView.maxNumberOfLines) {
         height += [self currentInputbarHeight];
     }
     else {
@@ -509,13 +509,13 @@
             
             BOOL bounces = self.bounces && [self.textView isFirstResponder];
             
-            [self.view animateLayoutIfNeededWithBounce:bounces
-                                                 options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
-                                            animations:^{
-                                                if (self.isEditing) {
-                                                    [self.textView scrollToCaretPositonAnimated:NO];
-                                                }
-                                            }];
+			[self.view slk_animateLayoutIfNeededWithBounce:bounces
+												   options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
+												animations:^{
+													if (self.isEditing) {
+														[self.textView slk_scrollToCaretPositonAnimated:NO];
+													}
+												}];
         }
         else {
             [self.view layoutIfNeeded];
@@ -567,7 +567,7 @@
     }
     
     // Don't show if the content offset is not at top (when inverted) or at bottom (when not inverted)
-    if ((self.isInverted && ![self.scrollViewProxy isAtTop]) || (!self.isInverted && ![self.scrollViewProxy isAtBottom])) {
+    if ((self.isInverted && ![self.scrollViewProxy slk_isAtTop]) || (!self.isInverted && ![self.scrollViewProxy slk_isAtBottom])) {
         return NO;
     }
     
@@ -655,7 +655,7 @@
     }
 
     [self.textView setText:text];
-    [self.textView scrollToCaretPositonAnimated:YES];
+    [self.textView slk_scrollToCaretPositonAnimated:YES];
     
     // Updates the constraints after inserting text, if already first responder
     if ([self.textView isFirstResponder]) {
@@ -678,7 +678,7 @@
 
 - (void)insertNewLineBreak
 {
-    [self.textView insertNewLineBreak];
+    [self.textView slk_insertNewLineBreak];
 }
 
 - (void)prepareForInterfaceRotation
@@ -686,10 +686,10 @@
     [self.view layoutIfNeeded];
     
     if ([self.textView isFirstResponder]) {
-        [self.textView scrollToCaretPositonAnimated:NO];
+        [self.textView slk_scrollToCaretPositonAnimated:NO];
     }
     else {
-        [self.textView scrollToBottomAnimated:NO];
+        [self.textView slk_scrollToBottomAnimated:NO];
     }
 }
 
@@ -720,7 +720,7 @@
     BOOL show = [notification.name isEqualToString:UIKeyboardWillShowNotification];
     
     // Programatically stops scrolling before updating the view constraints (to avoid scrolling glitch)
-    [self.scrollViewProxy stopScrolling];
+    [self.scrollViewProxy slk_stopScrolling];
     
     // Updates the height constraints' constants
     self.keyboardHC.constant = [self appropriateKeyboardHeight:notification];
@@ -731,10 +731,10 @@
     }
     
     // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
-    [self.view animateLayoutIfNeededWithDuration:duration
-                                          bounce:NO
-                                         options:(curve<<16)|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
-                                      animations:NULL];
+	[self.view slk_animateLayoutIfNeededWithDuration:duration
+											  bounce:NO
+											 options:(curve<<16)|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
+										  animations:NULL];
 }
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
@@ -830,9 +830,9 @@
     self.typingIndicatorViewHC.constant = indicatorView.isVisible ?  0.0 : indicatorView.height;
     self.scrollViewHC.constant -= self.typingIndicatorViewHC.constant;
     
-    [self.view animateLayoutIfNeededWithBounce:self.bounces
-                               options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
-                          animations:NULL];
+	[self.view slk_animateLayoutIfNeededWithBounce:self.bounces
+										   options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
+										animations:NULL];
 }
 
 - (void)didChangeTextViewContentSize:(NSNotification *)notification
@@ -925,7 +925,7 @@
     }
 
     NSRange range;
-    NSString *word = [self.textView wordAtCaretRange:&range];
+    NSString *word = [self.textView slk_wordAtCaretRange:&range];
     
     for (NSString *sign in self.registeredPrefixes) {
         
@@ -997,13 +997,13 @@
     SLKTextView *textView = self.textView;
     
     NSRange range = NSMakeRange(self.foundPrefixRange.location+1, self.foundWord.length);
-    NSRange insertionRange = [textView insertText:string inRange:range];
+    NSRange insertionRange = [textView slk_insertText:string inRange:range];
     
     textView.selectedRange = NSMakeRange(insertionRange.location, 0);
     
     [self cancelAutoCompletion];
     
-    [textView scrollToCaretPositonAnimated:NO];
+    [textView slk_scrollToCaretPositonAnimated:NO];
 }
 
 - (void)hideautoCompletionView
@@ -1041,9 +1041,9 @@
     
     self.autoCompletionViewHC.constant = viewHeight;
     
-    [self.view animateLayoutIfNeededWithBounce:self.bounces
-                                         options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
-                                    animations:NULL];
+	[self.view slk_animateLayoutIfNeededWithBounce:self.bounces
+										   options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
+										animations:NULL];
 }
 
 
@@ -1121,8 +1121,8 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[typingIndicatorView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[textInputbar]|" options:0 metrics:nil views:views]];
 
-    NSArray *bottomConstraints = [self.view constraintsForAttribute:NSLayoutAttributeBottom];
-    NSArray *heightConstraints = [self.view constraintsForAttribute:NSLayoutAttributeHeight];
+    NSArray *bottomConstraints = [self.view slk_constraintsForAttribute:NSLayoutAttributeBottom];
+    NSArray *heightConstraints = [self.view slk_constraintsForAttribute:NSLayoutAttributeHeight];
     
     self.scrollViewHC = heightConstraints[0];
     self.autoCompletionViewHC = heightConstraints[1];

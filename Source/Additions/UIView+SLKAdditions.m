@@ -20,13 +20,13 @@
 
 @implementation UIView (SLKAdditions)
 
-- (void)animateLayoutIfNeededWithBounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations
+- (void)slk_animateLayoutIfNeededWithBounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations
 {
     NSTimeInterval duration = bounce ? 0.5 : 0.2;
-    [self animateLayoutIfNeededWithDuration:duration bounce:bounce options:options animations:animations];
+    [self slk_animateLayoutIfNeededWithDuration:duration bounce:bounce options:options animations:animations];
 }
 
-- (void)animateLayoutIfNeededWithDuration:(NSTimeInterval)duration bounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations
+- (void)slk_animateLayoutIfNeededWithDuration:(NSTimeInterval)duration bounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations
 {
     if (bounce) {
         [UIView animateWithDuration:duration
@@ -58,7 +58,7 @@
     }
 }
 
-- (NSArray *)constraintsForAttribute:(NSLayoutAttribute)attribute
+- (NSArray *)slk_constraintsForAttribute:(NSLayoutAttribute)attribute
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstAttribute = %d", attribute];
     return [self.constraints filteredArrayUsingPredicate:predicate];

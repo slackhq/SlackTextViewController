@@ -22,34 +22,34 @@ static NSString * const kKeyScrollViewHorizontalIndicator = @"_horizontalScrollI
 
 @implementation UIScrollView (SLKAdditions)
 
-- (void)scrollToTopAnimated:(BOOL)animated
+- (void)slk_scrollToTopAnimated:(BOOL)animated
 {
-    if (![self isAtTop]) {
+    if (![self slk_isAtTop]) {
         CGPoint bottomOffset = CGPointZero;
         [self setContentOffset:bottomOffset animated:animated];
     }
 }
 
-- (void)scrollToBottomAnimated:(BOOL)animated
+- (void)slk_scrollToBottomAnimated:(BOOL)animated
 {
-    if ([self canScrollToBottom] && ![self isAtBottom]) {
+    if ([self slk_canScrollToBottom] && ![self slk_isAtBottom]) {
         CGPoint bottomOffset = CGPointMake(0.0, self.contentSize.height - self.bounds.size.height);
         [self setContentOffset:bottomOffset animated:animated];
     }
 }
 
-- (BOOL)isAtTop
+- (BOOL)slk_isAtTop
 {
     return (self.contentOffset.y == 0.0) ? YES : NO;
 }
 
-- (BOOL)isAtBottom
+- (BOOL)slk_isAtBottom
 {
     CGFloat bottomOffset = self.contentSize.height-self.bounds.size.height;
     return (self.contentOffset.y == bottomOffset) ? YES : NO;
 }
 
-- (BOOL)canScrollToBottom
+- (BOOL)slk_canScrollToBottom
 {
     if (self.contentSize.height > self.bounds.size.height) {
         return YES;
@@ -57,7 +57,7 @@ static NSString * const kKeyScrollViewHorizontalIndicator = @"_horizontalScrollI
     return NO;
 }
 
-- (void)stopScrolling
+- (void)slk_stopScrolling
 {
     if (!self.isDragging) {
         return;
@@ -71,25 +71,25 @@ static NSString * const kKeyScrollViewHorizontalIndicator = @"_horizontalScrollI
     [self setContentOffset:offset animated:NO];
 }
 
-- (UIView *)verticalScroller
+- (UIView *)slk_verticalScroller
 {
     if (objc_getAssociatedObject(self, _cmd) == nil) {
-        objc_setAssociatedObject(self, _cmd, [self safeValueForKey:kKeyScrollViewVerticalIndicator], OBJC_ASSOCIATION_ASSIGN);
+        objc_setAssociatedObject(self, _cmd, [self slk_safeValueForKey:kKeyScrollViewVerticalIndicator], OBJC_ASSOCIATION_ASSIGN);
     }
     
     return objc_getAssociatedObject(self, _cmd);
 }
 
-- (UIView *)horizontalScroller
+- (UIView *)slk_horizontalScroller
 {
     if (objc_getAssociatedObject(self, _cmd) == nil) {
-        objc_setAssociatedObject(self, _cmd, [self safeValueForKey:kKeyScrollViewHorizontalIndicator], OBJC_ASSOCIATION_ASSIGN);
+        objc_setAssociatedObject(self, _cmd, [self slk_safeValueForKey:kKeyScrollViewHorizontalIndicator], OBJC_ASSOCIATION_ASSIGN);
     }
     
     return objc_getAssociatedObject(self, _cmd);
 }
 
-- (id)safeValueForKey:(NSString *)key
+- (id)slk_safeValueForKey:(NSString *)key
 {
     Ivar instanceVariable = class_getInstanceVariable([self class], [key cStringUsingEncoding:NSUTF8StringEncoding]);
     return object_getIvar(self, instanceVariable);

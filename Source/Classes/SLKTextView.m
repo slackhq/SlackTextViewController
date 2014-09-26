@@ -148,7 +148,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 
 - (BOOL)isExpanding
 {
-    if (self.numberOfLines >= self.maxNumberOfLines) {
+    if (self.slk_numberOfLines >= self.maxNumberOfLines) {
         return YES;
     }
     return NO;
@@ -206,7 +206,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
         
         // Inserting the text fixes a UITextView bug whitch automatically scrolls to the bottom
         // and beyond scroll content size sometimes when the text is too long
-        [self insertTextAtCaretRange:item];
+        [self slk_insertTextAtCaretRange:item];
     }
 }
 
@@ -231,7 +231,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 
 - (void)flashScrollIndicatorsIfNeeded
 {
-    if (self.numberOfLines == self.maxNumberOfLines+1) {
+    if (self.slk_numberOfLines == self.maxNumberOfLines+1) {
         if (!_didFlashScrollIndicators) {
             _didFlashScrollIndicators = YES;
             [super flashScrollIndicators];

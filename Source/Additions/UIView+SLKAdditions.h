@@ -26,7 +26,7 @@
  @param options A mask of options indicating how you want to perform the animations.
  @param animations An additional block for custom animations.
  */
-- (void)animateLayoutIfNeededWithBounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations;
+- (void)slk_animateLayoutIfNeededWithBounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations;
 
 /**
  Animates the view's constraints by calling layoutIfNeeded.
@@ -36,7 +36,7 @@
  @param options A mask of options indicating how you want to perform the animations.
  @param animations An additional block for custom animations.
  */
-- (void)animateLayoutIfNeededWithDuration:(NSTimeInterval)duration bounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations;
+- (void)slk_animateLayoutIfNeededWithDuration:(NSTimeInterval)duration bounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations;
 
 /**
  Returns the view constraints matching a specific layout attribute (top, bottom, left, right, leading, trailing, etc.)
@@ -44,6 +44,6 @@
  @param attribute The layout attribute to use for searching.
  @return An array of matching constraints.
  */
-- (NSArray *)constraintsForAttribute:(NSLayoutAttribute)attribute;
+- (NSArray *)slk_constraintsForAttribute:(NSLayoutAttribute)attribute;
 
 @end

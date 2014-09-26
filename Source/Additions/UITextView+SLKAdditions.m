@@ -18,12 +18,12 @@
 
 @implementation UITextView (SLKAdditions)
 
-- (NSUInteger)numberOfLines
+- (NSUInteger)slk_numberOfLines
 {
     return abs(self.contentSize.height/self.font.lineHeight);
 }
 
-- (void)scrollToCaretPositonAnimated:(BOOL)animated
+- (void)slk_scrollToCaretPositonAnimated:(BOOL)animated
 {
     if (!animated)
     {
@@ -41,7 +41,7 @@
     }
 }
 
-- (void)scrollToBottomAnimated:(BOOL)animated
+- (void)slk_scrollToBottomAnimated:(BOOL)animated
 {
     CGRect rect = [self caretRectForPosition:self.selectedTextRange.end];
     rect.size.height += self.textContainerInset.bottom;
@@ -62,9 +62,9 @@
     }
 }
 
-- (void)insertNewLineBreak
+- (void)slk_insertNewLineBreak
 {
-    [self insertTextAtCaretRange:@"\n"];
+    [self slk_insertTextAtCaretRange:@"\n"];
     
     BOOL animated = YES;
     SEL expandingSelector = NSSelectorFromString(@"isExpanding");
@@ -82,17 +82,17 @@
     
     //Detected break. Should scroll to bottom if needed.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0025 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self scrollToBottomAnimated:animated];
+        [self slk_scrollToBottomAnimated:animated];
     });
 }
 
-- (void)insertTextAtCaretRange:(NSString *)text
+- (void)slk_insertTextAtCaretRange:(NSString *)text
 {
-    NSRange range = [self insertText:text inRange:self.selectedRange];
+    NSRange range = [self slk_insertText:text inRange:self.selectedRange];
     self.selectedRange = NSMakeRange(range.location, 0);
 }
 
-- (NSRange)insertText:(NSString *)text inRange:(NSRange)range
+- (NSRange)slk_insertText:(NSString *)text inRange:(NSRange)range
 {
     // Skip if the text is empty
     if (text.length == 0) {
@@ -122,12 +122,12 @@
     return self.selectedRange;
 }
 
-- (NSString *)wordAtCaretRange:(NSRangePointer)range
+- (NSString *)slk_wordAtCaretRange:(NSRangePointer)range
 {
-    return [self wordAtRange:self.selectedRange rangeInText:range];
+    return [self slk_wordAtRange:self.selectedRange rangeInText:range];
 }
 
-- (NSString *)wordAtRange:(NSRange)range rangeInText:(NSRangePointer)rangePointer
+- (NSString *)slk_wordAtRange:(NSRange)range rangeInText:(NSRangePointer)rangePointer
 {
     NSString *text = self.text;
     NSInteger location = range.location;

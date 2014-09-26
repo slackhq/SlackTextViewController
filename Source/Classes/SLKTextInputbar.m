@@ -338,7 +338,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 {
     if ([text isEqualToString:@"\n"]) {
         //Detected break. Should insert new line break manually.
-        [textView insertNewLineBreak];
+        [textView slk_insertNewLineBreak];
         
         return NO;
     }
@@ -386,9 +386,9 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         
         BOOL bounces = self.controller.bounces && [self.textView isFirstResponder];
         
-        [self animateLayoutIfNeededWithBounce:bounces
-                                      options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState
-                                   animations:NULL];
+		[self slk_animateLayoutIfNeededWithBounce:bounces
+										  options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState
+									   animations:NULL];
     }
 }
 
@@ -423,19 +423,19 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[accessoryView(0)]-(<=ver)-[textView(==minTextViewHeight@250)]-(==ver)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[accessoryView]|" options:0 metrics:metrics views:views]];
 
-    NSArray *heightConstraints = [self constraintsForAttribute:NSLayoutAttributeHeight];
-    NSArray *widthConstraints = [self constraintsForAttribute:NSLayoutAttributeWidth];
-    NSArray *bottomConstraints = [self constraintsForAttribute:NSLayoutAttributeBottom];
+    NSArray *heightConstraints = [self slk_constraintsForAttribute:NSLayoutAttributeHeight];
+    NSArray *widthConstraints = [self slk_constraintsForAttribute:NSLayoutAttributeWidth];
+    NSArray *bottomConstraints = [self slk_constraintsForAttribute:NSLayoutAttributeBottom];
 
     self.accessoryViewHC = heightConstraints[1];
 
     self.leftButtonWC = widthConstraints[0];
     self.leftButtonHC = heightConstraints[0];
-    self.leftMarginWC = [self constraintsForAttribute:NSLayoutAttributeLeading][0];
+    self.leftMarginWC = [self slk_constraintsForAttribute:NSLayoutAttributeLeading][0];
     self.bottomMarginWC = bottomConstraints[0];
 
     self.rightButtonWC = widthConstraints[1];
-    self.rightMarginWC = [self constraintsForAttribute:NSLayoutAttributeTrailing][0];
+    self.rightMarginWC = [self slk_constraintsForAttribute:NSLayoutAttributeTrailing][0];
 }
 
 - (void)updateConstraintConstants

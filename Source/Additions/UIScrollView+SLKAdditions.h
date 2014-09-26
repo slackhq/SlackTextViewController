@@ -20,32 +20,32 @@
 @interface UIScrollView (SLKAdditions)
 
 /** YES if the scrollView's offset is at the very top. */
-@property (nonatomic, readonly) BOOL isAtTop;
+@property (nonatomic, readonly) BOOL slk_isAtTop;
 /** YES if the scrollView's offset is at the very bottom. */
-@property (nonatomic, readonly) BOOL isAtBottom;
+@property (nonatomic, readonly) BOOL slk_isAtBottom;
 /** YES if the scrollView can scroll from it's current offset position to the bottom. */
-@property (nonatomic, readonly) BOOL canScrollToBottom;
+@property (nonatomic, readonly) BOOL slk_canScrollToBottom;
 
 /** The vertical scroll indicator view. */
-@property (nonatomic, readonly) UIView *verticalScroller;
+@property (nonatomic, readonly) UIView *slk_verticalScroller;
 /** The horizontal scroll indicator view. */
-@property (nonatomic, readonly) UIView *horizontalScroller;
+@property (nonatomic, readonly) UIView *slk_horizontalScroller;
 
 /**
  Sets the content offset to the top.
  @param animated YES to animate the transition at a constant velocity to the new offset, NO to make the transition immediate.
  */
-- (void)scrollToTopAnimated:(BOOL)animated;
+- (void)slk_scrollToTopAnimated:(BOOL)animated;
 
 /**
  Sets the content offset to the bottom.
  @param animated YES to animate the transition at a constant velocity to the new offset, NO to make the transition immediate.
  */
-- (void)scrollToBottomAnimated:(BOOL)animated;
+- (void)slk_scrollToBottomAnimated:(BOOL)animated;
 
 /**
  Stops scrolling, if it was scrolling.
  */
-- (void)stopScrolling;
+- (void)slk_stopScrolling;
 
 @end
