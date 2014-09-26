@@ -24,7 +24,7 @@
     CGPoint _draggingOffset;
 }
 
-// Used for Auto-Layout constraints, and update its constants
+// Auto-Layout height constraints used for updating their constants
 @property (nonatomic, strong) NSLayoutConstraint *scrollViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *textInputbarHC;
 @property (nonatomic, strong) NSLayoutConstraint *typingIndicatorViewHC;
@@ -55,6 +55,11 @@
 @synthesize presentedInPopover = _presentedInPopover;
 
 #pragma mark - Initializer
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    return [self init];
+}
 
 - (instancetype)init
 {
