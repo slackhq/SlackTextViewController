@@ -63,7 +63,7 @@
 
 - (instancetype)initWithTableViewStyle:(UITableViewStyle)style
 {
-    if (self = [super init]) {
+    if (self = [super initWithNibName:nil bundle:nil]) {
         [self tableViewWithStyle:style];
         [self commonInit];
     }
@@ -72,7 +72,7 @@
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
-    if (self = [super init]) {
+    if (self = [super initWithNibName:nil bundle:nil]) {
         [self collectionViewWithLayout:layout];
         [self commonInit];
     }
