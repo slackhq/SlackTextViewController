@@ -85,7 +85,7 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 - (void)beginTextEditing;
 
 /**
- Begins editing the text, by updating the 'editing' flag and the view constraints.
+ End editing the text, by updating the 'editing' flag and the view constraints.
  */
 - (void)endTextEdition;
 
