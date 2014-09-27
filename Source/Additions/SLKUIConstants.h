@@ -47,7 +47,7 @@ inline static CGFloat minimumKeyboardHeight()
     }
 }
 
-inline static CGFloat quicktypeBarHeightForMode(SLKQuicktypeBarMode mode)
+inline static CGFloat SLKQuicktypeBarHeightForMode(SLKQuicktypeBarMode mode)
 {
     if (UI_IS_IPAD) {
         switch (mode) {
