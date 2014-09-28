@@ -33,17 +33,17 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 /** @name A drop-in UIViewController subclass with a growing text input view and other useful messaging features. */
 @interface SLKTextViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
 
-/** The main table view managed by the controller object. Default view if initialized with -init */
-@property (nonatomic, readonly) IBOutlet UITableView *tableView;
+/** The main table view managed by the controller object. Created by default initializing with -init or initWithNibName:bundle: */
+@property (nonatomic, readonly) UITableView *tableView;
 
 /** The main collection view managed by the controller object. Not nil if the controller is initialised with -initWithCollectionViewLayout: */
-@property (nonatomic, readonly) IBOutlet UICollectionView *collectionView;
+@property (nonatomic, readonly) UICollectionView *collectionView;
 
 /** The bottom toolbar containing a text view and buttons. */
-@property (nonatomic, readonly) IBOutlet SLKTextInputbar *textInputbar;
+@property (nonatomic, readonly) SLKTextInputbar *textInputbar;
 
 /** The typing indicator used to display user names horizontally. */
-@property (nonatomic, readonly) IBOutlet SLKTypingIndicatorView *typingIndicatorView;
+@property (nonatomic, readonly) SLKTypingIndicatorView *typingIndicatorView;
 
 /** YES if control's animation should have bouncy effects. Default is YES. */
 @property (nonatomic, assign) BOOL bounces;
@@ -75,6 +75,11 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 @property (nonatomic, readonly) UIButton *leftButton;
 @property (nonatomic, readonly) UIButton *rightButton;
 
+
+///------------------------------------------------
+/// @name Initialization
+///------------------------------------------------
+
 /**
  Initializes a text view controller to manage a table view of a given style.
  @discussion If you use the standard -init method, a table view with plain style will be created.
@@ -94,12 +99,29 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout;
 
 /**
- Verifies if the right button can be pressed. If NO, the button is disabled.
- @discussion You can override this method to perform additional tasks.
+ Returns the tableView style to be configured when using Interface Builder. Default is UITableViewStylePlain.
+ @discussion You must override this method if you want to configure a tableView.
+ You should not override -initWithCoder:
  
- @return YES if the right button can be pressed.
+ @param decoder An unarchiver object.
+ @return The tableView style to be used in the new instantiated tableView.
  */
-- (BOOL)canPressRightButton;
++ (UITableViewStyle)tableViewStyleForCoder:(NSCoder *)decoder;
+
+/**
+ Returns the tableView style to be configured when using Interface Builder. Default is nil.
+ @discussion You must override this method if you want to configure a collectionView.
+ You should not override -initWithCoder:
+ 
+ @param decoder An unarchiver object.
+ @return The collectionView style to be used in the new instantiated collectionView.
+ */
++ (UICollectionViewLayout *)collectionViewLayoutForCoder:(NSCoder *)decoder;
+
+
+///------------------------------------------------
+/// @name Text Typing & Keyboard Handling
+///------------------------------------------------
 
 /**
  Presents the keyboard, if not already, animated.
@@ -159,6 +181,14 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 - (void)didPressRightButton:(id)sender;
 
 /**
+ Verifies if the right button can be pressed. If NO, the button is disabled.
+ @discussion You can override this method to perform additional tasks.
+ 
+ @return YES if the right button can be pressed.
+ */
+- (BOOL)canPressRightButton;
+
+/**
  Notifies the view controller when the user has pasted an image inside of the text view.
  @discussion You can override this method to perform additional tasks associated with image pasting.
  
@@ -191,6 +221,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
  @discussion You can override this method to perform additional tasks.
  */
 - (void)didPressEscapeKey:(id)sender;
+
 
 ///------------------------------------------------
 /// @name Text Edition
@@ -229,7 +260,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 ///------------------------------------------------
 
 /** The table view used to display autocompletion results. */
-@property (nonatomic, readonly) IBOutlet UITableView *autoCompletionView;
+@property (nonatomic, readonly) UITableView *autoCompletionView;
 
 /** The recently found prefix symbol used as prefix for autocompletion mode. */
 @property (nonatomic, readonly) NSString *foundPrefix;

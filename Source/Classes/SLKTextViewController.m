@@ -72,7 +72,8 @@
 
 - (instancetype)initWithTableViewStyle:(UITableViewStyle)style
 {
-    if (self = [super initWithNibName:nil bundle:nil]) {
+    if (self = [super initWithNibName:nil bundle:nil])
+    {
         [self tableViewWithStyle:style];
         [self commonInit];
     }
@@ -81,8 +82,31 @@
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
-    if (self = [super initWithNibName:nil bundle:nil]) {
+    if (self = [super initWithNibName:nil bundle:nil])
+    {
         [self collectionViewWithLayout:layout];
+        [self commonInit];
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    if (self = [super initWithCoder:decoder])
+    {
+        UITableViewStyle tableViewStyle = [[self class] tableViewStyleForCoder:decoder];
+        UICollectionViewLayout *collectionViewLayout = [[self class] collectionViewLayoutForCoder:decoder];
+        
+        if ([collectionViewLayout isKindOfClass:[UICollectionViewLayout class]]) {
+            [self collectionViewWithLayout:collectionViewLayout];
+        }
+        else if (tableViewStyle == UITableViewStylePlain || tableViewStyle == UITableViewStyleGrouped) {
+            [self tableViewWithStyle:tableViewStyle];
+        }
+        else {
+            return nil;
+        }
+        
         [self commonInit];
     }
     return self;
@@ -144,6 +168,16 @@
 
 
 #pragma mark - Getters
+
++ (UITableViewStyle)tableViewStyleForCoder:(NSCoder *)decoder
+{
+    return UITableViewStylePlain;
+}
+
++ (UICollectionViewLayout *)collectionViewLayoutForCoder:(NSCoder *)decoder
+{
+    return nil;
+}
 
 - (UITableView *)tableViewWithStyle:(UITableViewStyle)style
 {
