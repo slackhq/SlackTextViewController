@@ -19,9 +19,6 @@
 /** @name UITextView additional features used for SlackTextViewController. */
 @interface UITextView (SLKAdditions)
 
-/** The current displayed number of lines. */
-@property (nonatomic, readonly) NSUInteger slk_numberOfLines;
-
 /**
  Scrolls to the very end of the content size, animated.
  

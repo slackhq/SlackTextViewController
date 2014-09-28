@@ -119,6 +119,11 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
     return self.placeholderLabel.textColor;
 }
 
+- (NSUInteger)numberOfLines
+{
+    return abs(self.contentSize.height/self.font.lineHeight);
+}
+
 // Returns a different number of lines when landscape and only on iPhone
 - (NSUInteger)maxNumberOfLines
 {
@@ -148,7 +153,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 
 - (BOOL)isExpanding
 {
-    if (self.slk_numberOfLines >= self.maxNumberOfLines) {
+    if (self.numberOfLines >= self.maxNumberOfLines) {
         return YES;
     }
     return NO;
@@ -231,7 +236,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 
 - (void)flashScrollIndicatorsIfNeeded
 {
-    if (self.slk_numberOfLines == self.maxNumberOfLines+1) {
+    if (self.numberOfLines == self.maxNumberOfLines+1) {
         if (!_didFlashScrollIndicators) {
             _didFlashScrollIndicators = YES;
             [super flashScrollIndicators];

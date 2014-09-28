@@ -294,7 +294,7 @@
 {
     CGFloat height = [self deltaInputbarHeight];
     
-    height += roundf(self.textView.font.lineHeight*self.textView.slk_numberOfLines);
+    height += roundf(self.textView.font.lineHeight*self.textView.numberOfLines);
     height += (kTextViewVerticalPadding*2.0);
     
     return height;
@@ -304,10 +304,10 @@
 {
     CGFloat height = 0.0;
     
-    if (self.textView.slk_numberOfLines == 1) {
+    if (self.textView.numberOfLines == 1) {
         height = [self minimumInputbarHeight];
     }
-    else if (self.textView.slk_numberOfLines < self.textView.maxNumberOfLines) {
+    else if (self.textView.numberOfLines < self.textView.maxNumberOfLines) {
         height += [self currentInputbarHeight];
     }
     else {

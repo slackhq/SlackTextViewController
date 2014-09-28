@@ -18,11 +18,6 @@
 
 @implementation UITextView (SLKAdditions)
 
-- (NSUInteger)slk_numberOfLines
-{
-    return abs(self.contentSize.height/self.font.lineHeight);
-}
-
 - (void)slk_scrollToCaretPositonAnimated:(BOOL)animated
 {
     if (!animated)
