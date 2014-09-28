@@ -1,3 +1,4 @@
+source 'https://github.com/CocoaPods/Specs.git'
 
 workspace 'Messenger.xcworkspace'
 platform :ios, '7.0'

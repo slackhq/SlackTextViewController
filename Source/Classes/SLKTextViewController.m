@@ -68,6 +68,8 @@
 
 - (instancetype)initWithTableViewStyle:(UITableViewStyle)style
 {
+    NSAssert([self class] != [SLKTextViewController class], @"Oops! You must subclass SLKTextViewController.");
+
     if (self = [super initWithNibName:nil bundle:nil])
     {
         [self tableViewWithStyle:style];
@@ -78,6 +80,8 @@
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
+    NSAssert([self class] != [SLKTextViewController class], @"Oops! You must subclass SLKTextViewController.");
+
     if (self = [super initWithNibName:nil bundle:nil])
     {
         [self collectionViewWithLayout:layout];
@@ -86,8 +90,10 @@
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)decoder
+- (instancetype)initWithCoder:(NSCoder *)decoder
 {
+    NSAssert([self class] != [SLKTextViewController class], @"Oops! You must subclass SLKTextViewController.");
+    
     if (self = [super initWithCoder:decoder])
     {
         UITableViewStyle tableViewStyle = [[self class] tableViewStyleForCoder:decoder];
