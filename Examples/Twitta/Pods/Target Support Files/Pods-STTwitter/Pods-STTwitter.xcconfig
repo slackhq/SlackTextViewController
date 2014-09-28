@@ -1,0 +1,1 @@
+PODS_STTWITTER_OTHER_LDFLAGS = -framework "Accounts" -framework "CoreGraphics" -framework "Foundation" -framework "QuartzCore" -framework "Twitter" -framework "UIKit" -weak_framework "Social"
