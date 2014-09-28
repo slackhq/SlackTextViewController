@@ -7,14 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F2C27E419D8932D00888C05 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F2C27E319D8932D00888C05 /* Main.storyboard */; };
+		4F2C27E719D8936B00888C05 /* TWComposerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2C27E619D8936B00888C05 /* TWComposerController.m */; };
 		4F4383A719D7CC0B007B3434 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4383A619D7CC0B007B3434 /* main.m */; };
 		4F4383AA19D7CC0B007B3434 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4383A919D7CC0B007B3434 /* AppDelegate.m */; };
-		4F4383B019D7CC0B007B3434 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F4383AE19D7CC0B007B3434 /* Main.storyboard */; };
 		4F4383B219D7CC0B007B3434 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F4383B119D7CC0B007B3434 /* Images.xcassets */; };
-		4F4383B519D7CC0B007B3434 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F4383B319D7CC0B007B3434 /* LaunchScreen.xib */; };
 		4F4383C119D7CC0B007B3434 /* TwittaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4383C019D7CC0B007B3434 /* TwittaTests.m */; };
-		4F4383CC19D7CD5B007B3434 /* ComposerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4383CB19D7CD5B007B3434 /* ComposerViewController.m */; };
-		4F4383CF19D7DA1C007B3434 /* CNCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4383CE19D7DA1C007B3434 /* CNCollectionViewLayout.m */; };
 		F95F9995D730BF93F5D2E89B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE0A0CC82B83DC624E20D48B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -30,21 +28,18 @@
 
 /* Begin PBXFileReference section */
 		3A939B5604BD8623A05AE86E /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		4F2C27E319D8932D00888C05 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		4F2C27E519D8936B00888C05 /* TWComposerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWComposerController.h; sourceTree = "<group>"; };
+		4F2C27E619D8936B00888C05 /* TWComposerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWComposerController.m; sourceTree = "<group>"; };
 		4F4383A119D7CC0B007B3434 /* Twitta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Twitta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F4383A519D7CC0B007B3434 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F4383A619D7CC0B007B3434 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4F4383A819D7CC0B007B3434 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4F4383A919D7CC0B007B3434 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		4F4383AF19D7CC0B007B3434 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4F4383B119D7CC0B007B3434 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		4F4383B419D7CC0B007B3434 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		4F4383BA19D7CC0B007B3434 /* TwittaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwittaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F4383BF19D7CC0B007B3434 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F4383C019D7CC0B007B3434 /* TwittaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TwittaTests.m; sourceTree = "<group>"; };
-		4F4383CA19D7CD5B007B3434 /* ComposerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposerViewController.h; sourceTree = "<group>"; };
-		4F4383CB19D7CD5B007B3434 /* ComposerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposerViewController.m; sourceTree = "<group>"; };
-		4F4383CD19D7DA1C007B3434 /* CNCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNCollectionViewLayout.h; sourceTree = "<group>"; };
-		4F4383CE19D7DA1C007B3434 /* CNCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNCollectionViewLayout.m; sourceTree = "<group>"; };
 		B665A9AFDDCE0D2CDE55F444 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		CE0A0CC82B83DC624E20D48B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -102,13 +97,10 @@
 			children = (
 				4F4383A819D7CC0B007B3434 /* AppDelegate.h */,
 				4F4383A919D7CC0B007B3434 /* AppDelegate.m */,
-				4F4383CA19D7CD5B007B3434 /* ComposerViewController.h */,
-				4F4383CB19D7CD5B007B3434 /* ComposerViewController.m */,
-				4F4383CD19D7DA1C007B3434 /* CNCollectionViewLayout.h */,
-				4F4383CE19D7DA1C007B3434 /* CNCollectionViewLayout.m */,
-				4F4383AE19D7CC0B007B3434 /* Main.storyboard */,
+				4F2C27E519D8936B00888C05 /* TWComposerController.h */,
+				4F2C27E619D8936B00888C05 /* TWComposerController.m */,
+				4F2C27E319D8932D00888C05 /* Main.storyboard */,
 				4F4383B119D7CC0B007B3434 /* Images.xcassets */,
-				4F4383B319D7CC0B007B3434 /* LaunchScreen.xib */,
 				4F4383A419D7CC0B007B3434 /* Supporting Files */,
 			);
 			path = Twitta;
@@ -230,9 +222,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F4383B019D7CC0B007B3434 /* Main.storyboard in Resources */,
-				4F4383B519D7CC0B007B3434 /* LaunchScreen.xib in Resources */,
 				4F4383B219D7CC0B007B3434 /* Images.xcassets in Resources */,
+				4F2C27E419D8932D00888C05 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,9 +275,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F4383AA19D7CC0B007B3434 /* AppDelegate.m in Sources */,
-				4F4383CF19D7DA1C007B3434 /* CNCollectionViewLayout.m in Sources */,
+				4F2C27E719D8936B00888C05 /* TWComposerController.m in Sources */,
 				4F4383A719D7CC0B007B3434 /* main.m in Sources */,
-				4F4383CC19D7CD5B007B3434 /* ComposerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,25 +297,6 @@
 			targetProxy = 4F4383BB19D7CC0B007B3434 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		4F4383AE19D7CC0B007B3434 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4F4383AF19D7CC0B007B3434 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		4F4383B319D7CC0B007B3434 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4F4383B419D7CC0B007B3434 /* Base */,
-			);
-			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		4F4383C219D7CC0B007B3434 /* Debug */ = {
