@@ -216,6 +216,9 @@
 /** The recently found prefix symbol used as prefix for autocompletion mode. */
 @property (nonatomic, readonly) NSString *foundPrefix;
 
+/** The range of the found prefix in the text view content. */
+@property (nonatomic, readonly) NSRange foundPrefixRange;
+
 /** The recently found word at the textView caret position. */
 @property (nonatomic, readonly) NSString *foundWord;
 

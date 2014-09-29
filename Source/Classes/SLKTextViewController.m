@@ -37,9 +37,6 @@
 // YES if the user is moving the keyboard with a gesture
 @property (nonatomic, readonly, getter = isMovingKeyboard) BOOL movingKeyboard;
 
-// Used for Auto-Completion
-@property (nonatomic, readonly) NSRange foundPrefixRange;
-
 // The current QuicktypeBar mode (hidden, collapsed or expanded)
 @property (nonatomic) SLKQuicktypeBarMode quicktypeBarMode;
 
