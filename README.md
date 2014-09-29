@@ -259,6 +259,8 @@ Check out the sample project, everything is demo'd there.
 
 ##XCode Templates
 
+![Template](Screenshots/screenshot_template.png)
+
 We have prepared a set of useful XCode templates so you can quickly start using SlackTextViewController.
 
 To install the templates, open up your terminal and type:
