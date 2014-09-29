@@ -251,6 +251,17 @@ To add additional key commands, simply override `-keyCommands` and append `super
 }
 ````
 
-##Sample project
+
+##Sample Project
 
 Check out the sample project, everything is demo'd there.
+
+
+##XCode Templates
+
+We have prepared a set of useful XCode templates so you can quickly start using SlackTextViewController.
+
+To install the templates, open up your terminal and type:
+```sh Template/install.sh```
+
+These templates are also available in [Alcatraz](https://github.com/supermarin/Alcatraz).
