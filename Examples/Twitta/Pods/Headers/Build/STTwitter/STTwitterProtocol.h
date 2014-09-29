@@ -1,1 +1,0 @@
-../../../STTwitter/STTwitter/STTwitterProtocol.h
