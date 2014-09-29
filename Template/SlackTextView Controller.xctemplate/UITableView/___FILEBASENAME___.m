@@ -20,7 +20,7 @@
 - (id)init
 {
 #warning Potentially incomplete method implementation.
-    self = [super initWithTableViewStyle:<#(UITableViewStyle)#>];
+    self = [super initWithCollectionViewLayout:<#(UICollectionViewLayout *)#>];
     if (self) {
         
     }
@@ -122,68 +122,6 @@
 */
 
 
-#pragma mark <UICollectionViewDataSource>
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-#warning Incomplete method implementation -- Return the number of sections
-    return 0;
-}
-
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-#warning Incomplete method implementation -- Return the number of items in the section
-    return 0;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell
-    
-    return cell;
-}
-
-
-#pragma mark <UICollectionViewDelegate>
-
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return YES;
-}
-*/
-
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return YES;
-}
-*/
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return NO;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
-{
-    return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
-{
-    
-}
-*/
-
-
 #pragma mark - <UITableViewDataSource>
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -197,6 +135,9 @@
 {
 #warning Incomplete method implementation.
     // Returns the number of rows in the section.
+    if ([tableView isEqual:self.tableView]) {
+        return 0;
+    }
     if ([tableView isEqual:self.autoCompletionView]) {
         return 0;
     }
@@ -207,7 +148,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-
+    
+    if ([tableView isEqual:self.tableView]) {
+        // Configure the message cell...
+    }
     if ([tableView isEqual:self.autoCompletionView]) {
         // Configure the autocompletion cell...
     }
@@ -218,11 +162,14 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Returns the height each row
+    if ([tableView isEqual:self.tableView]) {
+        return 0;
+    }
     if ([tableView isEqual:self.autoCompletionView]) {
         return 0;
     }
 }
-*/
+ */
 
 
 #pragma mark - <UITableViewDelegate>
@@ -231,12 +178,15 @@
 // Uncomment this method to handle the cell selection
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ([tableView isEqual:self.tableView]) {
+
+    }
     if ([tableView isEqual:self.autoCompletionView]) {
- 
+
         [self acceptAutoCompletionWithString:<#@"any_string"#>];
     }
 }
- */
+*/
 
 
 #pragma mark - View lifeterm
