@@ -45,9 +45,9 @@ pod 'SlackTextViewController'
 ##How to use
 
 ###Subclassing
-`SCKChatViewController` is meant to be subclassed, like you would normally do with UITableViewController or UICollectionViewController. This pattern is a convenient way of extending UIViewController. SlackTextViewController manages a lot behind the scenes while still providing the ability to add custom behaviours. You may override methods, and decide to call super and  perform additional logic, or not to call super and override default logic.
+`SLKTextViewController` is meant to be subclassed, like you would normally do with UITableViewController or UICollectionViewController. This pattern is a convenient way of extending UIViewController. SlackTextViewController manages a lot behind the scenes while still providing the ability to add custom behaviours. You may override methods, and decide to call super and  perform additional logic, or not to call super and override default logic.
 
-Start by creating a new subclass of `SCKChatViewController`.
+Start by creating a new subclass of `SLKTextViewController`.
 
 In the init overriding method, if you wish to use the `UITableView` version, call:
 ```
@@ -161,7 +161,7 @@ You can always call `-cancelAutoCompletion` to exit the autocompletion mode.
 
 ![Edit Mode](Screenshots/screenshot_edit-mode.png)
 
-To enable edit mode, you simply need to call `[self editText:@"hello"];`, and the text input will automatically adjust to the edit mode, removing both left and right buttons, extending the view a bit higher with "Accept" and "Cancel" buttons. Both of this buttons are accessible under `SCKChatToolbar` for customisation.
+To enable edit mode, you simply need to call `[self editText:@"hello"];`, and the text input will automatically adjust to the edit mode, removing both left and right buttons, extending the view a bit higher with "Accept" and "Cancel" buttons. Both of this buttons are accessible under `SLKTextInputbar` for customisation.
 
 To capture the "Accept" or "Cancel" events, you must override the following methods.
 
