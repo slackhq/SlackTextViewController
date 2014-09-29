@@ -6,12 +6,6 @@
 // project.
 
 
-// STTwitter
-#define COCOAPODS_POD_AVAILABLE_STTwitter
-#define COCOAPODS_VERSION_MAJOR_STTwitter 0
-#define COCOAPODS_VERSION_MINOR_STTwitter 1
-#define COCOAPODS_VERSION_PATCH_STTwitter 4
-
 // SlackTextViewController
 #define COCOAPODS_POD_AVAILABLE_SlackTextViewController
 #define COCOAPODS_VERSION_MAJOR_SlackTextViewController 1

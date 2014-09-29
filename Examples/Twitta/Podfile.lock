@@ -4,11 +4,9 @@ PODS:
     - SlackTextViewController/Additions
   - SlackTextViewController/Additions (1.1):
     - SlackTextViewController/Additions
-  - STTwitter (0.1.4)
 
 DEPENDENCIES:
   - SlackTextViewController (from `../../SlackTextViewController.podspec`)
-  - STTwitter (~> 0.1)
 
 EXTERNAL SOURCES:
   SlackTextViewController:
@@ -16,6 +14,5 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   SlackTextViewController: f72bdc6b7383a56f38677a2dc791751483a84019
-  STTwitter: 809f63f856341fdd103fbc6d9e4818d48a91be0c
 
 COCOAPODS: 0.34.1

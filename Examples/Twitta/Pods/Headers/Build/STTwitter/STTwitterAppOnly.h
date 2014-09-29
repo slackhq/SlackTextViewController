@@ -1,1 +1,0 @@
-../../../STTwitter/STTwitter/STTwitterAppOnly.h
