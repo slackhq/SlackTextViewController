@@ -8,6 +8,27 @@
 
 class MessagesViewController: SLKTextViewController {
     
+    var searchResult:NSMutableArray!
+    
+    // MARK: - Initializers
+
+//    // init with TableView
+//    override init() {
+//        //#warning Potentially incomplete method implementation.
+//        super.init(tableViewStyle: UITableViewStyle.Plain)
+//    }
+//    
+//    // init with CollectionView
+//    override init() {
+//        //#warning Potentially incomplete method implementation.
+//        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+//        super.init(collectionViewLayout: layout)
+//    }
+//
+//    required init(coder aDecoder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+    
     class override func tableViewStyleForCoder(decoder: NSCoder) -> UITableViewStyle {
         return UITableViewStyle.Plain
     }
@@ -19,10 +40,69 @@ class MessagesViewController: SLKTextViewController {
 //        return layout
 //    }
     
+    
+    // MARK: - View lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.bounces = false;
+        self.undoShakingEnabled = true;
+        self.keyboardPanningEnabled = true;
+        self.inverted = true;
+        
+        self.textInputbar.autoHideRightButton = false;
+        self.textView.placeholder = "Start a new message"
+        
+        registerPrefixesForAutoCompletion(["@","#"])
     }
     
+    
+    // MARK: - SlackTextViewController
+
+    override func textWillUpdate() {
+        super.textWillUpdate()
+    }
+    
+    override func textDidUpdate(animated: Bool) {
+        super.textDidUpdate(animated)
+    }
+    
+    override func didPressRightButton(sender: AnyObject!) {
+        super.didPressRightButton(sender)
+    }
+    
+    override func didPressLeftButton(sender: AnyObject!) {
+        super.didPressLeftButton(sender)
+    }
+    
+    override func canPressRightButton() -> Bool {
+        return super.canPressRightButton()
+    }
+    
+    override func didPasteImage(image: UIImage!) {
+        // Useful for sending an image
+    }
+    
+    override func willRequestUndo() {
+        super.willRequestUndo()
+    }
+    
+    override func canShowAutoCompletion() -> Bool {
+        
+        let prefix = self.foundPrefix;
+        let word = self.foundWord;
+        
+        return false;
+    }
+    
+    override func heightForAutoCompletionView() -> CGFloat {
+        return 0.0
+    }
+    
+    
+    // MARK: - <UITableViewDataSource>
+
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 20
     }
@@ -38,5 +118,16 @@ class MessagesViewController: SLKTextViewController {
         cell.transform = tableView.transform
         
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 40.0
+    }
+    
+    
+    // MARK: - <UITableViewDelegate>
+
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
     }
 }
