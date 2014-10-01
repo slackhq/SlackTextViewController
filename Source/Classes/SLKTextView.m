@@ -69,7 +69,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
     [super drawRect:rect];
 
     if (self.text.length == 0 && self.placeholder.length > 0) {
-        self.placeholderLabel.frame = CGRectInset(rect, 5.0, 5.0);
+        self.placeholderLabel.frame = CGRectInset(rect, 5.0+self.textContainerInset.left, 5.0);
         self.placeholderLabel.hidden = NO;
         [self sendSubviewToBack:self.placeholderLabel];
     }
