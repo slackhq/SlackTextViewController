@@ -120,6 +120,21 @@
     [self.scrollViewProxy flashScrollIndicators];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    // Stops the keyboard from being dismissed during the navigation controller's "swipe-to-pop"
+    if (self.isMovingFromParentViewController) {
+        self.textView.didNotResignFirstResponder = YES;
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+}
+
 
 #pragma mark - Getters
 
@@ -702,6 +717,7 @@
     
     // Skips if textview did refresh only
     if (self.textView.didNotResignFirstResponder) {
+        self.textView.didNotResignFirstResponder = NO;
         return;
     }
     

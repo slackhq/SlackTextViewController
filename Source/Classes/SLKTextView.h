@@ -41,8 +41,9 @@ extern NSString * const SLKTextViewDidShakeNotification;
 @property (nonatomic, readonly) BOOL isExpanding;
 
 /** YES if quickly refreshed the textview without the intension to dismiss the keyboard. @view -disableQuicktypeBar: for more details. */
-@property (nonatomic, readonly) BOOL didNotResignFirstResponder;
+@property (nonatomic, readwrite) BOOL didNotResignFirstResponder;
 
+/** YES if the magnifying glass is visible. */
 @property (nonatomic, getter=isLoupeVisible) BOOL loupeVisible;
 
 /**
