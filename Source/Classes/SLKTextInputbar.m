@@ -71,16 +71,15 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 #pragma mark - UIView Overrides
 
-- (void)willMoveToSuperview:(UIView *)newSuperview
+- (void)layoutIfNeeded
 {
-    [super willMoveToSuperview:newSuperview];
+    if (self.constraints.count == 0) {
+        return;
+    }
     
     [self updateConstraintConstants];
-    [self layoutIfNeeded];
+    [super layoutIfNeeded];
 }
-
-
-#pragma mark - UIView Overrides
 
 - (CGSize)intrinsicContentSize
 {
