@@ -458,10 +458,12 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
         CGSize leftButtonSize = [self.leftButton imageForState:self.leftButton.state].size;
         
-        self.leftButtonWC.constant = roundf(leftButtonSize.width);
-        self.leftButtonHC.constant = roundf(leftButtonSize.height);
-        self.leftMarginWC.constant = (leftButtonSize.width > 0) ? kTextViewHorizontalPadding : zero;
-        self.bottomMarginWC.constant = roundf((self.intrinsicContentSize.height - leftButtonSize.height) / 2.0);
+        if (leftButtonSize.width > 0) {
+            self.leftButtonWC.constant = roundf(leftButtonSize.width);
+            self.leftButtonHC.constant = roundf(leftButtonSize.height);
+            self.leftMarginWC.constant = (leftButtonSize.width > 0) ? kTextViewHorizontalPadding : zero;
+            self.bottomMarginWC.constant = roundf((self.intrinsicContentSize.height - leftButtonSize.height) / 2.0);
+        }
         
         self.rightButtonWC.constant = [self appropriateRightButtonWidth];
         self.rightMarginWC.constant = [self appropriateRightButtonMargin];
