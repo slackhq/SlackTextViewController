@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AllowedTypes</key>
+	<array>
+		<string>public.objective-c-source</string>
+		<string>public.objective-c-plus-plus-source</string>
+	</array>
+	<key>Platforms</key>
+	<array>
+		<string>com.apple.platform.iphoneos</string>
+	</array>
+	<key>Description</key>
+	<string>SlackTextViewController subclass file</string>
+	<key>DefaultCompletionName</key>
+	<string>MyTextViewController</string>
+	<key>Kind</key>
+	<string>Xcode.IDEKit.TextSubstitutionFileTemplateKind</string>
+	<key>Summary</key>
+	<string>A SLKTextViewController subclass</string>
+	<key>MainTemplateFile</key>
+	<string>___FILEBASENAME___.m</string>
+	<key>SortOrder</key>
+	<integer>1</integer>
+	<key>Options</key>
+	<array>
+		<dict>
+			<key>Description</key>
+			<string>The name of the class to create</string>
+			<key>Identifier</key>
+			<string>productName</string>
+			<key>Name</key>
+			<string>Class:</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>Required</key>
+			<true/>
+			<key>Type</key>
+			<string>text</string>
+		</dict>
+		<dict>
+			<key>Default</key>
+			<string>SLKTextViewController</string>
+			<key>Description</key>
+			<string>The default parent class SLKTextViewController</string>
+			<key>Identifier</key>
+			<string>textViewControllerSubclass</string>
+			<key>Name</key>
+			<string>Subclass of:</string>
+			<key>Required</key>
+			<false/>
+			<key>Type</key>
+			<string>static</string>
+		</dict>
+		<dict>
+			<key>Default</key>
+			<string>UITableView</string>
+			<key>Description</key>
+			<string>The content view type</string>
+			<key>Identifier</key>
+			<string>contentViewChoice</string>
+			<key>Name</key>
+			<string>Content View:</string>
+			<key>Required</key>
+			<true/>
+			<key>Type</key>
+			<string>popup</string>
+			<key>Values</key>
+			<array>
+				<string>UITableView</string>
+				<string>UICollectionView</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
