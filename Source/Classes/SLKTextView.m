@@ -67,12 +67,10 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 - (void)drawRect:(CGRect)rect
 {
     [super drawRect:rect];
-
-    if (self.text.length == 0 && self.placeholder.length > 0) {
-        self.placeholderLabel.frame = CGRectInset(rect, 5.0+self.textContainerInset.left, 5.0);
-        self.placeholderLabel.hidden = NO;
-        [self sendSubviewToBack:self.placeholderLabel];
-    }
+    
+    self.placeholderLabel.hidden = [self shouldHidePlaceholder];
+    self.placeholderLabel.frame = [self placeholderRectForBounds:self.bounds];
+    [self sendSubviewToBack:self.placeholderLabel];
 }
 
 
@@ -157,6 +155,24 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
         return YES;
     }
     return NO;
+}
+
+- (BOOL)shouldHidePlaceholder
+{
+    if (self.placeholder.length == 0 || self.text.length > 0) {
+        return YES;
+    }
+    return NO;
+}
+
+- (CGRect)placeholderRectForBounds:(CGRect)bounds
+{
+    CGRect rect = UIEdgeInsetsInsetRect(bounds, self.textContainerInset);
+    CGFloat padding = self.textContainer.lineFragmentPadding;
+    rect.origin.x += padding;
+    rect.size.width -= padding * 2.0f;
+    
+    return rect;
 }
 
 
@@ -278,8 +294,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 
 - (void)didChangeTextView:(NSNotification *)notification
 {
-    if (self.placeholder.length > 0) {
-        self.placeholderLabel.hidden = (self.text.length > 0) ? YES : NO;
+    if (self.placeholderLabel.hidden != [self shouldHidePlaceholder]) {
         [self setNeedsDisplay];
     }
     

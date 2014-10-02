@@ -26,10 +26,10 @@ extern NSString * const SLKTextViewDidShakeNotification;
 @interface SLKTextView : UITextView
 
 /** The placeholder text string. */
-@property (nonatomic, readwrite) NSString *placeholder;
+@property (nonatomic, copy) NSString *placeholder;
 
 /** The placeholder color. */
-@property (nonatomic, readwrite) UIColor *placeholderColor;
+@property (nonatomic, copy) UIColor *placeholderColor;
 
 /** The maximum number of lines before enabling scrolling. Default is 0 wich means limitless. */
 @property (nonatomic, readwrite) NSUInteger maxNumberOfLines;
