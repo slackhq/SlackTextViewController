@@ -120,7 +120,7 @@
  Notifies the view controller that the text did update.
  @discussion You can override this method to perform additional tasks associated with presenting the view. You MUST call super at some point in your implementation.
  
- @param If YES, the text input bar was resized using an animation.
+ @param If YES, the text input bar will be resized using an animation.
  */
 - (void)textDidUpdate:(BOOL)animated;
 

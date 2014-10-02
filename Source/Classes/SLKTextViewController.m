@@ -125,9 +125,7 @@
     [super viewWillDisappear:animated];
     
     // Stops the keyboard from being dismissed during the navigation controller's "swipe-to-pop"
-    if (self.isMovingFromParentViewController) {
-        self.textView.didNotResignFirstResponder = YES;
-    }
+    self.textView.didNotResignFirstResponder = self.isMovingFromParentViewController;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
