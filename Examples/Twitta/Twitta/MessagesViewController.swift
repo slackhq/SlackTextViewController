@@ -8,7 +8,10 @@
 
 class MessagesViewController: SLKTextViewController {
     
+    var parent:RecipientsViewController!
     var searchResult:NSMutableArray!
+    
+    
     
     // MARK: - Initializers
 
@@ -91,7 +94,32 @@ class MessagesViewController: SLKTextViewController {
     override func canShowAutoCompletion() -> Bool {
         
         let prefix = self.foundPrefix;
-        let word = self.foundWord;
+        let word:NSString = self.foundWord;
+        
+        println(word)
+        
+        if (word.length < 3) {
+            return false;
+        }
+        
+        
+        
+        let failureHandler: ((NSError) -> Void) = {
+            error in
+            self.parent.logError("Error", message: error.localizedDescription)
+        }
+        
+        let query:NSString = NSString(format: "@%@", word)
+        println(query)
+        
+        self.parent.swifter.getUsersSearchWithQuery(query, page: 0, count: 5, includeEntities: false, success: { (users) -> Void in
+            println(users)
+            }, failure: failureHandler)
+
+        
+//        self.parent.swifter.getUsersLookupWithScreenNames(screenNames: word, includeEntities: true, success: { (users) -> Void in
+////            self.searchResult = users!
+//            }, failure: failureHandler)
         
         return false;
     }
