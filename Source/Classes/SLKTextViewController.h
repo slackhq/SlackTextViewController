@@ -23,6 +23,13 @@
 #import "UITextView+SLKAdditions.h"
 #import "UIView+SLKAdditions.h"
 
+typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
+    SLKKeyboardStatusDidHide,
+    SLKKeyboardStatusWillShow,
+    SLKKeyboardStatusDidShow,
+    SLKKeyboardStatusWillHide
+};
+
 /** @name A drop-in UIViewController subclass with a growing text input view and other useful messaging features. */
 @interface SLKTextViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
 
@@ -105,6 +112,14 @@
  */
 - (void)dismissKeyboard:(BOOL)animated;
 
+/**
+ Notifies the view controller that the keyboard changed status.
+ @discussion You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
+ 
+ @param status The new keyboard status.
+ */
+- (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status;
+
 
 ///------------------------------------------------
 /// @name Text Typing Notifications
@@ -112,7 +127,7 @@
 
 /**
  Notifies the view controller that the text will update.
- @discussion You can override this method to perform additional tasks associated with presenting the view. You MUST call super at some point in your implementation.
+ @discussion You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
  */
 - (void)textWillUpdate;
 

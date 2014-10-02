@@ -101,17 +101,3 @@ inline static SLKQuicktypeBarMode SLKQuicktypeBarModeForHeight(CGFloat height)
     
     return SLKQuicktypeBarModeHidden;
 }
-
-inline static NSString *NSStringFromSLKQuicktypeBarMode(SLKQuicktypeBarMode mode)
-{
-    switch (mode) {
-        case SLKQuicktypeBarModeHidden:
-            return @"Hidden";
-            
-        case SLKQuicktypeBarModeCollapsed:
-            return @"Collapsed";
-            
-        case SLKQuicktypeBarModeExpanded:
-            return @"Expanded";
-    }
-}

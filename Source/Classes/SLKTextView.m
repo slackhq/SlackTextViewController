@@ -268,6 +268,8 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
     
     _didNotResignFirstResponder = YES;
     [self resignFirstResponder];
+    
+    _didNotResignFirstResponder = NO;
     [self becomeFirstResponder];
 }
 

@@ -159,6 +159,11 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 #pragma mark - Overriden Methods
 
+- (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status
+{
+    // Useful for notifying when user will type some text
+}
+
 - (void)textWillUpdate
 {
     [super textWillUpdate];

@@ -35,10 +35,13 @@
 @property (nonatomic, strong) UIGestureRecognizer *singleTapGesture;
 
 // YES if the user is moving the keyboard with a gesture
-@property (nonatomic, readonly, getter = isMovingKeyboard) BOOL movingKeyboard;
+@property (nonatomic, getter = isMovingKeyboard) BOOL movingKeyboard;
 
 // The current QuicktypeBar mode (hidden, collapsed or expanded)
 @property (nonatomic) SLKQuicktypeBarMode quicktypeBarMode;
+
+// The current keyboard status (hidden, showing, etc.)
+@property (nonatomic) SLKKeyboardStatus keyboardStatus;
 
 @end
 
@@ -111,6 +114,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    self.textView.didNotResignFirstResponder = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -354,6 +359,10 @@
         keyboardHeight -= tabBarHeight;
     }
     
+    if (keyboardHeight < 0) {
+        keyboardHeight = 0.0;
+    }
+    
     return keyboardHeight;
 }
 
@@ -453,6 +462,24 @@
     }
 }
 
+- (void)setKeyboardStatus:(SLKKeyboardStatus)status
+{
+    // Skips if trying to update the same status
+    if (self.keyboardStatus == status) {
+        return;
+    }
+    
+    // Skips illogical conditions
+    if ((self.keyboardStatus == SLKKeyboardStatusDidShow && status == SLKKeyboardStatusWillShow) ||
+        (self.keyboardStatus == SLKKeyboardStatusDidHide && status == SLKKeyboardStatusWillHide)) {
+        return;
+    }
+    
+    _keyboardStatus = status;
+    
+    [self didChangeKeyboardStatus:status];
+}
+
 
 #pragma mark - Subclassable Methods
 
@@ -496,6 +523,11 @@
             [self.textView resignFirstResponder];
         }
     }
+}
+
+- (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status
+{
+    // No implementation here. Meant to be overriden in subclass.
 }
 
 - (void)textWillUpdate
@@ -715,7 +747,6 @@
     
     // Skips if textview did refresh only
     if (self.textView.didNotResignFirstResponder) {
-        self.textView.didNotResignFirstResponder = NO;
         return;
     }
     
@@ -728,7 +759,7 @@
     NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
 
     // Checks if it's showing or hidding the keyboard
-    BOOL show = [notification.name isEqualToString:UIKeyboardWillShowNotification];
+    BOOL willShow = [notification.name isEqualToString:UIKeyboardWillShowNotification];
     
     // Programatically stops scrolling before updating the view constraints (to avoid scrolling glitch)
     [self.scrollViewProxy slk_stopScrolling];
@@ -737,8 +768,9 @@
     self.keyboardHC.constant = [self appropriateKeyboardHeight:notification];
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
-    if (!show && self.isAutoCompleting) {
-        [self hideautoCompletionView];
+    // Hides autocompletion mode if the keyboard is being dismissed
+    if (!willShow && self.isAutoCompleting) {
+        [self hideAutoCompletionView];
     }
     
     // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
@@ -746,6 +778,9 @@
 											  bounce:NO
 											 options:(curve<<16)|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
 										  animations:NULL];
+    
+    // Updates and notifies about the keyboard status update
+    self.keyboardStatus = willShow ? SLKKeyboardStatusWillShow : SLKKeyboardStatusWillHide;
 }
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
@@ -761,12 +796,15 @@
     }
     
     // Checks if it's showing or hidding the keyboard
-    BOOL show = [notification.name isEqualToString:UIKeyboardDidShowNotification];
+    BOOL didShow = [notification.name isEqualToString:UIKeyboardDidShowNotification];
     
     // After showing keyboard, check if the current cursor position could diplay autocompletion
-    if (show) {
+    if (didShow) {
         [self processTextForAutoCompletion];
     }
+    
+    // Updates and notifies about the keyboard status update
+    self.keyboardStatus = didShow ? SLKKeyboardStatusDidShow : SLKKeyboardStatusDidHide;
 }
 
 - (void)didChangeKeyboardFrame:(NSNotification *)notification
@@ -782,16 +820,10 @@
         return;
     }
     
-    CGFloat keyboardHeight = [self appropriateKeyboardHeight:notification];
-    
-    if (keyboardHeight < 0) {
-        keyboardHeight = 0.0;
-    }
-    
-    self.keyboardHC.constant = keyboardHeight;
+    self.keyboardHC.constant = [self appropriateKeyboardHeight:notification];
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
-    _movingKeyboard = self.scrollViewProxy.isDragging;
+    self.movingKeyboard = self.scrollViewProxy.isDragging;
     
     if (self.isInverted && self.isMovingKeyboard && !CGPointEqualToPoint(self.scrollViewProxy.contentOffset, _draggingOffset)) {
         self.scrollViewProxy.contentOffset = _draggingOffset;
@@ -1017,7 +1049,7 @@
     [textView slk_scrollToCaretPositonAnimated:NO];
 }
 
-- (void)hideautoCompletionView
+- (void)hideAutoCompletionView
 {
     [self showAutoCompletionView:NO];
 }
