@@ -548,7 +548,7 @@ public extension Swifter {
     Only the first 1,000 matching results are available.
     */
     public func getUsersSearchWithQuery(q: String, page: Int?, count: Int?, includeEntities: Bool?, success: ((users: [JSONValue]?) -> Void)?, failure: FailureHandler) {
-        let path = "users/search/json"
+        let path = "users/search"
 
         var parameters = Dictionary<String, AnyObject>()
         parameters["q"] = q

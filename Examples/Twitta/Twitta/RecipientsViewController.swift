@@ -13,8 +13,8 @@ import SwifteriOS
 
 class RecipientsViewController: UITableViewController {
     
-    var key: NSString = "ejzsGPK20pckEY16aM1MTf6qt"
-    var secret: NSString = "bdvsnHkGKQc0xcbnjAz6TwMu16dxv1N4UgEnMovVdqv4xQ8HgN"
+    var key: NSString = "RErEmzj7ijDkJr60ayE2gjSHT" //"ejzsGPK20pckEY16aM1MTf6qt"
+    var secret: NSString = "SbS0CHk11oJdALARa7NDik0nty4pXvAxdt7aj0R5y1gNzWaNEx" //"bdvsnHkGKQc0xcbnjAz6TwMu16dxv1N4UgEnMovVdqv4xQ8HgN"
 
     var swifter: Swifter
     var discussions : [JSONValue] = []
@@ -34,10 +34,11 @@ class RecipientsViewController: UITableViewController {
     }
 
     func login() {
+        
         let failureHandler: ((NSError) -> Void) = {
             error in
             
-            self.alertWithTitle("Error", message: error.localizedDescription)
+            self.logError("Error", message: error.localizedDescription)
         }
         
         if useACAccount {
@@ -53,16 +54,19 @@ class RecipientsViewController: UITableViewController {
                     
                     if twitterAccounts?.count == 0
                     {
-                        self.alertWithTitle("Error", message: "There are no Twitter accounts configured. You can add or create a Twitter account in Settings.")
+                        self.logError("Error", message: "There are no Twitter accounts configured. You can add or create a Twitter account in Settings.")
                     }
                     else {
                         let twitterAccount = twitterAccounts[0] as ACAccount
                         self.swifter = Swifter(account: twitterAccount)
-                        self.fetchDiscussions()
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.next()
+                        })
                     }
                 }
                 else {
-                    self.alertWithTitle("Error", message: error.localizedDescription)
+                    self.logError("Error", message: error.localizedDescription)
                 }
             }
         }
@@ -70,17 +74,26 @@ class RecipientsViewController: UITableViewController {
             swifter.authorizeWithCallbackURL(NSURL(string: "twitta://success"), success: {
                 accessToken, response in
                 
-                self.fetchDiscussions()
+                self.next()
                 
                 },failure: failureHandler
             )
         }
     }
     
+    func next() {
+        let vc:MessagesViewController = MessagesViewController(tableViewStyle: UITableViewStyle.Plain)
+        vc.parent = self
+        
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+        //self.fetchDiscussions()
+    }
+    
     func fetchDiscussions() {
         let failureHandler: ((NSError) -> Void) = {
             error in
-            self.alertWithTitle("Error", message: error.localizedDescription)
+            self.logError("Error", message: error.localizedDescription)
         }
         
         self.swifter.getSentDirectMessagesSinceID(nil, maxID: nil, count: 20, page: 0, includeEntities: true, success: {
@@ -113,9 +126,7 @@ class RecipientsViewController: UITableViewController {
         return cell
     }
 
-    func alertWithTitle(title: String, message: String) {
-        var alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+    func logError(title: String, message: String) {
+        println(title,message)
     }
 }
