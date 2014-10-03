@@ -55,7 +55,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     self.translucent = NO;
     self.autoHideRightButton = YES;
     self.editing = NO;
-    self.contentInset = UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0);
+    self.contentInset = UIEdgeInsetsMake(5.0, 8.0, 5.0, 5.0);
     self.accessoryViewHeight = 38.0;
     
     [self addSubview:self.accessoryView];
@@ -252,12 +252,36 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (void)setAutoHideRightButton:(BOOL)hide
 {
-    if (self.autoHideRightButton != hide) {
-        _autoHideRightButton = hide;
+    if (self.autoHideRightButton == hide) {
+        return;
     }
+    
+    _autoHideRightButton = hide;
     
     self.rightButtonWC.constant = [self appropriateRightButtonWidth];
     [self layoutIfNeeded];
+}
+
+- (void)setContentInset:(UIEdgeInsets)contentInset
+{
+    if (UIEdgeInsetsEqualToEdgeInsets(self.contentInset, contentInset)) {
+        return;
+    }
+    
+    if (UIEdgeInsetsEqualToEdgeInsets(self.contentInset, UIEdgeInsetsZero)) {
+        _contentInset = contentInset;
+        return;
+    }
+    
+    _contentInset = contentInset;
+    
+    // Add new constraints
+    [self removeConstraints:self.constraints];
+    [self setupViewConstraints];
+    
+    // Add constant values and refresh layout
+    [self updateConstraintConstants];
+    [super layoutIfNeeded];
 }
 
 - (void)setEditing:(BOOL)editing
