@@ -1,5 +1,5 @@
-SlackTextViewController
-=============================================
+#SlackTextViewController
+
 [![Pod Version](http://img.shields.io/cocoapods/v/SlackTextViewController.svg)](https://cocoadocs.org/docsets/SlackTextViewController)
 [![License](http://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://opensource.org/licenses/Apache2.0)
 
@@ -12,28 +12,29 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 ## Features
 
 ### Core
-- iOS 7 and iOS 8
-- iPhone 6 compatible
-- iPad compatible
-- Support for UITableView and UICollectionView
-- Built with Auto Layout
-- Customizable: provides left and right button, and toolbar outlets
+- Works out of the box with UITableView or UICollectionView
 - Growing text view, with line count limit support
-- Autocomplete mode by registering any prefix key (`@`, `#`, `/`)
+- Customizable: provides left and right button, and toolbar outlets
 - Tap gesture for dismissing the keyboard
+- Pan gesture for sliding down the keyboard
+- Flexible UI Built with Auto Layout
 - Text append APIs
-- External keyboard support for basic commands
-- Rotation support
-- Localization support
 
 ### Optional
+- Autocomplete mode by registering any prefix key (`@`, `#`, `/`)
 - Edit mode
-- "User is typing..." indicator display
-- Pan gesture for sliding down the keyboard
+- Typing indicator display
 - Shake gesture for undo
 - Image pasting support
 - Inverted mode for displaying cells upside-down (using CATransform) -- a necessary hack for some messaging apps (including ours)
 - Bouncy animations
+
+### Compatibility
+- iOS 7 & iOS 8
+- iPhone & iPad
+- UIPopOverController & UITabBarController support
+- Auto-Rotation & Localization support
+- External keyboard support for basic commands
 
 ## Installation
 
