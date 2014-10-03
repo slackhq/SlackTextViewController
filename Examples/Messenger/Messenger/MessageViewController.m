@@ -161,33 +161,33 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status
 {
-    // Useful for notifying when user will type some text
+    // Notifies the view controller that the keyboard changed status.
 }
 
 - (void)textWillUpdate
 {
+    // Notifies the view controller that the text will update.
+
     [super textWillUpdate];
-    
-    // Useful for notifying when user will type some text
 }
 
 - (void)textDidUpdate:(BOOL)animated
 {
+    // Notifies the view controller that the text did update.
+
     [super textDidUpdate:animated];
-    
-    // Useful for notifying when user did type some text
 }
 
 - (void)didPressLeftButton:(id)sender
 {
-    NSLog(@"%s",__FUNCTION__);
+    // Notifies the view controller when the left button's action has been triggered, manually.
     
     [super didPressLeftButton:sender];
 }
 
 - (void)didPressRightButton:(id)sender
 {
-    NSLog(@"%s",__FUNCTION__);
+    // Notifies the view controller when the right button's action has been triggered, manually or by using the keyboard return key.
     
     // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button
     [self.textView refreshFirstResponder];
@@ -206,18 +206,22 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (void)didPasteImage:(UIImage *)image
 {
-    // Useful for sending an image
+    // Notifies the view controller when the user has pasted an image inside of the text view.
     
     NSLog(@"%s",__FUNCTION__);
 }
 
 - (void)willRequestUndo
 {
+    // Notifies the view controller when a user did shake the device to undo the typed text
+    
     [super willRequestUndo];
 }
 
 - (void)didCommitTextEditing:(id)sender
 {
+    // Notifies the view controller when tapped on the right "Accept" button for commiting the edited text
+    
     NSString *message = [self.textView.text copy];
     
     [self.messages removeObjectAtIndex:0];
@@ -229,6 +233,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (void)didCancelTextEditing:(id)sender
 {
+    // Notifies the view controller when tapped on the left "Cancel" button
+
     [super didCancelTextEditing:sender];
 }
 

@@ -33,36 +33,50 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     // Do view setup here.
 }
 
 
 #pragma mark - SLKTextViewController Events
 
+- (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status
+{
+    // Notifies the view controller that the keyboard changed status.
+    // Calling super does nothing
+}
+
 - (void)textWillUpdate
 {
-    // Notification about when a user will type some text
+    // Notifies the view controller that the text will update.
+    // Calling super does nothing
+    
     [super textWillUpdate];
 }
 
 - (void)textDidUpdate:(BOOL)animated
 {
-    // Notification about when a user did type some text
+    // Notifies the view controller that the text did update.
+    // Must call super
+    
     [super textDidUpdate:animated];
 }
 
 - (BOOL)canPressRightButton
 {
     // Asks if the right button can be pressed
+    
     return [super canPressRightButton];
 }
 
 - (void)didPressRightButton:(id)sender
 {
+    // Notifies the view controller when the right button's action has been triggered, manually or by using the keyboard return key.
+    // Must call super
+    
     // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button
     [self.textView refreshFirstResponder];
     
-    // Notification about when a user did press the right button
     [super didPressRightButton:sender];
 }
 
@@ -70,7 +84,8 @@
 // Uncomment these methods for aditional events
 - (void)didPressLeftButton:(id)sender
 {
-    // Notification about when a user did press the left button
+    // Notifies the view controller when the left button's action has been triggered, manually.
+    
     [super didPressLeftButton:sender];
 }
 
@@ -83,9 +98,10 @@
 - (void)willRequestUndo
 {
     // Notification about when a user did shake the device to undo the typed text
+    
     [super willRequestUndo];
 }
-*/
+ */
 
 #pragma mark - SLKTextViewController Edition
 
@@ -93,13 +109,15 @@
 // Uncomment these methods to enable edit mode
 - (void)didCommitTextEditing:(id)sender
 {
-    // Notification about when a user did press the right button when editing
+    // Notifies the view controller when tapped on the right "Accept" button for commiting the edited text
+ 
     [super didCommitTextEditing:sender];
 }
 
 - (void)didCancelTextEditing:(id)sender
 {
-    // Notification about when a user did press the left button when editing
+    // Notifies the view controller when tapped on the left "Cancel" button
+ 
     [super didCancelTextEditing:sender];
 }
 */
@@ -111,12 +129,14 @@
 - (BOOL)canShowAutoCompletion
 {
     // Asks of the autocompletion view should be shown
+ 
     return NO;
 }
 
 - (CGFloat)heightForAutoCompletionView
 {
     // Asks for the height of the autocompletion view
+ 
     return 0.0;
 }
 */
@@ -127,6 +147,7 @@
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
 #warning Incomplete method implementation -- Return the number of sections
+    
     return 0;
 }
 
@@ -134,6 +155,7 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
 #warning Incomplete method implementation -- Return the number of items in the section
+    
     return 0;
 }
 
@@ -190,6 +212,7 @@
 {
 #warning Potentially incomplete method implementation.
     // Returns the number of sections.
+    
     return 0;
 }
 
@@ -197,6 +220,7 @@
 {
 #warning Incomplete method implementation.
     // Returns the number of rows in the section.
+    
     if ([tableView isEqual:self.autoCompletionView]) {
         return 0;
     }
@@ -218,6 +242,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Returns the height each row
+ 
     if ([tableView isEqual:self.autoCompletionView]) {
         return 0;
     }
