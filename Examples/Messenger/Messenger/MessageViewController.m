@@ -72,24 +72,23 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:MessengerCellIdentifier];
-    [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
-
-    self.textInputbar.autoHideRightButton = YES;
-    self.typingIndicatorView.canResignByTouch = YES;
 
     self.textView.placeholder = NSLocalizedString(@"Message", nil);
     self.textView.placeholderColor = [UIColor lightGrayColor];
-    self.textInputbar.backgroundColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1.0];
     self.textView.layer.borderColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0].CGColor;
     
     [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
-
     [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
     
     [self.textInputbar.editorTitle setTextColor:[UIColor darkGrayColor]];
     [self.textInputbar.editortLeftButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
     [self.textInputbar.editortRightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
     
+    self.textInputbar.autoHideRightButton = YES;
+    
+    self.typingIndicatorView.canResignByTouch = YES;
+    
+    [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
     [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":"]];
 }
 

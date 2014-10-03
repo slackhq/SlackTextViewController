@@ -52,9 +52,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (void)commonInit
 {
-    self.translucent = NO;
     self.autoHideRightButton = YES;
-    self.editing = NO;
     self.contentInset = UIEdgeInsetsMake(5.0, 8.0, 5.0, 5.0);
     self.accessoryViewHeight = 38.0;
     
@@ -115,7 +113,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.scrollIndicatorInsets = UIEdgeInsetsMake(0, -1, 0, 1);
         _textView.textContainerInset = UIEdgeInsetsMake(8.0, 3.5, 8.0, 0.0);
         _textView.layer.cornerRadius = 5.0;
-        _textView.layer.borderWidth = 1.0;
+        _textView.layer.borderWidth = 0.5;
         _textView.layer.borderColor =  [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:205.0/255.0 alpha:1.0].CGColor;
         
         // Adds an aditional action to a private gesture to detect when the magnifying glass becomes visible
