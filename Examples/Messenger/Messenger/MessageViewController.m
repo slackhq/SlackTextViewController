@@ -78,6 +78,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.textView.layer.borderColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0].CGColor;
     
     [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
+    [self.leftButton setTintColor:[UIColor grayColor]];
+    
     [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
     
     [self.textInputbar.editorTitle setTextColor:[UIColor darkGrayColor]];
@@ -85,7 +87,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [self.textInputbar.editortRightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
     
     self.textInputbar.autoHideRightButton = YES;
-    
     self.typingIndicatorView.canResignByTouch = YES;
     
     [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
