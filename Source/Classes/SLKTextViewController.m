@@ -324,7 +324,7 @@
     }
     
     if (self.isEditing) {
-        height += kAccessoryViewHeight;
+        height += self.textInputbar.accessoryViewHeight;
     }
     
     return roundf(height);
@@ -1167,7 +1167,7 @@
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     if (self.isEditing) {
-        self.textInputbarHC.constant += kAccessoryViewHeight;
+        self.textInputbarHC.constant += self.textInputbar.accessoryViewHeight;
     }
 }
 

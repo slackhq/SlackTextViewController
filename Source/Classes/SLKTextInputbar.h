@@ -19,8 +19,6 @@
 @class SLKTextViewController;
 @class SLKTextView;
 
-#define kAccessoryViewHeight 38.0
-
 extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 @interface SCKInputAccessoryView : UIView
@@ -67,6 +65,9 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 /** The 'accept' button displayed right in the accessoryView. */
 @property (nonatomic, strong) UIButton *editortRightButton;
+
+/** The accessory view's maximum height. Default is 38. */
+@property (nonatomic, assign) CGFloat accessoryViewHeight;
 
 /** A Boolean value indicating whether the control is in edit mode. */
 @property (nonatomic, getter = isEditing) BOOL editing;

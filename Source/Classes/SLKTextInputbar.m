@@ -56,6 +56,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     self.autoHideRightButton = YES;
     self.editing = NO;
     self.contentInset = UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0);
+    self.accessoryViewHeight = 38.0;
     
     [self addSubview:self.accessoryView];
     [self addSubview:self.leftButton];
@@ -446,7 +447,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
     if (self.isEditing)
     {
-        self.accessoryViewHC.constant = kAccessoryViewHeight;
+        self.accessoryViewHC.constant = self.accessoryViewHeight;
         self.leftButtonWC.constant = zero;
         self.leftButtonHC.constant = zero;
         self.leftMarginWC.constant = zero;
