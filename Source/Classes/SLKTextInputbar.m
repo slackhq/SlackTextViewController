@@ -55,6 +55,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     self.translucent = NO;
     self.autoHideRightButton = YES;
     self.editing = NO;
+    self.contentInset = UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0);
     
     [self addSubview:self.accessoryView];
     [self addSubview:self.leftButton];
@@ -83,7 +84,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (CGSize)intrinsicContentSize
 {
-    return CGSizeMake(UIViewNoIntrinsicMetric, kTextInputbarMinimumHeight);
+    return CGSizeMake(UIViewNoIntrinsicMetric, 44.0);
 }
 
 + (BOOL)requiresConstraintBasedLayout
@@ -189,11 +190,11 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
                                 @"rightButton": self.editortRightButton,
                                 };
         
-        NSDictionary *metrics = @{@"hor" : @(kTextViewHorizontalPadding),
-                                  @"ver" : @(kTextViewVerticalPadding),
+        NSDictionary *metrics = @{@"left" : @(self.contentInset.left),
+                                  @"right" : @(self.contentInset.right)
                                   };
         
-        [_accessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==hor)-[leftButton(60)]-(==hor)-[label(>=0)]-(==hor)-[rightButton(60)]-(<=hor)-|" options:0 metrics:metrics views:views]];
+        [_accessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==left)-[leftButton(60)]-(==left)-[label(>=0)]-(==right)-[rightButton(60)]-(<=right)-|" options:0 metrics:metrics views:views]];
         [_accessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[leftButton]|" options:0 metrics:metrics views:views]];
         [_accessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[rightButton]|" options:0 metrics:metrics views:views]];
         [_accessoryView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[label]|" options:0 metrics:metrics views:views]];
@@ -224,7 +225,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
             return 0.0;
         }
     }
-    return rigthButtonSize.width+kTextViewHorizontalPadding;
+    return rigthButtonSize.width+self.contentInset.right;
 }
 
 - (CGFloat)appropriateRightButtonMargin
@@ -235,7 +236,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         }
     }
     
-    return kTextViewHorizontalPadding;
+    return self.contentInset.right;
 }
 
 
@@ -409,17 +410,19 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
                             @"accessoryView": self.accessoryView
                             };
     
-    NSDictionary *metrics = @{@"hor" : @(kTextViewHorizontalPadding),
-                              @"ver" : @(kTextViewVerticalPadding),
+    NSDictionary *metrics = @{@"top" : @(self.contentInset.top),
+                              @"bottom" : @(self.contentInset.bottom),
+                              @"left" : @(self.contentInset.left),
+                              @"right" : @(self.contentInset.right),
                               @"leftVerMargin" : @(leftVerMargin),
                               @"rightVerMargin" : @(rightVerMargin),
                               @"minTextViewHeight" : @(self.textView.intrinsicContentSize.height),
                               };
-    
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==hor)-[leftButton(0)]-(<=hor)-[textView]-(==hor)-[rightButton(0)]-(==hor)-|" options:0 metrics:metrics views:views]];
+
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==left)-[leftButton(0)]-(<=left)-[textView]-(==right)-[rightButton(0)]-(==right)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[leftButton(0)]-(0@750)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=rightVerMargin)-[rightButton]-(<=rightVerMargin)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[accessoryView(0)]-(<=ver)-[textView(==minTextViewHeight@250)]-(==ver)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[accessoryView(0)]-(<=top)-[textView(==minTextViewHeight@250)]-(==bottom)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[accessoryView]|" options:0 metrics:metrics views:views]];
 
     NSArray *heightConstraints = [self slk_constraintsForAttribute:NSLayoutAttributeHeight];
@@ -463,7 +466,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         }
         
         self.leftButtonWC.constant = roundf(leftButtonSize.width);
-        self.leftMarginWC.constant = (leftButtonSize.width > 0) ? kTextViewHorizontalPadding : zero;
+        self.leftMarginWC.constant = (leftButtonSize.width > 0) ? self.contentInset.left : zero;
         
         self.rightButtonWC.constant = [self appropriateRightButtonWidth];
         self.rightMarginWC.constant = [self appropriateRightButtonMargin];

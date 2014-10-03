@@ -295,22 +295,12 @@
     return self.textInputbar.intrinsicContentSize.height;
 }
 
-- (CGFloat)maximumInputbarHeight
+- (CGFloat)inputBarHeightForLines:(NSUInteger)numberOfLines
 {
     CGFloat height = [self deltaInputbarHeight];
     
-    height += roundf(self.textView.font.lineHeight*self.textView.maxNumberOfLines);
-    height += (kTextViewVerticalPadding*2.0);
-    
-    return height;
-}
-
-- (CGFloat)currentInputbarHeight
-{
-    CGFloat height = [self deltaInputbarHeight];
-    
-    height += roundf(self.textView.font.lineHeight*self.textView.numberOfLines);
-    height += (kTextViewVerticalPadding*2.0);
+    height += roundf(self.textView.font.lineHeight*numberOfLines);
+    height += self.textInputbar.contentInset.top+self.textInputbar.contentInset.bottom;
     
     return height;
 }
@@ -323,10 +313,10 @@
         height = [self minimumInputbarHeight];
     }
     else if (self.textView.numberOfLines < self.textView.maxNumberOfLines) {
-        height += [self currentInputbarHeight];
+        height += [self inputBarHeightForLines:self.textView.numberOfLines];
     }
     else {
-        height += [self maximumInputbarHeight];
+        height += [self inputBarHeightForLines:self.textView.maxNumberOfLines];
     }
     
     if (height < [self minimumInputbarHeight]) {

@@ -19,10 +19,7 @@
 @class SLKTextViewController;
 @class SLKTextView;
 
-#define kTextInputbarMinimumHeight 44.0
 #define kAccessoryViewHeight 38.0
-#define kTextViewVerticalPadding 5.0
-#define kTextViewHorizontalPadding 8.0
 
 extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
@@ -51,6 +48,9 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 /** YES if the right button should be hidden animatedly in case the text view has no text in it. Default is YES. */
 @property (nonatomic, readwrite) BOOL autoHideRightButton;
+
+/* The inner padding to use when laying out content in the view. Default is {5, 5, 5, 5}. */
+@property (nonatomic, assign) UIEdgeInsets contentInset;
 
 ///------------------------------------------------
 /// @name Text Editing
