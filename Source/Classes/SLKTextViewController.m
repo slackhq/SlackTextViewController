@@ -558,7 +558,12 @@
 - (BOOL)canPressRightButton
 {
     NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    return text.length > 0 ? YES : NO;
+    
+    if (text.length > 0 && ![self.textInputbar limitExceeded]) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (void)didPressLeftButton:(id)sender

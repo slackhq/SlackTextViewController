@@ -87,6 +87,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [self.textInputbar.editortRightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
     
     self.textInputbar.autoHideRightButton = YES;
+    self.textInputbar.maxCharCount = 140;
+    
     self.typingIndicatorView.canResignByTouch = YES;
     
     [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];

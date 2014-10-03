@@ -47,8 +47,15 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 /** YES if the right button should be hidden animatedly in case the text view has no text in it. Default is YES. */
 @property (nonatomic, readwrite) BOOL autoHideRightButton;
 
-/* The inner padding to use when laying out content in the view. Default is {5, 8, 5, 5}. */
+/** The inner padding to use when laying out content in the view. Default is {5, 8, 5, 5}. */
 @property (nonatomic, assign) UIEdgeInsets contentInset;
+
+/** The maximum character count allowed. If larger than 0, a character count label will be displayed on top of the right button. Default is 0, which means infinite.*/
+@property (nonatomic, readwrite) NSUInteger maxCharCount;
+
+/** YES if the maxmimum character count has been exceeded. */
+@property (nonatomic, readonly) BOOL limitExceeded;
+
 
 ///------------------------------------------------
 /// @name Text Editing

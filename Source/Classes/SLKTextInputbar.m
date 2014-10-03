@@ -35,6 +35,8 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 @property (nonatomic, strong) NSLayoutConstraint *rightMarginWC;
 @property (nonatomic, strong) NSLayoutConstraint *accessoryViewHC;
 
+@property (nonatomic, strong) UILabel *charCountLabel;
+
 @end
 
 @implementation SLKTextInputbar
@@ -60,10 +62,12 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [self addSubview:self.leftButton];
     [self addSubview:self.rightButton];
     [self addSubview:self.textView];
-    
+    [self addSubview:self.charCountLabel];
+
     [self setupViewConstraints];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
     
     [self.leftButton.imageView addObserver:self forKeyPath:NSStringFromSelector(@selector(image)) options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
 }
@@ -201,6 +205,21 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     return _accessoryView;
 }
 
+- (UILabel *)charCountLabel
+{
+    if (!_charCountLabel)
+    {
+        _charCountLabel = [UILabel new];
+        _charCountLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        _charCountLabel.backgroundColor = [UIColor clearColor];
+        _charCountLabel.textAlignment = NSTextAlignmentRight;
+        _charCountLabel.font = [UIFont systemFontOfSize:11.0];
+        
+        _charCountLabel.hidden = NO;
+    }
+    return _charCountLabel;
+}
+
 - (NSUInteger)defaultNumberOfLines
 {
     if (UI_IS_IPAD) {
@@ -212,6 +231,16 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     else {
         return 6;
     }
+}
+
+- (BOOL)limitExceeded
+{
+    NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    if (self.maxCharCount > 0 && text.length > self.maxCharCount) {
+        return YES;
+    }
+    return NO;
 }
 
 - (CGFloat)appropriateRightButtonWidth
@@ -392,6 +421,14 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         return;
     }
     
+    // Updates the char count label
+    if (self.maxCharCount > 0) {
+        NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+        self.charCountLabel.text = [NSString stringWithFormat:@"%ld/%ld", text.length, self.maxCharCount];
+        self.charCountLabel.textColor = [self limitExceeded] ?  [UIColor redColor] : [UIColor lightGrayColor];
+    }
+    
     if (self.autoHideRightButton && !self.isEditing)
     {
         CGFloat rightButtonNewWidth = [self appropriateRightButtonWidth];
@@ -415,6 +452,14 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     }
 }
 
+- (void)didChangeTextViewContentSize:(NSNotification *)notification
+{
+    if (self.maxCharCount > 0) {
+        BOOL shouldHide = (self.textView.numberOfLines == 1) || self.editing;
+        self.charCountLabel.hidden = shouldHide;
+    }
+}
+
 
 #pragma mark - View Auto-Layout
 
@@ -430,7 +475,8 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     NSDictionary *views = @{@"textView": self.textView,
                             @"leftButton": self.leftButton,
                             @"rightButton": self.rightButton,
-                            @"accessoryView": self.accessoryView
+                            @"accessoryView": self.accessoryView,
+                            @"charCountLabel": self.charCountLabel
                             };
     
     NSDictionary *metrics = @{@"top" : @(self.contentInset.top),
@@ -445,9 +491,12 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==left)-[leftButton(0)]-(<=left)-[textView]-(==right)-[rightButton(0)]-(==right)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[leftButton(0)]-(0@750)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=rightVerMargin)-[rightButton]-(<=rightVerMargin)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(<=top)-[charCountLabel]-(>=0)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==left@250)-[charCountLabel(<=50@1000)]-(==right@750)-|" options:0 metrics:metrics views:views]];
+
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[accessoryView(0)]-(<=top)-[textView(==minTextViewHeight@250)]-(==bottom)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[accessoryView]|" options:0 metrics:metrics views:views]];
-
+    
     NSArray *heightConstraints = [self slk_constraintsForAttribute:NSLayoutAttributeHeight];
     NSArray *widthConstraints = [self slk_constraintsForAttribute:NSLayoutAttributeWidth];
     NSArray *bottomConstraints = [self slk_constraintsForAttribute:NSLayoutAttributeBottom];
@@ -521,6 +570,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewContentSizeDidChangeNotification object:nil];
     
     [_leftButton.imageView removeObserver:self forKeyPath:NSStringFromSelector(@selector(image))];
     
