@@ -19,6 +19,12 @@
 @class SLKTextViewController;
 @class SLKTextView;
 
+typedef NS_ENUM(NSUInteger, SLKCounterStyle) {
+    SLKCounterStyleNone,
+    SLKCounterStyleSplit,
+    SLKCounterStyleCountdown
+};
+
 extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 @interface SCKInputAccessoryView : UIView
@@ -47,11 +53,14 @@ extern NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification;
 /** YES if the right button should be hidden animatedly in case the text view has no text in it. Default is YES. */
 @property (nonatomic, readwrite) BOOL autoHideRightButton;
 
-/** The inner padding to use when laying out content in the view. Default is {5, 8, 5, 5}. */
+/** The inner padding to use when laying out content in the view. Default is {5, 8, 5, 8}. */
 @property (nonatomic, assign) UIEdgeInsets contentInset;
 
 /** The maximum character count allowed. If larger than 0, a character count label will be displayed on top of the right button. Default is 0, which means infinite.*/
 @property (nonatomic, readwrite) NSUInteger maxCharCount;
+
+/** The character counter formatting. Ignored if maxCharCount is 0. Default is Split mode. */
+@property (nonatomic, assign) SLKCounterStyle counterStyle;
 
 /** YES if the maxmimum character count has been exceeded. */
 @property (nonatomic, readonly) BOOL limitExceeded;

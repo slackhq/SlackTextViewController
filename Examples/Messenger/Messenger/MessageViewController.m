@@ -88,6 +88,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     self.textInputbar.autoHideRightButton = YES;
     self.textInputbar.maxCharCount = 140;
+    self.textInputbar.counterStyle = SLKCounterStyleSplit;
     
     self.typingIndicatorView.canResignByTouch = YES;
     

@@ -55,9 +55,9 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 - (void)commonInit
 {
     self.autoHideRightButton = YES;
-    self.contentInset = UIEdgeInsetsMake(5.0, 8.0, 5.0, 5.0);
     self.accessoryViewHeight = 38.0;
-    
+    self.contentInset = UIEdgeInsetsMake(5.0, 8.0, 5.0, 8.0);
+
     [self addSubview:self.accessoryView];
     [self addSubview:self.leftButton];
     [self addSubview:self.rightButton];
@@ -356,6 +356,29 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 }
 
 
+#pragma mark - Character Counter
+
+- (void)updateCounter
+{
+    NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *counter = nil;
+    
+    if (self.counterStyle == SLKCounterStyleNone) {
+        counter = [NSString stringWithFormat:@"%ld", text.length];
+    }
+    if (self.counterStyle == SLKCounterStyleSplit) {
+        counter = [NSString stringWithFormat:@"%ld/%ld", text.length, self.maxCharCount];
+    }
+    if (self.counterStyle == SLKCounterStyleCountdown) {
+        counter = [NSString stringWithFormat:@"%ld", text.length-self.maxCharCount];
+    }
+    
+    self.charCountLabel.text = counter;
+    
+    self.charCountLabel.textColor = [self limitExceeded] ?  [UIColor redColor] : [UIColor lightGrayColor];
+}
+
+
 #pragma mark - Magnifying Glass handling
 
 - (void)willShowLoupe:(UIGestureRecognizer *)gesture
@@ -421,12 +444,9 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         return;
     }
     
-    // Updates the char count label
+    // Updates the char counter label
     if (self.maxCharCount > 0) {
-        NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        
-        self.charCountLabel.text = [NSString stringWithFormat:@"%ld/%ld", text.length, self.maxCharCount];
-        self.charCountLabel.textColor = [self limitExceeded] ?  [UIColor redColor] : [UIColor lightGrayColor];
+        [self updateCounter];
     }
     
     if (self.autoHideRightButton && !self.isEditing)
