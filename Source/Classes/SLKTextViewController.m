@@ -24,6 +24,9 @@
     CGPoint _draggingOffset;
 }
 
+// The shared scrollView pointer, either a tableView or collectionView
+@property (nonatomic, weak) UIScrollView *scrollViewProxy;
+
 // Auto-Layout height constraints used for updating their constants
 @property (nonatomic, strong) NSLayoutConstraint *scrollViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *textInputbarHC;
@@ -52,6 +55,7 @@
 @synthesize textInputbar = _textInputbar;
 @synthesize autoCompletionView = _autoCompletionView;
 @synthesize autoCompleting = _autoCompleting;
+@synthesize scrollViewProxy = _scrollViewProxy;
 @synthesize presentedInPopover = _presentedInPopover;
 
 #pragma mark - Initializer
@@ -154,9 +158,7 @@
         
         _tableView.tableFooterView = [UIView new];
 
-        _singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapScrollView)];
-        _singleTapGesture.delegate = self;
-        [_tableView addGestureRecognizer:self.singleTapGesture];
+        [self setScrollViewProxy:self.tableView];
     }
     return _tableView;
 }
@@ -172,22 +174,9 @@
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
         
-        _singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapScrollView)];
-        _singleTapGesture.delegate = self;
-        [_collectionView addGestureRecognizer:self.singleTapGesture];
+        [self setScrollViewProxy:self.collectionView];
     }
     return _collectionView;
-}
-
-- (UIScrollView *)scrollViewProxy
-{
-    if (_tableView) {
-        return _tableView;
-    }
-    if (_collectionView) {
-        return _collectionView;
-    }
-    return nil;
 }
 
 - (UITableView *)autoCompletionView
@@ -333,6 +322,14 @@
 - (CGFloat)appropriateKeyboardHeight:(NSNotification *)notification
 {
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboardFrame = [self.view convertRect:[self.view.window convertRect:endFrame fromWindow:nil] fromView:nil];
+    
+    _externalKeyboard = keyboardFrame.origin.y + keyboardFrame.size.height > self.view.bounds.size.height;
+    
+    // Return 0 if an external keyboard has been detected
+    if (self.isExternalKeyboard) {
+        return 0.0;
+    }
     
     CGFloat keyboardHeight = 0.0;
     CGFloat tabBarHeight = ([self.tabBarController.tabBar isHidden] || self.hidesBottomBarWhenPushed) ? 0.0 : CGRectGetHeight(self.tabBarController.tabBar.frame);
@@ -371,6 +368,19 @@
 
 
 #pragma mark - Setters
+
+- (void)setScrollViewProxy:(UIScrollView *)scrollView
+{
+    if (self.scrollViewProxy) {
+        return;
+    }
+    
+    _scrollViewProxy = scrollView;
+    
+    _singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapScrollView:)];
+    _singleTapGesture.delegate = self;
+    [_scrollViewProxy addGestureRecognizer:self.singleTapGesture];
+}
 
 - (void)setbounces:(BOOL)bounces
 {
@@ -670,10 +680,15 @@
 
 #pragma mark - Private Actions
 
-- (void)didTapScrollView
+- (void)didTapScrollView:(UIGestureRecognizer *)gesture
 {
     // Skips if it is presented inside of a popover
     if (self.isPresentedInPopover) {
+        return;
+    }
+    
+    // Skips if using an external keyboard
+    if (self.isExternalKeyboard) {
         return;
     }
     

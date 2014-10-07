@@ -54,6 +54,9 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 /** YES if keyboard can be dismissed gradually with a vertical panning gesture. Default is YES. */
 @property (nonatomic, assign) BOOL keyboardPanningEnabled;
 
+/** YES if an external keyboard has been detected (this value only changes when the text view becomes first responder). */
+@property (nonatomic, readonly, getter=isExternalKeyboard) BOOL externalKeyboard;
+
 /**
  YES if the main table view is inverted. Default is YES.
  @discussion This allows the table view to start from the bottom like any typical messaging interface.
