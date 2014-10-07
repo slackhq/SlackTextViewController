@@ -143,6 +143,10 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (void)editLastMessage:(id)sender
 {
+    if (self.textView.text > 0) {
+        return;
+    }
+    
     NSString *lastMessage = [self.messages firstObject];
     [self editText:lastMessage];
     

@@ -36,6 +36,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 @property (nonatomic, strong) NSLayoutConstraint *accessoryViewHC;
 
 @property (nonatomic, strong) UILabel *charCountLabel;
+@property (nonatomic) BOOL newWordInserted;
 
 @end
 
@@ -411,6 +412,13 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+    self.newWordInserted = ([text rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].location != NSNotFound);
+    
+    // Records text for undo for every new word
+    if (self.newWordInserted) {
+        [self.textView prepareForUndo:@"Word Change"];
+    }
+    
     if ([text isEqualToString:@"\n"]) {
         //Detected break. Should insert new line break manually.
         [textView slk_insertNewLineBreak];
@@ -470,6 +478,8 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 										  options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState
 									   animations:NULL];
     }
+    
+    
 }
 
 - (void)didChangeTextViewContentSize:(NSNotification *)notification

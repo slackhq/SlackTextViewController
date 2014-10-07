@@ -193,6 +193,9 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 
 - (void)setText:(NSString *)text
 {
+    // Registers for undo management
+    [self prepareForUndo:@"Text Set"];
+    
     [super setText:text];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:self];
@@ -200,6 +203,9 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 
 - (void)setAttributedText:(NSAttributedString *)attributedText
 {
+    // Registers for undo management
+    [self prepareForUndo:@"Attributed Text Set"];
+    
     [super setAttributedText:attributedText];
 }
 
