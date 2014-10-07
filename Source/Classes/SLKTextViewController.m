@@ -321,25 +321,9 @@
 
 - (CGFloat)appropriateKeyboardHeight:(NSNotification *)notification
 {
-    CGRect beginFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
-    CGRect keyboardFrame = CGRectZero;
-
-    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-        keyboardFrame = [self.view convertRect:[self.view.window convertRect:endFrame fromWindow:nil] fromView:nil];
-    }
-    else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
-        keyboardFrame = [self.view convertRect:[self.view.window convertRect:beginFrame fromWindow:nil] fromView:nil];
-    }
-
-    if (!self.isMovingKeyboard) {
-        _externalKeyboard = keyboardFrame.origin.y + keyboardFrame.size.height > self.view.bounds.size.height;
-    }
-    
-    if (CGRectIsNull(keyboardFrame)) {
-        _externalKeyboard = NO;
-    }
+    [self checkForExternalKeyboardInNotification:notification];
     
     // Return 0 if an external keyboard has been detected
     if (self.isExternalKeyboard) {
@@ -500,6 +484,29 @@
     _keyboardStatus = status;
     
     [self didChangeKeyboardStatus:status];
+}
+
+- (void)checkForExternalKeyboardInNotification:(NSNotification *)notification
+{
+    CGRect beginFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
+    CGRect keyboardFrame = CGRectZero;
+    
+    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+        keyboardFrame = [self.view convertRect:[self.view.window convertRect:endFrame fromWindow:nil] fromView:nil];
+    }
+    else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
+        keyboardFrame = [self.view convertRect:[self.view.window convertRect:beginFrame fromWindow:nil] fromView:nil];
+    }
+    
+    if (!self.isMovingKeyboard) {
+        _externalKeyboard = keyboardFrame.origin.y + keyboardFrame.size.height > self.view.bounds.size.height;
+    }
+    
+    if (CGRectIsNull(keyboardFrame)) {
+        _externalKeyboard = NO;
+    }
 }
 
 
