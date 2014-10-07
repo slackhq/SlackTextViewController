@@ -341,10 +341,17 @@
         keyboardHeight = MIN(CGRectGetWidth(endFrame), CGRectGetHeight(endFrame));
         keyboardHeight -= tabBarHeight;
     }
-    
     // The height of the keyboard if sliding
-    if ([notification.name isEqualToString:SCKInputAccessoryViewKeyboardFrameDidChangeNotification]) {
-        keyboardHeight = CGRectGetHeight([UIScreen mainScreen].bounds)-endFrame.origin.y;
+    else if ([notification.name isEqualToString:SCKInputAccessoryViewKeyboardFrameDidChangeNotification]) {
+        
+        if (UI_IS_IOS8_AND_HIGHER) {
+            keyboardHeight = CGRectGetHeight([UIScreen mainScreen].bounds);
+        }
+        else {
+            keyboardHeight = MIN(CGRectGetWidth([UIScreen mainScreen].bounds), CGRectGetHeight([UIScreen mainScreen].bounds));
+        }
+        
+        keyboardHeight -= endFrame.origin.y;
         keyboardHeight -= tabBarHeight;
     }
     
