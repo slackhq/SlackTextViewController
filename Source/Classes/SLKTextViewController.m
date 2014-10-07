@@ -324,7 +324,9 @@
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboardFrame = [self.view convertRect:[self.view.window convertRect:endFrame fromWindow:nil] fromView:nil];
     
-    _externalKeyboard = keyboardFrame.origin.y + keyboardFrame.size.height > self.view.bounds.size.height;
+    if (!self.isMovingKeyboard) {
+        _externalKeyboard = keyboardFrame.origin.y + keyboardFrame.size.height > self.view.bounds.size.height;
+    }
     
     // Return 0 if an external keyboard has been detected
     if (self.isExternalKeyboard) {
@@ -830,10 +832,10 @@
         return;
     }
     
+    self.movingKeyboard = self.scrollViewProxy.isDragging;
+    
     self.keyboardHC.constant = [self appropriateKeyboardHeight:notification];
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
-    
-    self.movingKeyboard = self.scrollViewProxy.isDragging;
     
     if (self.isInverted && self.isMovingKeyboard && !CGPointEqualToPoint(self.scrollViewProxy.contentOffset, _draggingOffset)) {
         self.scrollViewProxy.contentOffset = _draggingOffset;
