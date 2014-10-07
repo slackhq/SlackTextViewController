@@ -94,6 +94,9 @@
         return NSMakeRange(0, 0);
     }
     
+    [[self.undoManager prepareWithInvocationTarget:self] setText:self.text];
+    [self.undoManager setActionName:NSLocalizedString(@"Text appending", nil)];
+    
     // Append the new string at the caret position
     if (range.length == 0)
     {

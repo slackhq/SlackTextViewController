@@ -112,7 +112,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         self.textView.text = [LoremIpsum sentencesWithNumber:sentences];
     }
     else {
-        [self.textView slk_insertTextAtCaretRange:[LoremIpsum word]];
+        [self.textView slk_insertTextAtCaretRange:[NSString stringWithFormat:@" %@", [LoremIpsum word]]];
     }
 }
 
