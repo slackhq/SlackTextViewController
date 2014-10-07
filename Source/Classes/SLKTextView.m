@@ -219,6 +219,11 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
         return YES;
     }
     
+    if ((action == @selector(undo:) && [self.undoManager canUndo]) ||
+        (action == @selector(redo:) && [self.undoManager canRedo])) {
+        return YES;
+    }
+    
     return [super canPerformAction:action withSender:sender];
 }
 
@@ -235,6 +240,16 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
         // and beyond scroll content size sometimes when the text is too long
         [self slk_insertTextAtCaretRange:item];
     }
+}
+
+- (void)undo:(id)sender
+{
+    [self.undoManager undo];
+}
+
+- (void)redo:(id)sender
+{
+    [self.undoManager redo];
 }
 
 - (void)setFont:(UIFont *)font
