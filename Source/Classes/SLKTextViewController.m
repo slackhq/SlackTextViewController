@@ -321,11 +321,24 @@
 
 - (CGFloat)appropriateKeyboardHeight:(NSNotification *)notification
 {
+    CGRect beginFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGRect keyboardFrame = [self.view convertRect:[self.view.window convertRect:endFrame fromWindow:nil] fromView:nil];
     
+    CGRect keyboardFrame = CGRectZero;
+
+    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+        keyboardFrame = [self.view convertRect:[self.view.window convertRect:endFrame fromWindow:nil] fromView:nil];
+    }
+    else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
+        keyboardFrame = [self.view convertRect:[self.view.window convertRect:beginFrame fromWindow:nil] fromView:nil];
+    }
+
     if (!self.isMovingKeyboard) {
         _externalKeyboard = keyboardFrame.origin.y + keyboardFrame.size.height > self.view.bounds.size.height;
+    }
+    
+    if (CGRectIsNull(keyboardFrame)) {
+        _externalKeyboard = NO;
     }
     
     // Return 0 if an external keyboard has been detected
@@ -344,7 +357,7 @@
     // The height of the keyboard if sliding
     else if ([notification.name isEqualToString:SCKInputAccessoryViewKeyboardFrameDidChangeNotification]) {
         
-        if (UI_IS_IOS8_AND_HIGHER) {
+        if (UI_IS_IOS8_AND_HIGHER || !UI_IS_LANDSCAPE) {
             keyboardHeight = CGRectGetHeight([UIScreen mainScreen].bounds);
         }
         else {
