@@ -112,7 +112,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         self.textView.text = [LoremIpsum sentencesWithNumber:sentences];
     }
     else {
-        [self.textView slk_insertTextAtCaretRange:[LoremIpsum word]];
+        [self.textView slk_insertTextAtCaretRange:[NSString stringWithFormat:@" %@", [LoremIpsum word]]];
     }
 }
 
@@ -143,6 +143,10 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (void)editLastMessage:(id)sender
 {
+    if (self.textView.text > 0) {
+        return;
+    }
+    
     NSString *lastMessage = [self.messages firstObject];
     [self editText:lastMessage];
     

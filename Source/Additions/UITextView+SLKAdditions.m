@@ -94,6 +94,9 @@
         return NSMakeRange(0, 0);
     }
     
+    // Registers for undo management
+    [self prepareForUndo:@"Text appending"];
+    
     // Append the new string at the caret position
     if (range.length == 0)
     {
@@ -162,6 +165,12 @@
     }
 
     return word;
+}
+
+- (void)prepareForUndo:(NSString *)description
+{
+    [[self.undoManager prepareWithInvocationTarget:self] setText:self.text];
+    [self.undoManager setActionName:description];
 }
 
 @end

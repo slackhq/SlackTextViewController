@@ -675,6 +675,21 @@
     [self performRightAction];
 }
 
+- (void)didPressCommandZKeys:(id)sender
+{
+    UIKeyCommand *keyComamnd = (UIKeyCommand *)sender;
+    
+    if ((keyComamnd.modifierFlags & UIKeyModifierShift) > 0) {
+        
+        if ([self.textView.undoManager canRedo]) {
+            [self.textView.undoManager redo];
+        }
+    }
+    else if ([self.textView.undoManager canUndo]) {
+        [self.textView.undoManager undo];
+    }
+}
+
 - (void)didPressEscapeKey:(id)sender
 {
     if (self.isAutoCompleting) {
@@ -1239,6 +1254,14 @@
              [UIKeyCommand keyCommandWithInput:@"\r"
                                  modifierFlags:UIKeyModifierControl
                                         action:@selector(insertNewLineBreak)],
+             
+             // Undo/Redo
+             [UIKeyCommand keyCommandWithInput:@"z"
+                                 modifierFlags:UIKeyModifierCommand
+                                        action:@selector(didPressCommandZKeys:)],
+             [UIKeyCommand keyCommandWithInput:@"z"
+                                 modifierFlags:UIKeyModifierShift|UIKeyModifierCommand
+                                        action:@selector(didPressCommandZKeys:)],
              
              // Pressing Esc key
              [UIKeyCommand keyCommandWithInput:UIKeyInputEscape

@@ -193,6 +193,9 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 
 - (void)setText:(NSString *)text
 {
+    // Registers for undo management
+    [self prepareForUndo:@"Text Set"];
+    
     [super setText:text];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:self];
@@ -200,6 +203,9 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 
 - (void)setAttributedText:(NSAttributedString *)attributedText
 {
+    // Registers for undo management
+    [self prepareForUndo:@"Attributed Text Set"];
+    
     [super setAttributedText:attributedText];
 }
 
@@ -210,6 +216,11 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
     }
     
     if (action == @selector(paste:) && [self pasteboardItem]) {
+        return YES;
+    }
+    
+    if ((action == @selector(undo:) && [self.undoManager canUndo]) ||
+        (action == @selector(redo:) && [self.undoManager canRedo])) {
         return YES;
     }
     
@@ -229,6 +240,16 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
         // and beyond scroll content size sometimes when the text is too long
         [self slk_insertTextAtCaretRange:item];
     }
+}
+
+- (void)undo:(id)sender
+{
+    [self.undoManager undo];
+}
+
+- (void)redo:(id)sender
+{
+    [self.undoManager redo];
 }
 
 - (void)setFont:(UIFont *)font

@@ -63,4 +63,11 @@
  */
 - (NSString *)slk_wordAtCaretRange:(NSRangePointer)range;
 
+/**
+ Registers the current text for future undo actions.
+ 
+ @param description A simple description associated with the Undo or Redo command.
+ */
+- (void)prepareForUndo:(NSString *)description;
+
 @end
