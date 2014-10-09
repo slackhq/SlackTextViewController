@@ -1,6 +1,0 @@
-source 'https://github.com/CocoaPods/Specs.git'
-
-workspace 'Twitta.xcworkspace'
-platform :ios, '7.0'
-
-pod 'SlackTextViewController', :path => '../../SlackTextViewController.podspec'
