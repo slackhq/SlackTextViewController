@@ -20,13 +20,21 @@
 - (id)init
 {
 #warning Potentially incomplete method implementation.
-    self = [super initWithTableViewStyle:<#(UITableViewStyle)#>];
+    self = [super initWithCollectionViewLayout:<#(UICollectionViewLayout *)#>];
     if (self) {
         
     }
     return self;
 }
 
+/*
+// Uncomment if you are using Storyboard.
+// You don't need to call initWithCoder: anymore
++ (UICollectionViewLayout *)collectionViewLayoutForCoder:(NSCoder *)decoder
+{
+    return <#(UICollectionViewLayout *)#>;
+}
+*/
 
 #pragma mark - View lifecycle
 
@@ -35,6 +43,7 @@
     [super viewDidLoad];
     
     // Do view setup here.
+    
 }
 
 
@@ -161,7 +170,7 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
     
     // Configure the cell
     
@@ -224,6 +233,8 @@
     if ([tableView isEqual:self.autoCompletionView]) {
         return 0;
     }
+    
+    return 0;
 }
 
 /*

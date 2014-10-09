@@ -36,7 +36,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 
 #pragma mark - Initialization
 
-- (id)init
+- (instancetype)init
 {
     if (self = [super init]) {
         [self commonInit];
@@ -46,8 +46,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
-    self = [super initWithCoder:coder];
-    if (self) {
+    if (self = [super initWithCoder:coder]) {
         [self commonInit];
     }
     return self;

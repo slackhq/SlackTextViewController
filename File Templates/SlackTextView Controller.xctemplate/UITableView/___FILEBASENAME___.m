@@ -20,12 +20,21 @@
 - (id)init
 {
 #warning Potentially incomplete method implementation.
-    self = [super initWithCollectionViewLayout:<#(UICollectionViewLayout *)#>];
+    self = [super initWithTableViewStyle:<#(UITableViewStyle)#>];
     if (self) {
         
     }
     return self;
 }
+
+/*
+// Uncomment if you are using Storyboard.
+// You don't need to call initWithCoder: anymore
++ (UITableViewStyle)tableViewStyleForCoder:(NSCoder *)decoder
+{
+    return <#(UITableViewStyle)#>;
+}
+*/
 
 
 #pragma mark - View lifecycle
@@ -35,6 +44,7 @@
     [super viewDidLoad];
     
     // Do view setup here.
+    
 }
 
 
@@ -157,12 +167,11 @@
 #warning Incomplete method implementation.
     // Returns the number of rows in the section.
     
-    if ([tableView isEqual:self.tableView]) {
-        return 0;
-    }
     if ([tableView isEqual:self.autoCompletionView]) {
         return 0;
     }
+    
+    return 0;
 }
 
 /*
@@ -171,11 +180,11 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
     
-    if ([tableView isEqual:self.tableView]) {
-        // Configure the message cell...
-    }
     if ([tableView isEqual:self.autoCompletionView]) {
         // Configure the autocompletion cell...
+    }
+    else if ([tableView isEqual:self.tableView]) {
+        // Configure the message cell...
     }
     
     return cell;
@@ -185,14 +194,13 @@
 {
     // Returns the height each row
  
-    if ([tableView isEqual:self.tableView]) {
-        return 0;
-    }
     if ([tableView isEqual:self.autoCompletionView]) {
         return 0;
     }
+    
+    return 0;
 }
- */
+*/
 
 
 #pragma mark - <UITableViewDelegate>

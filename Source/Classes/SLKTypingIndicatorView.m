@@ -34,8 +34,15 @@ NSString * const SLKTypingIndicatorViewIdentifier = @"com.slack.TextViewControll
 
 - (id)init
 {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    if (self = [super initWithCoder:coder]) {
         [self commonInit];
     }
     return self;
