@@ -20,6 +20,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F1AD51E19E727750027043E /* ___FILEBASENAME___.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "___FILEBASENAME___.h"; sourceTree = "<group>"; };
+		4F1AD51F19E727750027043E /* ___FILEBASENAME___.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "___FILEBASENAME___.m"; sourceTree = "<group>"; };
+		4F1AD52119E727750027043E /* ___FILEBASENAME___.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "___FILEBASENAME___.h"; sourceTree = "<group>"; };
+		4F1AD52219E727750027043E /* ___FILEBASENAME___.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "___FILEBASENAME___.m"; sourceTree = "<group>"; };
 		4F3EDB49199ED00F004C15D6 /* Messenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Messenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F3EDB4C199ED00F004C15D6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4F3EDB4E199ED00F004C15D6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -54,10 +58,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F1AD51C19E727640027043E /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				4F1AD51D19E727750027043E /* UICollectionView */,
+				4F1AD52019E727750027043E /* UITableView */,
+			);
+			name = Templates;
+			sourceTree = "<group>";
+		};
+		4F1AD51D19E727750027043E /* UICollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				4F1AD51E19E727750027043E /* ___FILEBASENAME___.h */,
+				4F1AD51F19E727750027043E /* ___FILEBASENAME___.m */,
+			);
+			name = UICollectionView;
+			path = "../../File Templates/SlackTextView Controller.xctemplate/UICollectionView";
+			sourceTree = "<group>";
+		};
+		4F1AD52019E727750027043E /* UITableView */ = {
+			isa = PBXGroup;
+			children = (
+				4F1AD52119E727750027043E /* ___FILEBASENAME___.h */,
+				4F1AD52219E727750027043E /* ___FILEBASENAME___.m */,
+			);
+			name = UITableView;
+			path = "../../File Templates/SlackTextView Controller.xctemplate/UITableView";
+			sourceTree = "<group>";
+		};
 		4F3EDB40199ED00F004C15D6 = {
 			isa = PBXGroup;
 			children = (
 				4F3EDB52199ED00F004C15D6 /* Messenger */,
+				4F1AD51C19E727640027043E /* Templates */,
 				4F3EDB4B199ED00F004C15D6 /* Frameworks */,
 				4F3EDB4A199ED00F004C15D6 /* Products */,
 				E95E9DDA5E0D4C2EA4907AAC /* Pods.xcconfig */,

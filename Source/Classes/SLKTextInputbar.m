@@ -376,7 +376,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         counter = [NSString stringWithFormat:@"%ld/%ld", (unsigned long)text.length, (unsigned long)self.maxCharCount];
     }
     if (self.counterStyle == SLKCounterStyleCountdown) {
-        counter = [NSString stringWithFormat:@"%u", text.length-self.maxCharCount];
+        counter = [NSString stringWithFormat:@"%lu", text.length-self.maxCharCount];
     }
     
     self.charCountLabel.text = counter;
