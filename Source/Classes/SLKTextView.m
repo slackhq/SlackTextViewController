@@ -64,7 +64,9 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
     self.directionalLockEnabled = YES;
     self.dataDetectorTypes = UIDataDetectorTypeNone;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBeginEditing:) name:UITextViewTextDidBeginEditingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeText:) name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEndEditing:) name:UITextViewTextDidEndEditingNotification object:nil];
     
     [self addObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize)) options:NSKeyValueObservingOptionNew context:NULL];
 }
@@ -227,9 +229,9 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
         return YES;
     }
     
-    if ((action == @selector(undo:) && [self.undoManager canUndo]) ||
-        (action == @selector(redo:) && [self.undoManager canRedo])) {
-        return YES;
+    if ((action == @selector(undo:) && ![self.undoManager canUndo]) ||
+        (action == @selector(redo:) && ![self.undoManager canRedo])) {
+        return NO;
     }
     
     return [super canPerformAction:action withSender:sender];
@@ -319,15 +321,37 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 }
 
 
-#pragma mark - Observers & Notifications
+#pragma mark - Notification Events
 
-- (void)didChangeTextView:(NSNotification *)notification
+- (void)didBeginEditing:(NSNotification *)notification
 {
+    if (![notification.object isEqual:self]) {
+        return;
+    }
+    
+    // Do something
+}
+
+- (void)didChangeText:(NSNotification *)notification
+{
+    if (![notification.object isEqual:self]) {
+        return;
+    }
+    
     if (self.placeholderLabel.hidden != [self shouldHidePlaceholder]) {
         [self setNeedsDisplay];
     }
     
     [self flashScrollIndicatorsIfNeeded];
+}
+
+- (void)didEndEditing:(NSNotification *)notification
+{
+    if (![notification.object isEqual:self]) {
+        return;
+    }
+    
+    // Do something
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -352,9 +376,14 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
+    @try {
+        [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
+    }
+    @catch(id anException) {
+        //do nothing, obviously it wasn't attached because an exception was thrown
+    }
     
     _placeholderLabel = nil;
 }
