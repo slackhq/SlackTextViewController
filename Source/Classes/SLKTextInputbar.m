@@ -612,7 +612,12 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewContentSizeDidChangeNotification object:nil];
     
-    [_leftButton.imageView removeObserver:self forKeyPath:NSStringFromSelector(@selector(image))];
+    @try {
+        [_leftButton.imageView removeObserver:self forKeyPath:NSStringFromSelector(@selector(image))];
+    }
+    @catch(id anException) {
+        //do nothing, obviously it wasn't attached because an exception was thrown
+    }
     
     _leftButton = nil;
     _rightButton = nil;
@@ -648,13 +653,34 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     }
 }
 
-- (void)willMoveToSuperview:(UIView *)newSuperview
+- (void)addKeyPathObserverToView:(UIView *)superview
 {
-    if (self.superview) {
-        [self.superview removeObserver:self forKeyPath:[self keyPathForKeyboardHandling]];
+    [self removeKeyPathObserver];
+    
+    if (!superview) {
+        return;
     }
     
-    [newSuperview addObserver:self forKeyPath:[self keyPathForKeyboardHandling] options:0 context:NULL];
+    [superview addObserver:self forKeyPath:[self keyPathForKeyboardHandling] options:0 context:NULL];
+}
+
+- (void)removeKeyPathObserver
+{
+    if (!self.superview) {
+        return;
+    }
+    
+    @try {
+        [self.superview removeObserver:self forKeyPath:[self keyPathForKeyboardHandling]];
+    }
+    @catch(id anException) {
+        //do nothing, obviously it wasn't attached because an exception was thrown
+    }
+}
+
+- (void)willMoveToSuperview:(UIView *)newSuperview
+{
+    [self addKeyPathObserverToView:newSuperview];
     
     [super willMoveToSuperview:newSuperview];
 }
@@ -670,9 +696,7 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (void)dealloc
 {
-    if (self.superview) {
-        [self.superview removeObserver:self forKeyPath:[self keyPathForKeyboardHandling]];
-    }
+    [self removeKeyPathObserver];
 }
 
 @end
