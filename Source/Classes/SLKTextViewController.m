@@ -528,20 +528,23 @@
 
 - (void)checkForExternalKeyboardInNotification:(NSNotification *)notification
 {
-    CGRect beginFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    
-    CGRect keyboardFrame = CGRectZero;
+    CGRect targetRect = CGRectZero;
     
     if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-        keyboardFrame = [self.view convertRect:[self.view.window convertRect:endFrame fromWindow:nil] fromView:nil];
+        targetRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     }
     else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
-        keyboardFrame = [self.view convertRect:[self.view.window convertRect:beginFrame fromWindow:nil] fromView:nil];
+        targetRect = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     }
     
+    CGRect keyboardFrame = [self.view convertRect:[self.view.window convertRect:targetRect fromWindow:nil] fromView:nil];
+    
     if (!self.isMovingKeyboard) {
-        _externalKeyboard = keyboardFrame.origin.y + keyboardFrame.size.height > self.view.bounds.size.height;
+        
+        CGFloat maxKeyboardHeight = keyboardFrame.origin.y + keyboardFrame.size.height;
+        maxKeyboardHeight -= CGRectGetHeight(self.tabBarController.tabBar.frame);
+        
+        _externalKeyboard = maxKeyboardHeight > CGRectGetHeight(self.view.bounds);
     }
     
     if (CGRectIsNull(keyboardFrame)) {
