@@ -542,7 +542,10 @@
     if (!self.isMovingKeyboard) {
         
         CGFloat maxKeyboardHeight = keyboardFrame.origin.y + keyboardFrame.size.height;
-        maxKeyboardHeight -= CGRectGetHeight(self.tabBarController.tabBar.frame);
+        
+        // Reduces the tab bar height (if it's visible)
+        CGFloat tabBarHeight = ([self.tabBarController.tabBar isHidden] || self.hidesBottomBarWhenPushed) ? 0.0 : CGRectGetHeight(self.tabBarController.tabBar.frame);
+        maxKeyboardHeight -= tabBarHeight;
         
         _externalKeyboard = maxKeyboardHeight > CGRectGetHeight(self.view.bounds);
     }
