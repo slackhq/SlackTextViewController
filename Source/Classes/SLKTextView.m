@@ -244,10 +244,16 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
         [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewDidPasteImageNotification object:item];
     }
     else if ([item isKindOfClass:[NSString class]]){
-        
-        // Inserting the text fixes a UITextView bug whitch automatically scrolls to the bottom
-        // and beyond scroll content size sometimes when the text is too long
-        [self slk_insertTextAtCaretRange:item];
+        if (self.delegate
+            && [self.delegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)]) {
+            if ([self.delegate textView:self shouldChangeTextInRange:self.selectedRange replacementText:item]) {
+                [self slk_insertTextAtCaretRange:item];
+            }
+        } else {
+            // Inserting the text fixes a UITextView bug whitch automatically scrolls to the bottom
+            // and beyond scroll content size sometimes when the text is too long
+            [self slk_insertTextAtCaretRange:item];
+        }
     }
 }
 
