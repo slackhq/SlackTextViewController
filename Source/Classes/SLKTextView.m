@@ -141,7 +141,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
     return _maxNumberOfLines;
 }
 
-// Returns a valid pasteboard item (image or text)
+// Returns a supported pasteboard item (image or text)
 - (id)pasteboardItem
 {
     UIImage *image = [[UIPasteboard generalPasteboard] image];
