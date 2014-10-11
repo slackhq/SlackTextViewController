@@ -26,10 +26,21 @@ NSString * const SLKTextViewDidPasteImageNotification = @"com.slack.TextViewCont
 NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewController.TextView.DidShake";
 
 @interface SLKTextView ()
-{
-    BOOL _didFlashScrollIndicators;
-}
+
+// The label used as placeholder
 @property (nonatomic, strong) UILabel *placeholderLabel;
+
+// The keyboard commands available for external keyboards
+@property (nonatomic, strong) NSArray *keyboardCommands;
+
+// Used for moving the care up/down
+@property (nonatomic) UITextLayoutDirection verticalMoveDirection;
+@property (nonatomic) CGRect verticalMoveStartCaretRect;
+@property (nonatomic) CGRect verticalMoveLastCaretRect;
+
+// Used for detecting if the scroll indicator was previously flashed
+@property (nonatomic) BOOL didFlashScrollIndicators;
+
 @end
 
 @implementation SLKTextView
@@ -225,6 +236,11 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
         return NO;
     }
     
+    if ((action == @selector(copy:) || action == @selector(cut:))
+        && self.selectedRange.length > 0) {
+        return YES;
+    }
+    
     if (action == @selector(paste:) && [self pasteboardItem]) {
         return YES;
     }
@@ -362,13 +378,168 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 }
 
 
-#pragma mark - Motion
+#pragma mark - Motion Events
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
     if (event.type == UIEventTypeMotion && event.subtype == UIEventSubtypeMotionShake) {
-		[[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewDidShakeNotification object:self];
-	}
+        [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewDidShakeNotification object:self];
+    }
+}
+
+
+#pragma mark - External Keyboard Support
+
+- (NSArray *)keyCommands
+{
+    if (_keyboardCommands) {
+        return _keyboardCommands;
+    }
+    
+    _keyboardCommands = @[
+         // Return
+         [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:UIKeyModifierShift action:@selector(didPressLineBreakKeys:)],
+         [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:UIKeyModifierAlternate action:@selector(didPressLineBreakKeys:)],
+         [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:UIKeyModifierControl action:@selector(didPressLineBreakKeys:)],
+         
+         // Undo/Redo
+         [UIKeyCommand keyCommandWithInput:@"z" modifierFlags:UIKeyModifierCommand action:@selector(didPressCommandZKeys:)],
+         [UIKeyCommand keyCommandWithInput:@"z" modifierFlags:UIKeyModifierShift|UIKeyModifierCommand action:@selector(didPressCommandZKeys:)],
+         
+         // Up/Down
+         [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(didPressArrowKey:)],
+         [UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(didPressArrowKey:)]
+         ];
+    
+    return _keyboardCommands;
+}
+
+
+#pragma mark Line Break
+
+- (void)didPressLineBreakKeys:(id)sender
+{
+    [self slk_insertNewLineBreak];
+}
+
+#pragma mark Undo/Redo Text
+
+- (void)didPressCommandZKeys:(id)sender
+{
+    UIKeyCommand *keyCommand = (UIKeyCommand *)sender;
+    
+    if ((keyCommand.modifierFlags & UIKeyModifierShift) > 0) {
+        
+        if ([self.undoManager canRedo]) {
+            [self.undoManager redo];
+        }
+    }
+    else if ([self.undoManager canUndo]) {
+        [self.undoManager undo];
+    }
+}
+
+#pragma mark Up/Down Cursor Movement
+
+- (void)didPressArrowKey:(id)sender
+{
+    if (self.text.length == 0 || self.numberOfLines < 2) {
+        return;
+    }
+    
+    UIKeyCommand *keyCommand = (UIKeyCommand *)sender;
+    
+    if ([keyCommand.input isEqualToString:UIKeyInputUpArrow]) {
+        [self moveCursorTodirection:UITextLayoutDirectionUp];
+    }
+    else {
+        [self moveCursorTodirection:UITextLayoutDirectionDown];
+    }
+}
+
+// Based on code from Ruben Cabaco
+// https://gist.github.com/rcabaco/6765778
+//UITextPosition *p0 = (direction = UITextLayoutDirectionUp) ? self.selectedTextRange.start : self.selectedTextRange.end;
+
+- (void)moveCursorTodirection:(UITextLayoutDirection)direction
+{
+    UITextPosition *start = (direction == UITextLayoutDirectionUp) ? self.selectedTextRange.start : self.selectedTextRange.end;
+    
+    if ([self isNewVerticalMovementForPosition:start inDirection:direction]) {
+        self.verticalMoveDirection = direction;
+        self.verticalMoveStartCaretRect = [self caretRectForPosition:start];
+    }
+    
+    if (start) {
+        
+        UITextPosition *end = [self closestPositionToPosition:start inDirection:direction];
+        
+        if (end) {
+            self.verticalMoveLastCaretRect = [self caretRectForPosition:end];
+            self.selectedTextRange = [self textRangeFromPosition:end toPosition:end];
+            
+            [self slk_scrollToCaretPositonAnimated:NO];
+        }
+    }
+}
+
+- (UITextPosition *)closestPositionToPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction
+{
+    // Currently only up and down are implemented.
+    NSParameterAssert(direction == UITextLayoutDirectionUp || direction == UITextLayoutDirectionDown);
+    
+    // Translate the vertical direction to a horizontal direction.
+    UITextLayoutDirection lookupDirection = (direction == UITextLayoutDirectionUp) ? UITextLayoutDirectionLeft : UITextLayoutDirectionRight;
+    
+    // Walk one character at a time in `lookupDirection` until the next line is reached.
+    UITextPosition *checkPosition = position;
+    UITextPosition *closestPosition = position;
+    CGRect startingCaretRect = [self caretRectForPosition:position];
+    CGRect nextLineCaretRect;
+    BOOL isInNextLine = NO;
+    
+    while (YES) {
+        UITextPosition *nextPosition = [self positionFromPosition:checkPosition inDirection:lookupDirection offset:1];
+        
+        // End of line.
+        if (!nextPosition || [self comparePosition:checkPosition toPosition:nextPosition] == NSOrderedSame) {
+            break;
+        }
+        
+        checkPosition = nextPosition;
+        CGRect checkRect = [self caretRectForPosition:checkPosition];
+        if (CGRectGetMidY(startingCaretRect) != CGRectGetMidY(checkRect)) {
+            // While on the next line stop just above/below the starting position.
+            if (lookupDirection == UITextLayoutDirectionLeft && CGRectGetMidX(checkRect) <= CGRectGetMidX(self.verticalMoveStartCaretRect)) {
+                closestPosition = checkPosition;
+                break;
+            }
+            if (lookupDirection == UITextLayoutDirectionRight && CGRectGetMidX(checkRect) >= CGRectGetMidX(self.verticalMoveStartCaretRect)) {
+                closestPosition = checkPosition;
+                break;
+            }
+            // But don't skip lines.
+            if (isInNextLine && CGRectGetMidY(checkRect) != CGRectGetMidY(nextLineCaretRect)) {
+                break;
+            }
+            
+            isInNextLine = YES;
+            nextLineCaretRect = checkRect;
+            closestPosition = checkPosition;
+        }
+    }
+    return closestPosition;
+}
+
+- (BOOL)isNewVerticalMovementForPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction
+{
+    CGRect caretRect = [self caretRectForPosition:position];
+    BOOL noPreviousStartPosition = CGRectEqualToRect(self.verticalMoveStartCaretRect, CGRectZero);
+    BOOL caretMovedSinceLastPosition = !CGRectEqualToRect(caretRect, self.verticalMoveLastCaretRect);
+    BOOL directionChanged = self.verticalMoveDirection != direction;
+    
+    BOOL newMovement = noPreviousStartPosition || caretMovedSinceLastPosition || directionChanged;
+    return newMovement;
 }
 
 

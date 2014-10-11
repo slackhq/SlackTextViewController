@@ -781,11 +781,6 @@
     }
 }
 
-- (void)insertNewLineBreak
-{
-    [self.textView slk_insertNewLineBreak];
-}
-
 - (void)prepareForInterfaceRotation
 {
     [self.view layoutIfNeeded];
@@ -824,21 +819,6 @@
     }
     
     [self dismissKeyboard:YES];
-}
-
-- (void)didPressCommandZKeys:(id)sender
-{
-    UIKeyCommand *keyComamnd = (UIKeyCommand *)sender;
-    
-    if ((keyComamnd.modifierFlags & UIKeyModifierShift) > 0) {
-        
-        if ([self.textView.undoManager canRedo]) {
-            [self.textView.undoManager redo];
-        }
-    }
-    else if ([self.textView.undoManager canUndo]) {
-        [self.textView.undoManager undo];
-    }
 }
 
 
@@ -1292,42 +1272,18 @@
 
 - (NSArray *)keyCommands
 {
-    if (!_keyboardCommands) {
-        _keyboardCommands = [[NSArray alloc] initWithArray:[self keySet]];
+    if (_keyboardCommands) {
+        return _keyboardCommands;
     }
+    
+    _keyboardCommands = @[
+          // Pressing Return key
+          [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:0 action:@selector(didPressReturnKey:)],
+          // Pressing Esc key
+          [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(didPressEscapeKey:)]
+          ];
+    
     return _keyboardCommands;
-}
-
-- (NSArray *)keySet
-{
-    return @[
-       // Pressing Return key
-       [UIKeyCommand keyCommandWithInput:@"\r"
-                           modifierFlags:0
-                                  action:@selector(didPressReturnKey:)],
-       [UIKeyCommand keyCommandWithInput:@"\r"
-                           modifierFlags:UIKeyModifierShift
-                                  action:@selector(insertNewLineBreak)],
-       [UIKeyCommand keyCommandWithInput:@"\r"
-                           modifierFlags:UIKeyModifierAlternate
-                                  action:@selector(insertNewLineBreak)],
-       [UIKeyCommand keyCommandWithInput:@"\r"
-                           modifierFlags:UIKeyModifierControl
-                                  action:@selector(insertNewLineBreak)],
-
-       // Undo/Redo
-       [UIKeyCommand keyCommandWithInput:@"z"
-                           modifierFlags:UIKeyModifierCommand
-                                  action:@selector(didPressCommandZKeys:)],
-       [UIKeyCommand keyCommandWithInput:@"z"
-                           modifierFlags:UIKeyModifierShift|UIKeyModifierCommand
-                                  action:@selector(didPressCommandZKeys:)],
-       
-       // Pressing Esc key
-       [UIKeyCommand keyCommandWithInput:UIKeyInputEscape
-                           modifierFlags:0
-                                  action:@selector(didPressEscapeKey:)]
-       ];
 }
 
 

@@ -76,7 +76,7 @@
     }
     
     //Detected break. Should scroll to bottom if needed.
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0025 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0125 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self slk_scrollToBottomAnimated:animated];
     });
 }
