@@ -37,6 +37,9 @@
 // The single tap gesture used to dismiss the keyboard
 @property (nonatomic, strong) UIGestureRecognizer *singleTapGesture;
 
+// The keyboard commands available for external keyboards
+@property (nonatomic, strong) NSArray *keyboardCommands;
+
 // YES if the user is moving the keyboard with a gesture
 @property (nonatomic, getter = isMovingKeyboard) BOOL movingKeyboard;
 
@@ -1285,6 +1288,14 @@
 #pragma mark - External Keyboard Support
 
 - (NSArray *)keyCommands
+{
+    if (!_keyboardCommands) {
+        _keyboardCommands = [[NSArray alloc] initWithArray:[self keySet]];
+    }
+    return _keyboardCommands;
+}
+
+- (NSArray *)keySet
 {
     return @[
              // Pressing Return key
