@@ -76,7 +76,7 @@
 - (instancetype)initWithTableViewStyle:(UITableViewStyle)style
 {
     NSAssert([self class] != [SLKTextViewController class], @"Oops! You must subclass SLKTextViewController.");
-
+    
     if (self = [super initWithNibName:nil bundle:nil])
     {
         [self tableViewWithStyle:style];
@@ -88,7 +88,7 @@
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
     NSAssert([self class] != [SLKTextViewController class], @"Oops! You must subclass SLKTextViewController.");
-
+    
     if (self = [super initWithNibName:nil bundle:nil])
     {
         [self collectionViewWithLayout:layout];
@@ -200,7 +200,7 @@
         _tableView.delegate = self;
         
         _tableView.tableFooterView = [UIView new];
-
+        
         [self setScrollViewProxy:self.tableView];
     }
     return _tableView;
@@ -266,15 +266,7 @@
 - (UIView *)inputAccessoryView
 {
     if (_keyboardPanningEnabled) {
-        
-        static dispatch_once_t onceToken;
-        static SCKInputAccessoryView *_inputAccessoryView = nil;
-        
-        dispatch_once(&onceToken, ^{
-            _inputAccessoryView = [SCKInputAccessoryView new];
-        });
-        
-        return _inputAccessoryView;
+        return [[SCKInputAccessoryView alloc] initWithFrame:self.textInputbar.bounds];
     }
     return nil;
 }
@@ -376,24 +368,18 @@
     CGFloat keyboardHeight = 0.0;
     CGFloat tabBarHeight = ([self.tabBarController.tabBar isHidden] || self.hidesBottomBarWhenPushed) ? 0.0 : CGRectGetHeight(self.tabBarController.tabBar.frame);
     
-    // The height of the keyboard if showing
-    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-        keyboardHeight = MIN(CGRectGetWidth(endFrame), CGRectGetHeight(endFrame));
-        keyboardHeight -= tabBarHeight;
+    // The height of the keyboard
+    if (UI_IS_IOS8_AND_HIGHER || !UI_IS_LANDSCAPE) {
+        keyboardHeight = CGRectGetHeight([UIScreen mainScreen].bounds);
     }
-    // The height of the keyboard if sliding
-    else if ([notification.name isEqualToString:SCKInputAccessoryViewKeyboardFrameDidChangeNotification]) {
-        
-        if (UI_IS_IOS8_AND_HIGHER || !UI_IS_LANDSCAPE) {
-            keyboardHeight = CGRectGetHeight([UIScreen mainScreen].bounds);
-        }
-        else {
-            keyboardHeight = MIN(CGRectGetWidth([UIScreen mainScreen].bounds), CGRectGetHeight([UIScreen mainScreen].bounds));
-        }
-        
-        keyboardHeight -= endFrame.origin.y;
-        keyboardHeight -= tabBarHeight;
+    else {
+        keyboardHeight = MIN(CGRectGetWidth([UIScreen mainScreen].bounds), CGRectGetHeight([UIScreen mainScreen].bounds));
     }
+    
+    keyboardHeight -= endFrame.origin.y;
+    
+    keyboardHeight -= tabBarHeight;
+    keyboardHeight -= self.textView.inputAccessoryView.bounds.size.height;
     
     if (keyboardHeight < 0) {
         keyboardHeight = 0.0;
@@ -405,7 +391,7 @@
 - (CGFloat)appropriateScrollViewHeight
 {
     CGFloat height = self.view.bounds.size.height;
-
+    
     height -= self.keyboardHC.constant;
     height -= self.textInputbarHC.constant;
     height -= self.autoCompletionViewHC.constant;
@@ -529,35 +515,6 @@
     [self didChangeKeyboardStatus:status];
 }
 
-- (void)checkForExternalKeyboardInNotification:(NSNotification *)notification
-{
-    CGRect targetRect = CGRectZero;
-    
-    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-        targetRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    }
-    else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
-        targetRect = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    }
-    
-    CGRect keyboardFrame = [self.view convertRect:[self.view.window convertRect:targetRect fromWindow:nil] fromView:nil];
-    
-    if (!self.isMovingKeyboard) {
-        
-        CGFloat maxKeyboardHeight = keyboardFrame.origin.y + keyboardFrame.size.height;
-        
-        // Reduces the tab bar height (if it's visible)
-        CGFloat tabBarHeight = ([self.tabBarController.tabBar isHidden] || self.hidesBottomBarWhenPushed) ? 0.0 : CGRectGetHeight(self.tabBarController.tabBar.frame);
-        maxKeyboardHeight -= tabBarHeight;
-        
-        _externalKeyboard = maxKeyboardHeight > CGRectGetHeight(self.view.bounds);
-    }
-    
-    if (CGRectIsNull(keyboardFrame)) {
-        _externalKeyboard = NO;
-    }
-}
-
 
 #pragma mark - Subclassable Methods
 
@@ -617,7 +574,7 @@
 {
     self.textInputbar.rightButton.enabled = [self canPressRightButton];
     self.textInputbar.editortRightButton.enabled = [self canPressRightButton];
-
+    
     CGFloat inputbarHeight = [self appropriateInputbarHeight];
     
     if (inputbarHeight != self.textInputbarHC.constant)
@@ -629,18 +586,20 @@
             
             BOOL bounces = self.bounces && [self.textView isFirstResponder];
             
-			[self.view slk_animateLayoutIfNeededWithBounce:bounces
-												   options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
-												animations:^{
-													if (self.isEditing) {
-														[self.textView slk_scrollToCaretPositonAnimated:NO];
-													}
-												}];
+            [self.view slk_animateLayoutIfNeededWithBounce:bounces
+                                                   options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
+                                                animations:^{
+                                                    if (self.isEditing) {
+                                                        [self.textView slk_scrollToCaretPositonAnimated:NO];
+                                                    }
+                                                }];
         }
         else {
             [self.view layoutIfNeeded];
         }
     }
+    
+    [self reloadInputViewIfNeeded];
 }
 
 - (BOOL)canPressRightButton
@@ -758,7 +717,7 @@
     if (![self.textView isFirstResponder]) {
         [self.textInputbar beginTextEditing];
     }
-
+    
     [self.textView setText:text];
     [self.textView slk_scrollToCaretPositonAnimated:YES];
     
@@ -778,6 +737,50 @@
     
     if (actions.count > 0 && [self canPressRightButton]) {
         [self.rightButton sendActionsForControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+- (void)checkForExternalKeyboardInNotification:(NSNotification *)notification
+{
+    CGRect targetRect = CGRectZero;
+    
+    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+        targetRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    }
+    else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
+        targetRect = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    }
+    
+    CGRect keyboardFrame = [self.view convertRect:[self.view.window convertRect:targetRect fromWindow:nil] fromView:nil];
+    
+    if (!self.isMovingKeyboard) {
+        
+        CGFloat maxKeyboardHeight = keyboardFrame.origin.y + keyboardFrame.size.height;
+        
+        // Reduces the tab bar height (if it's visible)
+        CGFloat tabBarHeight = ([self.tabBarController.tabBar isHidden] || self.hidesBottomBarWhenPushed) ? 0.0 : CGRectGetHeight(self.tabBarController.tabBar.frame);
+        maxKeyboardHeight -= tabBarHeight;
+        
+        _externalKeyboard = maxKeyboardHeight > CGRectGetHeight(self.view.bounds);
+    }
+    
+    if (CGRectIsNull(keyboardFrame)) {
+        _externalKeyboard = NO;
+    }
+}
+
+- (void)reloadInputViewIfNeeded
+{
+    if (self.keyboardPanningEnabled) {
+        
+        if (!CGRectEqualToRect(self.textView.inputAccessoryView.frame, self.textInputbar.bounds)) {
+            
+            self.textView.inputAccessoryView = [[SCKInputAccessoryView alloc] initWithFrame:self.textInputbar.bounds];
+            
+            if (self.textView.isFirstResponder) {
+                [self.textView reloadInputViews];
+            }
+        }
     }
 }
 
@@ -843,7 +846,7 @@
     
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-
+    
     // Checks if it's showing or hidding the keyboard
     BOOL willShow = [notification.name isEqualToString:UIKeyboardWillShowNotification];
     
@@ -914,7 +917,7 @@
     if (self.isInverted && self.isMovingKeyboard && !CGPointEqualToPoint(self.scrollViewProxy.contentOffset, _draggingOffset)) {
         self.scrollViewProxy.contentOffset = _draggingOffset;
     }
-
+    
     [self.view layoutIfNeeded];
 }
 
@@ -1052,7 +1055,7 @@
     if (text.length == 0) {
         return [self cancelAutoCompletion];
     }
-
+    
     NSRange range;
     NSString *word = [self.textView slk_wordAtCaretRange:&range];
     
@@ -1096,7 +1099,7 @@
     else {
         return [self cancelAutoCompletion];
     }
-
+    
     BOOL canShow = [self canShowAutoCompletion];
     
     [self.autoCompletionView reloadData];
@@ -1122,7 +1125,7 @@
     if (string.length == 0) {
         return;
     }
-
+    
     SLKTextView *textView = self.textView;
     
     NSRange range = NSMakeRange(self.foundPrefixRange.location+1, self.foundWord.length);
@@ -1149,7 +1152,7 @@
     if (self.autoCompletionViewHC.constant == viewHeight) {
         return;
     }
-
+    
     // If the autocompletion view height is bigger than the maximum height allows, it is reduce to that size. Default 140 pts.
     if (viewHeight > [self maximumHeightForAutoCompletionView]) {
         viewHeight = [self maximumHeightForAutoCompletionView];
@@ -1162,7 +1165,7 @@
         tableHeight -= CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
         tableHeight -= self.navigationController.navigationBar.frame.size.height;
     }
-
+    
     // On iPhone, the autocompletion view can't extend beyond the table view height
     if (viewHeight > tableHeight) {
         viewHeight = tableHeight;
@@ -1249,7 +1252,7 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[autoCompletionView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[typingIndicatorView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[textInputbar]|" options:0 metrics:nil views:views]];
-
+    
     NSArray *bottomConstraints = [self.view slk_constraintsForAttribute:NSLayoutAttributeBottom];
     NSArray *heightConstraints = [self.view slk_constraintsForAttribute:NSLayoutAttributeHeight];
     
@@ -1296,7 +1299,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideKeyboard:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
-
+    
     // TextView notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willChangeTextView:) name:SLKTextViewTextWillChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
@@ -1318,7 +1321,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
-
+    
     // TextView notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewTextWillChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
