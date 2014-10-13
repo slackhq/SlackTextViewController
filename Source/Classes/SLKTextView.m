@@ -262,6 +262,12 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
     }
     else if ([item isKindOfClass:[NSString class]]){
         
+        if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)]) {
+            if (![self.delegate textView:self shouldChangeTextInRange:self.selectedRange replacementText:item]) {
+                return;
+            }
+        }
+        
         // Inserting the text fixes a UITextView bug whitch automatically scrolls to the bottom
         // and beyond scroll content size sometimes when the text is too long
         [self slk_insertTextAtCaretRange:item];
