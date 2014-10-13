@@ -641,7 +641,22 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 @end
 
-@implementation SLKInputAccessoryView
+@implementation SLKInputAccessoryView {
+
+	__weak UIView* _observedSuperview;
+
+}
+
+- (void)addSuperviewObserver
+{
+    if (_observedSuperview != nil || self.superview == nil) {
+        return;
+    }
+
+    _observedSuperview = self.superview;
+    
+    [self.superview addObserver:self forKeyPath:[self keyPathForKeyboardHandling] options:0 context:NULL];
+}
 
 - (void)didChangeKeyboardFrame:(CGRect)frame
 {
@@ -659,34 +674,22 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     }
 }
 
-- (void)addKeyPathObserverToView:(UIView *)superview
+- (void)removeSuperviewObserver
 {
-    [self removeKeyPathObserver];
-    
-    if (!superview) {
+    UIView* superview = _observedSuperview;
+    if (superview == nil) {
         return;
     }
-    
-    [superview addObserver:self forKeyPath:[self keyPathForKeyboardHandling] options:0 context:NULL];
-}
 
-- (void)removeKeyPathObserver
-{
-    if (!self.superview) {
-        return;
-    }
-    
-    @try {
-        [self.superview removeObserver:self forKeyPath:[self keyPathForKeyboardHandling]];
-    }
-    @catch(id anException) {
-        //do nothing, obviously it wasn't attached because an exception was thrown
-    }
+    [superview removeObserver:self forKeyPath:[self keyPathForKeyboardHandling]];
+
+    _observedSuperview = nil;
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
-    [self addKeyPathObserverToView:newSuperview];
+    [self removeSuperviewObserver];
+    [self addSuperviewObserver];
     
     [super willMoveToSuperview:newSuperview];
 }
@@ -700,7 +703,7 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (void)dealloc
 {
-    [self removeKeyPathObserver];
+    [self removeSuperviewObserver];
 }
 
 @end
