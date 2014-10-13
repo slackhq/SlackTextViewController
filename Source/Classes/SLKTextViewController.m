@@ -713,7 +713,8 @@
         return;
     }
     
-    // TODO: Become first responder and enable keyboard panning from the bottom (like Facebook Messages app)
+    // Become first responder and enable keyboard
+    [self.textView becomeFirstResponder];
 }
 
 - (void)editText:(NSString *)text
@@ -1227,15 +1228,20 @@
 
 #pragma mark - UIGestureRecognizerDelegate Methods
 
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture
 {
-    if ([gestureRecognizer isEqual:self.singleTapGesture]) {
+    if ([gesture isEqual:self.singleTapGesture]) {
         return [self.textInputbar.textView isFirstResponder];
     }
     
-    if ([gestureRecognizer isEqual:self.panGesture]) {
+    if (![gesture.view isFirstResponder] && [gesture isEqual:self.panGesture]) {
         CGPoint velocity = [self.panGesture velocityInView:self.view];
-        return ABS(velocity.y) > ABS(velocity.x) && ![self.textInputbar.textView isFirstResponder]; // Vertical panning
+        
+        // Vertical panning, from bottom to top only
+        if (velocity.y < 0 && ABS(velocity.y) > ABS(velocity.x) && ![self.textInputbar.textView isFirstResponder]) {
+            return YES;
+        }
+        return NO;
     }
     
     return YES;
