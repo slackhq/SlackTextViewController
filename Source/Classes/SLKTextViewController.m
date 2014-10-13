@@ -374,7 +374,7 @@
     [self checkForExternalKeyboardInNotification:notification];
     
     // Return 0 if an external keyboard has been detected
-    if (self.isExternalKeyboard) {
+    if (self.isExternalKeyboardDetected) {
         return 0.0;
     }
     
@@ -711,7 +711,7 @@
     }
     
     // Skips if using an external keyboard
-    if (self.isExternalKeyboard) {
+    if (self.isExternalKeyboardDetected) {
         return;
     }
     
@@ -783,11 +783,11 @@
         CGFloat tabBarHeight = ([self.tabBarController.tabBar isHidden] || self.hidesBottomBarWhenPushed) ? 0.0 : CGRectGetHeight(self.tabBarController.tabBar.frame);
         maxKeyboardHeight -= tabBarHeight;
         
-        _externalKeyboard = maxKeyboardHeight > CGRectGetHeight(self.view.bounds);
+        _externalKeyboardDetected = maxKeyboardHeight > CGRectGetHeight(self.view.bounds);
     }
     
     if (CGRectIsNull(keyboardFrame)) {
-        _externalKeyboard = NO;
+        _externalKeyboardDetected = NO;
     }
 }
 

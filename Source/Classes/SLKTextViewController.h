@@ -55,7 +55,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 @property (nonatomic, assign) BOOL keyboardPanningEnabled;
 
 /** YES if an external keyboard has been detected (this value only changes when the text view becomes first responder). */
-@property (nonatomic, readonly, getter=isExternalKeyboard) BOOL externalKeyboard;
+@property (nonatomic, readonly, getter=isExternalKeyboardDetected) BOOL externalKeyboardDetected;
 
 /**
  YES if the main table view is inverted. Default is YES.
