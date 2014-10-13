@@ -1,5 +1,0 @@
-#include "Pods-SlackTextViewController.xcconfig"
-GCC_PREPROCESSOR_DEFINITIONS = COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/SlackTextViewController" "${PODS_ROOT}/BuildHeaders/SlackTextViewController/Additions" "${PODS_ROOT}/BuildHeaders/SlackTextViewController/Classes" "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/LoremIpsum" "${PODS_ROOT}/Headers/SlackTextViewController" "${PODS_ROOT}/Headers/SlackTextViewController/Additions" "${PODS_ROOT}/Headers/SlackTextViewController/Classes"
-OTHER_LDFLAGS = -ObjC ${PODS_SLACKTEXTVIEWCONTROLLER_OTHER_LDFLAGS}
-PODS_ROOT = ${SRCROOT}
