@@ -316,7 +316,7 @@
     }
     
     SLKInputAccessoryView *view = [[SLKInputAccessoryView alloc] initWithFrame:self.textInputbar.bounds];
-    view.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
+    view.backgroundColor = [UIColor clearColor];
     view.userInteractionEnabled = NO;
     
     return view;
@@ -916,6 +916,8 @@
     
     // Updates and notifies about the keyboard status update
     self.keyboardStatus = didShow ? SLKKeyboardStatusDidShow : SLKKeyboardStatusDidHide;
+    
+    self.movingKeyboard = NO;
 }
 
 - (void)didChangeKeyboardFrame:(NSNotification *)notification
