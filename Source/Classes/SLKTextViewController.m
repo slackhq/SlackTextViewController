@@ -37,6 +37,9 @@
 // The single tap gesture used to dismiss the keyboard
 @property (nonatomic, strong) UIGestureRecognizer *singleTapGesture;
 
+// The pan gesture used for bringing the keyboard from the bottom
+@property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
+
 // The keyboard commands available for external keyboards
 @property (nonatomic, strong) NSArray *keyboardCommands;
 
@@ -248,6 +251,10 @@
         [_textInputbar.rightButton addTarget:self action:@selector(didPressRightButton:) forControlEvents:UIControlEventTouchUpInside];
         [_textInputbar.editortLeftButton addTarget:self action:@selector(didCancelTextEditing:) forControlEvents:UIControlEventTouchUpInside];
         [_textInputbar.editortRightButton addTarget:self action:@selector(didCommitTextEditing:) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanTextView:)];
+        self.panGesture.delegate = self;
+        [_textInputbar.textView addGestureRecognizer:self.panGesture];
     }
     return _textInputbar;
 }
@@ -261,14 +268,6 @@
         _typingIndicatorView.canResignByTouch = NO;
     }
     return _typingIndicatorView;
-}
-
-- (UIView *)inputAccessoryView
-{
-    if (_keyboardPanningEnabled) {
-        return [[SCKInputAccessoryView alloc] initWithFrame:self.textInputbar.bounds];
-    }
-    return nil;
 }
 
 - (BOOL)isEditing
@@ -470,14 +469,14 @@
     _keyboardPanningEnabled = enabled;
     
     if (enabled) {
-        self.textView.inputAccessoryView = [self inputAccessoryView];
+        self.textView.inputAccessoryView = [[SLKInputAccessoryView alloc] initWithFrame:self.textInputbar.bounds];
         self.scrollViewProxy.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
     }
     else {
         self.textView.inputAccessoryView = nil;
         self.scrollViewProxy.keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
     }
 }
 
@@ -707,6 +706,16 @@
     [self dismissKeyboard:YES];
 }
 
+- (void)didPanTextView:(id)sender
+{
+    // Skips if the text view is already first responder
+    if ([self.textView isFirstResponder]) {
+        return;
+    }
+    
+    // TODO: Become first responder and enable keyboard panning from the bottom (like Facebook Messages app)
+}
+
 - (void)editText:(NSString *)text
 {
     if (![self.textInputbar canEditText:text]) {
@@ -775,7 +784,7 @@
         
         if (!CGRectEqualToRect(self.textView.inputAccessoryView.frame, self.textInputbar.bounds)) {
             
-            self.textView.inputAccessoryView = [[SCKInputAccessoryView alloc] initWithFrame:self.textInputbar.bounds];
+            self.textView.inputAccessoryView = [[SLKInputAccessoryView alloc] initWithFrame:self.textInputbar.bounds];
             
             if (self.textView.isFirstResponder) {
                 [self.textView reloadInputViews];
@@ -905,7 +914,8 @@
     
     // Skips this if it's not the expected textView.
     // Checking the keyboard height constant helps to disable the view constraints update on iPad when the keyboard is undocked.
-    if (![self.textView isFirstResponder] || self.keyboardHC.constant == 0) {
+    // Checking the keyboard status allows to keep the inputAccessoryView valid when still reacing the bottom of the screen.
+    if (![self.textView isFirstResponder] || (self.keyboardHC.constant == 0 && self.keyboardStatus == SLKKeyboardStatusDidHide)) {
         return;
     }
     
@@ -1219,8 +1229,13 @@
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
-    if ([self.singleTapGesture isEqual:gestureRecognizer]) {
+    if ([gestureRecognizer isEqual:self.singleTapGesture]) {
         return [self.textInputbar.textView isFirstResponder];
+    }
+    
+    if ([gestureRecognizer isEqual:self.panGesture]) {
+        CGPoint velocity = [self.panGesture velocityInView:self.view];
+        return ABS(velocity.y) > ABS(velocity.x) && ![self.textInputbar.textView isFirstResponder]; // Vertical panning
     }
     
     return YES;

@@ -23,7 +23,7 @@
 
 #import "SLKUIConstants.h"
 
-NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.TextViewController.TextInputbar.FrameDidChange";
+NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.TextViewController.TextInputbar.FrameDidChange";
 
 @interface SLKTextInputbar () <UITextViewDelegate>
 
@@ -641,7 +641,13 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 @end
 
-@implementation SCKInputAccessoryView
+@implementation SLKInputAccessoryView
+
+- (void)didChangeKeyboardFrame:(CGRect)frame
+{
+    NSDictionary *userInfo = @{UIKeyboardFrameEndUserInfoKey:[NSValue valueWithCGRect:frame]};
+    [[NSNotificationCenter defaultCenter] postNotificationName:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil userInfo:userInfo];
+}
 
 - (NSString *)keyPathForKeyboardHandling
 {
@@ -687,10 +693,8 @@ NSString * const SCKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([object isEqual:self.superview] && [keyPath isEqualToString:[self keyPathForKeyboardHandling]])
-    {
-        NSDictionary *userInfo = @{UIKeyboardFrameEndUserInfoKey:[NSValue valueWithCGRect:[object frame]]};
-        [[NSNotificationCenter defaultCenter] postNotificationName:SCKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil userInfo:userInfo];
+    if ([object isEqual:self.superview] && [keyPath isEqualToString:[self keyPathForKeyboardHandling]]) {
+        [self didChangeKeyboardFrame:self.superview.frame];
     }
 }
 
