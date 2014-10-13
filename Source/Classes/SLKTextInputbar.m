@@ -377,13 +377,13 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     NSString *counter = nil;
     
     if (self.counterStyle == SLKCounterStyleNone) {
-        counter = [NSString stringWithFormat:@"%ld", (unsigned long)text.length];
+        counter = [NSString stringWithFormat:@"%lu", (unsigned long)text.length];
     }
     if (self.counterStyle == SLKCounterStyleSplit) {
-        counter = [NSString stringWithFormat:@"%ld/%ld", (unsigned long)text.length, (unsigned long)self.maxCharCount];
+        counter = [NSString stringWithFormat:@"%lu/%lu", (unsigned long)text.length, (unsigned long)self.maxCharCount];
     }
     if (self.counterStyle == SLKCounterStyleCountdown) {
-        counter = [NSString stringWithFormat:@"%lu", text.length-self.maxCharCount];
+        counter = [NSString stringWithFormat:@"%ld", (long)(text.length - self.maxCharCount)];
     }
     
     self.charCountLabel.text = counter;
