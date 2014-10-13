@@ -96,10 +96,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":"]];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
 
 #pragma mark - Action Methods
 

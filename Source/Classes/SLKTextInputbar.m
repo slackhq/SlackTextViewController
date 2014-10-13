@@ -25,7 +25,7 @@
 
 NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.TextViewController.TextInputbar.FrameDidChange";
 
-@interface SLKTextInputbar () <UITextViewDelegate>
+@interface SLKTextInputbar ()
 
 @property (nonatomic, strong) NSLayoutConstraint *leftButtonWC;
 @property (nonatomic, strong) NSLayoutConstraint *leftButtonHC;
@@ -36,7 +36,6 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 @property (nonatomic, strong) NSLayoutConstraint *accessoryViewHC;
 
 @property (nonatomic, strong) UILabel *charCountLabel;
-@property (nonatomic) BOOL newWordInserted;
 
 @end
 
@@ -74,7 +73,7 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
 
     [self setupViewConstraints];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextView:) name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
     
     [self.leftButton.imageView addObserver:self forKeyPath:NSStringFromSelector(@selector(image)) options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
@@ -114,7 +113,6 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
         _textView.translatesAutoresizingMaskIntoConstraints = NO;
         _textView.font = [UIFont systemFontOfSize:15.0];
         _textView.maxNumberOfLines = [self defaultNumberOfLines];
-        _textView.delegate = self;
         
         _textView.autocorrectionType = UITextAutocorrectionTypeDefault;
         _textView.spellCheckingType = UITextSpellCheckingTypeDefault;
@@ -409,42 +407,6 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     }
 }
 
-
-#pragma mark - UITextViewDelegate
-
-- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
-{
-    return YES;
-}
-
-- (BOOL)textViewShouldEndEditing:(UITextView *)textView
-{
-    return YES;
-}
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    self.newWordInserted = ([text rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].location != NSNotFound);
-    
-    // Records text for undo for every new word
-    if (self.newWordInserted) {
-        [self.textView prepareForUndo:@"Word Change"];
-    }
-    
-    if ([text isEqualToString:@"\n"]) {
-        //Detected break. Should insert new line break manually.
-        [textView slk_insertNewLineBreak];
-        
-        return NO;
-    }
-    else {
-        NSDictionary *userInfo = @{@"text": text, @"range": [NSValue valueWithRange:range]};
-        [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewTextWillChangeNotification object:self.textView userInfo:userInfo];
-        
-        return YES;
-    }
-}
-
 - (void)textViewDidChangeSelection:(UITextView *)textView
 {
     if (self.textView.isLoupeVisible) {
@@ -455,7 +417,10 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewSelectionDidChangeNotification object:self.textView userInfo:userInfo];
 }
 
-- (void)didChangeTextView:(NSNotification *)notification
+
+#pragma mark - Notification Events
+
+- (void)didChangeTextViewText:(NSNotification *)notification
 {
     SLKTextView *textView = (SLKTextView *)notification.object;
     
