@@ -469,7 +469,7 @@
     _keyboardPanningEnabled = enabled;
     
     if (enabled) {
-        self.textView.inputAccessoryView = [self inputAccessoryView];
+        self.textView.inputAccessoryView = [self slk_inputAccessoryView];
         self.scrollViewProxy.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
     }
@@ -480,7 +480,7 @@
     }
 }
 
-- (UIView *)inputAccessoryView
+- (UIView *)slk_inputAccessoryView
 {
     UIView *view = [[SLKInputAccessoryView alloc] initWithFrame:self.textInputbar.bounds];
     view.backgroundColor = [UIColor clearColor];
@@ -793,7 +793,7 @@
         
         if (!CGRectEqualToRect(self.textView.inputAccessoryView.frame, self.textInputbar.bounds)) {
             
-            self.textView.inputAccessoryView = [self inputAccessoryView];
+            self.textView.inputAccessoryView = [self slk_inputAccessoryView];
             
             if (self.textView.isFirstResponder) {
                 [self.textView reloadInputViews];
