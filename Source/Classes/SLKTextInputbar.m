@@ -72,6 +72,7 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     [self addSubview:self.charCountLabel];
 
     [self setupViewConstraints];
+    [self updateConstraintConstants];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
