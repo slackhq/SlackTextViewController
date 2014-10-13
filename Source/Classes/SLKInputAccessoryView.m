@@ -91,6 +91,9 @@ NSString *SLKKeyboardHandlingKeyPath()
     if ([object isEqual:self.superview] && [keyPath isEqualToString:SLKKeyboardHandlingKeyPath()]) {
         [self didChangeKeyboardFrame:self.superview.frame];
     }
+    else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 #pragma mark - Lifeterm

@@ -576,12 +576,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewContentSizeDidChangeNotification object:nil];
     
-    @try {
-        [_leftButton.imageView removeObserver:self forKeyPath:NSStringFromSelector(@selector(image))];
-    }
-    @catch(id anException) {
-        //do nothing, obviously it wasn't attached because an exception was thrown
-    }
+    [_leftButton.imageView removeObserver:self forKeyPath:NSStringFromSelector(@selector(image))];
     
     _leftButton = nil;
     _rightButton = nil;

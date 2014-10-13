@@ -384,6 +384,9 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
     if ([object isEqual:self] && [keyPath isEqualToString:NSStringFromSelector(@selector(contentSize))]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewContentSizeDidChangeNotification object:self userInfo:nil];
     }
+    else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 
@@ -558,12 +561,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    @try {
-        [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
-    }
-    @catch(id anException) {
-        //do nothing, obviously it wasn't attached because an exception was thrown
-    }
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
     
     _placeholderLabel = nil;
 }
