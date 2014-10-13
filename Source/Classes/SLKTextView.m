@@ -75,6 +75,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
     self.directionalLockEnabled = YES;
     self.dataDetectorTypes = UIDataDetectorTypeNone;
     
+    // UITextView notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBeginEditing:) name:UITextViewTextDidBeginEditingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeText:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEndEditing:) name:UITextViewTextDidEndEditingNotification object:nil];

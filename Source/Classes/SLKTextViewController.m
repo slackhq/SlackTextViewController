@@ -294,11 +294,6 @@
     return _presentedInPopover && UI_IS_IPAD;
 }
 
-+ (BOOL)accessInstanceVariablesDirectly
-{
-    return NO;
-}
-
 - (SLKTextView *)textView
 {
     return self.textInputbar.textView;
@@ -312,6 +307,19 @@
 - (UIButton *)rightButton
 {
     return self.textInputbar.rightButton;
+}
+
+- (SLKInputAccessoryView *)emptyInputAccessoryView
+{
+    if (!self.keyboardPanningEnabled) {
+        return nil;
+    }
+    
+    SLKInputAccessoryView *view = [[SLKInputAccessoryView alloc] initWithFrame:self.textInputbar.bounds];
+    view.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
+    view.userInteractionEnabled = NO;
+    
+    return view;
 }
 
 - (CGFloat)deltaInputbarHeight
@@ -475,23 +483,13 @@
     _keyboardPanningEnabled = enabled;
     
     if (enabled) {
-        self.textView.inputAccessoryView = [self slk_inputAccessoryView];
         self.scrollViewProxy.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
     }
     else {
-        self.textView.inputAccessoryView = nil;
         self.scrollViewProxy.keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
         [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
     }
-}
-
-- (UIView *)slk_inputAccessoryView
-{
-    UIView *view = [[SLKInputAccessoryView alloc] initWithFrame:self.textInputbar.bounds];
-    view.backgroundColor = [UIColor clearColor];
-    view.userInteractionEnabled = NO;
-    return view;
 }
 
 - (void)setInverted:(BOOL)inverted
@@ -795,16 +793,15 @@
 
 - (void)reloadInputViewIfNeeded
 {
-    if (self.keyboardPanningEnabled) {
-        
-        if (!CGRectEqualToRect(self.textView.inputAccessoryView.frame, self.textInputbar.bounds)) {
-            
-            self.textView.inputAccessoryView = [self slk_inputAccessoryView];
-            
-            if (self.textView.isFirstResponder) {
-                [self.textView reloadInputViews];
-            }
-        }
+    // Reload only if the input views if the text view is first responder
+    if (!self.keyboardPanningEnabled || ![self.textView isFirstResponder]) {
+        return;
+    }
+    
+    // Reload only if the input views if the frame doesn't match the text input bar's
+    if (!CGRectEqualToRect(self.textView.inputAccessoryView.frame, self.textInputbar.bounds)) {
+        self.textView.inputAccessoryView = [self emptyInputAccessoryView];
+        [self.textView reloadInputViews];
     }
 }
 
@@ -914,6 +911,7 @@
     // After showing keyboard, check if the current cursor position could diplay autocompletion
     if (didShow) {
         [self processTextForAutoCompletion];
+        [self reloadInputViewIfNeeded];
     }
     
     // Updates and notifies about the keyboard status update
