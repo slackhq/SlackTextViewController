@@ -23,8 +23,6 @@
 
 #import "SLKUIConstants.h"
 
-NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.TextViewController.TextInputbar.FrameDidChange";
-
 @interface SLKTextInputbar ()
 
 @property (nonatomic, strong) NSLayoutConstraint *leftButtonWC;
@@ -603,73 +601,6 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com
     _rightButtonWC = nil;
     _rightMarginWC = nil;
     _accessoryViewHC = nil;
-}
-
-@end
-
-@implementation SLKInputAccessoryView {
-
-	__weak UIView* _observedSuperview;
-
-}
-
-- (void)addSuperviewObserver
-{
-    if (_observedSuperview != nil || self.superview == nil) {
-        return;
-    }
-
-    _observedSuperview = self.superview;
-    
-    [self.superview addObserver:self forKeyPath:[self keyPathForKeyboardHandling] options:0 context:NULL];
-}
-
-- (void)didChangeKeyboardFrame:(CGRect)frame
-{
-    NSDictionary *userInfo = @{UIKeyboardFrameEndUserInfoKey:[NSValue valueWithCGRect:frame]};
-    [[NSNotificationCenter defaultCenter] postNotificationName:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil userInfo:userInfo];
-}
-
-- (NSString *)keyPathForKeyboardHandling
-{
-    if (UI_IS_IOS8_AND_HIGHER) {
-        return NSStringFromSelector(@selector(center));
-    }
-    else {
-        return NSStringFromSelector(@selector(frame));
-    }
-}
-
-- (void)removeSuperviewObserver
-{
-    UIView* superview = _observedSuperview;
-    if (superview == nil) {
-        return;
-    }
-
-    [superview removeObserver:self forKeyPath:[self keyPathForKeyboardHandling]];
-
-    _observedSuperview = nil;
-}
-
-- (void)willMoveToSuperview:(UIView *)newSuperview
-{
-    [self removeSuperviewObserver];
-    [self addSuperviewObserver];
-    
-    [super willMoveToSuperview:newSuperview];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if ([object isEqual:self.superview] && [keyPath isEqualToString:[self keyPathForKeyboardHandling]]) {
-        [self didChangeKeyboardFrame:self.superview.frame];
-    }
-}
-
-- (void)dealloc
-{
-    [self removeSuperviewObserver];
 }
 
 @end

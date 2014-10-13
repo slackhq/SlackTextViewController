@@ -25,11 +25,6 @@ typedef NS_ENUM(NSUInteger, SLKCounterStyle) {
     SLKCounterStyleCountdown
 };
 
-extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
-
-@interface SLKInputAccessoryView : UIView
-@end
-
 /** @name A custom tool bar encapsulating messaging controls. */
 @interface SLKTextInputbar : UIToolbar
 

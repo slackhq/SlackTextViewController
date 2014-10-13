@@ -15,6 +15,7 @@
 //
 
 #import "SLKTextViewController.h"
+#import "SLKInputAccessoryView.h"
 #import "SLKUIConstants.h"
 
 #import <objc/runtime.h>

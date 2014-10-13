@@ -210,7 +210,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 }
 
 
-#pragma mark - Overrides
+#pragma mark - Super Overrides
 
 - (void)setText:(NSString *)text
 {
@@ -375,6 +375,9 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
     
     // Do something
 }
+
+
+#pragma mark - KVO Listener
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
