@@ -137,9 +137,9 @@
 
 #pragma mark - View lifecycle
 
-- (void)loadView
+- (void)viewDidLoad
 {
-    [super loadView];
+    [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
