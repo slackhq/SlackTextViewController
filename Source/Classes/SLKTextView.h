@@ -22,6 +22,20 @@ extern NSString * const SLKTextViewContentSizeDidChangeNotification;
 extern NSString * const SLKTextViewDidPasteImageNotification;
 extern NSString * const SLKTextViewDidShakeNotification;
 
+extern NSString * const SLKTextViewPastedItemContentType;
+extern NSString * const SLKTextViewPastedItemMediaType;
+extern NSString * const SLKTextViewPastedItemData;
+
+typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
+    SLKPastableMediaTypeNone    = 0,
+    SLKPastableMediaTypePNG     = 1 << 0,
+    SLKPastableMediaTypeJPEG    = 1 << 1,
+    SLKPastableMediaTypeTIFF    = 1 << 2,
+    SLKPastableMediaTypeGIF     = 1 << 3,
+    SLKPastableMediaTypeMOV     = 1 << 4,
+    SLKPastableMediaTypeAll     = SLKPastableMediaTypePNG|SLKPastableMediaTypeJPEG|SLKPastableMediaTypeTIFF|SLKPastableMediaTypeGIF|SLKPastableMediaTypeMOV
+};
+
 /**  @name A custom text input view. */
 @interface SLKTextView : UITextView
 
@@ -36,6 +50,9 @@ extern NSString * const SLKTextViewDidShakeNotification;
 
 /** The current displayed number of lines. */
 @property (nonatomic, readonly) NSUInteger numberOfLines;
+
+/** The supported media types allowed to be pasted in the text view. Default is All. */
+@property (nonatomic) SLKPastableMediaType pastableMediaTypes;
 
 /** YES if the text view is and can still expand it self, depending if the maximum number of lines are reached. */
 @property (nonatomic, readonly) BOOL isExpanding;

@@ -76,6 +76,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.textView.placeholder = NSLocalizedString(@"Message", nil);
     self.textView.placeholderColor = [UIColor lightGrayColor];
     self.textView.layer.borderColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0].CGColor;
+    self.textView.pastableMediaTypes = SLKPastableMediaTypeAll;
     
     [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
     [self.leftButton setTintColor:[UIColor grayColor]];
@@ -217,11 +218,11 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [super didPressRightButton:sender];
 }
 
-- (void)didPasteImage:(UIImage *)image
+- (void)didPasteMediaContent:(NSDictionary *)userInfo
 {
     // Notifies the view controller when the user has pasted an image inside of the text view.
     
-    NSLog(@"%s",__FUNCTION__);
+    NSLog(@"%s : %@",__FUNCTION__, userInfo);
 }
 
 - (void)willRequestUndo

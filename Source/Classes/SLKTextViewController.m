@@ -374,7 +374,7 @@
     [self checkForExternalKeyboardInNotification:notification];
     
     // Return 0 if an external keyboard has been detected
-    if (self.isExternalKeyboard) {
+    if (self.isExternalKeyboardDetected) {
         return 0.0;
     }
     
@@ -686,6 +686,11 @@
 
 - (void)didPasteImage:(UIImage *)image
 {
+    // Deprecated. User -didPasteMediaContent: instead.
+}
+
+- (void)didPasteMediaContent:(NSDictionary *)userInfo
+{
     // No implementation here. Meant to be overriden in subclass.
 }
 
@@ -711,7 +716,7 @@
     }
     
     // Skips if using an external keyboard
-    if (self.isExternalKeyboard) {
+    if (self.isExternalKeyboardDetected) {
         return;
     }
     
@@ -783,11 +788,11 @@
         CGFloat tabBarHeight = ([self.tabBarController.tabBar isHidden] || self.hidesBottomBarWhenPushed) ? 0.0 : CGRectGetHeight(self.tabBarController.tabBar.frame);
         maxKeyboardHeight -= tabBarHeight;
         
-        _externalKeyboard = maxKeyboardHeight > CGRectGetHeight(self.view.bounds);
+        _externalKeyboardDetected = maxKeyboardHeight > CGRectGetHeight(self.view.bounds);
     }
     
     if (CGRectIsNull(keyboardFrame)) {
-        _externalKeyboard = NO;
+        _externalKeyboardDetected = NO;
     }
 }
 
@@ -1020,11 +1025,9 @@
         return;
     }
     
-    UIImage *image = notification.object;
-    
-    // Notifies only if the pasted object is a valid UIImage instance
-    if ([image isKindOfClass:[UIImage class]]) {
-        [self didPasteImage:image];
+    // Notifies only if the pasted item is nested in a dictionary
+    if ([notification.userInfo isKindOfClass:[NSDictionary class]]) {
+        [self didPasteMediaContent:notification.userInfo];
     }
 }
 
