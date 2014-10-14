@@ -277,18 +277,18 @@
     return self.contentInset.right;
 }
 
-- (BOOL)didLayoutSubviews
+- (BOOL)didFinishConfigurating
 {
-    SEL didAppearSelector = NSSelectorFromString(@"didAppear");
+    SEL selector = NSSelectorFromString(@"didFinishConfigurating");
     
-    if ([self.controller respondsToSelector:didAppearSelector]) {
+    if ([self.controller respondsToSelector:selector]) {
         
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        BOOL didAppear = (BOOL)[self.controller performSelector:didAppearSelector];
+        BOOL didFinish = (BOOL)[self.controller performSelector:selector];
 #pragma clang diagnostic pop
         
-        return didAppear;
+        return didFinish;
     }
     return NO;
 }
@@ -466,7 +466,7 @@
         
         BOOL bounces = self.controller.bounces && [self.textView isFirstResponder];
         
-        if (![self didLayoutSubviews]) {
+        if (![self didFinishConfigurating]) {
             [self layoutIfNeeded];
             return;
         }

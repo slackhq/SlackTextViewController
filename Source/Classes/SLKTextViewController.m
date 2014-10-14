@@ -59,8 +59,8 @@
 // YES if the device is rotating
 @property (nonatomic, getter = isRotating) BOOL rotating;
 
-// YES if the view controller did appear
-@property (nonatomic) BOOL didAppear;
+// YES if the view controller did appear and everything is finished configurating. This allows blocking some layout animations among other things.
+@property (nonatomic) BOOL didFinishConfigurating;
 
 @end
 
@@ -174,7 +174,7 @@
     
     [self.scrollViewProxy flashScrollIndicators];
     
-    self.didAppear = YES;
+    self.didFinishConfigurating = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -184,17 +184,12 @@
     // Stops the keyboard from being dismissed during the navigation controller's "swipe-to-pop"
     self.textView.didNotResignFirstResponder = self.isMovingFromParentViewController;
     
-    self.didAppear = NO;
+    self.didFinishConfigurating = NO;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-}
-
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
 }
 
 
@@ -1021,7 +1016,7 @@
     }
     
     // Animated only if the view already appeared
-    [self textDidUpdate:self.didAppear];
+    [self textDidUpdate:self.didFinishConfigurating];
 }
 
 - (void)didChangeTextViewContentSize:(NSNotification *)notification
@@ -1032,7 +1027,7 @@
     }
     
     // Animated only if the view already appeared
-    [self textDidUpdate:self.didAppear];
+    [self textDidUpdate:self.didFinishConfigurating];
 }
 
 - (void)didChangeTextViewSelection:(NSNotification *)notification
