@@ -327,7 +327,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
-{
+{    
     if (action == @selector(delete:)) {
         return NO;
     }

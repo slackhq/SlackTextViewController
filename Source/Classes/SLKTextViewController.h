@@ -198,7 +198,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 
 /** 
  Notifies the view controller when the user has pasted a supported media content (image or video).
- @discussion You can override this method to perform additional tasks associated with image/video pasting.
+ @discussion You can override this method to perform additional tasks associated with image/video pasting. You don't need call super since this method doesn't do anything.
  Only supported pastable medias configured in SLKTextView will be forwarded. Default is All.
  
  @para userInfo The payload containing the media data, content and media types.
