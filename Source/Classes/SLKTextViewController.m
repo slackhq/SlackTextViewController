@@ -53,8 +53,11 @@
 // The current keyboard status (hidden, showing, etc.)
 @property (nonatomic) SLKKeyboardStatus keyboardStatus;
 
-// Yes if a new word has been typed recently
+// YES if a new word has been typed recently
 @property (nonatomic) BOOL newWordInserted;
+
+// YES if the device is rotating
+@property (nonatomic, getter = isRotating) BOOL rotating;
 
 @end
 
@@ -822,6 +825,12 @@
 
 - (void)prepareForInterfaceRotation
 {
+    if (self.isRotating) {
+        return;
+    }
+    
+    self.rotating = YES;
+    
     [self.view layoutIfNeeded];
     
     if ([self.textView isFirstResponder]) {
@@ -950,6 +959,11 @@
         return;
     }
     
+    // Skips if the device is transitioning during a rotation
+    if (self.isRotating) {
+        return;
+    }
+    
     // Skips this if it's not the expected textView.
     // Checking the keyboard height constant helps to disable the view constraints update on iPad when the keyboard is undocked.
     // Checking the keyboard status allows to keep the inputAccessoryView valid when still reacing the bottom of the screen.
@@ -969,7 +983,7 @@
     [self.view layoutIfNeeded];
 }
 
-- (void)willChangeTextView:(NSNotification *)notification
+- (void)willChangeTextViewText:(NSNotification *)notification
 {
     SLKTextView *textView = (SLKTextView *)notification.object;
     
@@ -991,28 +1005,6 @@
     }
     
     [self textDidUpdate:YES];
-}
-
-- (void)willShowOrHideTypeIndicatorView:(NSNotification *)notification
-{
-    SLKTypingIndicatorView *indicatorView = (SLKTypingIndicatorView *)notification.object;
-    
-    // Skips if it's not the expected typing indicator view.
-    if (![indicatorView isEqual:self.typingIndicatorView]) {
-        return;
-    }
-    
-    // Skips if the typing indicator should not show. Ignores the checking if it's trying to hide.
-    if (![self canShowTypeIndicator] && !self.typingIndicatorView.isVisible) {
-        return;
-    }
-    
-    self.typingIndicatorViewHC.constant = indicatorView.isVisible ?  0.0 : indicatorView.height;
-    self.scrollViewHC.constant -= self.typingIndicatorViewHC.constant;
-    
-	[self.view slk_animateLayoutIfNeededWithBounce:self.bounces
-										   options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
-										animations:NULL];
 }
 
 - (void)didChangeTextViewContentSize:(NSNotification *)notification
@@ -1059,6 +1051,35 @@
     // Notifies of the shake gesture if undo mode is on and the text view is not empty
     if (self.undoShakingEnabled && self.textView.text.length > 0) {
         [self willRequestUndo];
+    }
+}
+
+- (void)willShowOrHideTypeIndicatorView:(NSNotification *)notification
+{
+    SLKTypingIndicatorView *indicatorView = (SLKTypingIndicatorView *)notification.object;
+    
+    // Skips if it's not the expected typing indicator view.
+    if (![indicatorView isEqual:self.typingIndicatorView]) {
+        return;
+    }
+    
+    // Skips if the typing indicator should not show. Ignores the checking if it's trying to hide.
+    if (![self canShowTypeIndicator] && !self.typingIndicatorView.isVisible) {
+        return;
+    }
+    
+    self.typingIndicatorViewHC.constant = indicatorView.isVisible ?  0.0 : indicatorView.height;
+    self.scrollViewHC.constant -= self.typingIndicatorViewHC.constant;
+    
+    [self.view slk_animateLayoutIfNeededWithBounce:self.bounces
+                                           options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
+                                        animations:NULL];
+}
+
+- (void)didRotateDevice:(NSNotification *)notification
+{
+    if (self.isRotating) {
+        self.rotating = NO;
     }
 }
 
@@ -1393,7 +1414,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
     
     // TextView notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willChangeTextView:) name:SLKTextViewTextWillChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willChangeTextViewText:) name:SLKTextViewTextWillChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewSelection:) name:SLKTextViewSelectionDidChangeNotification object:nil];
@@ -1403,6 +1424,9 @@
     // TypeIndicator notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SLKTypingIndicatorViewWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SLKTypingIndicatorViewWillHideNotification object:nil];
+    
+    // Rotation notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotateDevice:)name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 - (void)unregisterNotifications
@@ -1424,6 +1448,9 @@
     // TypeIndicator notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTypingIndicatorViewWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTypingIndicatorViewWillHideNotification object:nil];
+    
+    // Rotation notifications
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 
