@@ -625,7 +625,11 @@
         }
     }
     
+    // Only updates the input view if the number of line changed
     [self reloadInputViewIfNeeded];
+    
+    // Process the text at every change
+    [self processTextForAutoCompletion];
 }
 
 - (BOOL)canPressRightButton
