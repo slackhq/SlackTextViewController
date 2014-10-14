@@ -194,7 +194,16 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
  
  @param image The image that has been pasted. Only JPG or PNG are supported.
  */
-- (void)didPasteImage:(UIImage *)image;
+- (void)didPasteImage:(UIImage *)image DEPRECATED_MSG_ATTRIBUTE("Use -didPasteMediaContent: instead");
+
+/** 
+ Notifies the view controller when the user has pasted a supported media content (image or video).
+ @discussion You can override this method to perform additional tasks associated with image/video pasting.
+ Only supported pastable medias configured in SLKTextView will be forwarded. Default is All.
+ 
+ @para userInfo The payload containing the media data, content and media types.
+ */
+- (void)didPasteMediaContent:(NSDictionary *)userInfo;
 
 /**
  Verifies that the typing indicator view should be shown. Default is YES, if meeting some requierements.

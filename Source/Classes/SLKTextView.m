@@ -25,6 +25,10 @@ NSString * const SLKTextViewContentSizeDidChangeNotification = @"com.slack.TextV
 NSString * const SLKTextViewDidPasteImageNotification = @"com.slack.TextViewController.TextView.DidPasteImage";
 NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewController.TextView.DidShake";
 
+NSString * const SLKTextViewPastedItemContentType = @"SLKTextViewPastedItemContentType";
+NSString * const SLKTextViewPastedItemMediaType = @"SLKTextViewPastedItemMediaType";
+NSString * const SLKTextViewPastedItemData = @"SLKTextViewPastedItemData";
+
 @interface SLKTextView ()
 
 // The label used as placeholder
@@ -66,6 +70,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 - (void)commonInit
 {
     self.placeholderColor = [UIColor lightGrayColor];
+    self.pastableMediaTypes = SLKPastableMediaTypeAll;
     
     self.font = [UIFont systemFontOfSize:14.0];
     self.editable = YES;
@@ -153,22 +158,112 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
     return _maxNumberOfLines;
 }
 
-// Returns a supported pasteboard item (image or text)
-- (id)pasteboardItem
+// Returns a supported pasteboard item
+- (id)pastedItem
 {
-    UIImage *image = [[UIPasteboard generalPasteboard] image];
-    NSString *text = [[UIPasteboard generalPasteboard] string];
-    
-    // Gives priority to images
-    if (image) {
-        return image;
+    NSString *contentType = [self pasteboardContentType];
+    NSData *data = [[UIPasteboard generalPasteboard] dataForPasteboardType:contentType];
+
+    if (data && [data isKindOfClass:[NSData class]]) {
+        SLKPastableMediaType mediaType = SLKPastableMediaTypeFromNSString(contentType);
+        return @{SLKTextViewPastedItemContentType: contentType, SLKTextViewPastedItemMediaType: @(mediaType), SLKTextViewPastedItemData: data};
     }
-    else if (text.length > 0) {
-        return text;
+    else if ([[UIPasteboard generalPasteboard] URL]) {
+        return [[UIPasteboard generalPasteboard] URL];
+    }
+    else if ([[UIPasteboard generalPasteboard] string]) {
+        return [[UIPasteboard generalPasteboard] string];
     }
     else {
         return nil;
     }
+}
+
+// Checks if any supported media found in the general pasteboard
+- (BOOL)isPasteboardItemSupported
+{
+    if ([self pasteboardContentType].length > 0) {
+        return YES;
+    }
+    return NO;
+}
+
+- (NSString *)pasteboardContentType
+{
+    NSArray *pasteboardTypes = [[UIPasteboard generalPasteboard] pasteboardTypes];
+    NSMutableArray *subpredicates = [NSMutableArray new];
+    
+    for (NSString *type in [self supportedMediaTypes]) {
+        [subpredicates addObject:[NSPredicate predicateWithFormat:@"SELF == %@", type]];
+    }
+    
+    return [[pasteboardTypes filteredArrayUsingPredicate:[NSCompoundPredicate orPredicateWithSubpredicates:subpredicates]] firstObject];
+}
+
+- (NSArray *)supportedMediaTypes
+{
+    if (self.pastableMediaTypes == SLKPastableMediaTypeNone) {
+        return nil;
+    }
+    
+    NSMutableArray *types = [NSMutableArray new];
+    
+    if (self.pastableMediaTypes & SLKPastableMediaTypePNG) {
+        [types addObject:NSStringFromSLKPastableMediaType(SLKPastableMediaTypePNG)];
+    }
+    if (self.pastableMediaTypes & SLKPastableMediaTypeJPEG) {
+        [types addObject:NSStringFromSLKPastableMediaType(SLKPastableMediaTypeJPEG)];
+    }
+    if (self.pastableMediaTypes & SLKPastableMediaTypeTIFF) {
+        [types addObject:NSStringFromSLKPastableMediaType(SLKPastableMediaTypeTIFF)];
+    }
+    if (self.pastableMediaTypes & SLKPastableMediaTypeGIF) {
+        [types addObject:NSStringFromSLKPastableMediaType(SLKPastableMediaTypeGIF)];
+    }
+    if (self.pastableMediaTypes & SLKPastableMediaTypeMOV) {
+        [types addObject:NSStringFromSLKPastableMediaType(SLKPastableMediaTypeMOV)];
+    }
+    return types;
+}
+
+NSString *NSStringFromSLKPastableMediaType(SLKPastableMediaType type)
+{
+    if (type == SLKPastableMediaTypePNG) {
+        return @"public.png";
+    }
+    if (type == SLKPastableMediaTypeJPEG) {
+        return @"public.jpeg";
+    }
+    if (type == SLKPastableMediaTypeTIFF) {
+        return @"public.tiff";
+    }
+    if (type == SLKPastableMediaTypeGIF) {
+        return @"com.compuserve.gif";
+    }
+    if (type == SLKPastableMediaTypeMOV) {
+        return @"com.apple.quicktime";
+    }
+    return nil;
+}
+
+SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
+{
+    if ([string isEqualToString:NSStringFromSLKPastableMediaType(SLKPastableMediaTypePNG)]) {
+        return SLKPastableMediaTypePNG;
+    }
+    if ([string isEqualToString:NSStringFromSLKPastableMediaType(SLKPastableMediaTypeJPEG)]) {
+        return SLKPastableMediaTypeJPEG;
+    }
+    if ([string isEqualToString:NSStringFromSLKPastableMediaType(SLKPastableMediaTypeTIFF)]) {
+        return SLKPastableMediaTypeTIFF;
+    }
+    if ([string isEqualToString:NSStringFromSLKPastableMediaType(SLKPastableMediaTypeGIF)]) {
+        return SLKPastableMediaTypeGIF;
+    }
+    if ([string isEqualToString:NSStringFromSLKPastableMediaType(SLKPastableMediaTypeMOV)]) {
+        return SLKPastableMediaTypeMOV;
+    }
+    return SLKPastableMediaTypeNone;
 }
 
 - (BOOL)isExpanding
@@ -242,7 +337,7 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
         return YES;
     }
     
-    if (action == @selector(paste:) && [self pasteboardItem]) {
+    if (action == @selector(paste:) && [self isPasteboardItemSupported]) {
         return YES;
     }
     
@@ -256,22 +351,22 @@ NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewControlle
 
 - (void)paste:(id)sender
 {
-    id item = [self pasteboardItem];
+    id pastedItem = [self pastedItem];
     
-    if ([item isKindOfClass:[UIImage class]]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewDidPasteImageNotification object:item];
+    if ([pastedItem isKindOfClass:[NSDictionary class]]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewDidPasteImageNotification object:nil userInfo:pastedItem];
     }
-    else if ([item isKindOfClass:[NSString class]]){
+    else if ([pastedItem isKindOfClass:[NSString class]]){
         
         if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)]) {
-            if (![self.delegate textView:self shouldChangeTextInRange:self.selectedRange replacementText:item]) {
+            if (![self.delegate textView:self shouldChangeTextInRange:self.selectedRange replacementText:pastedItem]) {
                 return;
             }
         }
         
         // Inserting the text fixes a UITextView bug whitch automatically scrolls to the bottom
         // and beyond scroll content size sometimes when the text is too long
-        [self slk_insertTextAtCaretRange:item];
+        [self slk_insertTextAtCaretRange:pastedItem];
     }
 }
 

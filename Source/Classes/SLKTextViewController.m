@@ -686,6 +686,11 @@
 
 - (void)didPasteImage:(UIImage *)image
 {
+    // Deprecated. User -didPasteMediaContent: instead.
+}
+
+- (void)didPasteMediaContent:(NSDictionary *)userInfo
+{
     // No implementation here. Meant to be overriden in subclass.
 }
 
@@ -1020,11 +1025,9 @@
         return;
     }
     
-    UIImage *image = notification.object;
-    
-    // Notifies only if the pasted object is a valid UIImage instance
-    if ([image isKindOfClass:[UIImage class]]) {
-        [self didPasteImage:image];
+    // Notifies only if the pasted item is nested in a dictionary
+    if ([notification.userInfo isKindOfClass:[NSDictionary class]]) {
+        [self didPasteMediaContent:notification.userInfo];
     }
 }
 
