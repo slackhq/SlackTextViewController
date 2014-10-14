@@ -277,6 +277,22 @@
     return self.contentInset.right;
 }
 
+- (BOOL)didLayoutSubviews
+{
+    SEL didAppearSelector = NSSelectorFromString(@"didAppear");
+    
+    if ([self.controller respondsToSelector:didAppearSelector]) {
+        
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        BOOL didAppear = (BOOL)[self.controller performSelector:didAppearSelector];
+#pragma clang diagnostic pop
+        
+        return didAppear;
+    }
+    return NO;
+}
+
 
 #pragma mark - Setters
 
@@ -449,6 +465,11 @@
         }
         
         BOOL bounces = self.controller.bounces && [self.textView isFirstResponder];
+        
+        if (![self didLayoutSubviews]) {
+            [self layoutIfNeeded];
+            return;
+        }
         
 		[self slk_animateLayoutIfNeededWithBounce:bounces
 										  options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState

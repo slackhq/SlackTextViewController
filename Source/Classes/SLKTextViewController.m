@@ -59,6 +59,9 @@
 // YES if the device is rotating
 @property (nonatomic, getter = isRotating) BOOL rotating;
 
+// YES if the view controller did appear
+@property (nonatomic) BOOL didAppear;
+
 @end
 
 @implementation SLKTextViewController
@@ -170,6 +173,8 @@
     [super viewDidAppear:animated];
     
     [self.scrollViewProxy flashScrollIndicators];
+    
+    self.didAppear = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -178,11 +183,18 @@
     
     // Stops the keyboard from being dismissed during the navigation controller's "swipe-to-pop"
     self.textView.didNotResignFirstResponder = self.isMovingFromParentViewController;
+    
+    self.didAppear = NO;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
 }
 
 
@@ -1004,7 +1016,8 @@
         return;
     }
     
-    [self textDidUpdate:YES];
+    // Animated only if the view already appeared
+    [self textDidUpdate:self.didAppear];
 }
 
 - (void)didChangeTextViewContentSize:(NSNotification *)notification
@@ -1014,7 +1027,8 @@
         return;
     }
     
-    [self textDidUpdate:YES];
+    // Animated only if the view already appeared
+    [self textDidUpdate:self.didAppear];
 }
 
 - (void)didChangeTextViewSelection:(NSNotification *)notification
