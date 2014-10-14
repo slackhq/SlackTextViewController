@@ -810,6 +810,16 @@
     }
 }
 
+- (void)resetInputViewIfNeeded
+{
+    if (!self.textView.inputAccessoryView) {
+        return;
+    }
+    
+    self.textView.inputAccessoryView = nil;
+    [self.textView reloadInputViews];
+}
+
 - (void)prepareForInterfaceRotation
 {
     [self.view layoutIfNeeded];
@@ -916,12 +926,20 @@
     // After showing keyboard, check if the current cursor position could diplay autocompletion
     if (didShow) {
         [self processTextForAutoCompletion];
+    }
+    
+    // Reloads the input accessory view
+    if (didShow && !self.textView.inputAccessoryView) {
         [self reloadInputViewIfNeeded];
+    }
+    else if (!didShow && ![self.textView isFirstResponder]) {
+        [self resetInputViewIfNeeded];
     }
     
     // Updates and notifies about the keyboard status update
     self.keyboardStatus = didShow ? SLKKeyboardStatusDidShow : SLKKeyboardStatusDidHide;
     
+    // Very important to invalidate this flag back
     self.movingKeyboard = NO;
 }
 
