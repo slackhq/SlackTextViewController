@@ -1339,7 +1339,12 @@
         return [self.textInputbar.textView isFirstResponder];
     }
     
-    if (![gesture.view isFirstResponder] && [gesture isEqual:self.panGesture]) {
+    if ([gesture isEqual:self.panGesture]) {
+        
+        if ([self.textView isFirstResponder]) {
+            return NO;
+        }
+        
         CGPoint velocity = [self.panGesture velocityInView:self.view];
         
         // Vertical panning, from bottom to top only
