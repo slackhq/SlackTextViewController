@@ -56,9 +56,6 @@
 // YES if a new word has been typed recently
 @property (nonatomic) BOOL newWordInserted;
 
-// YES if the device is rotating
-@property (nonatomic, getter = isRotating) BOOL rotating;
-
 // YES if the view controller did appear and everything is finished configurating. This allows blocking some layout animations among other things.
 @property (nonatomic) BOOL didFinishConfigurating;
 
@@ -392,14 +389,19 @@
     CGFloat tabBarHeight = ([self.tabBarController.tabBar isHidden] || self.hidesBottomBarWhenPushed) ? 0.0 : CGRectGetHeight(self.tabBarController.tabBar.frame);
     
     // The height of the keyboard
-    if (UI_IS_IOS8_AND_HIGHER || !UI_IS_LANDSCAPE) {
-        keyboardHeight = CGRectGetHeight([UIScreen mainScreen].bounds);
+    if (!UI_IS_IOS8_AND_HIGHER && [notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+        keyboardHeight = MIN(CGRectGetWidth(endFrame), CGRectGetHeight(endFrame));
     }
     else {
-        keyboardHeight = MIN(CGRectGetWidth([UIScreen mainScreen].bounds), CGRectGetHeight([UIScreen mainScreen].bounds));
+        if (UI_IS_IOS8_AND_HIGHER || !UI_IS_LANDSCAPE) {
+            keyboardHeight = CGRectGetHeight([UIScreen mainScreen].bounds);
+        }
+        else {
+            keyboardHeight = MIN(CGRectGetWidth([UIScreen mainScreen].bounds), CGRectGetHeight([UIScreen mainScreen].bounds));
+        }
+        
+        keyboardHeight -= endFrame.origin.y;
     }
-    
-    keyboardHeight -= endFrame.origin.y;
     
     keyboardHeight -= tabBarHeight;
     keyboardHeight -= self.textView.inputAccessoryView.bounds.size.height;
@@ -836,11 +838,7 @@
 
 - (void)prepareForInterfaceRotation
 {
-    if (self.isRotating) {
-        return;
-    }
-    
-    self.rotating = YES;
+    NSLog(@"%s",__FUNCTION__);
     
     [self.view layoutIfNeeded];
     
@@ -970,11 +968,6 @@
         return;
     }
     
-    // Skips if the device is transitioning during a rotation
-    if (self.isRotating) {
-        return;
-    }
-    
     // Skips this if it's not the expected textView.
     // Checking the keyboard height constant helps to disable the view constraints update on iPad when the keyboard is undocked.
     // Checking the keyboard status allows to keep the inputAccessoryView valid when still reacing the bottom of the screen.
@@ -1087,13 +1080,6 @@
     [self.view slk_animateLayoutIfNeededWithBounce:self.bounces
                                            options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
                                         animations:NULL];
-}
-
-- (void)didRotateDevice:(NSNotification *)notification
-{
-    if (self.isRotating) {
-        self.rotating = NO;
-    }
 }
 
 
@@ -1442,9 +1428,6 @@
     // TypeIndicator notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SLKTypingIndicatorViewWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SLKTypingIndicatorViewWillHideNotification object:nil];
-    
-    // Rotation notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotateDevice:)name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 - (void)unregisterNotifications
@@ -1466,26 +1449,23 @@
     // TypeIndicator notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTypingIndicatorViewWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTypingIndicatorViewWillHideNotification object:nil];
-    
-    // Rotation notifications
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 
 #pragma mark - View Auto-Rotation
 
-// iOS7 only
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    if (![self respondsToSelector:@selector(willTransitionToTraitCollection:withTransitionCoordinator:)]) {
+    if (UI_IS_IOS8_AND_HIGHER) {
         [self prepareForInterfaceRotation];
     }
 }
 
-// iOS8 only
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    [self prepareForInterfaceRotation];
+    if (!UI_IS_IOS8_AND_HIGHER) {
+        [self prepareForInterfaceRotation];
+    }
 }
 
 - (NSUInteger)supportedInterfaceOrientations
