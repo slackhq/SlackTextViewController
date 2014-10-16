@@ -23,13 +23,16 @@
 #define UI_IS_IPHONE6PLUS       (UI_IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 736.0 || [[UIScreen mainScreen] bounds].size.width == 736.0) // Both orientations
 #define UI_IS_IOS8_AND_HIGHER   ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
 
+UIKIT_EXTERN NSString *const SLKKeyboardWillShowNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardDidShowNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardWillHideNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardDidHideNotification;
 
 typedef NS_ENUM(NSUInteger, SLKQuicktypeBarMode) {
     SLKQuicktypeBarModeHidden,
     SLKQuicktypeBarModeCollapsed,
     SLKQuicktypeBarModeExpanded ,
 };
-
 
 inline static CGFloat minimumKeyboardHeight()
 {

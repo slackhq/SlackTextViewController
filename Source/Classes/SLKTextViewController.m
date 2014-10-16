@@ -20,6 +20,11 @@
 
 #import <objc/runtime.h>
 
+NSString * const SLKKeyboardWillShowNotification = @"SLKKeyboardWillShowNotification";
+NSString * const SLKKeyboardDidShowNotification = @"SLKKeyboardDidShowNotification";
+NSString * const SLKKeyboardWillHideNotification = @"SLKKeyboardWillHideNotification";
+NSString * const SLKKeyboardDidHideNotification = @"SLKKeyboardDidHideNotification";
+
 @interface SLKTextViewController () <UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
     CGPoint _draggingOffset;
@@ -323,7 +328,7 @@
     }
     
     SLKInputAccessoryView *view = [[SLKInputAccessoryView alloc] initWithFrame:self.textInputbar.bounds];
-    view.backgroundColor = [UIColor clearColor];
+    view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.0];
     view.userInteractionEnabled = NO;
     
     return view;
@@ -424,6 +429,25 @@
     
     if (height < 0) return 0;
     else return roundf(height);
+}
+
+- (NSString *)appropriateKeyboardNotificationName:(NSNotification *)notification
+{
+    NSString *name = notification.name;
+    
+    if ([name isEqualToString:UIKeyboardWillShowNotification]) {
+        return SLKKeyboardWillShowNotification;
+    }
+    if ([name isEqualToString:UIKeyboardWillHideNotification]) {
+        return SLKKeyboardWillHideNotification;
+    }
+    if ([name isEqualToString:UIKeyboardDidShowNotification]) {
+        return SLKKeyboardDidShowNotification;
+    }
+    if ([name isEqualToString:UIKeyboardDidHideNotification]) {
+        return SLKKeyboardDidHideNotification;
+    }
+    return nil;
 }
 
 
@@ -783,6 +807,18 @@
     }
 }
 
+- (void)postCustomKeyboarNotification:(NSNotification *)notification
+{
+    NSMutableDictionary *userInfo = [notification.userInfo mutableCopy];
+    
+    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    endFrame.size.height = self.keyboardHC.constant;
+    [userInfo setObject:[NSValue valueWithCGRect:endFrame] forKey:UIKeyboardFrameEndUserInfoKey];
+    
+    NSString *name = [self appropriateKeyboardNotificationName:notification];
+    [[NSNotificationCenter defaultCenter] postNotificationName:name object:nil userInfo:userInfo];
+}
+
 - (void)checkForExternalKeyboardInNotification:(NSNotification *)notification
 {
     CGRect targetRect = CGRectZero;
@@ -822,7 +858,7 @@
     // Reload only if the input views if the frame doesn't match the text input bar's
     if (!CGRectEqualToRect(self.textView.inputAccessoryView.frame, self.textInputbar.bounds)) {
         self.textView.inputAccessoryView = [self emptyInputAccessoryView];
-        [self.textView reloadInputViews];
+        [self.textView refreshInputViews];
     }
 }
 
@@ -833,13 +869,11 @@
     }
     
     self.textView.inputAccessoryView = nil;
-    [self.textView reloadInputViews];
+    [self.textView refreshInputViews];
 }
 
 - (void)prepareForInterfaceRotation
 {
-    NSLog(@"%s",__FUNCTION__);
-    
     [self.view layoutIfNeeded];
     
     if ([self.textView isFirstResponder]) {
@@ -924,6 +958,8 @@
     
     // Updates and notifies about the keyboard status update
     self.keyboardStatus = willShow ? SLKKeyboardStatusWillShow : SLKKeyboardStatusWillHide;
+    
+    [self postCustomKeyboarNotification:notification];
 }
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
@@ -959,6 +995,8 @@
     
     // Very important to invalidate this flag back
     self.movingKeyboard = NO;
+    
+    [self postCustomKeyboarNotification:notification];
 }
 
 - (void)didChangeKeyboardFrame:(NSNotification *)notification
