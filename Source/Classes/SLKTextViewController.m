@@ -146,6 +146,12 @@ NSString * const SLKKeyboardDidHideNotification = @"SLKKeyboardDidHideNotificati
 
 #pragma mark - View lifecycle
 
+- (void)loadView
+{
+    self.view = [UIView new];
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
