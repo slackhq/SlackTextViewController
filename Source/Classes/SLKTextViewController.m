@@ -849,24 +849,18 @@ NSString * const SLKKeyboardDidHideNotification = @"SLKKeyboardDidHideNotificati
 {
     // Reload only if the input views if the text view is first responder
     if (!self.keyboardPanningEnabled || ![self.textView isFirstResponder]) {
-        return;
+        
+        // Disables the input accessory when not first responder so when showing the keyboard back, there is no animation delay
+        if (self.textView.inputAccessoryView) {
+            self.textView.inputAccessoryView = nil;
+            [self.textView refreshInputViews];
+        }
     }
-    
     // Reload only if the input views if the frame doesn't match the text input bar's
-    if (!CGRectEqualToRect(self.textView.inputAccessoryView.frame, self.textInputbar.bounds)) {
+    else if (!CGRectEqualToRect(self.textView.inputAccessoryView.frame, self.textInputbar.bounds)) {
         self.textView.inputAccessoryView = [self emptyInputAccessoryView];
         [self.textView refreshInputViews];
     }
-}
-
-- (void)resetInputViewIfNeeded
-{
-    if (!self.textView.inputAccessoryView) {
-        return;
-    }
-    
-    self.textView.inputAccessoryView = nil;
-    [self.textView refreshInputViews];
 }
 
 - (void)prepareForInterfaceRotation
@@ -979,12 +973,7 @@ NSString * const SLKKeyboardDidHideNotification = @"SLKKeyboardDidHideNotificati
     }
     
     // Reloads the input accessory view
-    if (didShow && !self.textView.inputAccessoryView) {
-        [self reloadInputViewIfNeeded];
-    }
-    else if (!didShow && ![self.textView isFirstResponder]) {
-        [self resetInputViewIfNeeded];
-    }
+    [self reloadInputViewIfNeeded];
     
     // Updates and notifies about the keyboard status update
     self.keyboardStatus = didShow ? SLKKeyboardStatusDidShow : SLKKeyboardStatusDidHide;
