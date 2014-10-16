@@ -167,15 +167,14 @@ NSString * const SLKTextViewPastedItemData = @"SLKTextViewPastedItemData";
         SLKPastableMediaType mediaType = SLKPastableMediaTypeFromNSString(contentType);
         return @{SLKTextViewPastedItemContentType: contentType, SLKTextViewPastedItemMediaType: @(mediaType), SLKTextViewPastedItemData: data};
     }
-    else if ([[UIPasteboard generalPasteboard] URL]) {
-        return [[UIPasteboard generalPasteboard] URL];
+    if ([[UIPasteboard generalPasteboard] URL]) {
+        return [[[UIPasteboard generalPasteboard] URL] absoluteString];
     }
-    else if ([[UIPasteboard generalPasteboard] string]) {
+    if ([[UIPasteboard generalPasteboard] string]) {
         return [[UIPasteboard generalPasteboard] string];
     }
-    else {
-        return nil;
-    }
+    
+    return nil;
 }
 
 // Checks if any supported media found in the general pasteboard
@@ -352,11 +351,12 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 {
     id pastedItem = [self pastedItem];
     
-    if ([pastedItem isKindOfClass:[NSDictionary class]]) {
+    if ([pastedItem isKindOfClass:[NSDictionary class]])
+    {
         [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewDidPasteImageNotification object:nil userInfo:pastedItem];
     }
-    else if ([pastedItem isKindOfClass:[NSString class]]){
-        
+    else if ([pastedItem isKindOfClass:[NSString class]]) {
+        // Respect the delegate yo!
         if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)]) {
             if (![self.delegate textView:self shouldChangeTextInRange:self.selectedRange replacementText:pastedItem]) {
                 return;
