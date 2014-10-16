@@ -324,6 +324,24 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     [super setAttributedText:attributedText];
 }
 
+- (BOOL)canBecomeFirstResponder
+{
+    // Adds undo/redo items to the Menu Controller
+    UIMenuItem *undo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Undo", nil) action:@selector(undo:)];
+    UIMenuItem *redo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Redo", nil) action:@selector(redo:)];
+    [[UIMenuController sharedMenuController] setMenuItems:@[undo,redo]];
+    
+    return [super canBecomeFirstResponder];
+}
+
+- (BOOL)canResignFirstResponder
+{
+    // Removes undo/redo items
+    [[UIMenuController sharedMenuController] setMenuItems:@[]];
+    
+    return [super canResignFirstResponder];
+}
+
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {    
     if (action == @selector(delete:)) {

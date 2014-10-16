@@ -131,11 +131,6 @@
                 [gesture addTarget:self action:@selector(willShowLoupe:)];
             }
         }
-        
-        // Registers the Menu Controller for undo/redo actions
-        UIMenuItem *undo = [[UIMenuItem alloc] initWithTitle:@"Undo" action:NSSelectorFromString(@"undo:")];
-        UIMenuItem *redo = [[UIMenuItem alloc] initWithTitle:@"Redo" action:NSSelectorFromString(@"redo:")];
-        [[UIMenuController sharedMenuController] setMenuItems:@[undo,redo]];
     }
     return _textView;
 }
@@ -400,7 +395,6 @@
     }
     
     self.charCountLabel.text = counter;
-    
     self.charCountLabel.textColor = [self limitExceeded] ?  [UIColor redColor] : [UIColor lightGrayColor];
 }
 
