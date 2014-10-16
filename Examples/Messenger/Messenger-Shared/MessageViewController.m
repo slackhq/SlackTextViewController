@@ -47,6 +47,11 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     return self;
 }
 
++ (UITableViewStyle)tableViewStyleForCoder:(NSCoder *)decoder
+{
+    return UITableViewStylePlain;
+}
+
 
 #pragma mark - View lifecycle
 

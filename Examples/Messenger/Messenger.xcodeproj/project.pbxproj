@@ -111,7 +111,7 @@
 		<dict>
 			<key>children</key>
 			<array>
-				<string>4F3EDB52199ED00F004C15D6</string>
+				<string>4F86BF8B19F011E9007A3D4A</string>
 				<string>4F1AD51C19E727640027043E</string>
 				<string>4F3EDB4B199ED00F004C15D6</string>
 				<string>4F3EDB4A199ED00F004C15D6</string>
@@ -130,6 +130,14 @@
 				<string>0510</string>
 				<key>ORGANIZATIONNAME</key>
 				<string>Slack Technologies, Inc.</string>
+				<key>TargetAttributes</key>
+				<dict>
+					<key>4F86BF6419F011D0007A3D4A</key>
+					<dict>
+						<key>CreatedOnToolsVersion</key>
+						<string>6.0.1</string>
+					</dict>
+				</dict>
 			</dict>
 			<key>buildConfigurationList</key>
 			<string>4F3EDB44199ED00F004C15D6</string>
@@ -159,6 +167,7 @@
 			<key>targets</key>
 			<array>
 				<string>4F3EDB48199ED00F004C15D6</string>
+				<string>4F86BF6419F011D0007A3D4A</string>
 			</array>
 		</dict>
 		<key>4F3EDB44199ED00F004C15D6</key>
@@ -181,9 +190,9 @@
 			<string>2147483647</string>
 			<key>files</key>
 			<array>
-				<string>4F72F3CC19B4E51A009CD8F4</string>
+				<string>4F86BF9719F01234007A3D4A</string>
 				<string>4F3EDB5D199ED00F004C15D6</string>
-				<string>4F3EDB90199ED091004C15D6</string>
+				<string>4F86BF9519F01234007A3D4A</string>
 				<string>4F3EDB59199ED00F004C15D6</string>
 			</array>
 			<key>isa</key>
@@ -213,8 +222,7 @@
 			<string>2147483647</string>
 			<key>files</key>
 			<array>
-				<string>4F3EDB68199ED00F004C15D6</string>
-				<string>4F3EDB57199ED00F004C15D6</string>
+				<string>4F86BF9319F01234007A3D4A</string>
 			</array>
 			<key>isa</key>
 			<string>PBXResourcesBuildPhase</string>
@@ -240,7 +248,7 @@
 			<key>isa</key>
 			<string>PBXNativeTarget</string>
 			<key>name</key>
-			<string>Messenger</string>
+			<string>Messenger-Programatic</string>
 			<key>productName</key>
 			<string>ChatRoom</string>
 			<key>productReference</key>
@@ -266,6 +274,7 @@
 			<key>children</key>
 			<array>
 				<string>4F3EDB49199ED00F004C15D6</string>
+				<string>4F86BF6519F011D0007A3D4A</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -356,15 +365,12 @@
 			<array>
 				<string>4F3EDB5B199ED00F004C15D6</string>
 				<string>4F3EDB5C199ED00F004C15D6</string>
-				<string>4F3EDB8E199ED091004C15D6</string>
-				<string>4F3EDB8F199ED091004C15D6</string>
-				<string>4F72F3CA19B4E51A009CD8F4</string>
-				<string>4F72F3CB19B4E51A009CD8F4</string>
-				<string>4F3EDB67199ED00F004C15D6</string>
 				<string>4F3EDB53199ED00F004C15D6</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Programatic Example</string>
 			<key>path</key>
 			<string>Messenger</string>
 			<key>sourceTree</key>
@@ -375,9 +381,7 @@
 			<key>children</key>
 			<array>
 				<string>4F3EDB54199ED00F004C15D6</string>
-				<string>4F3EDB55199ED00F004C15D6</string>
 				<string>4F3EDB58199ED00F004C15D6</string>
-				<string>4F3EDB5A199ED00F004C15D6</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -393,42 +397,9 @@
 			<key>lastKnownFileType</key>
 			<string>text.plist.xml</string>
 			<key>path</key>
-			<string>Messenger-Info.plist</string>
+			<string>Info.plist</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
-		</dict>
-		<key>4F3EDB55199ED00F004C15D6</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>4F3EDB56199ED00F004C15D6</string>
-			</array>
-			<key>isa</key>
-			<string>PBXVariantGroup</string>
-			<key>name</key>
-			<string>InfoPlist.strings</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>4F3EDB56199ED00F004C15D6</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.plist.strings</string>
-			<key>name</key>
-			<string>en</string>
-			<key>path</key>
-			<string>en.lproj/InfoPlist.strings</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>4F3EDB57199ED00F004C15D6</key>
-		<dict>
-			<key>fileRef</key>
-			<string>4F3EDB55199ED00F004C15D6</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
 		</dict>
 		<key>4F3EDB58199ED00F004C15D6</key>
 		<dict>
@@ -447,17 +418,6 @@
 			<string>4F3EDB58199ED00F004C15D6</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-		</dict>
-		<key>4F3EDB5A199ED00F004C15D6</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>Messenger-Prefix.pch</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>4F3EDB5B199ED00F004C15D6</key>
 		<dict>
@@ -485,24 +445,6 @@
 		<dict>
 			<key>fileRef</key>
 			<string>4F3EDB5C199ED00F004C15D6</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>4F3EDB67199ED00F004C15D6</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>folder.assetcatalog</string>
-			<key>path</key>
-			<string>Images.xcassets</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>4F3EDB68199ED00F004C15D6</key>
-		<dict>
-			<key>fileRef</key>
-			<string>4F3EDB67199ED00F004C15D6</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
@@ -670,9 +612,9 @@
 				<key>GCC_PRECOMPILE_PREFIX_HEADER</key>
 				<string>YES</string>
 				<key>GCC_PREFIX_HEADER</key>
-				<string>Messenger/Messenger-Prefix.pch</string>
+				<string></string>
 				<key>INFOPLIST_FILE</key>
-				<string>Messenger/Messenger-Info.plist</string>
+				<string>Messenger/Info.plist</string>
 				<key>PRODUCT_NAME</key>
 				<string>Messenger</string>
 				<key>WRAPPER_EXTENSION</key>
@@ -696,9 +638,9 @@
 				<key>GCC_PRECOMPILE_PREFIX_HEADER</key>
 				<string>YES</string>
 				<key>GCC_PREFIX_HEADER</key>
-				<string>Messenger/Messenger-Prefix.pch</string>
+				<string></string>
 				<key>INFOPLIST_FILE</key>
-				<string>Messenger/Messenger-Info.plist</string>
+				<string>Messenger/Info.plist</string>
 				<key>PRODUCT_NAME</key>
 				<string>Messenger</string>
 				<key>WRAPPER_EXTENSION</key>
@@ -709,40 +651,366 @@
 			<key>name</key>
 			<string>Release</string>
 		</dict>
-		<key>4F3EDB8E199ED091004C15D6</key>
+		<key>4F86BF6119F011D0007A3D4A</key>
 		<dict>
-			<key>fileEncoding</key>
-			<string>4</string>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>4F86BF9819F01234007A3D4A</string>
+				<string>4F86BF9619F01234007A3D4A</string>
+				<string>4F86BF6D19F011D0007A3D4A</string>
+				<string>4F86BF6A19F011D0007A3D4A</string>
+			</array>
+			<key>isa</key>
+			<string>PBXSourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>4F86BF6219F011D0007A3D4A</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>8C6D809F3C95C912F87F0D17</string>
+			</array>
+			<key>isa</key>
+			<string>PBXFrameworksBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>4F86BF6319F011D0007A3D4A</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>4F86BF7319F011D0007A3D4A</string>
+				<string>4F86BF9419F01234007A3D4A</string>
+				<string>4F86BF7819F011D0007A3D4A</string>
+			</array>
+			<key>isa</key>
+			<string>PBXResourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>4F86BF6419F011D0007A3D4A</key>
+		<dict>
+			<key>buildConfigurationList</key>
+			<string>4F86BF8919F011D0007A3D4A</string>
+			<key>buildPhases</key>
+			<array>
+				<string>A3DCCD9EDC51111004739174</string>
+				<string>4F86BF6119F011D0007A3D4A</string>
+				<string>4F86BF6219F011D0007A3D4A</string>
+				<string>4F86BF6319F011D0007A3D4A</string>
+				<string>AC349F540F6112E2363205C8</string>
+			</array>
+			<key>buildRules</key>
+			<array/>
+			<key>dependencies</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXNativeTarget</string>
+			<key>name</key>
+			<string>Messenger-Storyboard</string>
+			<key>productName</key>
+			<string>Messenger-Storyboard</string>
+			<key>productReference</key>
+			<string>4F86BF6519F011D0007A3D4A</string>
+			<key>productType</key>
+			<string>com.apple.product-type.application</string>
+		</dict>
+		<key>4F86BF6519F011D0007A3D4A</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>wrapper.application</string>
+			<key>includeInIndex</key>
+			<string>0</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
 			<key>path</key>
-			<string>MessageViewController.h</string>
+			<string>Messenger-Storyboard.app</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>4F86BF6619F011D0007A3D4A</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>4F86BF6B19F011D0007A3D4A</string>
+				<string>4F86BF6C19F011D0007A3D4A</string>
+				<string>4F86BF7119F011D0007A3D4A</string>
+				<string>4F86BF7619F011D0007A3D4A</string>
+				<string>4F86BF6719F011D0007A3D4A</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Storyboard Example</string>
+			<key>path</key>
+			<string>Messenger-Storyboard</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>4F3EDB8F199ED091004C15D6</key>
+		<key>4F86BF6719F011D0007A3D4A</key>
 		<dict>
-			<key>fileEncoding</key>
-			<string>4</string>
+			<key>children</key>
+			<array>
+				<string>4F86BF6819F011D0007A3D4A</string>
+				<string>4F86BF6919F011D0007A3D4A</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Supporting Files</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4F86BF6819F011D0007A3D4A</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.plist.xml</string>
+			<key>path</key>
+			<string>Info.plist</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4F86BF6919F011D0007A3D4A</key>
+		<dict>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.objc</string>
 			<key>path</key>
-			<string>MessageViewController.m</string>
+			<string>main.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>4F3EDB90199ED091004C15D6</key>
+		<key>4F86BF6A19F011D0007A3D4A</key>
 		<dict>
 			<key>fileRef</key>
-			<string>4F3EDB8F199ED091004C15D6</string>
+			<string>4F86BF6919F011D0007A3D4A</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>4F72F3CA19B4E51A009CD8F4</key>
+		<key>4F86BF6B19F011D0007A3D4A</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>AppDelegate.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4F86BF6C19F011D0007A3D4A</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>AppDelegate.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4F86BF6D19F011D0007A3D4A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>4F86BF6C19F011D0007A3D4A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>4F86BF7119F011D0007A3D4A</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>4F86BF7219F011D0007A3D4A</string>
+			</array>
+			<key>isa</key>
+			<string>PBXVariantGroup</string>
+			<key>name</key>
+			<string>Main.storyboard</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4F86BF7219F011D0007A3D4A</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>file.storyboard</string>
+			<key>name</key>
+			<string>Base</string>
+			<key>path</key>
+			<string>Base.lproj/Main.storyboard</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4F86BF7319F011D0007A3D4A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>4F86BF7119F011D0007A3D4A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>4F86BF7619F011D0007A3D4A</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>4F86BF7719F011D0007A3D4A</string>
+			</array>
+			<key>isa</key>
+			<string>PBXVariantGroup</string>
+			<key>name</key>
+			<string>LaunchScreen.xib</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4F86BF7719F011D0007A3D4A</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>file.xib</string>
+			<key>name</key>
+			<string>Base</string>
+			<key>path</key>
+			<string>Base.lproj/LaunchScreen.xib</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4F86BF7819F011D0007A3D4A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>4F86BF7619F011D0007A3D4A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>4F86BF8519F011D0007A3D4A</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>622BF1F6C9CF013275EF6275</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
+				<string>AppIcon</string>
+				<key>CLANG_WARN_UNREACHABLE_CODE</key>
+				<string>YES</string>
+				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
+				<string>YES</string>
+				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
+				<array>
+					<string>DEBUG=1</string>
+					<string>$(inherited)</string>
+				</array>
+				<key>INFOPLIST_FILE</key>
+				<string>Messenger-Storyboard/Info.plist</string>
+				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
+				<string>7.1</string>
+				<key>LD_RUNPATH_SEARCH_PATHS</key>
+				<string>$(inherited) @executable_path/Frameworks</string>
+				<key>MTL_ENABLE_DEBUG_INFO</key>
+				<string>YES</string>
+				<key>PRODUCT_NAME</key>
+				<string>$(TARGET_NAME)</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Debug</string>
+		</dict>
+		<key>4F86BF8619F011D0007A3D4A</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>C905E5DB18A83F74BD092CDD</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
+				<string>AppIcon</string>
+				<key>CLANG_WARN_UNREACHABLE_CODE</key>
+				<string>YES</string>
+				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
+				<string>YES</string>
+				<key>INFOPLIST_FILE</key>
+				<string>Messenger-Storyboard/Info.plist</string>
+				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
+				<string>7.1</string>
+				<key>LD_RUNPATH_SEARCH_PATHS</key>
+				<string>$(inherited) @executable_path/Frameworks</string>
+				<key>MTL_ENABLE_DEBUG_INFO</key>
+				<string>NO</string>
+				<key>PRODUCT_NAME</key>
+				<string>$(TARGET_NAME)</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Release</string>
+		</dict>
+		<key>4F86BF8919F011D0007A3D4A</key>
+		<dict>
+			<key>buildConfigurations</key>
+			<array>
+				<string>4F86BF8519F011D0007A3D4A</string>
+				<string>4F86BF8619F011D0007A3D4A</string>
+			</array>
+			<key>defaultConfigurationIsVisible</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>XCConfigurationList</string>
+		</dict>
+		<key>4F86BF8B19F011E9007A3D4A</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>4F86BF8D19F01234007A3D4A</string>
+				<string>4F3EDB52199ED00F004C15D6</string>
+				<string>4F86BF6619F011D0007A3D4A</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Sample</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4F86BF8D19F01234007A3D4A</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>4F86BF8E19F01234007A3D4A</string>
+				<string>4F86BF8F19F01234007A3D4A</string>
+				<string>4F86BF9019F01234007A3D4A</string>
+				<string>4F86BF9119F01234007A3D4A</string>
+				<string>4F86BF9219F01234007A3D4A</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Shared Classes</string>
+			<key>path</key>
+			<string>Messenger-Shared</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4F86BF8E19F01234007A3D4A</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>folder.assetcatalog</string>
+			<key>path</key>
+			<string>Images.xcassets</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4F86BF8F19F01234007A3D4A</key>
 		<dict>
 			<key>fileEncoding</key>
 			<string>4</string>
@@ -755,7 +1023,7 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>4F72F3CB19B4E51A009CD8F4</key>
+		<key>4F86BF9019F01234007A3D4A</key>
 		<dict>
 			<key>fileEncoding</key>
 			<string>4</string>
@@ -768,10 +1036,71 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>4F72F3CC19B4E51A009CD8F4</key>
+		<key>4F86BF9119F01234007A3D4A</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>MessageViewController.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4F86BF9219F01234007A3D4A</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>MessageViewController.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4F86BF9319F01234007A3D4A</key>
 		<dict>
 			<key>fileRef</key>
-			<string>4F72F3CB19B4E51A009CD8F4</string>
+			<string>4F86BF8E19F01234007A3D4A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>4F86BF9419F01234007A3D4A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>4F86BF8E19F01234007A3D4A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>4F86BF9519F01234007A3D4A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>4F86BF9019F01234007A3D4A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>4F86BF9619F01234007A3D4A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>4F86BF9019F01234007A3D4A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>4F86BF9719F01234007A3D4A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>4F86BF9219F01234007A3D4A</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>4F86BF9819F01234007A3D4A</key>
+		<dict>
+			<key>fileRef</key>
+			<string>4F86BF9219F01234007A3D4A</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
@@ -827,6 +1156,67 @@
 			<string>Pods</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>8C6D809F3C95C912F87F0D17</key>
+		<dict>
+			<key>fileRef</key>
+			<string>DDFA9095EABC480682E6396C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>A3DCCD9EDC51111004739174</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>Check Pods Manifest.lock</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
+if [[ $? != 0 ]] ; then
+    cat &lt;&lt; EOM
+error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
+EOM
+    exit 1
+fi
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>AC349F540F6112E2363205C8</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>Copy Pods Resources</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh"
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
 		</dict>
 		<key>C905E5DB18A83F74BD092CDD</key>
 		<dict>
