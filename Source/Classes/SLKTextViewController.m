@@ -807,7 +807,7 @@ NSString * const SLKKeyboardDidHideNotification = @"SLKKeyboardDidHideNotificati
     }
 }
 
-- (void)postCustomKeyboarNotification:(NSNotification *)notification
+- (void)postKeyboarStatusNotification:(NSNotification *)notification
 {
     NSMutableDictionary *userInfo = [notification.userInfo mutableCopy];
     
@@ -958,8 +958,7 @@ NSString * const SLKKeyboardDidHideNotification = @"SLKKeyboardDidHideNotificati
     
     // Updates and notifies about the keyboard status update
     self.keyboardStatus = willShow ? SLKKeyboardStatusWillShow : SLKKeyboardStatusWillHide;
-    
-    [self postCustomKeyboarNotification:notification];
+    [self postKeyboarStatusNotification:notification];
 }
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
@@ -992,11 +991,10 @@ NSString * const SLKKeyboardDidHideNotification = @"SLKKeyboardDidHideNotificati
     
     // Updates and notifies about the keyboard status update
     self.keyboardStatus = didShow ? SLKKeyboardStatusDidShow : SLKKeyboardStatusDidHide;
+    [self postKeyboarStatusNotification:notification];
     
     // Very important to invalidate this flag back
     self.movingKeyboard = NO;
-    
-    [self postCustomKeyboarNotification:notification];
 }
 
 - (void)didChangeKeyboardFrame:(NSNotification *)notification
