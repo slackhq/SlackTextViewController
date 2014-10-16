@@ -152,9 +152,9 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 
 /**
  Notifies the view controller that the text will update.
- @discussion You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
+ @discussion You can override this method to perform additional tasks associated with presenting the view. You MUST call super at some point in your implementation.
  */
-- (void)textWillUpdate;
+- (void)textWillUpdate NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller that the text did update.
@@ -162,7 +162,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
  
  @param If YES, the text input bar will be resized using an animation.
  */
-- (void)textDidUpdate:(BOOL)animated;
+- (void)textDidUpdate:(BOOL)animated NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller when the left button's action has been triggered, manually.
@@ -178,11 +178,11 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
  
  @param sender The object calling this method.
  */
-- (void)didPressRightButton:(id)sender;
+- (void)didPressRightButton:(id)sender NS_REQUIRES_SUPER;
 
 /**
  Verifies if the right button can be pressed. If NO, the button is disabled.
- @discussion You can override this method to perform additional tasks.
+ @discussion You can override this method to perform additional tasks. You SHOULD call super to inherit some conditionals.
  
  @return YES if the right button can be pressed.
  */
@@ -207,7 +207,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 
 /**
  Verifies that the typing indicator view should be shown. Default is YES, if meeting some requierements.
- @discussion You must override this method to perform perform additional verifications before displaying the typing indicator.
+ @discussion You can override this method to perform additional tasks. You SHOULD call super to inherit some conditionals.
  
  @return YES if the typing indicator view should be shown.
  */
@@ -221,15 +221,15 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 
 /**
  Notifies the view controller when the user has pressed the Return key (↵) with an external keyboard.
- @discussion You can override this method to perform additional tasks.
+ @discussion You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
  */
-- (void)didPressReturnKey:(id)sender;
+- (void)didPressReturnKey:(id)sender NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller when the user has pressed the Escape key (Esc) with an external keyboard.
- @discussion You can override this method to perform additional tasks.
+ @discussion You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
  */
-- (void)didPressEscapeKey:(id)sender;
+- (void)didPressEscapeKey:(id)sender NS_REQUIRES_SUPER;
 
 
 ///------------------------------------------------
@@ -245,7 +245,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 
  @param text The string text to edit.
  */
-- (void)editText:(NSString *)text;
+- (void)editText:(NSString *)text NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller when the editing bar's right button's action has been triggered, manually or by using the external keyboard's Return key.
@@ -253,7 +253,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
  
  @param sender The object calling this method.
  */
-- (void)didCommitTextEditing:(id)sender;
+- (void)didCommitTextEditing:(id)sender NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller when the editing bar's right button's action has been triggered, manually or by using the external keyboard's Esc key.
@@ -261,7 +261,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
  
  @param sender The object calling this method.
  */
-- (void)didCancelTextEditing:(id)sender;
+- (void)didCancelTextEditing:(id)sender NS_REQUIRES_SUPER;
 
 
 ///------------------------------------------------
@@ -297,7 +297,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 
 /**
  Verifies that the autocompletion view should be shown. Default is NO.
- @discussion You must override this method to perform additional tasks, before autocompletion is shown, like populating the data source.
+ @discussion You MUST override this method to perform additional tasks, before autocompletion is shown, like populating the data source.
  
  @return YES if the autocompletion view should be shown.
  */
@@ -320,7 +320,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 - (CGFloat)maximumHeightForAutoCompletionView;
 
 /**
- Cancels and hides the autocompletion view, animated
+ Cancels and hides the autocompletion view, animated.
  */
 - (void)cancelAutoCompletion;
 
@@ -333,12 +333,22 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 
 
 ///------------------------------------------------
-/// @name Miscellaneous
+/// @name Delegate Methods Requiring Super
 ///------------------------------------------------
 
-/**
- Allows subclasses to use the super implementation of this method.
- */
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer;
+/** UITextViewDelegate */
+- (BOOL)textViewShouldBeginEditing:(SLKTextView *)textView NS_REQUIRES_SUPER;
+- (BOOL)textViewShouldEndEditing:(SLKTextView *)textView NS_REQUIRES_SUPER;
+- (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text NS_REQUIRES_SUPER;
+- (void)textViewDidChangeSelection:(SLKTextView *)textView NS_REQUIRES_SUPER;
+
+/** UIGestureRecognizerDelegate */
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer NS_REQUIRES_SUPER;
+
+/** UIScrollViewDelegate */
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView NS_REQUIRES_SUPER;
+
+/** UIAlertViewDelegate */
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
 
 @end
