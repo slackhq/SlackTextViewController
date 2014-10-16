@@ -20,7 +20,6 @@
 #import "SLKUIConstants.h"
 
 NSString * const SLKTextViewTextWillChangeNotification = @"com.slack.TextViewController.TextView.WillChangeText";
-NSString * const SLKTextViewSelectionDidChangeNotification = @"com.slack.TextViewController.TextView.DidChangeSelection";
 NSString * const SLKTextViewContentSizeDidChangeNotification = @"com.slack.TextViewController.TextView.DidChangeContentSize";
 NSString * const SLKTextViewDidPasteImageNotification = @"com.slack.TextViewController.TextView.DidPasteImage";
 NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewController.TextView.DidShake";

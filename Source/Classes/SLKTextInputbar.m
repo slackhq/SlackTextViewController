@@ -418,18 +418,10 @@
     
     // We still need to notify a selection change in the textview after the magnifying class is dismissed
     if (gesture.state == UIGestureRecognizerStateEnded) {
-        [self textViewDidChangeSelection:self.textView];
+        if (self.textView.delegate && [self.textView.delegate respondsToSelector:@selector(textViewDidChangeSelection:)]) {
+            [self.textView.delegate textViewDidChangeSelection:self.textView];
+        }
     }
-}
-
-- (void)textViewDidChangeSelection:(UITextView *)textView
-{
-    if (self.textView.isLoupeVisible) {
-        return;
-    }
-    
-    NSDictionary *userInfo = @{@"range": [NSValue valueWithRange:textView.selectedRange]};
-    [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewSelectionDidChangeNotification object:self.textView userInfo:userInfo];
 }
 
 

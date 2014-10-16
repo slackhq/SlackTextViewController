@@ -17,7 +17,6 @@
 #import <UIKit/UIKit.h>
 
 extern NSString * const SLKTextViewTextWillChangeNotification;
-extern NSString * const SLKTextViewSelectionDidChangeNotification;
 extern NSString * const SLKTextViewContentSizeDidChangeNotification;
 extern NSString * const SLKTextViewDidPasteImageNotification;
 extern NSString * const SLKTextViewDidShakeNotification;

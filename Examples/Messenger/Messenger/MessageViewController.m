@@ -56,7 +56,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
     
-    for (int i = 0; i < 40; i++) {
+    for (int i = 0; i < 100; i++) {
         NSInteger words = (arc4random() % 15)+1;
         [array addObject:[LoremIpsum wordsWithNumber:words]];
     }
@@ -68,7 +68,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.bounces = YES;
     self.undoShakingEnabled = YES;
     self.keyboardPanningEnabled = YES;
-    self.inverted = YES;
+    self.inverted = NO;
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:MessengerCellIdentifier];
