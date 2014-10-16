@@ -40,9 +40,6 @@ NSString * const SLKKeyboardDidHideNotification = @"SLKKeyboardDidHideNotificati
 @property (nonatomic, strong) NSLayoutConstraint *autoCompletionViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *keyboardHC;
 
-// The single tap gesture used to dismiss the keyboard
-@property (nonatomic, strong) UIGestureRecognizer *singleTapGesture;
-
 // The pan gesture used for bringing the keyboard from the bottom
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 
