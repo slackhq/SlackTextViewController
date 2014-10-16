@@ -79,5 +79,6 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
  You can also use this method to confirm an auto-correction programatically, before the text view resigns first responder.
  */
 - (void)refreshFirstResponder;
+- (void)refreshInputViews;
 
 @end
