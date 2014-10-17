@@ -11,7 +11,7 @@
 #import "SLKTextViewController.h"
 #import "MessageViewController.h"
 
-@interface AppDelegate () <UIPopoverControllerDelegate>
+@interface AppDelegate ()
 @end
 
 @implementation AppDelegate

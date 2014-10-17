@@ -229,6 +229,12 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
     if (self.pastableMediaTypes & SLKPastableMediaTypePassbook) {
         [types addObject:NSStringFromSLKPastableMediaType(SLKPastableMediaTypePassbook)];
     }
+    
+    if (self.pastableMediaTypes & SLKPastableMediaTypeImages) {
+        [types addObject:NSStringFromSLKPastableMediaType(SLKPastableMediaTypeImages)];
+    }
+    
+    
     return types;
 }
 
@@ -252,6 +258,10 @@ NSString *NSStringFromSLKPastableMediaType(SLKPastableMediaType type)
     if (type == SLKPastableMediaTypePassbook) {
         return @"com.apple.pkpass";
     }
+    if (type == SLKPastableMediaTypeImages) {
+        return @"com.apple.uikit.image";
+    }
+    
     return nil;
 }
 
@@ -274,6 +284,9 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     }
     if ([string isEqualToString:NSStringFromSLKPastableMediaType(SLKPastableMediaTypePassbook)]) {
         return SLKPastableMediaTypePassbook;
+    }
+    if ([string isEqualToString:NSStringFromSLKPastableMediaType(SLKPastableMediaTypeImages)]) {
+        return SLKPastableMediaTypeImages;
     }
     return SLKPastableMediaTypeNone;
 }
