@@ -16,9 +16,9 @@
 
 #import "SLKTypingIndicatorView.h"
 
-NSString * const SLKTypingIndicatorViewWillShowNotification = @"com.slack.TextViewController.TypingIndicatorView.WillShow";
-NSString * const SLKTypingIndicatorViewWillHideNotification = @"com.slack.TextViewController.TypingIndicatorView.WillHide";
-NSString * const SLKTypingIndicatorViewIdentifier = @"com.slack.TextViewController.TypingIndicatorView.Identifier";
+NSString * const SLKTypingIndicatorViewWillShowNotification =   @"com.slack.TextViewController.TypingIndicatorView.WillShow";
+NSString * const SLKTypingIndicatorViewWillHideNotification =   @"com.slack.TextViewController.TypingIndicatorView.WillHide";
+NSString * const SLKTypingIndicatorViewIdentifier =             @"com.slack.TextViewController.TypingIndicatorView.Identifier";
 
 @interface SLKTypingIndicatorView ()
 
@@ -108,7 +108,7 @@ NSString * const SLKTypingIndicatorViewIdentifier = @"com.slack.TextViewControll
         text = [NSString stringWithFormat:NSLocalizedString(@"%@ & %@ are typing", nil), [_usernames firstObject], [_usernames lastObject]];
     }
     else if (_usernames.count > 2) {
-        text = NSLocalizedString(@"several people are typing", nil);
+        text = NSLocalizedString(@"Several people are typing", nil);
     }
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];

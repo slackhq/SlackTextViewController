@@ -357,6 +357,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer NS_REQUIRES_SUPER;
 
 /** UIScrollViewDelegate */
+- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView NS_REQUIRES_SUPER;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView NS_REQUIRES_SUPER;
 
 /** UIAlertViewDelegate */

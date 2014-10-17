@@ -18,6 +18,7 @@
 
 extern NSString * const SLKTextViewTextWillChangeNotification;
 extern NSString * const SLKTextViewContentSizeDidChangeNotification;
+extern NSString * const SLKTextViewDidPasteImageNotification DEPRECATED_ATTRIBUTE;
 extern NSString * const SLKTextViewDidPasteItemNotification;
 extern NSString * const SLKTextViewDidShakeNotification;
 

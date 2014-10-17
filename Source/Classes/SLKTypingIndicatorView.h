@@ -59,7 +59,7 @@ extern NSString * const SLKTypingIndicatorViewWillHideNotification;
 - (void)removeUsername:(NSString *)username;
 
 /**
- * Dismisses the indicator view.
+ Dismisses the indicator view.
  */
 - (void)dismissIndicator;
 
