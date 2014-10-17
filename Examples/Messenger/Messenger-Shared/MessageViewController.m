@@ -356,12 +356,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     NSString *message = self.messages[indexPath.row];
     cell.textLabel.text = message;
     cell.indexPath = indexPath;
-    cell.topAligned = YES;
 
     if (cell.needsPlaceholder)
     {
-        cell.needsPlaceholder = NO;
-        
         CGFloat scale = [UIScreen mainScreen].scale;
         
         if ([[UIScreen mainScreen] respondsToSelector:@selector(nativeScale)]) {
@@ -372,8 +369,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         
         [LoremIpsum asyncPlaceholderImageWithSize:imgSize
                                        completion:^(UIImage *image) {
-                                           image = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
-                                           cell.imageView.image = image;
+                                           [cell setPlaceholder:image scale:scale];
                                        }];
     }
     

@@ -19,15 +19,10 @@
         self.textLabel.numberOfLines = 0;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        UIImage *placeholder = placeholderImage([UIColor colorWithWhite:0.9 alpha:1.0]);
-        
-        self.imageView.image = placeholder;
-        self.imageView.layer.cornerRadius = roundf(kAvatarSize/2.0);
+        [self setPlaceholder:nil scale:1.0];
+
+        self.imageView.layer.cornerRadius = kAvatarSize/2.0;
         self.imageView.layer.masksToBounds = YES;
-        self.imageView.layer.shouldRasterize = YES;
-        self.imageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
-        
-        self.needsPlaceholder = YES;
     }
     return self;
 }
@@ -36,16 +31,29 @@
 {
     [super layoutSubviews];
     
-    if (self.topAligned) {
-        CGRect avatarFrame = self.imageView.frame;
-        avatarFrame.origin = CGPointMake(kAvatarSize/2.0, 10.0);
-        self.imageView.frame = avatarFrame;
+    CGRect avatarFrame = self.imageView.frame;
+    avatarFrame.origin = CGPointMake(kAvatarSize/2.0, 10.0);
+    self.imageView.frame = avatarFrame;
+}
+
+- (void)setPlaceholder:(UIImage *)image scale:(CGFloat)scale
+{
+    if (!image) {
+        self.imageView.image = blankImage([UIColor colorWithWhite:0.9 alpha:1.0]);
+        self.needsPlaceholder = YES;
     }
+    else {
+        self.imageView.image = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
+        self.needsPlaceholder = NO;
+    }
+    
+    self.imageView.layer.shouldRasterize = YES;
+    self.imageView.layer.rasterizationScale = scale;
 }
 
 #pragma mark - Helpers
 
-UIImage *placeholderImage(UIColor *color)
+UIImage *blankImage(UIColor *color)
 {
     CGSize size = CGSizeMake(kAvatarSize, kAvatarSize);
     

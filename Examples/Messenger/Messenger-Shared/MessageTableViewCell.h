@@ -14,8 +14,8 @@
 @interface MessageTableViewCell : UITableViewCell
 
 @property (nonatomic, strong) NSIndexPath *indexPath;
-
 @property (nonatomic) BOOL needsPlaceholder;
-@property (nonatomic) BOOL topAligned;
+
+- (void)setPlaceholder:(UIImage *)image scale:(CGFloat)scale;
 
 @end
