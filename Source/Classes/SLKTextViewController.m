@@ -854,10 +854,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     if (!self.keyboardPanningEnabled || ![self.textView isFirstResponder]) {
         
         // Disables the input accessory when not first responder so when showing the keyboard back, there is no animation delay
-//        if (self.textView.inputAccessoryView) {
-//            self.textView.inputAccessoryView = nil;
-//            [self.textView refreshInputViews];
-//        }
+        if (self.textView.inputAccessoryView) {
+            self.textView.inputAccessoryView = nil;
+            [self.textView refreshInputViews];
+        }
     }
     // Reload only if the input views if the frame doesn't match the text input bar's
     else if (!CGRectEqualToRect(self.textView.inputAccessoryView.frame, self.textInputbar.bounds)) {
@@ -933,7 +933,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     BOOL willShow = [notification.name isEqualToString:UIKeyboardWillShowNotification];
     
     // Programatically stops scrolling before updating the view constraints (to avoid scrolling glitch)
-    [self.scrollViewProxy slk_stopScrolling];
+    if (willShow) {
+        [self.scrollViewProxy slk_stopScrolling];
+    }
     
     // Updates the height constraints' constants
     self.keyboardHC.constant = [self appropriateKeyboardHeight:notification];
@@ -976,7 +978,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     // Reloads the input accessory view
-//    [self reloadInputViewIfNeeded];
+    [self reloadInputViewIfNeeded];
     
     // Updates and notifies about the keyboard status update
     self.keyboardStatus = didShow ? SLKKeyboardStatusDidShow : SLKKeyboardStatusDidHide;
@@ -1006,7 +1008,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     if (self.isInverted && self.isMovingKeyboard && !CGPointEqualToPoint(self.scrollViewProxy.contentOffset, _draggingOffset)) {
-        self.scrollViewProxy.contentOffset = _draggingOffset;
+        if (!self.scrollViewProxy.isDecelerating) {
+            self.scrollViewProxy.contentOffset = _draggingOffset;
+        }
     }
     
     [self.view layoutIfNeeded];
@@ -1351,6 +1355,21 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 
 #pragma mark - UIScrollViewDelegate Methods
+
+- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView
+{
+    if (!self.scrollViewProxy.scrollsToTop) {
+        return NO;
+    }
+    
+    if (self.isInverted) {
+        [scrollView slk_scrollToBottomAnimated:YES];
+        return NO;
+    }
+    else {
+        return ![scrollView slk_isAtTop];
+    }
+}
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {

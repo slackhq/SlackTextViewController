@@ -157,15 +157,20 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
     return _maxNumberOfLines;
 }
 
-// Returns a supported pasteboard item
+// Returns only a supported pasted item
 - (id)pastedItem
 {
     NSString *contentType = [self pasteboardContentType];
     NSData *data = [[UIPasteboard generalPasteboard] dataForPasteboardType:contentType];
 
-    if (data && [data isKindOfClass:[NSData class]]) {
+    if (data && [data isKindOfClass:[NSData class]])
+    {
         SLKPastableMediaType mediaType = SLKPastableMediaTypeFromNSString(contentType);
-        return @{SLKTextViewPastedItemContentType: contentType, SLKTextViewPastedItemMediaType: @(mediaType), SLKTextViewPastedItemData: data};
+        
+        NSDictionary *userInfo = @{SLKTextViewPastedItemContentType: contentType,
+                                   SLKTextViewPastedItemMediaType: @(mediaType),
+                                   SLKTextViewPastedItemData: data};
+        return userInfo;
     }
     if ([[UIPasteboard generalPasteboard] URL]) {
         return [[[UIPasteboard generalPasteboard] URL] absoluteString];
