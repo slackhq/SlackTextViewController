@@ -23,6 +23,14 @@
 #import "UITextView+SLKAdditions.h"
 #import "UIView+SLKAdditions.h"
 
+/** UIKeyboard notification replacement, posting reliably only when showing/hiding the
+ keyboard (not when resizing keyboard, or with inputAccessoryView reloads, etc.)
+ Use these APIs with your own risk (still a work in progress). */
+extern NSString *const SLKKeyboardWillShowNotification;
+extern NSString *const SLKKeyboardDidShowNotification;
+extern NSString *const SLKKeyboardWillHideNotification;
+extern NSString *const SLKKeyboardDidHideNotification;
+
 typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
     SLKKeyboardStatusDidHide,
     SLKKeyboardStatusWillShow,
@@ -200,9 +208,9 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 - (void)didPasteImage:(UIImage *)image DEPRECATED_MSG_ATTRIBUTE("Use -didPasteMediaContent: instead");
 
 /** 
- Notifies the view controller when the user has pasted a supported media content (image or video).
- @discussion You can override this method to perform additional tasks associated with image/video pasting. You don't need call super since this method doesn't do anything.
- Only supported pastable medias configured in SLKTextView will be forwarded. Default is All.
+ Notifies the view controller when the user has pasted a supported media content (images and/or videos).
+ @discussion You can override this method to perform additional tasks associated with image/video pasting. You don't need to call super since this method doesn't do anything.
+ Only supported pastable medias configured in SLKTextView will be forwarded (take a look at SLKPastableMediaType).
  
  @para userInfo The payload containing the media data, content and media types.
  */

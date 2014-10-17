@@ -26,13 +26,16 @@ extern NSString * const SLKTextViewPastedItemMediaType;
 extern NSString * const SLKTextViewPastedItemData;
 
 typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
-    SLKPastableMediaTypeNone    = 0,
-    SLKPastableMediaTypePNG     = 1 << 0,
-    SLKPastableMediaTypeJPEG    = 1 << 1,
-    SLKPastableMediaTypeTIFF    = 1 << 2,
-    SLKPastableMediaTypeGIF     = 1 << 3,
-    SLKPastableMediaTypeMOV     = 1 << 4,
-    SLKPastableMediaTypeAll     = SLKPastableMediaTypePNG|SLKPastableMediaTypeJPEG|SLKPastableMediaTypeTIFF|SLKPastableMediaTypeGIF|SLKPastableMediaTypeMOV
+    SLKPastableMediaTypeNone        = 0,
+    SLKPastableMediaTypePNG         = 1 << 0,
+    SLKPastableMediaTypeJPEG        = 1 << 1,
+    SLKPastableMediaTypeTIFF        = 1 << 2,
+    SLKPastableMediaTypeGIF         = 1 << 3,
+    SLKPastableMediaTypeMOV         = 1 << 4,
+    SLKPastableMediaTypePassbook    = 1 << 5,
+    SLKPastableMediaTypeImages      = SLKPastableMediaTypePNG|SLKPastableMediaTypeJPEG|SLKPastableMediaTypeTIFF|SLKPastableMediaTypeGIF,
+    SLKPastableMediaTypeVideos      = SLKPastableMediaTypeMOV,
+    SLKPastableMediaTypeAll         = SLKPastableMediaTypeImages|SLKPastableMediaTypeMOV
 };
 
 /** @name A custom text input view. */
@@ -50,7 +53,7 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 /** The current displayed number of lines. */
 @property (nonatomic, readonly) NSUInteger numberOfLines;
 
-/** The supported media types allowed to be pasted in the text view. Default is All. */
+/** The supported media types allowed to be pasted in the text view, such as images or videos. Default is None. */
 @property (nonatomic) SLKPastableMediaType pastableMediaTypes;
 
 /** YES if the text view is and can still expand it self, depending if the maximum number of lines are reached. */

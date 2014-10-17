@@ -69,7 +69,7 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
 - (void)commonInit
 {
     self.placeholderColor = [UIColor lightGrayColor];
-    self.pastableMediaTypes = SLKPastableMediaTypeAll;
+    self.pastableMediaTypes = SLKPastableMediaTypeNone;
     
     self.font = [UIFont systemFontOfSize:14.0];
     self.editable = YES;
@@ -221,6 +221,9 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
     if (self.pastableMediaTypes & SLKPastableMediaTypeMOV) {
         [types addObject:NSStringFromSLKPastableMediaType(SLKPastableMediaTypeMOV)];
     }
+    if (self.pastableMediaTypes & SLKPastableMediaTypePassbook) {
+        [types addObject:NSStringFromSLKPastableMediaType(SLKPastableMediaTypePassbook)];
+    }
     return types;
 }
 
@@ -241,6 +244,9 @@ NSString *NSStringFromSLKPastableMediaType(SLKPastableMediaType type)
     if (type == SLKPastableMediaTypeMOV) {
         return @"com.apple.quicktime";
     }
+    if (type == SLKPastableMediaTypePassbook) {
+        return @"com.apple.pkpass";
+    }
     return nil;
 }
 
@@ -260,6 +266,9 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     }
     if ([string isEqualToString:NSStringFromSLKPastableMediaType(SLKPastableMediaTypeMOV)]) {
         return SLKPastableMediaTypeMOV;
+    }
+    if ([string isEqualToString:NSStringFromSLKPastableMediaType(SLKPastableMediaTypePassbook)]) {
+        return SLKPastableMediaTypePassbook;
     }
     return SLKPastableMediaTypeNone;
 }
@@ -352,7 +361,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
         && self.selectedRange.length > 0) {
         return YES;
     }
-    
+
     if (action == @selector(paste:) && [self isPasteboardItemSupported]) {
         return YES;
     }
