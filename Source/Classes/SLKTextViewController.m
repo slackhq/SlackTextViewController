@@ -1464,7 +1464,7 @@ NSString * const SLKKeyboardDidHideNotification = @"SLKKeyboardDidHideNotificati
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willChangeTextViewText:) name:SLKTextViewTextWillChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewPasteboard:) name:SLKTextViewDidPasteImageNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewPasteboard:) name:SLKTextViewDidPasteItemNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShakeTextView:) name:SLKTextViewDidShakeNotification object:nil];
     
     // TypeIndicator notifications
@@ -1484,7 +1484,7 @@ NSString * const SLKKeyboardDidHideNotification = @"SLKKeyboardDidHideNotificati
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewTextWillChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewContentSizeDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewDidPasteImageNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewDidPasteItemNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewDidShakeNotification object:nil];
     
     // TypeIndicator notifications

@@ -19,14 +19,14 @@
 
 #import "SLKUIConstants.h"
 
-NSString * const SLKTextViewTextWillChangeNotification = @"com.slack.TextViewController.TextView.WillChangeText";
-NSString * const SLKTextViewContentSizeDidChangeNotification = @"com.slack.TextViewController.TextView.DidChangeContentSize";
-NSString * const SLKTextViewDidPasteImageNotification = @"com.slack.TextViewController.TextView.DidPasteImage";
-NSString * const SLKTextViewDidShakeNotification = @"com.slack.TextViewController.TextView.DidShake";
+NSString * const SLKTextViewTextWillChangeNotification =        @"com.slack.TextViewController.TextView.WillChangeText";
+NSString * const SLKTextViewContentSizeDidChangeNotification =  @"com.slack.TextViewController.TextView.DidChangeContentSize";
+NSString * const SLKTextViewDidPasteItemNotification =          @"com.slack.TextViewController.TextView.DidPasteItem";
+NSString * const SLKTextViewDidShakeNotification =              @"com.slack.TextViewController.TextView.DidShake";
 
-NSString * const SLKTextViewPastedItemContentType = @"SLKTextViewPastedItemContentType";
-NSString * const SLKTextViewPastedItemMediaType = @"SLKTextViewPastedItemMediaType";
-NSString * const SLKTextViewPastedItemData = @"SLKTextViewPastedItemData";
+NSString * const SLKTextViewPastedItemContentType =             @"SLKTextViewPastedItemContentType";
+NSString * const SLKTextViewPastedItemMediaType =               @"SLKTextViewPastedItemMediaType";
+NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPastedItemData";
 
 @interface SLKTextView ()
 
@@ -371,7 +371,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     
     if ([pastedItem isKindOfClass:[NSDictionary class]])
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewDidPasteImageNotification object:nil userInfo:pastedItem];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewDidPasteItemNotification object:nil userInfo:pastedItem];
     }
     else if ([pastedItem isKindOfClass:[NSString class]]) {
         // Respect the delegate yo!

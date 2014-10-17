@@ -18,7 +18,7 @@
 
 extern NSString * const SLKTextViewTextWillChangeNotification;
 extern NSString * const SLKTextViewContentSizeDidChangeNotification;
-extern NSString * const SLKTextViewDidPasteImageNotification;
+extern NSString * const SLKTextViewDidPasteItemNotification;
 extern NSString * const SLKTextViewDidShakeNotification;
 
 extern NSString * const SLKTextViewPastedItemContentType;
@@ -35,7 +35,7 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
     SLKPastableMediaTypeAll     = SLKPastableMediaTypePNG|SLKPastableMediaTypeJPEG|SLKPastableMediaTypeTIFF|SLKPastableMediaTypeGIF|SLKPastableMediaTypeMOV
 };
 
-/**  @name A custom text input view. */
+/** @name A custom text input view. */
 @interface SLKTextView : UITextView
 
 /** The placeholder text string. */
