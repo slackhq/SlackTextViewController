@@ -271,8 +271,8 @@ NSString * const SLKTypingIndicatorViewIdentifier =             @"com.slack.Text
     NSDictionary *views = @{@"label": self.indicatorLabel};
     NSDictionary *metrics = @{@"lineHeight": lineHeight, @"padding": padding};
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=padding)-[label(==lineHeight)]-(<=padding)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==40)-[label]-(<=20)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=padding)-[label(lineHeight)]-(<=padding)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(40)-[label]-(<=20)-|" options:0 metrics:metrics views:views]];
     
     [self layoutIfNeeded];
 }

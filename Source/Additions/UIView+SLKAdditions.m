@@ -64,4 +64,10 @@
     return [self.constraints filteredArrayUsingPredicate:predicate];
 }
 
+- (NSLayoutConstraint *)slk_constraintForAttribute:(NSLayoutAttribute)attribute firstItem:(id)first secondItem:(id)second
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstAttribute = %d AND firstItem = %@ AND secondItem = %@", attribute, first, second];
+    return [[self.constraints filteredArrayUsingPredicate:predicate] firstObject];
+}
+
 @end

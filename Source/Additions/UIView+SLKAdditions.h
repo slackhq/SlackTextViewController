@@ -46,4 +46,14 @@
  */
 - (NSArray *)slk_constraintsForAttribute:(NSLayoutAttribute)attribute;
 
+/**
+ Returns a layout constraint matching a specific layout attribute and relationship between 2 items, first and second items.
+ 
+ @param attribute The layout attribute to use for searching.
+ @param first The first item in the relationship.
+ @param second The second item in the relationship.
+ @return A layout constraint.
+ */
+- (NSLayoutConstraint *)slk_constraintForAttribute:(NSLayoutAttribute)attribute firstItem:(id)first secondItem:(id)second;
+
 @end
