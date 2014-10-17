@@ -17,7 +17,7 @@
 #import "SLKInputAccessoryView.h"
 #import "SLKUIConstants.h"
 
-NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"com.slack.TextViewController.TextInputbar.FrameDidChange";
+NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"SLKInputAccessoryViewKeyboardFrameDidChangeNotification";
 
 @interface SLKInputAccessoryView ()
 @property (nonatomic, weak) UIView *observedSuperview;

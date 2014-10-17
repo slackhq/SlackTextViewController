@@ -16,8 +16,8 @@
 
 #import "SLKTypingIndicatorView.h"
 
-NSString * const SLKTypingIndicatorViewWillShowNotification =   @"com.slack.TextViewController.TypingIndicatorView.WillShow";
-NSString * const SLKTypingIndicatorViewWillHideNotification =   @"com.slack.TextViewController.TypingIndicatorView.WillHide";
+NSString * const SLKTypingIndicatorViewWillShowNotification =   @"SLKTypingIndicatorViewWillShowNotification";
+NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndicatorViewWillHideNotification";
 NSString * const SLKTypingIndicatorViewIdentifier =             @"com.slack.TextViewController.TypingIndicatorView.Identifier";
 
 @interface SLKTypingIndicatorView ()
