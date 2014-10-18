@@ -16,6 +16,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define SLK_INPUT_ACCESSORY_DEBUG 0
+
 extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 @interface SLKInputAccessoryView : UIView
