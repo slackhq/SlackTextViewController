@@ -976,7 +976,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     BOOL didShow = [notification.name isEqualToString:UIKeyboardDidShowNotification];
     
     // After showing keyboard, check if the current cursor position could diplay autocompletion
-    if (didShow) {
+    if (didShow && !self.isAutoCompleting) {
         [self processTextForAutoCompletion];
     }
     
@@ -1207,6 +1207,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     // Reload the tableview before showing it
     [self.autoCompletionView reloadData];
+    [self.autoCompletionView setContentOffset:CGPointZero];
     
     [self showAutoCompletionView:canShow];
 }
