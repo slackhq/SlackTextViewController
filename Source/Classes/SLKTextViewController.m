@@ -148,19 +148,17 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)loadView
 {
-    self.view = [UIView new];
-    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-    self.view.backgroundColor = [UIColor whiteColor];
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
+    [super loadView];
         
     [self.view addSubview:self.scrollViewProxy];
     [self.view addSubview:self.autoCompletionView];
     [self.view addSubview:self.typingIndicatorView];
     [self.view addSubview:self.textInputbar];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
     
     [self setupViewConstraints];
 }

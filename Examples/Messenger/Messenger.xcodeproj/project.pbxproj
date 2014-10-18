@@ -206,7 +206,7 @@
 		4F86BF8B19F011E9007A3D4A /* Examples */ = {
 			isa = PBXGroup;
 			children = (
-				4F86BF8D19F01234007A3D4A /* Shared Classes */,
+				4F86BF8D19F01234007A3D4A /* Shared */,
 				4F3EDB52199ED00F004C15D6 /* Programatic Example */,
 				4F86BF6619F011D0007A3D4A /* Storyboard Example */,
 				4F86BFC419F050AF007A3D4A /* Swift Example */,
@@ -214,17 +214,17 @@
 			name = Examples;
 			sourceTree = "<group>";
 		};
-		4F86BF8D19F01234007A3D4A /* Shared Classes */ = {
+		4F86BF8D19F01234007A3D4A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				4F86BF8E19F01234007A3D4A /* Images.xcassets */,
-				4F86BF8F19F01234007A3D4A /* MessageTableViewCell.h */,
-				4F86BF9019F01234007A3D4A /* MessageTableViewCell.m */,
 				4F86BF9119F01234007A3D4A /* MessageViewController.h */,
 				4F86BF9219F01234007A3D4A /* MessageViewController.m */,
+				4F86BF8F19F01234007A3D4A /* MessageTableViewCell.h */,
+				4F86BF9019F01234007A3D4A /* MessageTableViewCell.m */,
+				4F86BF8E19F01234007A3D4A /* Images.xcassets */,
 				4F86BFE719F05519007A3D4A /* Bridge-Header.h */,
 			);
-			name = "Shared Classes";
+			name = Shared;
 			path = "Messenger-Shared";
 			sourceTree = "<group>";
 		};
@@ -654,6 +654,7 @@
 			baseConfigurationReference = 622BF1F6C9CF013275EF6275 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -673,6 +674,7 @@
 			baseConfigurationReference = C905E5DB18A83F74BD092CDD /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				INFOPLIST_FILE = "Messenger-Storyboard/Info.plist";
