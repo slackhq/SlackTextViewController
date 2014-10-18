@@ -649,7 +649,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     // Only updates the input view if the number of line changed
-    [self reloadInputViewIfNeeded];
+    [self reloadInputAccessoryViewIfNeeded];
 }
 
 - (BOOL)canPressRightButton
@@ -847,19 +847,19 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
 }
 
-- (void)reloadInputViewIfNeeded
+- (void)reloadInputAccessoryViewIfNeeded
 {
     // Reload only if the input views if the text view is first responder
     if (!self.keyboardPanningEnabled || ![self.textView isFirstResponder]) {
         
-        // Disables the input accessory when not first responder so when showing the keyboard back, there is no animation delay
+        // Disables the input accessory when not first responder so when showing the keyboard back, there is no delay in the animation
         if (self.textView.inputAccessoryView) {
             self.textView.inputAccessoryView = nil;
             [self.textView refreshInputViews];
         }
     }
     // Reload only if the input views if the frame doesn't match the text input bar's
-    else if (!CGRectEqualToRect(self.textView.inputAccessoryView.frame, self.textInputbar.bounds)) {
+    else if (CGRectGetHeight(self.textView.inputAccessoryView.frame) != CGRectGetHeight(self.textInputbar.bounds)) {
         self.textView.inputAccessoryView = [self emptyInputAccessoryView];
         [self.textView refreshInputViews];
     }
@@ -977,7 +977,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     // Reloads the input accessory view
-    [self reloadInputViewIfNeeded];
+    [self reloadInputAccessoryViewIfNeeded];
     
     // Updates and notifies about the keyboard status update
     self.keyboardStatus = didShow ? SLKKeyboardStatusDidShow : SLKKeyboardStatusDidHide;
@@ -1002,6 +1002,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     self.movingKeyboard = self.scrollViewProxy.isDragging;
+    
+    if (!self.movingKeyboard) {
+        return;
+    }
     
     self.keyboardHC.constant = [self appropriateKeyboardHeight:notification];
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
@@ -1510,18 +1514,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 #pragma mark - View Auto-Rotation
 
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    if (UI_IS_IOS8_AND_HIGHER) {
-        [self prepareForInterfaceRotation];
-    }
-}
-
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    if (!UI_IS_IOS8_AND_HIGHER) {
-        [self prepareForInterfaceRotation];
-    }
+    [self prepareForInterfaceRotation];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
