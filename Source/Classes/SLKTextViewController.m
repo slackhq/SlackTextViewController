@@ -489,6 +489,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     if (UI_IS_IOS8_AND_HIGHER) {
         [self updateQuicktypeBarMode];
     }
+    // On iOS7, it should always disable auto-correction and spell checking if autocompletion is enabled.
+    else {
+        [self.textView disableQuicktypeBar:autoCompleting];
+    }
 }
 
 - (void)updateQuicktypeBarMode
@@ -503,14 +507,15 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 {
     _quicktypeBarMode = quicktypeBarMode;
     
-    BOOL shouldHide = quicktypeBarMode == SLKQuicktypeBarModeExpanded  && self.autoCompleting;
+    BOOL shouldHide = (quicktypeBarMode == SLKQuicktypeBarModeExpanded && self.autoCompleting) ? YES : NO;
     
     // Skips if the QuickType Bar is minimised
     if (quicktypeBarMode == SLKQuicktypeBarModeCollapsed) {
         return;
     }
     
-    // Hides the iOS8 QuicktypeBar if visible and auto-completing mode is on
+    // When predictive mode is enabled, the QuicktypeBar is hidden
+    // Spelling check is also disabled
     [self.textView disableQuicktypeBar:shouldHide];
 }
 

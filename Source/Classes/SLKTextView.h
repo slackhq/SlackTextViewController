@@ -68,7 +68,7 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 
 /**
  Disables iOS8's Quick Type bar.
- The cleanest hack so far is to disable auto-correction and spellingCheck momentarily, while calling -refreshFirstResponder if -isFirstResponder to be able to reflect the property changes in the text view.
+ The cleanest hack so far is to disable autocorrection and spelling check momentarily, while calling -refreshFirstResponder if isFirstResponder to be able to reflect the property changes in the text view, whitout dismissing the keyboard and tiggering keyboard notifications.
  
  @param disable YES if the bar should be disabled.
  */

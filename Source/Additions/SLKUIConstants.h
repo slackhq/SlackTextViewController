@@ -27,7 +27,7 @@
 typedef NS_ENUM(NSUInteger, SLKQuicktypeBarMode) {
     SLKQuicktypeBarModeHidden,
     SLKQuicktypeBarModeCollapsed,
-    SLKQuicktypeBarModeExpanded ,
+    SLKQuicktypeBarModeExpanded,
 };
 
 inline static CGFloat minimumKeyboardHeight()
