@@ -356,7 +356,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     NSString *message = self.messages[indexPath.row];
     cell.textLabel.text = message;
     cell.indexPath = indexPath;
-
+    cell.usedForMessage = YES;
+    
     if (cell.needsPlaceholder)
     {
         CGFloat scale = [UIScreen mainScreen].scale;
@@ -384,7 +385,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     MessageTableViewCell *cell = (MessageTableViewCell *)[self.autoCompletionView dequeueReusableCellWithIdentifier:AutoCompletionCellIdentifier];
     cell.indexPath = indexPath;
-    
+    cell.usedForMessage = NO;
+
     NSString *item = self.searchResult[indexPath.row];
     
     if ([self.foundPrefix isEqualToString:@"#"]) {

@@ -31,9 +31,11 @@
 {
     [super layoutSubviews];
     
-    CGRect avatarFrame = self.imageView.frame;
-    avatarFrame.origin = CGPointMake(kAvatarSize/2.0, 10.0);
-    self.imageView.frame = avatarFrame;
+    if (self.usedForMessage) {
+        CGRect avatarFrame = self.imageView.frame;
+        avatarFrame.origin = CGPointMake(kAvatarSize/2.0, 10.0);
+        self.imageView.frame = avatarFrame;
+    }
 }
 
 - (void)setPlaceholder:(UIImage *)image scale:(CGFloat)scale

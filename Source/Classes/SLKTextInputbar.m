@@ -113,8 +113,7 @@
         _textView.font = [UIFont systemFontOfSize:15.0];
         _textView.maxNumberOfLines = [self defaultNumberOfLines];
         
-        _textView.autocorrectionType = UITextAutocorrectionTypeDefault;
-        _textView.spellCheckingType = UITextSpellCheckingTypeDefault;
+        _textView.typingSuggestionEnabled = YES;
         _textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
         _textView.keyboardType = UIKeyboardTypeTwitter;
         _textView.returnKeyType = UIReturnKeyDefault;

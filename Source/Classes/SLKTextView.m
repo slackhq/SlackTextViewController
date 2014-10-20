@@ -455,15 +455,16 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     }
 }
 
-- (void)disableQuicktypeBar:(BOOL)disable
+- (void)setTypingSuggestionEnabled:(BOOL)enabled
 {
-    if ((disable && self.autocorrectionType == UITextAutocorrectionTypeNo) ||
-        (!disable && self.autocorrectionType == UITextAutocorrectionTypeDefault)) {
+    if (self.isTypingSuggestionEnabled == enabled) {
         return;
     }
+
+    _typingSuggestionEnabled = enabled;
     
-    self.autocorrectionType = disable ? UITextAutocorrectionTypeNo : UITextAutocorrectionTypeDefault;
-    self.spellCheckingType = disable ? UITextSpellCheckingTypeNo : UITextSpellCheckingTypeDefault;
+    self.autocorrectionType = enabled ? UITextAutocorrectionTypeDefault : UITextAutocorrectionTypeNo;
+    self.spellCheckingType = enabled ? UITextSpellCheckingTypeDefault : UITextSpellCheckingTypeNo;
     
     [self refreshFirstResponder];
 }

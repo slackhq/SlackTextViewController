@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) NSIndexPath *indexPath;
 @property (nonatomic) BOOL needsPlaceholder;
+@property (nonatomic) BOOL usedForMessage;
 
 - (void)setPlaceholder:(UIImage *)image scale:(CGFloat)scale;
 

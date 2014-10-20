@@ -66,13 +66,8 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 /** YES if the magnifying glass is visible. */
 @property (nonatomic, getter=isLoupeVisible) BOOL loupeVisible;
 
-/**
- Disables iOS8's Quick Type bar.
- The cleanest hack so far is to disable autocorrection and spelling check momentarily, while calling -refreshFirstResponder if isFirstResponder to be able to reflect the property changes in the text view, whitout dismissing the keyboard and tiggering keyboard notifications.
- 
- @param disable YES if the bar should be disabled.
- */
-- (void)disableQuicktypeBar:(BOOL)disable;
+/** YES if autocorrection and spell checking are enabled. On iOS8, this property also controls the predictive QuickType bar from being visible. Default is YES. */
+@property (nonatomic, getter=isTypingSuggestionEnabled) BOOL typingSuggestionEnabled;
 
 /**
  Some text view properties don't update when it's already firstResponder (auto-correction, spelling-check, etc.)

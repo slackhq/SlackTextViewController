@@ -485,38 +485,31 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     self.scrollViewProxy.scrollEnabled = !autoCompleting;
     
-    // Updates the iOS8 QuickType bar mode based on the keyboard height constant
-    if (UI_IS_IOS8_AND_HIGHER) {
-        [self updateQuicktypeBarMode];
+    if (UI_IS_IOS8_AND_HIGHER)
+    {
+        // Updates the iOS8 QuickType bar mode based on the keyboard height constant
+        CGFloat quicktypeBarHeight = self.keyboardHC.constant-minimumKeyboardHeight();
+        
+        // Updates the QuickType bar mode based on the keyboard height constant
+        self.quicktypeBarMode = SLKQuicktypeBarModeForHeight(quicktypeBarHeight);
     }
     // On iOS7, it should always disable auto-correction and spell checking if autocompletion is enabled.
     else {
-        [self.textView disableQuicktypeBar:autoCompleting];
+        [self.textView setTypingSuggestionEnabled:!autoCompleting];
     }
 }
 
-- (void)updateQuicktypeBarMode
+- (void)setQuicktypeBarMode:(SLKQuicktypeBarMode)mode
 {
-    CGFloat quicktypeBarHeight = self.keyboardHC.constant-minimumKeyboardHeight();
-    
-    // Updates the QuickType bar mode based on the keyboard height constant
-    self.quicktypeBarMode = SLKQuicktypeBarModeForHeight(quicktypeBarHeight);
-}
-
-- (void)setQuicktypeBarMode:(SLKQuicktypeBarMode)quicktypeBarMode
-{
-    _quicktypeBarMode = quicktypeBarMode;
-    
-    BOOL shouldHide = (quicktypeBarMode == SLKQuicktypeBarModeExpanded && self.autoCompleting) ? YES : NO;
+    _quicktypeBarMode = mode;
     
     // Skips if the QuickType Bar is minimised
-    if (quicktypeBarMode == SLKQuicktypeBarModeCollapsed) {
-        return;
+    if (mode != SLKQuicktypeBarModeCollapsed) {
+        
+        // When predictive mode is enabled, the QuicktypeBar is hidden
+        // Spelling check is also disabled
+        [self.textView setTypingSuggestionEnabled:!self.autoCompleting];
     }
-    
-    // When predictive mode is enabled, the QuicktypeBar is hidden
-    // Spelling check is also disabled
-    [self.textView disableQuicktypeBar:shouldHide];
 }
 
 - (void)setKeyboardPanningEnabled:(BOOL)enabled
