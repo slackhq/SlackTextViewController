@@ -820,10 +820,23 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 {
     NSMutableDictionary *userInfo = [notification.userInfo mutableCopy];
     
+    CGRect startFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    endFrame.size.height = self.keyboardHC.constant;
-    [userInfo setObject:[NSValue valueWithCGRect:endFrame] forKey:UIKeyboardFrameEndUserInfoKey];
     
+    // Fixes iOS7 oddness with inverted values on landscape orientation
+    if (!UI_IS_IOS8_AND_HIGHER && UI_IS_LANDSCAPE) {
+        startFrame = CGRectInvert(startFrame);
+        endFrame = CGRectInvert(endFrame);
+    }
+    
+    CGFloat keyboardHeight = self.keyboardHC.constant;
+    
+    startFrame.size.height = keyboardHeight;
+    endFrame.size.height = keyboardHeight;
+    
+    [userInfo setObject:[NSValue valueWithCGRect:startFrame] forKey:UIKeyboardFrameBeginUserInfoKey];
+    [userInfo setObject:[NSValue valueWithCGRect:endFrame] forKey:UIKeyboardFrameEndUserInfoKey];
+
     NSString *name = [self appropriateKeyboardNotificationName:notification];
     [[NSNotificationCenter defaultCenter] postNotificationName:name object:nil userInfo:userInfo];
 }
