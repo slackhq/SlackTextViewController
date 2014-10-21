@@ -402,7 +402,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         keyboardHeight = MIN(CGRectGetWidth(endFrame), CGRectGetHeight(endFrame));
     }
     else {
-        if (!UI_IS_IOS8_AND_HIGHER || UI_IS_LANDSCAPE) {
+        if (!UI_IS_IOS8_AND_HIGHER && UI_IS_LANDSCAPE) {
             keyboardHeight = MIN(CGRectGetWidth([UIScreen mainScreen].bounds), CGRectGetHeight([UIScreen mainScreen].bounds));
             keyboardHeight -= MAX(endFrame.origin.x, endFrame.origin.y);
         }
@@ -414,7 +414,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     keyboardHeight -= tabBarHeight;
     keyboardHeight -= CGRectGetHeight(self.textView.inputAccessoryView.bounds);
-
+    
     if (keyboardHeight < 0) {
         keyboardHeight = 0.0;
     }
