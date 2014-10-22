@@ -360,12 +360,22 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     return [super canBecomeFirstResponder];
 }
 
+- (BOOL)becomeFirstResponder
+{
+    return [super becomeFirstResponder];
+}
+
 - (BOOL)canResignFirstResponder
 {
     // Removes undo/redo items
     [[UIMenuController sharedMenuController] setMenuItems:@[]];
     
     return [super canResignFirstResponder];
+}
+
+- (BOOL)resignFirstResponder
+{
+    return [super resignFirstResponder];
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender

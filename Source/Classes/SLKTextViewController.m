@@ -464,6 +464,25 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     return nil;
 }
 
+- (SLKKeyboardStatus)keyboardStatusForNotification:(NSNotification *)notification
+{
+    NSString *name = notification.name;
+
+    if ([name isEqualToString:UIKeyboardWillShowNotification]) {
+        return SLKKeyboardStatusWillShow;
+    }
+    if ([name isEqualToString:UIKeyboardDidShowNotification]) {
+        return SLKKeyboardStatusDidShow;
+    }
+    if ([name isEqualToString:UIKeyboardWillHideNotification]) {
+        return SLKKeyboardStatusWillHide;
+    }
+    if ([name isEqualToString:UIKeyboardDidHideNotification]) {
+        return SLKKeyboardStatusDidHide;
+    }
+    return -1;
+}
+
 
 #pragma mark - Setters
 
@@ -932,7 +951,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)willShowOrHideKeyboard:(NSNotification *)notification
 {
-    
     // Skips if it is presented inside of a popover
     if (self.isPresentedInPopover) {
         return;
@@ -948,14 +966,18 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
+    SLKKeyboardStatus status = [self keyboardStatusForNotification:notification];
+    
+    // Skips if it's the same status
+    if (self.keyboardStatus == status) {
+        return;
+    }
+    
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
-    // Checks if it's showing or hidding the keyboard
-    BOOL willShow = [notification.name isEqualToString:UIKeyboardWillShowNotification];
-    
     // Programatically stops scrolling before updating the view constraints (to avoid scrolling glitch)
-    if (willShow) {
+    if (status == SLKKeyboardStatusWillShow) {
         [self.scrollViewProxy slk_stopScrolling];
     }
     
@@ -964,7 +986,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     // Hides autocompletion mode if the keyboard is being dismissed
-    if (!willShow && self.isAutoCompleting) {
+    if (!status == SLKKeyboardStatusWillShow && self.isAutoCompleting) {
         [self hideAutoCompletionView];
     }
     
@@ -975,7 +997,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 										  animations:NULL];
     
     // Updates and notifies about the keyboard status update
-    self.keyboardStatus = willShow ? SLKKeyboardStatusWillShow : SLKKeyboardStatusWillHide;
+    self.keyboardStatus = status;
+    
+    // Posts custom keyboard notification
     [self postKeyboarStatusNotification:notification];
 }
 
@@ -991,11 +1015,15 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
-    // Checks if it's showing or hidding the keyboard
-    BOOL didShow = [notification.name isEqualToString:UIKeyboardDidShowNotification];
+    SLKKeyboardStatus status = [self keyboardStatusForNotification:notification];
+    
+    // Skips if it's the same status
+    if (self.keyboardStatus == status) {
+        return;
+    }
     
     // After showing keyboard, check if the current cursor position could diplay autocompletion
-    if (didShow && !self.isAutoCompleting) {
+    if (status == SLKKeyboardStatusDidShow && !self.isAutoCompleting) {
         [self processTextForAutoCompletion];
     }
     
@@ -1003,7 +1031,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [self reloadInputAccessoryViewIfNeeded];
     
     // Updates and notifies about the keyboard status update
-    self.keyboardStatus = didShow ? SLKKeyboardStatusDidShow : SLKKeyboardStatusDidHide;
+    self.keyboardStatus = status;
+    
+    // Posts custom keyboard notification
     [self postKeyboarStatusNotification:notification];
     
     // Very important to invalidate this flag back
