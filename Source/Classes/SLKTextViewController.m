@@ -1056,7 +1056,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     self.movingKeyboard = self.scrollViewProxy.isDragging;
     
-    if (!self.movingKeyboard) {
+    if (self.movingKeyboard == NO) {
         return;
     }
     
@@ -1064,7 +1064,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     if (self.isInverted && self.isMovingKeyboard && !CGPointEqualToPoint(self.scrollViewProxy.contentOffset, _draggingOffset)) {
-        if (!self.scrollViewProxy.isDecelerating) {
+        if (!self.scrollViewProxy.isDecelerating && self.scrollViewProxy.isTracking) {
             self.scrollViewProxy.contentOffset = _draggingOffset;
         }
     }
