@@ -68,6 +68,9 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 /** YES if an external keyboard has been detected (this value only changes when the text view becomes first responder). */
 @property (nonatomic, readonly, getter=isExternalKeyboardDetected) BOOL externalKeyboardDetected;
 
+/** YES if after right button press, the text view is cleared out. Default is YES. */
+@property (nonatomic, assign) BOOL shouldClearTextViewAfterRightButtonPress;
+
 /**
  YES if the main table view is inverted. Default is YES.
  @discussion This allows the table view to start from the bottom like any typical messaging interface.
