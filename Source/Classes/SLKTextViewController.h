@@ -101,7 +101,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 - (instancetype)initWithTableViewStyle:(UITableViewStyle)style;
 
 /**
- Initializes a text view controller controller and configures the collection view with the provided layout.
+ Initializes a collection view controller and configures the collection view with the provided layout.
  @discussion If you use the standard -init method, a table view with plain style will be created.
 
  @param layout The layout object to associate with the collection view. The layout controls how the collection view presents its cells and supplementary views.
