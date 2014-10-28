@@ -141,6 +141,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.inverted = YES;
     self.undoShakingEnabled = NO;
     self.keyboardPanningEnabled = YES;
+    self.shouldClearTextAtRightButtonPress = YES;
 }
 
 
@@ -699,7 +700,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)didPressRightButton:(id)sender
 {
-    if (self.shouldClearTextViewAfterRightButtonPress) {
+    if (self.shouldClearTextAtRightButtonPress) {
         [self.textView setText:nil];
     }
 }

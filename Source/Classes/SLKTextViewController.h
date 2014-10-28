@@ -69,7 +69,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 @property (nonatomic, readonly, getter=isExternalKeyboardDetected) BOOL externalKeyboardDetected;
 
 /** YES if after right button press, the text view is cleared out. Default is YES. */
-@property (nonatomic, assign) BOOL shouldClearTextViewAfterRightButtonPress;
+@property (nonatomic, assign) BOOL shouldClearTextAtRightButtonPress;
 
 /**
  YES if the main table view is inverted. Default is YES.
