@@ -857,14 +857,21 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [userInfo setObject:[NSValue valueWithCGRect:endFrame] forKey:UIKeyboardFrameEndUserInfoKey];
 
     NSString *name = [self appropriateKeyboardNotificationName:notification];
-    [[NSNotificationCenter defaultCenter] postNotificationName:name object:nil userInfo:userInfo];
+    [[NSNotificationCenter defaultCenter] postNotificationName:name object:self.textView userInfo:userInfo];
 }
 
 - (void)checkForExternalKeyboardInNotification:(NSNotification *)notification
 {
+    NSString *name = notification.name;
     CGRect targetRect = CGRectZero;
     
-    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+    // Assumes it can't be an external keyboard since it is transitioning from a visible state
+    if ([name isEqualToString:UIKeyboardWillHideNotification] || [name isEqualToString:UIKeyboardDidHideNotification]) {
+        _externalKeyboardDetected = NO;
+        return;
+    }
+    
+    if ([name isEqualToString:UIKeyboardWillShowNotification]) {
         targetRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     }
     else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
@@ -881,6 +888,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         maxKeyboardHeight -= [self appropriateTabBarHeight];
         
         _externalKeyboardDetected = maxKeyboardHeight > CGRectGetHeight(self.view.bounds);
+    }
+    else {
+        _externalKeyboardDetected = NO;
     }
     
     if (CGRectIsNull(keyboardFrame)) {

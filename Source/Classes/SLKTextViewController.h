@@ -360,7 +360,4 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView NS_REQUIRES_SUPER;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView NS_REQUIRES_SUPER;
 
-/** UIAlertViewDelegate */
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
-
 @end
