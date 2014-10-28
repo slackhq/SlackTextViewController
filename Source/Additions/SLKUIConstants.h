@@ -24,7 +24,7 @@
 #define UI_IS_IOS8_AND_HIGHER   ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
 
 #define SLK_INPUT_ACCESSORY_DEBUG 0             // Renders a translucent red area representing the keyboard accessory view
-#define SLK_KEYBOARD_NOTIFICATION_DEBUG 1       // Logs every keyboard notification being sent
+#define SLK_KEYBOARD_NOTIFICATION_DEBUG 0       // Logs every keyboard notification being sent
 
 typedef NS_ENUM(NSUInteger, SLKQuicktypeBarMode) {
     SLKQuicktypeBarModeHidden,
