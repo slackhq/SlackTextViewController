@@ -257,11 +257,31 @@ To add additional key commands, simply override `-keyCommands` and append `super
 }
 ````
 
+##Storyboard
+
+When using SlackTextViewController with storyboards, instead of overriding the traditional `initWithCoder:` you will need to override any of the two custom methods below. This approach helps preserving the exact same features from the programatic approach, but also limits the edition of the nib of your `SLKTextViewController` subclass since it doesn't layout subviews from the nib (subviews are still initialized and layed out programatically).
+
+if you wish to use the `UITableView` version, call:
+```
++ (UITableViewStyle)tableViewStyleForCoder:(NSCoder *)decoder
+{
+    return UITableViewStylePlain;
+}
+```
+
+or the `UICollectionView` version:
+```
++ (UICollectionViewLayout *)collectionViewLayoutForCoder:(NSCoder *)decoder
+{
+    return [UICollectionViewFlowLayout new];
+}
+```
+
 
 ##Sample Project
 
 Check out the sample project, everything is demo'd there.
-
+There are 3 examples for illustrating the programatic, storyboard and Swift approach (in progress).
 
 ##XCode Templates
 
