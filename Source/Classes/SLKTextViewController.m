@@ -487,11 +487,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (BOOL)isIllogicalKeyboardStatus:(SLKKeyboardStatus)status
 {
-    // Skips if trying to update the same status
-    if (self.keyboardStatus == status) {
-        return YES;
-    }
-    
     if ((self.keyboardStatus == SLKKeyboardStatusDidShow && status == SLKKeyboardStatusWillShow) ||
         (self.keyboardStatus == SLKKeyboardStatusDidHide && status == SLKKeyboardStatusWillHide)) {
         return YES;
@@ -594,6 +589,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)setKeyboardStatus:(SLKKeyboardStatus)status
 {
+    // Skips if trying to update the same status
+    if (self.keyboardStatus == status) {
+        return;
+    }
+    
     // Skips illogical conditions
     if ([self isIllogicalKeyboardStatus:status]) {
         return;
@@ -873,7 +873,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [userInfo setObject:[NSValue valueWithCGRect:endFrame] forKey:UIKeyboardFrameEndUserInfoKey];
 
     NSString *name = [self appropriateKeyboardNotificationName:notification];
-    [[NSNotificationCenter defaultCenter] postNotificationName:name object:self.textView userInfo:userInfo];
+    [[NSNotificationCenter defaultCenter] postNotificationName:name object:nil userInfo:userInfo];
 }
 
 - (void)checkForExternalKeyboardInNotification:(NSNotification *)notification
@@ -977,6 +977,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)willShowOrHideKeyboard:(NSNotification *)notification
 {
+    SLKKeyboardStatus status = [self keyboardStatusForNotification:notification];
+
     // Skips if it is presented inside of a popover
     if (self.isPresentedInPopover) {
         return;
@@ -989,13 +991,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     // Skips if textview did refresh only
     if (self.textView.didNotResignFirstResponder) {
-        return;
-    }
-    
-    SLKKeyboardStatus status = [self keyboardStatusForNotification:notification];
-    
-    // Skips illogical conditions
-    if ([self isIllogicalKeyboardStatus:status]) {
         return;
     }
     
@@ -1025,8 +1020,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     // Updates and notifies about the keyboard status update
     self.keyboardStatus = status;
     
-    // Posts custom keyboard notification
-    [self postKeyboarStatusNotification:notification];
+    // Posts custom keyboard notification, if logical conditions apply
+    if (![self isIllogicalKeyboardStatus:status]) {
+        [self postKeyboarStatusNotification:notification];
+    }
 }
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
@@ -1059,11 +1056,19 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     // Updates and notifies about the keyboard status update
     self.keyboardStatus = status;
     
-    // Posts custom keyboard notification
-    [self postKeyboarStatusNotification:notification];
+    // Posts custom keyboard notification, if logical conditions apply
+    if (![self isIllogicalKeyboardStatus:status]) {
+        [self postKeyboarStatusNotification:notification];
+    }
     
     // Very important to invalidate this flag back
     self.movingKeyboard = NO;
+}
+
+// Used for debug
+- (void)didPostCustomKeyboardNotification:(NSNotification *)notification
+{
+    NSLog(@"didPostCustomKeyboardNotification : %@", notification);
 }
 
 - (void)didChangeKeyboardFrame:(NSNotification *)notification
@@ -1555,6 +1560,13 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
     
+#if SLK_KEYBOARD_NOTIFICATION_DEBUG
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didPostCustomKeyboardNotification:) name:SLKKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didPostCustomKeyboardNotification:) name:SLKKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didPostCustomKeyboardNotification:) name:SLKKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didPostCustomKeyboardNotification:) name:SLKKeyboardDidHideNotification object:nil];
+#endif
+    
     // TextView notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willChangeTextViewText:) name:SLKTextViewTextWillChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
@@ -1574,6 +1586,13 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
+    
+#if SLK_KEYBOARD_NOTIFICATION_DEBUG
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKKeyboardDidHideNotification object:nil];
+#endif
     
     // TextView notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewTextWillChangeNotification object:nil];
