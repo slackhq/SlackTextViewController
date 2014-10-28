@@ -637,6 +637,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
             [self.textView resignFirstResponder];
         }
     }
+    else if (self.keyboardHC.constant > 0) {
+        [self.view.window endEditing:NO];
+    }
 }
 
 - (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status
@@ -974,11 +977,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
-    // Skips this if it's not the expected textView.
-    if (![self.textView isFirstResponder]) {
-        return;
-    }
-    
     SLKKeyboardStatus status = [self keyboardStatusForNotification:notification];
     
     // Skips if it's the same status
@@ -1099,10 +1097,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)didChangeTextViewText:(NSNotification *)notification
 {
-    SLKTextView *textView = (SLKTextView *)notification.object;
-    
     // Skips this it's not the expected textView.
-    if (![textView isEqual:self.textView]) {
+    if (![notification.object isEqual:self.textView]) {
         return;
     }
     
@@ -1454,7 +1450,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture
 {
     if ([gesture isEqual:self.singleTapGesture]) {
-        return [self.textInputbar.textView isFirstResponder];
+        return [self.textView isFirstResponder] || self.keyboardHC.constant > 0;
     }
     
     if ([gesture isEqual:self.panGesture]) {
