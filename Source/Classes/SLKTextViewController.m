@@ -142,6 +142,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.undoShakingEnabled = NO;
     self.keyboardPanningEnabled = YES;
     self.shouldClearTextAtRightButtonPress = YES;
+    self.shouldForceTextInputbarAdjustment = NO;
 }
 
 
@@ -484,6 +485,21 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     return -1;
 }
 
+- (BOOL)isIllogicalKeyboardStatus:(SLKKeyboardStatus)status
+{
+    // Skips if trying to update the same status
+    if (self.keyboardStatus == status) {
+        return YES;
+    }
+    
+    if ((self.keyboardStatus == SLKKeyboardStatusDidShow && status == SLKKeyboardStatusWillShow) ||
+        (self.keyboardStatus == SLKKeyboardStatusDidHide && status == SLKKeyboardStatusWillHide)) {
+        return YES;
+    }
+    
+    return NO;
+}
+
 
 #pragma mark - Setters
 
@@ -578,14 +594,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)setKeyboardStatus:(SLKKeyboardStatus)status
 {
-    // Skips if trying to update the same status
-    if (self.keyboardStatus == status) {
-        return;
-    }
-    
     // Skips illogical conditions
-    if ((self.keyboardStatus == SLKKeyboardStatusDidShow && status == SLKKeyboardStatusWillShow) ||
-        (self.keyboardStatus == SLKKeyboardStatusDidHide && status == SLKKeyboardStatusWillHide)) {
+    if ([self isIllogicalKeyboardStatus:status]) {
         return;
     }
     
@@ -972,6 +982,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
+    // Skips this it's not the expected textView and shouldn't force adjustment of the text input bar.
+    if (![self.textView isFirstResponder] && !self.shouldForceTextInputbarAdjustment) {
+        return;
+    }
+    
     // Skips if textview did refresh only
     if (self.textView.didNotResignFirstResponder) {
         return;
@@ -979,8 +994,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     SLKKeyboardStatus status = [self keyboardStatusForNotification:notification];
     
-    // Skips if it's the same status
-    if (self.keyboardStatus == status) {
+    // Skips illogical conditions
+    if ([self isIllogicalKeyboardStatus:status]) {
         return;
     }
     
@@ -1085,10 +1100,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)willChangeTextViewText:(NSNotification *)notification
 {
-    SLKTextView *textView = (SLKTextView *)notification.object;
-    
     // Skips this it's not the expected textView.
-    if (![textView isEqual:self.textView]) {
+    if (![notification.object isEqual:self.textView]) {
         return;
     }
     
@@ -1109,7 +1122,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (void)didChangeTextViewContentSize:(NSNotification *)notification
 {
     // Skips this it's not the expected textView.
-    if (![self.textView isEqual:notification.object]) {
+    if (![notification.object isEqual:self.textView]) {
         return;
     }
     
