@@ -699,7 +699,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)didPressRightButton:(id)sender
 {
-    [self.textView setText:nil];
+    if (self.shouldClearTextViewAfterRightButtonPress) {
+        [self.textView setText:nil];
+    }
 }
 
 - (void)didCommitTextEditing:(id)sender
