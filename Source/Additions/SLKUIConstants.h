@@ -101,7 +101,7 @@ inline static SLKQuicktypeBarMode SLKQuicktypeBarModeForHeight(CGFloat height)
     return SLKQuicktypeBarModeHidden;
 }
 
-CG_INLINE CGRect CGRectInvert(CGRect rect)
+inline static CGRect SLKRectInvert(CGRect rect)
 {
     CGRect invert = CGRectZero;
     

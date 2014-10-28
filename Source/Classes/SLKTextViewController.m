@@ -844,8 +844,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     // Fixes iOS7 oddness with inverted values on landscape orientation
     if (!UI_IS_IOS8_AND_HIGHER && UI_IS_LANDSCAPE) {
-        startFrame = CGRectInvert(startFrame);
-        endFrame = CGRectInvert(endFrame);
+        startFrame = SLKRectInvert(startFrame);
+        endFrame = SLKRectInvert(endFrame);
     }
     
     CGFloat keyboardHeight = self.keyboardHC.constant;
