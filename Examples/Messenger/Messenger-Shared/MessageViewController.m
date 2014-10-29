@@ -66,7 +66,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.bounces = YES;
     self.undoShakingEnabled = YES;
     self.keyboardPanningEnabled = YES;
-    self.inverted = NO;
+    self.inverted = YES;
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:MessengerCellIdentifier];
