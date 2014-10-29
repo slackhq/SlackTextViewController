@@ -303,11 +303,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     return NO;
 }
 
-- (BOOL)isPresentedInPopover
-{
-    return _presentedInPopover;
-}
-
 - (SLKTextView *)textView
 {
     return self.textInputbar.textView;
@@ -833,6 +828,24 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
 }
 
+- (void)dismissTextInputbarIfNeeded
+{
+    if (self.keyboardHC.constant == 0) {
+        return;
+    }
+    
+    self.keyboardHC.constant = 0.0;
+    self.scrollViewHC.constant = [self appropriateScrollViewHeight];
+    
+    if (self.isAutoCompleting) {
+        [self hideAutoCompletionView];
+    }
+    
+    self.keyboardStatus = SLKKeyboardStatusDidHide;
+    
+    [self.view layoutIfNeeded];
+}
+
 - (void)postKeyboarStatusNotification:(NSNotification *)notification
 {
     NSMutableDictionary *userInfo = [notification.userInfo mutableCopy];
@@ -999,6 +1012,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
             return;
         }
         else if (!self.shouldForceTextInputbarAdjustment) {
+            [self dismissTextInputbarIfNeeded];
             return;
         }
     }
@@ -1487,8 +1501,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     if ([gesture isEqual:self.singleTapGesture]) {
         return [self.textView isFirstResponder] || self.keyboardHC.constant > 0;
     }
-    
-    if ([gesture isEqual:self.panGesture]) {
+    else if ([gesture isEqual:self.panGesture]) {
         
         if ([self.textView isFirstResponder]) {
             return NO;
