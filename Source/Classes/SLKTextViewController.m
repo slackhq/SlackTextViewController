@@ -828,24 +828,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
 }
 
-- (void)dismissTextInputbarIfNeeded
-{
-    if (self.keyboardHC.constant == 0) {
-        return;
-    }
-    
-    self.keyboardHC.constant = 0.0;
-    self.scrollViewHC.constant = [self appropriateScrollViewHeight];
-    
-    if (self.isAutoCompleting) {
-        [self hideAutoCompletionView];
-    }
-    
-    self.keyboardStatus = SLKKeyboardStatusDidHide;
-    
-    [self.view layoutIfNeeded];
-}
-
 - (void)postKeyboarStatusNotification:(NSNotification *)notification
 {
     NSMutableDictionary *userInfo = [notification.userInfo mutableCopy];
@@ -869,6 +851,24 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
     NSString *name = [self appropriateKeyboardNotificationName:notification];
     [[NSNotificationCenter defaultCenter] postNotificationName:name object:nil userInfo:userInfo];
+}
+
+- (void)dismissTextInputbarIfNeeded
+{
+    if (self.keyboardHC.constant == 0) {
+        return;
+    }
+    
+    self.keyboardHC.constant = 0.0;
+    self.scrollViewHC.constant = [self appropriateScrollViewHeight];
+    
+    if (self.isAutoCompleting) {
+        [self hideAutoCompletionView];
+    }
+    
+    self.keyboardStatus = SLKKeyboardStatusDidHide;
+    
+    [self.view layoutIfNeeded];
 }
 
 - (void)checkForExternalKeyboardInNotification:(NSNotification *)notification
@@ -1007,14 +1007,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     // Skips this it's not the expected textView and shouldn't force adjustment of the text input bar.
-    if (![self.textView isFirstResponder]) {
-        if (self.shouldForceTextInputbarAdjustment && status == SLKKeyboardStatusWillShow && self.keyboardHC.constant > 0) {
-            return;
-        }
-        else if (!self.shouldForceTextInputbarAdjustment) {
-            [self dismissTextInputbarIfNeeded];
-            return;
-        }
+    // This will also dismiss the text input bar if it's visible, and exit auto-completion mode if enabled.
+    if (![self.textView isFirstResponder] && !self.shouldForceTextInputbarAdjustment) {
+        return [self dismissTextInputbarIfNeeded];
     }
     
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
@@ -1030,7 +1025,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     // Hides autocompletion mode if the keyboard is being dismissed
-    if (!status == SLKKeyboardStatusWillShow && self.isAutoCompleting) {
+    if ((![self.textView isFirstResponder] || status == SLKKeyboardStatusWillHide) && self.isAutoCompleting) {
         [self hideAutoCompletionView];
     }
     
@@ -1063,13 +1058,13 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     SLKKeyboardStatus status = [self keyboardStatusForNotification:notification];
     
-    // Skips if it's the same status
+    // Skips if it's the current status
     if (self.keyboardStatus == status) {
         return;
     }
     
     // After showing keyboard, check if the current cursor position could diplay autocompletion
-    if (status == SLKKeyboardStatusDidShow && !self.isAutoCompleting) {
+    if ([self.textView isFirstResponder] && status == SLKKeyboardStatusDidShow && !self.isAutoCompleting) {
         [self processTextForAutoCompletion];
     }
     
@@ -1359,8 +1354,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 {
     CGFloat viewHeight = show ? [self heightForAutoCompletionView] : 0.0;
     
-    self.autoCompleting = show;
-    
     if (self.autoCompletionViewHC.constant == viewHeight) {
         return;
     }
@@ -1384,6 +1377,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     self.autoCompletionViewHC.constant = viewHeight;
+    self.autoCompleting = show;
     
 	[self.view slk_animateLayoutIfNeededWithBounce:self.bounces
 										   options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
