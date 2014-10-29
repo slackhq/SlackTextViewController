@@ -18,7 +18,8 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 - Tap gesture for dismissing the keyboard
 - Pan gesture for sliding down the keyboard
 - Flexible UI built with Auto Layout
-- Text append APIs
+- Undo/Redo (with keyboard commands and UIMenuController)
+- Text appending APIs
 
 ### Optional
 - Autocomplete mode by registering any prefix key (`@`, `#`, `/`)
@@ -33,9 +34,8 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 - iOS 7 & 8
 - iPhone & iPad
 - Storyboard
-- Undo/Redo
 - UIPopOverController & UITabBarController
-- External keyboard basic commands
+- External keyboard commands
 - Auto-Rotation
 - Localization
 
@@ -135,7 +135,7 @@ The maximum height of the autocompletion view is set to 140 pts by default. You 
 ````
 - (CGFloat)heightForAutoCompletionView
 {
-    CGFloat cellHeight = [self.autoCompletionView.delegate tableView:self.autoCompletionView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    CGFloat cellHeight = 34.0;
     return cellHeight*self.searchResult.count;
 }
 ````
@@ -240,6 +240,7 @@ There a few basic key commands enabled by default:
 - return key -> calls `-didPressRightButton:`, or `-didCommitTextEditing:` if in edit mode
 - shift/cmd + return key -> line break
 - escape key -> exits edit mode, or auto-completion mode, or dismisses the keyboard
+- up & down arrows -> vertical cursor movement
 
 To add additional key commands, simply override `-keyCommands` and append `super`'s array.
 
