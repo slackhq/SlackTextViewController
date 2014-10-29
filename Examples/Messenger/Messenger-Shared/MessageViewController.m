@@ -66,7 +66,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.bounces = YES;
     self.undoShakingEnabled = YES;
     self.keyboardPanningEnabled = YES;
-    self.inverted = YES;
+    self.shouldForceTextInputbarAdjustment = YES;
+    self.inverted = NO;
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:MessengerCellIdentifier];
@@ -93,6 +94,12 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
     [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":"]];
+    
+    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44.0)];
+    searchBar.autocorrectionType = UITextAutocorrectionTypeDefault;
+    searchBar.returnKeyType = UIReturnKeyDone;
+    
+    self.tableView.tableHeaderView = searchBar;
 }
 
 - (void)viewWillAppear:(BOOL)animated
