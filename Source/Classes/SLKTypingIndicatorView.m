@@ -116,7 +116,6 @@ NSString * const SLKTypingIndicatorViewIdentifier =             @"com.slack.Text
     NSMutableParagraphStyle *style  = [[NSMutableParagraphStyle alloc] init];
     style.alignment = NSTextAlignmentLeft;
     style.lineBreakMode = NSLineBreakByTruncatingTail;
-    style.lineBreakMode = NSLineBreakByWordWrapping;
     style.minimumLineHeight = 10.0;
     
     [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0.0, text.length)];
