@@ -44,7 +44,6 @@
     [super viewDidLoad];
     
     // Do view setup here.
-    
 }
 
 
@@ -99,9 +98,9 @@
     [super didPressLeftButton:sender];
 }
 
-- (void)didPasteImage:(UIImage *)image
+- (void)didPasteMediaContent:(NSDictionary *)userInfo
 {
-    // Notification about when a user did paste an image inside of the text view
+    // Notifies the view controller when a user did paste a media content inside of the text view
     // Calling super does nothing
 }
 

@@ -314,7 +314,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 
 /**
  Verifies that the autocompletion view should be shown. Default is NO.
- @discussion You MUST override this method to perform additional tasks, before autocompletion is shown, like populating the data source.
+ @discussion To enabled autocompletion, MUST override this method to perform additional tasks, before the autocompletion view is shown (i.e. populating the data source).
  
  @return YES if the autocompletion view should be shown.
  */
