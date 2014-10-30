@@ -19,6 +19,11 @@
 /** @name UIScrollView additional features used for SlackTextViewController. */
 @interface UIScrollView (SLKAdditions)
 
+/** The accurate CGPoint offset to reach the top of the scrollView. */
+@property (nonatomic, readonly) CGPoint slk_topOffset;
+/** The accurate CGPoint offset to reach the bottom of the scrollView. */
+@property (nonatomic, readonly) CGPoint slk_bottomOffset;
+
 /** YES if the scrollView's offset is at the very top. */
 @property (nonatomic, readonly) BOOL slk_isAtTop;
 /** YES if the scrollView's offset is at the very bottom. */

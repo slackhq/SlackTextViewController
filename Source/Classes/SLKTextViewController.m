@@ -143,6 +143,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.keyboardPanningEnabled = YES;
     self.shouldClearTextAtRightButtonPress = YES;
     self.shouldForceTextInputbarAdjustment = NO;
+    self.shouldScrollToBottomAfterKeyboardShows = NO;
 }
 
 
@@ -838,6 +839,21 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [[NSNotificationCenter defaultCenter] postNotificationName:name object:nil userInfo:userInfo];
 }
 
+- (void)scrollToBottomIfNeeded
+{
+    // Scrolls to bottom only if the keyboard is about to show.
+    if (!self.shouldScrollToBottomAfterKeyboardShows || self.keyboardStatus != SLKKeyboardStatusWillShow) {
+        return;
+    }
+
+    if (self.isInverted) {
+        [self.scrollViewProxy slk_scrollToTopAnimated:YES];
+    }
+    else {
+        [self.scrollViewProxy slk_scrollToBottomAnimated:YES];
+    }
+}
+
 - (void)enableTypingSuggestionIfNeeded
 {
     // Skips if the QuickType Bar is minimised
@@ -1032,14 +1048,16 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         [self hideAutoCompletionView];
     }
     
+    // Updates and notifies about the keyboard status update
+    self.keyboardStatus = status;
+    
     // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
 	[self.view slk_animateLayoutIfNeededWithDuration:duration
 											  bounce:NO
 											 options:(curve<<16)|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
-										  animations:NULL];
-    
-    // Updates and notifies about the keyboard status update
-    self.keyboardStatus = status;
+										  animations:^{
+                                              [self scrollToBottomIfNeeded];
+                                          }];
     
     // Posts custom keyboard notification, if logical conditions apply
     if (![self isIllogicalKeyboardStatus:status]) {

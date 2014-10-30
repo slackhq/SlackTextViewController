@@ -74,6 +74,9 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 /** YES if the text input bar should still move up/down when other text inputs interacts with the keyboard. Default is NO. */
 @property (nonatomic, assign) BOOL shouldForceTextInputbarAdjustment;
 
+/** YES if the scrollView should scroll to bottom when the keyboard is shown. Default is NO.*/
+@property (nonatomic, assign) BOOL shouldScrollToBottomAfterKeyboardShows;
+
 /**
  YES if the main table view is inverted. Default is YES.
  @discussion This allows the table view to start from the bottom like any typical messaging interface.

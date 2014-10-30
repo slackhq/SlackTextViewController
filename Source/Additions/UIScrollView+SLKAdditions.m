@@ -25,36 +25,46 @@ static NSString * const kKeyScrollViewHorizontalIndicator = @"_horizontalScrollI
 - (void)slk_scrollToTopAnimated:(BOOL)animated
 {
     if (![self slk_isAtTop]) {
-        CGPoint bottomOffset = CGPointZero;
-        [self setContentOffset:bottomOffset animated:animated];
+        [self setContentOffset:[self slk_topOffset] animated:animated];
     }
 }
 
 - (void)slk_scrollToBottomAnimated:(BOOL)animated
 {
-    if ([self slk_canScrollToBottom] && ![self slk_isAtBottom]) {
-        CGPoint bottomOffset = CGPointMake(0.0, self.contentSize.height - self.bounds.size.height);
-        [self setContentOffset:bottomOffset animated:animated];
+    if ([self slk_canScrollToBottom]) {
+        [self setContentOffset:[self slk_bottomOffset] animated:animated];
     }
 }
 
 - (BOOL)slk_isAtTop
 {
-    return (self.contentOffset.y == 0.0) ? YES : NO;
+    return (self.contentOffset.y == [self slk_topOffset].y) ? YES : NO;
 }
 
 - (BOOL)slk_isAtBottom
 {
-    CGFloat bottomOffset = self.contentSize.height-self.bounds.size.height;
-    return (self.contentOffset.y == bottomOffset) ? YES : NO;
+    return (self.contentOffset.y == [self slk_bottomOffset].y) ? YES : NO;
+}
+
+- (CGPoint)slk_topOffset
+{
+    return CGPointMake(self.contentOffset.x, 0.0);
+}
+
+- (CGPoint)slk_bottomOffset
+{
+    return CGPointMake(self.contentOffset.x, self.contentSize.height - self.bounds.size.height);
 }
 
 - (BOOL)slk_canScrollToBottom
 {
-    if (self.contentSize.height > self.bounds.size.height) {
-        return YES;
+    if (self.contentSize.height < self.bounds.size.height) {
+        return NO;
     }
-    return NO;
+    if ([self slk_isAtBottom]) {
+        return NO;
+    }
+    return YES;
 }
 
 - (void)slk_stopScrolling
@@ -65,10 +75,10 @@ static NSString * const kKeyScrollViewHorizontalIndicator = @"_horizontalScrollI
     
     CGPoint offset = self.contentOffset;
     offset.y -= 1.0;
-    [self setContentOffset:offset animated:NO];
+    [self setContentOffset:offset];
     
     offset.y += 1.0;
-    [self setContentOffset:offset animated:NO];
+    [self setContentOffset:offset];
 }
 
 - (UIView *)slk_verticalScroller
