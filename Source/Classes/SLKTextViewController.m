@@ -139,7 +139,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     self.bounces = YES;
     self.inverted = YES;
-    self.undoShakingEnabled = NO;
+    self.shakeToClearEnabled = NO;
     self.keyboardPanningEnabled = YES;
     self.shouldClearTextAtRightButtonPress = YES;
     self.shouldForceTextInputbarAdjustment = NO;
@@ -545,6 +545,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     if (!inverted && ((self.edgesForExtendedLayout & UIRectEdgeBottom) > 0)) {
         self.edgesForExtendedLayout = self.edgesForExtendedLayout & ~UIRectEdgeBottom;
     }
+}
+
+- (void)setUndoShakingEnabled:(BOOL)enabled
+{
+    _shakeToClearEnabled = enabled;
 }
 
 - (void)setKeyboardStatus:(SLKKeyboardStatus)status
@@ -1203,7 +1208,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     // Notifies of the shake gesture if undo mode is on and the text view is not empty
-    if (self.undoShakingEnabled && self.textView.text.length > 0) {
+    if (self.shakeToClearEnabled && self.textView.text.length > 0) {
         [self willRequestUndo];
     }
 }

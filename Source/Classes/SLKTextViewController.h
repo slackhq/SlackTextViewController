@@ -60,7 +60,8 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 @property (nonatomic, assign) BOOL bounces;
 
 /** YES if text view's content can be cleaned with a shake gesture. Default is NO. */
-@property (nonatomic, assign) BOOL undoShakingEnabled;
+@property (nonatomic, assign) BOOL shakeToClearEnabled;
+@property (nonatomic, assign) BOOL undoShakingEnabled DEPRECATED_MSG_ATTRIBUTE("Use -shakeToClearEnabled instead");
 
 /** YES if keyboard can be dismissed gradually with a vertical panning gesture. Default is YES. */
 @property (nonatomic, assign) BOOL keyboardPanningEnabled;

@@ -64,7 +64,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.messages = [[NSMutableArray alloc] initWithArray:reversed];
     
     self.bounces = YES;
-    self.undoShakingEnabled = YES;
+    self.shakeToClearEnabled = YES;
     self.keyboardPanningEnabled = YES;
     self.inverted = YES;
     
