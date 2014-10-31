@@ -304,6 +304,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     return NO;
 }
 
+- (BOOL)isPresentedInPopover
+{
+    return _presentedInPopover && UI_IS_IPAD;
+}
+
 - (SLKTextView *)textView
 {
     return self.textInputbar.textView;
