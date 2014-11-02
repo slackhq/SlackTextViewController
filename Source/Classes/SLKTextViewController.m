@@ -563,21 +563,23 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     _shakeToClearEnabled = enabled;
 }
 
-- (void)setKeyboardStatus:(SLKKeyboardStatus)status
+- (BOOL)updateKeyboardStatus:(SLKKeyboardStatus)status
 {
     // Skips if trying to update the same status
     if (self.keyboardStatus == status) {
-        return;
+        return NO;
     }
     
     // Skips illogical conditions
     if ([self isIllogicalKeyboardStatus:status]) {
-        return;
+        return NO;
     }
     
     _keyboardStatus = status;
     
     [self didChangeKeyboardStatus:status];
+    
+    return YES;
 }
 
 
@@ -826,23 +828,27 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)postKeyboarStatusNotification:(NSNotification *)notification
 {
+    if (self.isExternalKeyboardDetected) {
+        return;
+    }
+    
     NSMutableDictionary *userInfo = [notification.userInfo mutableCopy];
     
-    CGRect startFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    CGRect beginFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
     // Fixes iOS7 oddness with inverted values on landscape orientation
     if (!UI_IS_IOS8_AND_HIGHER && UI_IS_LANDSCAPE) {
-        startFrame = SLKRectInvert(startFrame);
+        beginFrame = SLKRectInvert(beginFrame);
         endFrame = SLKRectInvert(endFrame);
     }
     
     CGFloat keyboardHeight = self.keyboardHC.constant;
     
-    startFrame.size.height = keyboardHeight;
+    beginFrame.size.height = keyboardHeight;
     endFrame.size.height = keyboardHeight;
     
-    [userInfo setObject:[NSValue valueWithCGRect:startFrame] forKey:UIKeyboardFrameBeginUserInfoKey];
+    [userInfo setObject:[NSValue valueWithCGRect:beginFrame] forKey:UIKeyboardFrameBeginUserInfoKey];
     [userInfo setObject:[NSValue valueWithCGRect:endFrame] forKey:UIKeyboardFrameEndUserInfoKey];
 
     NSString *name = [self appropriateKeyboardNotificationName:notification];
@@ -895,18 +901,14 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         [self hideAutoCompletionView];
     }
     
-    self.keyboardStatus = SLKKeyboardStatusDidHide;
+    // Forces the keyboard status change
+    [self updateKeyboardStatus:SLKKeyboardStatusDidHide];
     
     [self.view layoutIfNeeded];
 }
 
 - (BOOL)isExternalKeyboardInNotification:(NSNotification *)notification
 {
-    // Assumes it can't be an external keyboard since it is transitioning from a visible state
-    if ([notification.name isEqualToString:UIKeyboardWillHideNotification] || [notification.name isEqualToString:UIKeyboardDidHideNotification]) {
-        return NO;
-    }
-    
     CGRect targetRect = CGRectZero;
     
     if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
@@ -1055,7 +1057,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     // Updates and notifies about the keyboard status update
-    self.keyboardStatus = status;
+    BOOL didUpdateStatus = [self updateKeyboardStatus:status];
     
     // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
 	[self.view slk_animateLayoutIfNeededWithDuration:duration
@@ -1066,7 +1068,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
                                           }];
     
     // Posts custom keyboard notification, if logical conditions apply
-    if (![self isIllogicalKeyboardStatus:status]) {
+    if (didUpdateStatus && ![self isIllogicalKeyboardStatus:self.keyboardStatus]) {
         [self postKeyboarStatusNotification:notification];
     }
 }
@@ -1096,15 +1098,19 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     // Updates and notifies about the keyboard status update
-    self.keyboardStatus = status;
+    BOOL didUpdateStatus = [self updateKeyboardStatus:status];
     
     // Posts custom keyboard notification, if logical conditions apply
-    if (![self isIllogicalKeyboardStatus:status]) {
+    if (didUpdateStatus && ![self isIllogicalKeyboardStatus:self.keyboardStatus]) {
         [self postKeyboarStatusNotification:notification];
     }
     
     // Very important to invalidate this flag back
     self.movingKeyboard = NO;
+    
+    // Updates the dismiss mode and input accessory view, if needed.
+    [self updateKeyboardDismissModeIfNeeded];
+    [self reloadInputAccessoryViewIfNeeded];
 }
 
 - (void)didChangeKeyboardFrame:(NSNotification *)notification
@@ -1137,21 +1143,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     [self.view layoutIfNeeded];
-}
-
-- (void)didBeginOrEndEditingTextView:(NSNotification *)notification
-{
-    // Skips this it's not the expected textView.
-    if (![notification.object isEqual:self.textView]) {
-        return;
-    }
-    
-    // Considers the keyboard transition to delay the keyboard dismiss mode update.
-    // This solves an issue on iOS7 where the keyboard wouln't animate when showing.
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self updateKeyboardDismissModeIfNeeded];
-        [self reloadInputAccessoryViewIfNeeded];
-    });
 }
 
 // Used for debug
@@ -1626,8 +1617,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 #endif
     
     // TextView notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBeginOrEndEditingTextView:) name:UITextViewTextDidBeginEditingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBeginOrEndEditingTextView:) name:UITextViewTextDidEndEditingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willChangeTextViewText:) name:SLKTextViewTextWillChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
