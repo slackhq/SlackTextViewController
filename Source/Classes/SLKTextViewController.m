@@ -579,46 +579,40 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)presentKeyboard:(BOOL)animated
 {
-    if (![self.textView isFirstResponder])
-    {
-        if (!animated)
-        {
-            [UIView beginAnimations:nil context:nil];
-            [UIView setAnimationDuration:0.0];
-            [UIView setAnimationDelay:0.0];
-            [UIView setAnimationCurve:UIViewAnimationCurveLinear];
-            
+    // Skips if already first responder
+    if ([self.textView isFirstResponder]) {
+        return;
+    }
+    
+    if (!animated) {
+        [UIView performWithoutAnimation:^{
             [self.textView becomeFirstResponder];
-            
-            [UIView commitAnimations];
-        }
-        else {
-            [self.textView becomeFirstResponder];
-        }
+        }];
+    }
+    else {
+        [self.textView becomeFirstResponder];
     }
 }
 
 - (void)dismissKeyboard:(BOOL)animated
 {
-    if ([self.textView isFirstResponder])
-    {
-        if (!animated)
-        {
-            [UIView beginAnimations:nil context:nil];
-            [UIView setAnimationDuration:0.0];
-            [UIView setAnimationDelay:0.0];
-            [UIView setAnimationCurve:UIViewAnimationCurveLinear];
-            
-            [self.textView resignFirstResponder];
-            
-            [UIView commitAnimations];
+    if (![self.textView isFirstResponder]) {
+        
+        // Dismisses the keyboard from any first responder in the window.
+        if (self.keyboardHC.constant > 0) {
+            [self.view.window endEditing:NO];
         }
-        else {
-            [self.textView resignFirstResponder];
-        }
+        return;
     }
-    else if (self.keyboardHC.constant > 0) {
-        [self.view.window endEditing:NO];
+    
+    if (!animated)
+    {
+        [UIView performWithoutAnimation:^{
+            [self.textView resignFirstResponder];
+        }];
+    }
+    else {
+        [self.textView resignFirstResponder];
     }
 }
 
