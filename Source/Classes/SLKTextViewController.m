@@ -1144,8 +1144,12 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
-    [self updateKeyboardDismissModeIfNeeded];
-    [self reloadInputAccessoryViewIfNeeded];
+    // Considers the keyboard transition to delay the keyboard dismiss mode update.
+    // This solves an issue on iOS7 where the keyboard wouln't animate when showing.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self updateKeyboardDismissModeIfNeeded];
+        [self reloadInputAccessoryViewIfNeeded];
+    });
 }
 
 // Used for debug
