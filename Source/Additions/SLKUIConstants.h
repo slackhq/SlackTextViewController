@@ -26,12 +26,6 @@
 #define SLK_INPUT_ACCESSORY_DEBUG 0             // Renders a translucent red area representing the keyboard accessory view
 #define SLK_KEYBOARD_NOTIFICATION_DEBUG 0       // Logs every keyboard notification being sent
 
-typedef NS_ENUM(NSUInteger, SLKQuicktypeBarMode) {
-    SLKQuicktypeBarModeHidden,
-    SLKQuicktypeBarModeCollapsed,
-    SLKQuicktypeBarModeExpanded,
-};
-
 inline static CGFloat minimumKeyboardHeight()
 {
     if (UI_IS_IPAD) {
@@ -46,61 +40,6 @@ inline static CGFloat minimumKeyboardHeight()
         if (UI_IS_LANDSCAPE) return 162.f;
         else return 216.f;
     }
-}
-
-inline static CGFloat SLKQuicktypeBarHeightForMode(SLKQuicktypeBarMode mode)
-{
-    if (UI_IS_IPAD) {
-        switch (mode) {
-            case SLKQuicktypeBarModeHidden:
-                return 0.f;
-                
-            case SLKQuicktypeBarModeCollapsed:
-                return 10.f;
-                
-            case SLKQuicktypeBarModeExpanded :
-                return 39.f;
-        }
-    }
-    if (UI_IS_IPHONE6PLUS) {
-        switch (mode) {
-            case SLKQuicktypeBarModeHidden:
-                return 0.f;
-                
-            case SLKQuicktypeBarModeCollapsed:
-                return 9.f;
-                
-            case SLKQuicktypeBarModeExpanded :
-                if (UI_IS_LANDSCAPE) return 32.f;
-                else return 45.f;
-        }
-    }
-    else {
-        switch (mode) {
-            case SLKQuicktypeBarModeHidden:
-                return 0.f;
-                
-            case SLKQuicktypeBarModeCollapsed:
-                return 8.f;
-                
-            case SLKQuicktypeBarModeExpanded :
-                if (UI_IS_LANDSCAPE) return 31.f;
-                else return 37.f;
-        }
-    }
-}
-
-inline static SLKQuicktypeBarMode SLKQuicktypeBarModeForHeight(CGFloat height)
-{
-    if (height > 0.f && height <= 10.f) {
-        return SLKQuicktypeBarModeCollapsed;
-    }
-    
-    if (height > 10.f && height <= 45.f) {
-        return SLKQuicktypeBarModeExpanded ;
-    }
-    
-    return SLKQuicktypeBarModeHidden;
 }
 
 inline static CGRect SLKRectInvert(CGRect rect)

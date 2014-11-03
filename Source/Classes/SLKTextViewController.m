@@ -309,6 +309,16 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     return _presentedInPopover && UI_IS_IPAD;
 }
 
+- (BOOL)isQuickTypeBarVisible
+{
+    CGFloat quickTypeBarHeight = self.keyboardHC.constant-minimumKeyboardHeight();
+    
+    if (UI_IS_IOS8_AND_HIGHER && quickTypeBarHeight > 0.0 && self.textView.autocorrectionType != UITextAutocorrectionTypeNo) {
+        return YES;
+    }
+    return NO;
+}
+
 - (SLKTextView *)textView
 {
     return self.textInputbar.textView;
@@ -532,14 +542,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     _autoCompleting = autoCompleting;
     
     self.scrollViewProxy.scrollEnabled = !autoCompleting;
-    
-    if (UI_IS_IOS8_AND_HIGHER) {
-        // Updates the iOS8 QuickType bar mode based on the keyboard height constant
-        CGFloat quicktypeBarHeight = self.keyboardHC.constant-minimumKeyboardHeight();
-        
-        // Updates the QuickType bar mode based on the keyboard height constant
-        self.quicktypeBarMode = SLKQuicktypeBarModeForHeight(quicktypeBarHeight);
-    }
 }
 
 - (void)setInverted:(BOOL)inverted
@@ -636,6 +638,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)textDidUpdate:(BOOL)animated
 {
+    // Disables animation if not first responder
+    if (![self.textView isFirstResponder]) {
+        animated = NO;
+    }
+    
     self.textInputbar.rightButton.enabled = [self canPressRightButton];
     self.textInputbar.editortRightButton.enabled = [self canPressRightButton];
     
@@ -872,8 +879,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)enableTypingSuggestionIfNeeded
 {
-    // Skips if the QuickType Bar is minimised
-    if (self.quicktypeBarMode == SLKQuicktypeBarModeCollapsed) {
+    if (![self.textView isFirstResponder]) {
         return;
     }
     
@@ -883,8 +889,12 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         enable = NO;
     }
     
-    // On iOS8, when the predictive mode is enabled, the QuicktypeBar is hidden
-    // On iOS7, it should always disable auto-correction and spell checking if autocompletion is enabled.
+    // Skips if the QuickType Bar isn't visible and it's trying to disable it. And the inverted logic.
+    if (UI_IS_IOS8_AND_HIGHER && ((enable == NO && !self.isQuickTypeBarVisible) || (enable == YES && self.isQuickTypeBarVisible))) {
+        return;
+    }
+    
+    // During text autocompletion, the iOS 8 QuickType bar is hidden and auto-correction and spell checking are disabled.
     [self.textView setTypingSuggestionEnabled:enable];
 }
 
