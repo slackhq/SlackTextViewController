@@ -223,6 +223,11 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [super didPressRightButton:sender];
 }
 
+- (NSString *)keyForTextCaching
+{
+    return [[NSBundle mainBundle] bundleIdentifier];
+}
+
 - (void)didPasteMediaContent:(NSDictionary *)userInfo
 {
     // Notifies the view controller when the user has pasted an image inside of the text view.

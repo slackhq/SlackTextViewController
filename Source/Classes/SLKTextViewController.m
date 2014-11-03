@@ -25,6 +25,8 @@ NSString * const SLKKeyboardDidShowNotification =   @"SLKKeyboardDidShowNotifica
 NSString * const SLKKeyboardWillHideNotification =  @"SLKKeyboardWillHideNotification";
 NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotification";
 
+static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.TextCaching.DefaultsKey";
+
 @interface SLKTextViewController () <UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
     CGPoint _draggingOffset;
@@ -157,6 +159,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [self.view addSubview:self.autoCompletionView];
     [self.view addSubview:self.typingIndicatorView];
     [self.view addSubview:self.textInputbar];
+    
+    [self reloadTextView];
 }
 
 - (void)viewDidLoad
@@ -590,7 +594,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 }
 
 
-#pragma mark - Subclassable Methods
+#pragma mark - Public & Subclassable Methods
 
 - (void)presentKeyboard:(BOOL)animated
 {
@@ -777,7 +781,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 }
 
 
-#pragma mark - Private Actions
+#pragma mark - Private Methods
 
 - (void)didTapScrollView:(UIGestureRecognizer *)gesture
 {
@@ -1160,9 +1164,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [self.view layoutIfNeeded];
 }
 
-// Used for debug
 - (void)didPostCustomKeyboardNotification:(NSNotification *)notification
 {
+    // Used for debug only
     NSLog(@"didPostCustomKeyboardNotification : %@", notification);
 }
 
@@ -1183,8 +1187,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
-    // Animated only if the view already appeared
+    // Animated only if the view already appeared.
     [self textDidUpdate:self.didFinishConfigurating];
+    
+    // Caches the text, if caching is enabled.
+    [self setTextToCache:self.textView.text];
 }
 
 - (void)didChangeTextViewContentSize:(NSNotification *)notification
@@ -1194,7 +1201,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
-    // Animated only if the view already appeared
+    // Animated only if the view already appeared.
     [self textDidUpdate:self.didFinishConfigurating];
 }
 
@@ -1205,7 +1212,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
-    // Notifies only if the pasted item is nested in a dictionary
+    // Notifies only if the pasted item is nested in a dictionary.
     if ([notification.userInfo isKindOfClass:[NSDictionary class]]) {
         [self didPasteMediaContent:notification.userInfo];
     }
@@ -1244,6 +1251,12 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [self.view slk_animateLayoutIfNeededWithBounce:self.bounces
                                            options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
                                         animations:NULL];
+}
+
+- (void)willTerminateApplication:(NSNotification *)notification
+{
+    // Saves caching changes to disk
+    [[self class] commitCacheToDisk];
 }
 
 
@@ -1425,17 +1438,93 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 }
 
 
+#pragma mark - Text Caching
+
+- (NSString *)keyForTextCaching
+{
+    // No implementation here. Meant to be overriden in subclass.
+    return nil;
+}
+
+- (void)reloadTextView
+{
+    if (self.textView.text.length > 0 || !self.isCachingEnabled) {
+        return;
+    }
+    
+    self.textView.text = [self cachedText];
+}
+
+- (void)clearCachedText
+{
+    // Removes the cached text (if any) from disk
+    [self setTextToCache:nil];
+}
+
++ (void)clearAllCachedText
+{
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:SLKTextCachingDefaultsKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (NSMutableDictionary *)cacheRepository
+{
+    NSDictionary *dict = [[NSUserDefaults standardUserDefaults] dictionaryForKey:SLKTextCachingDefaultsKey];
+    
+    if (![dict isKindOfClass:[NSDictionary class]]) {
+        dict = [NSDictionary new];
+    }
+    
+    return [dict mutableCopy];
+}
+
+- (BOOL)isCachingEnabled
+{
+    return ([self keyForTextCaching] != nil);
+}
+
+- (NSString *)cachedText
+{
+    if (!self.isCachingEnabled) {
+        return nil;
+    }
+    
+    return [[self cacheRepository] objectForKey:[self keyForTextCaching]];
+}
+
+- (void)setTextToCache:(NSString *)text
+{
+    if (!self.isCachingEnabled) {
+        return;
+    }
+    
+    NSMutableDictionary *dict = [self cacheRepository];
+    
+    // Caches text only if its a valid string and not already cached
+    if (text.length > 0 && ![text isEqualToString:[self cachedText]]) {
+        [dict setObject:text forKey:[self keyForTextCaching]];
+    }
+    // Clears cache only if the key exists
+    else if (text.length == 0 && [[dict allKeys] containsObject:[self keyForTextCaching]]) {
+        [dict removeObjectForKey:[self keyForTextCaching]];
+    }
+    // If not, skips.
+    else {
+        return;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setObject:dict forKey:SLKTextCachingDefaultsKey];
+}
+
++ (void)commitCacheToDisk
+{
+    if ([[NSUserDefaults standardUserDefaults] dictionaryForKey:SLKTextCachingDefaultsKey]) {
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+
 #pragma mark - UITextViewDelegate Methods
-
-- (BOOL)textViewShouldBeginEditing:(SLKTextView *)textView
-{
-    return YES;
-}
-
-- (BOOL)textViewShouldEndEditing:(SLKTextView *)textView
-{
-    return YES;
-}
 
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
@@ -1641,6 +1730,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     // TypeIndicator notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SLKTypingIndicatorViewWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SLKTypingIndicatorViewWillHideNotification object:nil];
+    
+    // Application notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willTerminateApplication:) name:UIApplicationWillTerminateNotification object:nil];
 }
 
 - (void)unregisterNotifications
@@ -1670,6 +1762,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     // TypeIndicator notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTypingIndicatorViewWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTypingIndicatorViewWillHideNotification object:nil];
+    
+    // Application notifications
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
 }
 
 
@@ -1726,6 +1821,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     _keyboardHC = nil;
     
     [self unregisterNotifications];
+    [[self class] commitCacheToDisk];
 }
 
 @end

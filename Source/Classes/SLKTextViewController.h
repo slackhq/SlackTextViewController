@@ -309,8 +309,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Registers any string prefix for autocompletion detection, useful for user mentions and/or hashtags autocompletion.
- @discussion The prefix must be valid NSString (i.e: '@', '#', '\', and so on)
- This also checks if no repeated prefix is inserted.
+ @discussion The prefix must be valid NSString (i.e: '@', '#', '\', and so on). This also checks if no repeated prefix is inserted.
  
  @param prefixes An array of prefix strings.
  */
@@ -354,12 +353,36 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 
 ///------------------------------------------------
+/// @name Text Caching
+///------------------------------------------------
+
+/**
+ Returns the key to be associated with a given text to be cached. Default is nil.
+ To enable text caching, you must override this method to return valid key.
+ The text view will be populated automatically when the view controller is configured.
+ You don't need call super since this method doesn't do anything.
+ 
+ @return The key for which to enable text caching.
+ */
+- (id)keyForTextCaching;
+
+/**
+ Removes the current's vien controller cached text.
+ To enable this, you must return a valid key string in -keyForTextCaching.
+ */
+- (void)clearCachedText;
+
+/**
+ Removes all the cached text from disk.
+ */
++ (void)clearAllCachedText;
+
+
+///------------------------------------------------
 /// @name Delegate Methods Requiring Super
 ///------------------------------------------------
 
 /** UITextViewDelegate */
-- (BOOL)textViewShouldBeginEditing:(SLKTextView *)textView NS_REQUIRES_SUPER;
-- (BOOL)textViewShouldEndEditing:(SLKTextView *)textView NS_REQUIRES_SUPER;
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text NS_REQUIRES_SUPER;
 - (void)textViewDidChangeSelection:(SLKTextView *)textView NS_REQUIRES_SUPER;
 
