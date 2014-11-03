@@ -36,7 +36,7 @@ extern NSString * const SLKTypingIndicatorViewWillHideNotification;
 
 /**
  Inserts a user name, only if that user name is not yet on the list.
- @discussion Each inserted name has an attached timer, which will automatically remove the name from the list once the interval is reached (default 6 seconds).
+ Each inserted name has an attached timer, which will automatically remove the name from the list once the interval is reached (default 6 seconds).
  
  The control follows a set of display rules, to accomodate the screen size:
  
@@ -52,7 +52,7 @@ extern NSString * const SLKTypingIndicatorViewWillHideNotification;
 
 /**
  Removes a user name, if existent on the list.
- @discussion Once there are no more items on the list, the indicator will automatically try to hide (by setting it self to visible = NO).
+ Once there are no more items on the list, the indicator will automatically try to hide (by setting it self to visible = NO).
 
  @param username The user name string.
  */

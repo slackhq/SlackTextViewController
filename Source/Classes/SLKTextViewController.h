@@ -80,7 +80,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  YES if the main table view is inverted. Default is YES.
- @discussion This allows the table view to start from the bottom like any typical messaging interface.
+ This allows the table view to start from the bottom like any typical messaging interface.
  If inverted, you must assign the same transform property to your cells to match the orientation (ie: cell.transform = tableView.transform;)
  Inverting the table view will enable some great features such as content offset corrections automatically when resizing the text input and/or showing autocompletion.
  
@@ -103,7 +103,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Initializes a text view controller to manage a table view of a given style.
- @discussion If you use the standard -init method, a table view with plain style will be created.
+ If you use the standard -init method, a table view with plain style will be created.
  
  @param style A constant that specifies the style of main table view that the controller object is to manage (UITableViewStylePlain or UITableViewStyleGrouped).
  @return An initialized SLKTextViewController object or nil if the object could not be created.
@@ -112,7 +112,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Initializes a collection view controller and configures the collection view with the provided layout.
- @discussion If you use the standard -init method, a table view with plain style will be created.
+ If you use the standard -init method, a table view with plain style will be created.
 
  @param layout The layout object to associate with the collection view. The layout controls how the collection view presents its cells and supplementary views.
  @return An initialized SLKTextViewController object or nil if the object could not be created.
@@ -121,7 +121,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Returns the tableView style to be configured when using Interface Builder. Default is UITableViewStylePlain.
- @discussion You must override this method if you want to configure a tableView.
+ You must override this method if you want to configure a tableView.
  You should not override -initWithCoder:
  
  @param decoder An unarchiver object.
@@ -131,7 +131,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Returns the tableView style to be configured when using Interface Builder. Default is nil.
- @discussion You must override this method if you want to configure a collectionView.
+ You must override this method if you want to configure a collectionView.
  You should not override -initWithCoder:
  
  @param decoder An unarchiver object.
@@ -160,7 +160,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Notifies the view controller that the keyboard changed status.
- @discussion You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
+ You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
  
  @param status The new keyboard status.
  */
@@ -173,13 +173,13 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Notifies the view controller that the text will update.
- @discussion You can override this method to perform additional tasks associated with presenting the view. You MUST call super at some point in your implementation.
+ You can override this method to perform additional tasks associated with presenting the view. You MUST call super at some point in your implementation.
  */
 - (void)textWillUpdate NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller that the text did update.
- @discussion You can override this method to perform additional tasks associated with presenting the view. You MUST call super at some point in your implementation.
+ You can override this method to perform additional tasks associated with presenting the view. You MUST call super at some point in your implementation.
  
  @param If YES, the text input bar will be resized using an animation.
  */
@@ -187,7 +187,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Notifies the view controller when the left button's action has been triggered, manually.
- @discussion You can override this method to perform additional tasks associated with the left button. You don't need call super since this method doesn't do anything.
+ You can override this method to perform additional tasks associated with the left button. You don't need call super since this method doesn't do anything.
  
  @param sender The object calling this method.
  */
@@ -195,7 +195,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Notifies the view controller when the right button's action has been triggered, manually or by using the keyboard return key.
- @discussion You can override this method to perform additional tasks associated with the right button. You MUST call super at some point in your implementation.
+ You can override this method to perform additional tasks associated with the right button. You MUST call super at some point in your implementation.
  
  @param sender The object calling this method.
  */
@@ -203,7 +203,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Verifies if the right button can be pressed. If NO, the button is disabled.
- @discussion You can override this method to perform additional tasks. You SHOULD call super to inherit some conditionals.
+ You can override this method to perform additional tasks. You SHOULD call super to inherit some conditionals.
  
  @return YES if the right button can be pressed.
  */
@@ -211,7 +211,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Notifies the view controller when the user has pasted an image inside of the text view.
- @discussion You can override this method to perform additional tasks associated with image pasting.
+ You can override this method to perform additional tasks associated with image pasting.
  
  @param image The image that has been pasted. Only JPG or PNG are supported.
  */
@@ -219,7 +219,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /** 
  Notifies the view controller when the user has pasted a supported media content (images and/or videos).
- @discussion You can override this method to perform additional tasks associated with image/video pasting. You don't need to call super since this method doesn't do anything.
+ You can override this method to perform additional tasks associated with image/video pasting. You don't need to call super since this method doesn't do anything.
  Only supported pastable medias configured in SLKTextView will be forwarded (take a look at SLKPastableMediaType).
  
  @para userInfo The payload containing the media data, content and media types.
@@ -228,7 +228,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Verifies that the typing indicator view should be shown. Default is YES, if meeting some requierements.
- @discussion You can override this method to perform additional tasks. You SHOULD call super to inherit some conditionals.
+ You can override this method to perform additional tasks. You SHOULD call super to inherit some conditionals.
  
  @return YES if the typing indicator view should be shown.
  */
@@ -236,19 +236,19 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Notifies the view controller when the user has shaked the device for undoing text typing.
- @discussion You can override this method to perform additional tasks associated with the shake gesture. Calling super will prompt a system alert view with undo option. This will not be called if 'undoShakingEnabled' is set to NO and/or if the text view's content is empty.
+ You can override this method to perform additional tasks associated with the shake gesture. Calling super will prompt a system alert view with undo option. This will not be called if 'undoShakingEnabled' is set to NO and/or if the text view's content is empty.
  */
 - (void)willRequestUndo;
 
 /**
  Notifies the view controller when the user has pressed the Return key (↵) with an external keyboard.
- @discussion You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
+ You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
  */
 - (void)didPressReturnKey:(id)sender NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller when the user has pressed the Escape key (Esc) with an external keyboard.
- @discussion You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
+ You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
  */
 - (void)didPressEscapeKey:(id)sender NS_REQUIRES_SUPER;
 
@@ -262,7 +262,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Re-uses the text layout for edition, displaying an accessory view on top of the text input bar with options (cancel & save).
- @discussion You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
+ You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
 
  @param text The string text to edit.
  */
@@ -270,7 +270,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Notifies the view controller when the editing bar's right button's action has been triggered, manually or by using the external keyboard's Return key.
- @discussion You can override this method to perform additional tasks associated with accepting changes. You MUST call super at some point in your implementation.
+ You can override this method to perform additional tasks associated with accepting changes. You MUST call super at some point in your implementation.
  
  @param sender The object calling this method.
  */
@@ -278,7 +278,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Notifies the view controller when the editing bar's right button's action has been triggered, manually or by using the external keyboard's Esc key.
- @discussion You can override this method to perform additional tasks associated with accepting changes. You MUST call super at some point in your implementation.
+ You can override this method to perform additional tasks associated with accepting changes. You MUST call super at some point in your implementation.
  
  @param sender The object calling this method.
  */
@@ -309,7 +309,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Registers any string prefix for autocompletion detection, useful for user mentions and/or hashtags autocompletion.
- @discussion The prefix must be valid NSString (i.e: '@', '#', '\', and so on). This also checks if no repeated prefix is inserted.
+ The prefix must be valid NSString (i.e: '@', '#', '\', and so on). This also checks if no repeated prefix is inserted.
  
  @param prefixes An array of prefix strings.
  */
@@ -317,7 +317,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Verifies that the autocompletion view should be shown. Default is NO.
- @discussion To enabled autocompletion, MUST override this method to perform additional tasks, before the autocompletion view is shown (i.e. populating the data source).
+ To enabled autocompletion, MUST override this method to perform additional tasks, before the autocompletion view is shown (i.e. populating the data source).
  
  @return YES if the autocompletion view should be shown.
  */
@@ -325,7 +325,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Returns a custom height for the autocompletion view. Default is 0.0.
- @discussion You can override this method to return a custom height.
+ You can override this method to return a custom height.
 
  @return The autocompletion view's height.
  */
@@ -333,7 +333,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Returns the maximum height for the autocompletion view. Default is 140.0.
- @discussion You can override this method to return a custom max height.
+ You can override this method to return a custom max height.
 
  @return The autocompletion view's max height.
  */
