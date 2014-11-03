@@ -89,6 +89,8 @@
     [super didPressRightButton:sender];
 }
 
+
+
 /*
 // Uncomment these methods for aditional events
 - (void)didPressLeftButton:(id)sender
@@ -96,6 +98,12 @@
     // Notifies the view controller when the left button's action has been triggered, manually.
  
     [super didPressLeftButton:sender];
+}
+ 
+- (id)keyForTextCaching
+{
+    // Return any valid key object for enabling text caching while composing in the text view.
+    // Calling super does nothing
 }
 
 - (void)didPasteMediaContent:(NSDictionary *)userInfo

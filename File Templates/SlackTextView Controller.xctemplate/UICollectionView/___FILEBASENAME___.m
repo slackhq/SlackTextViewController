@@ -96,6 +96,12 @@
     
     [super didPressLeftButton:sender];
 }
+ 
+- (id)keyForTextCaching
+{
+    // Return any valid key object for enabling text caching while composing in the text view.
+    // Calling super does nothing
+}
 
 - (void)didPasteMediaContent:(NSDictionary *)userInfo
 {
