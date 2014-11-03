@@ -43,7 +43,7 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
 @property (nonatomic, strong) NSLayoutConstraint *keyboardHC;
 
 // The pan gesture used for bringing the keyboard from the bottom
-@property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
+@property (nonatomic, strong) UIPanGestureRecognizer *verticalPanGesture;
 
 // The keyboard commands available for external keyboards
 @property (nonatomic, strong) NSArray *keyboardCommands;
@@ -277,9 +277,9 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
         
         _textInputbar.textView.delegate = self;
         
-        self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanTextView:)];
-        self.panGesture.delegate = self;
-        [_textInputbar.textView addGestureRecognizer:self.panGesture];
+        self.verticalPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanTextView:)];
+        self.verticalPanGesture.delegate = self;
+        [_textInputbar.textView addGestureRecognizer:self.verticalPanGesture];
     }
     return _textInputbar;
 }
@@ -1624,13 +1624,13 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
     if ([gesture isEqual:self.singleTapGesture]) {
         return [self.textView isFirstResponder] || self.keyboardHC.constant > 0;
     }
-    else if ([gesture isEqual:self.panGesture]) {
+    else if ([gesture isEqual:self.verticalPanGesture]) {
         
         if ([self.textView isFirstResponder]) {
             return NO;
         }
         
-        CGPoint velocity = [self.panGesture velocityInView:self.view];
+        CGPoint velocity = [self.verticalPanGesture velocityInView:self.view];
         
         // Vertical panning, from bottom to top only
         if (velocity.y < 0 && ABS(velocity.y) > ABS(velocity.x) && ![self.textInputbar.textView isFirstResponder]) {
@@ -1811,8 +1811,10 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
     _typingIndicatorView = nil;
     
     _registeredPrefixes = nil;
-    
+    _keyboardCommands = nil;
+
     _singleTapGesture = nil;
+    _verticalPanGesture = nil;
     _scrollViewHC = nil;
     _textInputbarHC = nil;
     _textInputbarHC = nil;
