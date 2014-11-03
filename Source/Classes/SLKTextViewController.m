@@ -63,6 +63,9 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
 // YES if the view controller did appear and everything is finished configurating. This allows blocking some layout animations among other things.
 @property (nonatomic) BOOL didFinishConfigurating;
 
+// The setter of isExternalKeyboardDetected, for private use.
+@property (nonatomic, getter = isRotating) BOOL rotating;
+
 @end
 
 @implementation SLKTextViewController
@@ -513,12 +516,13 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
 
 - (BOOL)isIllogicalKeyboardStatus:(SLKKeyboardStatus)status
 {
-    if ((self.keyboardStatus == SLKKeyboardStatusDidShow && status == SLKKeyboardStatusWillShow) ||
-        (self.keyboardStatus == SLKKeyboardStatusDidHide && status == SLKKeyboardStatusWillHide)) {
-        return YES;
+    if ((self.keyboardStatus == 0 && status == 1) ||
+        (self.keyboardStatus == 1 && status == 2) ||
+        (self.keyboardStatus == 2 && status == 3) ||
+        (self.keyboardStatus == 3 && status == 0)) {
+        return NO;
     }
-    
-    return NO;
+    return YES;
 }
 
 
@@ -844,7 +848,7 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
 
 - (void)postKeyboarStatusNotification:(NSNotification *)notification
 {
-    if (self.isExternalKeyboardDetected) {
+    if (self.isExternalKeyboardDetected || self.isRotating) {
         return;
     }
     
@@ -859,7 +863,7 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
         endFrame = SLKRectInvert(endFrame);
     }
     
-    CGFloat keyboardHeight = self.keyboardHC.constant;
+    CGFloat keyboardHeight = CGRectGetHeight(endFrame)-CGRectGetHeight(self.textView.inputAccessoryView.bounds);
     
     beginFrame.size.height = keyboardHeight;
     endFrame.size.height = keyboardHeight;
@@ -938,12 +942,11 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
     }
     
     CGRect keyboardFrame = [self.view convertRect:[self.view.window convertRect:targetRect fromWindow:nil] fromView:nil];
-    
+
     if (!self.isMovingKeyboard) {
-        
         CGFloat maxKeyboardHeight = keyboardFrame.origin.y + keyboardFrame.size.height;
         maxKeyboardHeight -= [self appropriateTabBarHeight];
-        
+
         return (maxKeyboardHeight > CGRectGetHeight(self.view.bounds));
     }
     else {
@@ -1075,9 +1078,6 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
         [self hideAutoCompletionView];
     }
     
-    // Updates and notifies about the keyboard status update
-    BOOL didUpdateStatus = [self updateKeyboardStatus:status];
-    
     // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
 	[self.view slk_animateLayoutIfNeededWithDuration:duration
 											  bounce:NO
@@ -1086,8 +1086,9 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
                                               [self scrollToBottomIfNeeded];
                                           }];
     
-    // Posts custom keyboard notification, if logical conditions apply
-    if (didUpdateStatus && ![self isIllogicalKeyboardStatus:self.keyboardStatus]) {
+    // Updates and notifies about the keyboard status update
+    if ([self updateKeyboardStatus:status]) {
+        // Posts custom keyboard notification, if logical conditions apply
         [self postKeyboarStatusNotification:notification];
     }
 }
@@ -1117,19 +1118,17 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
     }
     
     // Updates and notifies about the keyboard status update
-    BOOL didUpdateStatus = [self updateKeyboardStatus:status];
-    
-    // Posts custom keyboard notification, if logical conditions apply
-    if (didUpdateStatus && ![self isIllogicalKeyboardStatus:self.keyboardStatus]) {
+    if ([self updateKeyboardStatus:status]) {
+        // Posts custom keyboard notification, if logical conditions apply
         [self postKeyboarStatusNotification:notification];
     }
-    
-    // Very important to invalidate this flag after the keyboard is dismissed or presented
-    self.movingKeyboard = NO;
     
     // Updates the dismiss mode and input accessory view, if needed.
     [self updateKeyboardDismissModeIfNeeded];
     [self reloadInputAccessoryViewIfNeeded];
+    
+    // Very important to invalidate this flag after the keyboard is dismissed or presented
+    self.movingKeyboard = NO;
 }
 
 - (void)didChangeKeyboardFrame:(NSNotification *)notification
@@ -1146,7 +1145,9 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
         return;
     }
     
-    self.movingKeyboard = self.scrollViewProxy.isDragging;
+    if (self.scrollViewProxy.isDragging) {
+        self.movingKeyboard = YES;
+    }
     
     if (self.movingKeyboard == NO) {
         return;
@@ -1772,7 +1773,14 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
+    self.rotating = YES;
+    
     [self prepareForInterfaceRotation];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    self.rotating = NO;
 }
 
 - (NSUInteger)supportedInterfaceOrientations
