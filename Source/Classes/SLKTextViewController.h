@@ -64,10 +64,10 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, assign) BOOL undoShakingEnabled DEPRECATED_MSG_ATTRIBUTE("Use -shakeToClearEnabled instead");
 
 /** YES if keyboard can be dismissed gradually with a vertical panning gesture. Default is YES. */
-@property (nonatomic, assign) BOOL keyboardPanningEnabled;
+@property (nonatomic, assign, getter = isKeyboardPanningEnabled) BOOL keyboardPanningEnabled;
 
 /** YES if an external keyboard has been detected (this value only changes when the text view becomes first responder). */
-@property (nonatomic, readonly, getter=isExternalKeyboardDetected) BOOL externalKeyboardDetected;
+@property (nonatomic, readonly) BOOL isExternalKeyboardDetected;
 
 /** YES if after right button press, the text view is cleared out. Default is YES. */
 @property (nonatomic, assign) BOOL shouldClearTextAtRightButtonPress;
@@ -89,7 +89,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, assign, getter = isInverted) BOOL inverted;
 
 /** YES if the view controller is presented inside of a popover controller. If YES, the keyboard won't move the text input bar and tapping on the tableView/collectionView will not cause the keyboard to be dismissed. This property is compatible only with iPad. */
-@property (nonatomic, getter = isPresentedInPopover) BOOL presentedInPopover;
+@property (nonatomic, assign, getter = isPresentedInPopover) BOOL presentedInPopover;
 
 /** Convenience accessors (accessed through the text input bar) */
 @property (nonatomic, readonly) SLKTextView *textView;
@@ -141,7 +141,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 
 ///------------------------------------------------
-/// @name Text Typing & Keyboard Handling
+/// @name Keyboard Handling
 ///------------------------------------------------
 
 /**
@@ -286,7 +286,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 
 ///------------------------------------------------
-/// @name Text Typing Auto-Completion
+/// @name Text Auto-Completion
 ///------------------------------------------------
 
 /** The table view used to display autocompletion results. */

@@ -47,10 +47,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 @property (nonatomic, strong) NSArray *keyboardCommands;
 
 // YES if the user is moving the keyboard with a gesture
-@property (nonatomic, getter = isMovingKeyboard) BOOL movingKeyboard;
+@property (nonatomic, assign, getter = isMovingKeyboard) BOOL movingKeyboard;
 
-// The current QuicktypeBar mode (hidden, collapsed or expanded)
-@property (nonatomic) SLKQuicktypeBarMode quicktypeBarMode;
+// The setter of isExternalKeyboardDetected, for private use.
+@property (nonatomic, assign) BOOL externalKeyboardDetected;
 
 // The current keyboard status (hidden, showing, etc.)
 @property (nonatomic) SLKKeyboardStatus keyboardStatus;
@@ -304,6 +304,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     return NO;
 }
 
+- (BOOL)isExternalKeyboardDetected
+{
+    return _externalKeyboardDetected;
+}
+
 - (BOOL)isPresentedInPopover
 {
     return _presentedInPopover && UI_IS_IPAD;
@@ -336,7 +341,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (SLKInputAccessoryView *)emptyInputAccessoryView
 {
-    if (!self.keyboardPanningEnabled) {
+    if (!self.isKeyboardPanningEnabled) {
         return nil;
     }
     
@@ -404,7 +409,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
-    _externalKeyboardDetected = [self isExternalKeyboardInNotification:notification];
+    self.externalKeyboardDetected = [self detectExternalKeyboardInNotification:notification];
     
     // Always return 0 if an external keyboard has been detected
     if (self.isExternalKeyboardDetected) {
@@ -917,7 +922,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [self.view layoutIfNeeded];
 }
 
-- (BOOL)isExternalKeyboardInNotification:(NSNotification *)notification
+- (BOOL)detectExternalKeyboardInNotification:(NSNotification *)notification
 {
     CGRect targetRect = CGRectZero;
     
@@ -949,7 +954,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (void)reloadInputAccessoryViewIfNeeded
 {
     // Reload only if the input views if the text view is first responder
-    if (!self.keyboardPanningEnabled || ![self.textView isFirstResponder]) {
+    if (!self.isKeyboardPanningEnabled || ![self.textView isFirstResponder]) {
         
         // Disables the input accessory when not first responder so when showing the keyboard back, there is no delay in the animation
         if (self.textView.inputAccessoryView) {
@@ -967,7 +972,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (void)updateKeyboardDismissModeIfNeeded
 {
     // Skips if the keyboard panning is disabled
-    if (!self.keyboardPanningEnabled) {
+    if (!self.isKeyboardPanningEnabled) {
         return;
     }
     
@@ -1115,7 +1120,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         [self postKeyboarStatusNotification:notification];
     }
     
-    // Very important to invalidate this flag back
+    // Very important to invalidate this flag after the keyboard is dismissed or presented
     self.movingKeyboard = NO;
     
     // Updates the dismiss mode and input accessory view, if needed.
