@@ -25,7 +25,7 @@ NSString * const SLKKeyboardDidShowNotification =   @"SLKKeyboardDidShowNotifica
 NSString * const SLKKeyboardWillHideNotification =  @"SLKKeyboardWillHideNotification";
 NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotification";
 
-static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.TextCaching.DefaultsKey";
+#define SLKTextViewCacheIdentifier    [NSString stringWithFormat:@"%@.%@", SLKTextViewControllerDomain, [self keyForTextCaching]]
 
 @interface SLKTextViewController () <UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
@@ -162,15 +162,16 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
     [self.view addSubview:self.autoCompletionView];
     [self.view addSubview:self.typingIndicatorView];
     [self.view addSubview:self.textInputbar];
-    
-    [self reloadTextView];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    [self setupViewConstraints];
+    [UIView performWithoutAnimation:^{
+        [self reloadTextView];
+        [self setupViewConstraints];
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -1190,9 +1191,6 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
     
     // Animated only if the view already appeared.
     [self textDidUpdate:self.didFinishConfigurating];
-    
-    // Caches the text, if caching is enabled.
-    [self setTextToCache:self.textView.text];
 }
 
 - (void)didChangeTextViewContentSize:(NSNotification *)notification
@@ -1256,8 +1254,8 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
 
 - (void)willTerminateApplication:(NSNotification *)notification
 {
-    // Saves caching changes to disk
-    [[self class] commitCacheToDisk];
+    // Caches the text before it's too late!
+    [self cacheTextToDisk:self.textView.text];
 }
 
 
@@ -1458,25 +1456,28 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
 
 - (void)clearCachedText
 {
-    // Removes the cached text (if any) from disk
-    [self setTextToCache:nil];
+    [self cacheTextToDisk:nil];
 }
 
 + (void)clearAllCachedText
 {
-    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:SLKTextCachingDefaultsKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (NSMutableDictionary *)cacheRepository
-{
-    NSDictionary *dict = [[NSUserDefaults standardUserDefaults] dictionaryForKey:SLKTextCachingDefaultsKey];
+    NSMutableArray *cachedKeys = [NSMutableArray new];
     
-    if (![dict isKindOfClass:[NSDictionary class]]) {
-        dict = [NSDictionary new];
+    for (NSString *key in [[[NSUserDefaults standardUserDefaults] dictionaryRepresentation] allKeys]) {
+        if ([key containsString:SLKTextViewControllerDomain]) {
+            [cachedKeys addObject:key];
+        }
     }
     
-    return [dict mutableCopy];
+    if (cachedKeys.count == 0) {
+        return;
+    }
+    
+    for (NSString *cachedKey in cachedKeys) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:cachedKey];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (BOOL)isCachingEnabled
@@ -1490,38 +1491,31 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
         return nil;
     }
     
-    return [[self cacheRepository] objectForKey:[self keyForTextCaching]];
+    return [[NSUserDefaults standardUserDefaults] objectForKey:SLKTextViewCacheIdentifier];
 }
 
-- (void)setTextToCache:(NSString *)text
+- (void)cacheTextToDisk:(NSString *)text
 {
     if (!self.isCachingEnabled) {
         return;
     }
     
-    NSMutableDictionary *dict = [self cacheRepository];
+    NSString *cachedString = [self cachedText];
     
     // Caches text only if its a valid string and not already cached
-    if (text.length > 0 && ![text isEqualToString:[self cachedText]]) {
-        [dict setObject:text forKey:[self keyForTextCaching]];
+    if (text.length > 0 && ![text isEqualToString:cachedString]) {
+        [[NSUserDefaults standardUserDefaults] setObject:text forKey:SLKTextViewCacheIdentifier];
     }
-    // Clears cache only if the key exists
-    else if (text.length == 0 && [[dict allKeys] containsObject:[self keyForTextCaching]]) {
-        [dict removeObjectForKey:[self keyForTextCaching]];
+    // Clears cache only if it exists
+    else if (text.length == 0 && cachedString.length > 0) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:SLKTextViewCacheIdentifier];
     }
     // If not, skips.
     else {
         return;
     }
     
-    [[NSUserDefaults standardUserDefaults] setObject:dict forKey:SLKTextCachingDefaultsKey];
-}
-
-+ (void)commitCacheToDisk
-{
-    if ([[NSUserDefaults standardUserDefaults] dictionaryForKey:SLKTextCachingDefaultsKey]) {
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 
@@ -1803,6 +1797,9 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
 
 - (void)dealloc
 {
+    // Caches the text before it's too late!
+    [self cacheTextToDisk:self.textView.text];
+    
     _tableView.delegate = nil;
     _tableView.dataSource = nil;
     _tableView = nil;
@@ -1831,7 +1828,6 @@ static NSString *SLKTextCachingDefaultsKey = @"com.slack.TextViewController.Text
     _keyboardHC = nil;
     
     [self unregisterNotifications];
-    [[self class] commitCacheToDisk];
 }
 
 @end
