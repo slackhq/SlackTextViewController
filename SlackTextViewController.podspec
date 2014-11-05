@@ -18,8 +18,6 @@ Pod::Spec.new do |s|
   s.source_files 		= "Classes", "Source/Classes/*.{h,m}"
   s.frameworks   		= 'UIKit'
 
-  s.dependency     		'SlackTextViewController/Additions'
-
   s.subspec 'Additions' do |add|
     add.source_files     = 'Source/Additions/*.{h,m}'
   end
