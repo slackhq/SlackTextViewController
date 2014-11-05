@@ -25,8 +25,6 @@ NSString * const SLKKeyboardDidShowNotification =   @"SLKKeyboardDidShowNotifica
 NSString * const SLKKeyboardWillHideNotification =  @"SLKKeyboardWillHideNotification";
 NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotification";
 
-#define SLKTextViewCacheIdentifier    [NSString stringWithFormat:@"%@.%@", SLKTextViewControllerDomain, [self keyForTextCaching]]
-
 @interface SLKTextViewController () <UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
     CGPoint _draggingOffset;
@@ -1445,6 +1443,19 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     return nil;
 }
 
+- (NSString *)keyForPersistency
+{
+    NSString *keyForTextCaching = [self keyForTextCaching];
+    NSString *previousCachedText = [[NSUserDefaults standardUserDefaults] objectForKey:keyForTextCaching];
+    
+    if ([previousCachedText isKindOfClass:[NSString class]]) {
+        return keyForTextCaching;
+    }
+    else {
+        return [NSString stringWithFormat:@"%@.%@", SLKTextViewControllerDomain, [self keyForTextCaching]];
+    }
+}
+
 - (void)reloadTextView
 {
     if (self.textView.text.length > 0 || !self.isCachingEnabled) {
@@ -1491,7 +1502,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return nil;
     }
     
-    return [[NSUserDefaults standardUserDefaults] objectForKey:SLKTextViewCacheIdentifier];
+    return [[NSUserDefaults standardUserDefaults] objectForKey:[self keyForPersistency]];
 }
 
 - (void)cacheTextToDisk:(NSString *)text
@@ -1504,11 +1515,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     // Caches text only if its a valid string and not already cached
     if (text.length > 0 && ![text isEqualToString:cachedString]) {
-        [[NSUserDefaults standardUserDefaults] setObject:text forKey:SLKTextViewCacheIdentifier];
+        [[NSUserDefaults standardUserDefaults] setObject:text forKey:[self keyForPersistency]];
     }
     // Clears cache only if it exists
     else if (text.length == 0 && cachedString.length > 0) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:SLKTextViewCacheIdentifier];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:[self keyForPersistency]];
     }
     // If not, skips.
     else {
