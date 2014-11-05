@@ -985,13 +985,15 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     UIScrollView *scrollView = self.scrollViewProxy;
     UIScrollViewKeyboardDismissMode dismissMode = scrollView.keyboardDismissMode;
     
+    BOOL isPannable = self.textView.inputAccessoryView ? YES : NO;
+    
     // Enables the keyboard dismiss mode
-    if (dismissMode == UIScrollViewKeyboardDismissModeNone) {
+    if (dismissMode == UIScrollViewKeyboardDismissModeNone && isPannable) {
         scrollView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
     }
     // Disables the keyboard dismiss mode
-    else if (dismissMode == UIScrollViewKeyboardDismissModeInteractive) {
+    else if (dismissMode == UIScrollViewKeyboardDismissModeInteractive && !isPannable) {
         scrollView.keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
         [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
     }
@@ -1123,9 +1125,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     // Updates the dismiss mode and input accessory view, if needed.
-    [self updateKeyboardDismissModeIfNeeded];
     [self reloadInputAccessoryViewIfNeeded];
-    
+    [self updateKeyboardDismissModeIfNeeded];
+
     // Very important to invalidate this flag after the keyboard is dismissed or presented
     self.movingKeyboard = NO;
 }
