@@ -876,11 +876,27 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [[NSNotificationCenter defaultCenter] postNotificationName:name object:nil userInfo:userInfo];
 }
 
-- (void)scrollToBottomIfNeeded
+- (BOOL)scrollToTopIfNeeded
+{
+    if (!self.scrollViewProxy.scrollsToTop || self.keyboardStatus != SLKKeyboardStatusWillShow) {
+        return NO;
+    }
+    
+    if (self.isInverted) {
+        [self.scrollViewProxy slk_scrollToBottomAnimated:YES];
+    }
+    else {
+        [self.scrollViewProxy slk_scrollToTopAnimated:YES];
+    }
+    
+    return YES;
+}
+
+- (BOOL)scrollToBottomIfNeeded
 {
     // Scrolls to bottom only if the keyboard is about to show.
     if (!self.shouldScrollToBottomAfterKeyboardShows || self.keyboardStatus != SLKKeyboardStatusWillShow) {
-        return;
+        return NO;
     }
 
     if (self.isInverted) {
@@ -889,6 +905,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     else {
         [self.scrollViewProxy slk_scrollToBottomAnimated:YES];
     }
+    
+    return YES;
 }
 
 - (void)enableTypingSuggestionIfNeeded
@@ -1147,8 +1165,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     if (self.scrollViewProxy.isDragging) {
         self.movingKeyboard = YES;
     }
-    
-    if (self.movingKeyboard == NO) {
+
+    if (self.isMovingKeyboard == NO) {
         return;
     }
     
@@ -1602,26 +1620,14 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView
 {
-    if (!self.scrollViewProxy.scrollsToTop) {
-        return NO;
-    }
-    
-    if (self.isInverted) {
-        [scrollView slk_scrollToBottomAnimated:YES];
-        return NO;
-    }
-    else {
-        return ![scrollView slk_isAtTop];
-    }
+    return [self scrollToTopIfNeeded];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-//    if (!self.isMovingKeyboard) {
-//        _draggingOffset = scrollView.contentOffset;
-//    }
-    
-    NSLog(@"scrollViewDidScroll : %@", NSStringFromCGPoint(scrollView.contentOffset));
+    if (!self.isMovingKeyboard) {
+        _draggingOffset = scrollView.contentOffset;
+    }
 }
 
 
