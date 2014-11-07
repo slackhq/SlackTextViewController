@@ -1623,6 +1623,16 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     return [self scrollToTopIfNeeded];
 }
 
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    self.movingKeyboard = NO;
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    self.movingKeyboard = NO;
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (!self.isMovingKeyboard) {
