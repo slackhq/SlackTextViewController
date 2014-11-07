@@ -537,6 +537,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     _singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapScrollView:)];
     _singleTapGesture.delegate = self;
+    [_singleTapGesture requireGestureRecognizerToFail:scrollView.panGestureRecognizer];
+    
     [_scrollViewProxy addGestureRecognizer:self.singleTapGesture];
 }
 
@@ -1615,9 +1617,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (!self.isMovingKeyboard) {
-        _draggingOffset = scrollView.contentOffset;
-    }
+//    if (!self.isMovingKeyboard) {
+//        _draggingOffset = scrollView.contentOffset;
+//    }
+    
+    NSLog(@"scrollViewDidScroll : %@", NSStringFromCGPoint(scrollView.contentOffset));
 }
 
 
