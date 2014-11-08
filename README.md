@@ -291,6 +291,6 @@ There are 3 examples for illustrating the programatic, storyboard and Swift appr
 We have prepared a set of useful XCode templates so you can quickly start using SlackTextViewController.
 
 To install them, open up your terminal and type:
-```sh ./SlackTextViewController/Template/install.sh```
+```sh ./SlackTextViewController/File\ Templates/install.sh```
 
 These templates are also available in [Alcatraz](https://github.com/supermarin/Alcatraz).
