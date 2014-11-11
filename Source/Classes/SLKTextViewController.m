@@ -1184,7 +1184,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (void)didPostCustomKeyboardNotification:(NSNotification *)notification
 {
     // Used for debug only
-    NSLog(@"didPostCustomKeyboardNotification : %@", notification);
+    if ([notification.object isEqual:self.textView]) {
+        NSLog(@"didPostCustomKeyboardNotification : %@", notification);
+    }
 }
 
 - (void)willChangeTextViewText:(NSNotification *)notification
