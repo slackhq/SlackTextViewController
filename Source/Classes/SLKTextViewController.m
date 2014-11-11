@@ -849,7 +849,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)postKeyboarStatusNotification:(NSNotification *)notification
 {
-    if (self.isExternalKeyboardDetected || self.isRotating) {
+    if (![self.textView isFirstResponder] || self.isExternalKeyboardDetected || self.isRotating) {
         return;
     }
     
