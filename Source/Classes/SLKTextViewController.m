@@ -849,7 +849,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)postKeyboarStatusNotification:(NSNotification *)notification
 {
-    if (![self.textView isFirstResponder] || self.isExternalKeyboardDetected || self.isRotating) {
+    if (self.isExternalKeyboardDetected || self.isRotating) {
         return;
     }
     
@@ -1122,7 +1122,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     SLKKeyboardStatus status = [self keyboardStatusForNotification:notification];
-    
+
     // Skips if it's the current status
     if (self.keyboardStatus == status) {
         return;
@@ -1185,7 +1185,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 {
     // Used for debug only
     if ([notification.object isEqual:self.textView]) {
-        NSLog(@"didPostCustomKeyboardNotification : %@", notification);
+        NSLog(@"%@ didPostCustomKeyboardNotification : %@", NSStringFromClass([self class]), notification);
     }
 }
 
