@@ -1,10 +1,8 @@
 PODS:
   - LoremIpsum (1.0.0)
-  - SlackTextViewController (1.2.5):
+  - SlackTextViewController (1.3.2):
     - SlackTextViewController/Additions
-    - SlackTextViewController/Additions
-  - SlackTextViewController/Additions (1.2.5):
-    - SlackTextViewController/Additions
+  - SlackTextViewController/Additions (1.3.2)
 
 DEPENDENCIES:
   - LoremIpsum (~> 1.0)
@@ -16,6 +14,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   LoremIpsum: a4d378ecaffcb08c7e40cdba3fb935dc41b2272c
-  SlackTextViewController: 75e8775b499c561ad728556bb57f369b04c30557
+  SlackTextViewController: c797abfa58b84aa01e5c2056a1e4f3611b76cd51
 
-COCOAPODS: 0.34.1
+COCOAPODS: 0.34.4

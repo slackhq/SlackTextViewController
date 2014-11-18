@@ -920,7 +920,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     BOOL enable = !self.isAutoCompleting;
     
     // Skips if the QuickType Bar isn't visible and it's trying to disable it. And the inverted logic.
-    if (UI_IS_IOS8_AND_HIGHER && ((enable == NO && !self.isQuickTypeBarVisible) || (enable == YES && self.isQuickTypeBarVisible))) {
+    if (UI_IS_IOS8_AND_HIGHER && ((enable == NO && !self.isQuickTypeBarVisible) || (enable == self.textView.isTypingSuggestionEnabled))) {
         return;
     }
     

@@ -33,7 +33,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self = [super initWithTableViewStyle:UITableViewStylePlain];
     if (self) {
         
-        self.users = @[@"Allen", @"Anna", @"Alicia", @"Arnold", @"Armando", @"Antonio", @"Brad", @"Catalaya", @"Christoph", @"Emerson", @"Eric", @"Everyone"];
+        self.users = @[@"Allen", @"Anna", @"Alicia", @"Arnold", @"Armando", @"Antonio", @"Brad", @"Catalaya", @"Christoph", @"Emerson", @"Eric", @"Everyone", @"Steve"];
         self.channels = @[@"General", @"Random", @"iOS", @"Bugs", @"Sports", @"Android", @"UI", @"SSB"];
         self.emojis = @[@"m", @"man", @"machine", @"block-a", @"block-b", @"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
     }
@@ -269,6 +269,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (BOOL)canShowAutoCompletion
 {
+    NSLog(@"%s",__FUNCTION__);
+    
     NSArray *array = nil;
     NSString *prefix = self.foundPrefix;
     NSString *word = self.foundWord;
