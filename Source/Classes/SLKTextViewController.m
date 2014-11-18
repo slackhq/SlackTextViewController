@@ -166,17 +166,21 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 {
     [super viewDidLoad];
     
-    [UIView performWithoutAnimation:^{
-        [self reloadTextView];
-        [self setupViewConstraints];
-    }];
+    [self setupViewConstraints];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
+    // Invalidates this flag when the view appears
     self.textView.didNotResignFirstResponder = NO;
+    
+    [UIView performWithoutAnimation:^{
+        
+        // Reloads any cached text
+        [self reloadTextView];
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated
