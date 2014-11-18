@@ -20,14 +20,13 @@
 
 - (void)slk_scrollToCaretPositonAnimated:(BOOL)animated
 {
-    if (!animated)
-    {
+    if (animated) {
+        [self scrollRangeToVisible:self.selectedRange];
+    }
+    else {
         [UIView performWithoutAnimation:^{
             [self scrollRangeToVisible:self.selectedRange];
         }];
-    }
-    else {
-        [self scrollRangeToVisible:self.selectedRange];
     }
 }
 
@@ -36,14 +35,13 @@
     CGRect rect = [self caretRectForPosition:self.selectedTextRange.end];
     rect.size.height += self.textContainerInset.bottom;
     
-    if (!animated)
-    {
-        [UIView performWithoutAnimation:^{
-            [self scrollRectToVisible:rect animated:animated];
-        }];
+    if (animated) {
+        [self scrollRectToVisible:rect animated:animated];
     }
     else {
-        [self scrollRectToVisible:rect animated:animated];
+        [UIView performWithoutAnimation:^{
+            [self scrollRectToVisible:rect animated:NO];
+        }];
     }
 }
 
