@@ -809,13 +809,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)didPanTextView:(id)sender
 {
-    // Skips if the text view is already first responder
-    if ([self.textView isFirstResponder]) {
-        return;
-    }
-    
-    // Become first responder and enable keyboard
-    [self.textView becomeFirstResponder];
+    [self presentKeyboard:YES];
 }
 
 - (void)editText:(NSString *)text
@@ -1432,16 +1426,21 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         viewHeight = [self maximumHeightForAutoCompletionView];
     }
     
-    CGFloat tableHeight = self.scrollViewHC.constant;
+    CGFloat tableHeight = self.scrollViewHC.constant + self.autoCompletionViewHC.constant;
     
-    // If the the view controller extends it layout beneath it navigation bar and/or status bar, we then reduce it from the table view height
-    if (self.edgesForExtendedLayout == UIRectEdgeAll || self.edgesForExtendedLayout == UIRectEdgeTop) {
-        tableHeight -= CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
-        tableHeight -= self.navigationController.navigationBar.frame.size.height;
+    // Only when the view extends its layout beyond it top edge
+    if ((self.edgesForExtendedLayout & UIRectEdgeTop) > 0) {
+        
+        // On iOS7, the status bar isn't automatically hidden on landscape orientation
+        if (UI_IS_IPHONE && UI_IS_LANDSCAPE && !UI_IS_IOS8_AND_HIGHER) {
+            tableHeight -= CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
+        }
+        
+        tableHeight -= CGRectGetHeight(self.navigationController.navigationBar.frame);
     }
     
     // On iPhone, the autocompletion view can't extend beyond the table view height
-    if (viewHeight > tableHeight) {
+    if (UI_IS_IPHONE && viewHeight > tableHeight) {
         viewHeight = tableHeight;
     }
     
@@ -1691,7 +1690,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
                             @"textInputbar": self.textInputbar,
                             };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView(0@750)][autoCompletionView(0)][typingIndicatorView(0)]-0@999-[textInputbar(>=0)]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView(0@750)][autoCompletionView(0@750)][typingIndicatorView(0)]-0@999-[textInputbar(>=0)]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[autoCompletionView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[typingIndicatorView]|" options:0 metrics:nil views:views]];

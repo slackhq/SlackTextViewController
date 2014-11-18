@@ -269,8 +269,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (BOOL)canShowAutoCompletion
 {
-    NSLog(@"%s",__FUNCTION__);
-    
     NSArray *array = nil;
     NSString *prefix = self.foundPrefix;
     NSString *word = self.foundWord;
