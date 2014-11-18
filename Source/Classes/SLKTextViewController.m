@@ -1494,7 +1494,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     NSMutableArray *cachedKeys = [NSMutableArray new];
     
     for (NSString *key in [[[NSUserDefaults standardUserDefaults] dictionaryRepresentation] allKeys]) {
-        if ([key containsString:SLKTextViewControllerDomain]) {
+        if ([key rangeOfString:SLKTextViewControllerDomain].location != NSNotFound) {
             [cachedKeys addObject:key];
         }
     }
