@@ -14,22 +14,17 @@
 //   limitations under the License.
 //
 
-#import "UITextView+SLKAdditions.h"
+#import "SLKTextView+SLKAdditions.h"
 
-@implementation UITextView (SLKAdditions)
+@implementation SLKTextView (SLKAdditions)
 
 - (void)slk_scrollToCaretPositonAnimated:(BOOL)animated
 {
     if (!animated)
     {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.0];
-        [UIView setAnimationDelay:0.0];
-        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
-        
-        [self scrollRangeToVisible:self.selectedRange];
-        
-        [UIView commitAnimations];
+        [UIView performWithoutAnimation:^{
+            [self scrollRangeToVisible:self.selectedRange];
+        }];
     }
     else {
         [self scrollRangeToVisible:self.selectedRange];
@@ -43,14 +38,9 @@
     
     if (!animated)
     {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.0];
-        [UIView setAnimationDelay:0.0];
-        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
-        
-        [self scrollRectToVisible:rect animated:animated];
-        
-        [UIView commitAnimations];
+        [UIView performWithoutAnimation:^{
+            [self scrollRectToVisible:rect animated:animated];
+        }];
     }
     else {
         [self scrollRectToVisible:rect animated:animated];
@@ -61,19 +51,8 @@
 {
     [self slk_insertTextAtCaretRange:@"\n"];
     
-    BOOL animated = YES;
-    SEL expandingSelector = NSSelectorFromString(@"isExpanding");
-    
-    if ([self respondsToSelector:expandingSelector]) {
-        
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        BOOL isExpanding = (BOOL)[self performSelector:expandingSelector withObject:nil];
-#pragma clang diagnostic pop
-        
-        // if the text view cannot expand anymore, scrolling to bottom are not animated to fix a UITextView issue scrolling twice.
-        animated = !isExpanding;
-    }
+    // if the text view cannot expand anymore, scrolling to bottom are not animated to fix a UITextView issue scrolling twice.
+    BOOL animated = !self.isExpanding;
     
     //Detected break. Should scroll to bottom if needed.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0125 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

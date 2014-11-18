@@ -17,11 +17,9 @@
 #import "SLKTextInputbar.h"
 #import "SLKTextViewController.h"
 #import "SLKTextView.h"
-
-#import "UITextView+SLKAdditions.h"
-#import "UIView+SLKAdditions.h"
-
+#import "SLKTextView+SLKAdditions.h"
 #import "SLKUIConstants.h"
+#import "UIView+SLKAdditions.h"
 
 @interface SLKTextInputbar ()
 

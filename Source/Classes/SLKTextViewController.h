@@ -18,9 +18,9 @@
 #import "SLKTextInputbar.h"
 #import "SLKTypingIndicatorView.h"
 #import "SLKTextView.h"
+#import "SLKTextView+SLKAdditions.h"
 
 #import "UIScrollView+SLKAdditions.h"
-#import "UITextView+SLKAdditions.h"
 #import "UIView+SLKAdditions.h"
 
 /** UIKeyboard notification replacement, posting reliably only when showing/hiding the

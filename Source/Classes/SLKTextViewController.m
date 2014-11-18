@@ -836,8 +836,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     if ([self.textView isFirstResponder]) {
         [self.textInputbar beginTextEditing];
     }
-    
-    if (![self.textView isFirstResponder]) {
+    else {
         [self presentKeyboard:YES];
     }
 }
