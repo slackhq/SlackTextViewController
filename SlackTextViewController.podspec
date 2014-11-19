@@ -18,6 +18,7 @@ Pod::Spec.new do |s|
   s.source_files 		= 'Classes', 'Source/Classes/*.{h,m}'
 
   s.subspec 'Additions' do |add|
-    add.source_files     = 'Source/Additions/*.{h,m}'
+    add.source_files     =  'Source/Additions/*.{h,m}',
+                            'Source/Classes/SLKTextView.h'
   end
 end
