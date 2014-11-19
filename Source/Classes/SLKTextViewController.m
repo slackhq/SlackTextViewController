@@ -931,9 +931,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.keyboardHC.constant = 0.0;
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
-    if (self.isAutoCompleting) {
-        [self hideAutoCompletionView];
-    }
+    [self hideAutoCompletionViewIfNeeded];
     
     // Forces the keyboard status change
     [self updateKeyboardStatus:SLKKeyboardStatusDidHide];
@@ -1086,9 +1084,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.keyboardHC.constant = [self appropriateKeyboardHeight:notification];
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
-    // Hides autocompletion mode if the keyboard is being dismissed
-    if ((![self.textView isFirstResponder] || status == SLKKeyboardStatusWillHide) && self.isAutoCompleting) {
-        [self hideAutoCompletionView];
+    // Hides the autocompletion view if the keyboard is being dismissed
+    if (![self.textView isFirstResponder] || status == SLKKeyboardStatusWillHide) {
+        [self hideAutoCompletionViewIfNeeded];
     }
     
     // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
@@ -1300,6 +1298,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)processTextForAutoCompletion
 {
+    if (self.isRotating) {
+        return;
+    }
+    
     // Avoids text processing for autocompletion if the registered prefix list is empty.
     if (self.registeredPrefixes.count == 0) {
         return;
@@ -1385,9 +1387,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     [self.autoCompletionView setContentOffset:CGPointZero];
     
-    if (self.isAutoCompleting) {
-        [self showAutoCompletionView:NO];
-    }
+    [self hideAutoCompletionViewIfNeeded];
 }
 
 - (void)acceptAutoCompletionWithString:(NSString *)string
@@ -1408,13 +1408,20 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [textView slk_scrollToCaretPositonAnimated:NO];
 }
 
-- (void)hideAutoCompletionView
+- (void)hideAutoCompletionViewIfNeeded
 {
-    [self showAutoCompletionView:NO];
+    if (self.isAutoCompleting) {
+        [self showAutoCompletionView:NO];
+    }
 }
 
 - (void)showAutoCompletionView:(BOOL)show
 {
+    // Skips if rotating
+    if (self.isRotating) {
+        return;
+    }
+    
     CGFloat viewHeight = show ? [self heightForAutoCompletionView] : 0.0;
     
     if (self.autoCompletionViewHC.constant == viewHeight) {
@@ -1806,7 +1813,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    self.rotating = NO;
+    // Delays the rotation flag
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.rotating = NO;
+    });
 }
 
 - (NSUInteger)supportedInterfaceOrientations
