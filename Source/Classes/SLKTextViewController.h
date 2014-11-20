@@ -18,14 +18,15 @@
 #import "SLKTextInputbar.h"
 #import "SLKTypingIndicatorView.h"
 #import "SLKTextView.h"
-#import "SLKTextView+SLKAdditions.h"
 
+#import "SLKTextView+SLKAdditions.h"
 #import "UIScrollView+SLKAdditions.h"
 #import "UIView+SLKAdditions.h"
 
-/** UIKeyboard notification replacement, posting reliably only when showing/hiding the
- keyboard (not when resizing keyboard, or with inputAccessoryView reloads, etc.)
- Use these APIs with your own risk (still a work in progress). */
+/**
+ UIKeyboard notification replacement, posting reliably only when showing/hiding the
+ keyboard (not when resizing keyboard, or with inputAccessoryView reloads, etc.). Only triggered when using SLKTextViewController's text view.
+ */
 extern NSString *const SLKKeyboardWillShowNotification;
 extern NSString *const SLKKeyboardDidShowNotification;
 extern NSString *const SLKKeyboardWillHideNotification;
@@ -66,7 +67,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** YES if keyboard can be dismissed gradually with a vertical panning gesture. Default is YES. */
 @property (nonatomic, assign, getter = isKeyboardPanningEnabled) BOOL keyboardPanningEnabled;
 
-/** YES if an external keyboard has been detected (this value only changes when the text view becomes first responder). */
+/** YES if an external keyboard has been detected (this value updates only when the text view becomes first responder). */
 @property (nonatomic, readonly) BOOL isExternalKeyboardDetected;
 
 /** YES if after right button press, the text view is cleared out. Default is YES. */
@@ -298,7 +299,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** The range of the found prefix in the text view content. */
 @property (nonatomic, readonly) NSRange foundPrefixRange;
 
-/** The recently found word at the textView caret position. */
+/** The recently found word at the text view's caret position. */
 @property (nonatomic, readonly) NSString *foundWord;
 
 /** YES if the autocompletion mode is active. */

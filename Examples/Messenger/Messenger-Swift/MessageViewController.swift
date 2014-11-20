@@ -9,10 +9,12 @@
 class MessageViewController: SLKTextViewController {
 
     override class func tableViewStyleForCoder(decoder: NSCoder) -> UITableViewStyle {
-        return UITableViewStyle.Grouped;
+        return UITableViewStyle.Plain;
     }
     
     override func viewDidLoad() {
+        
+        // In progress in branch 'swift-example'
         super.viewDidLoad()
     }
 
