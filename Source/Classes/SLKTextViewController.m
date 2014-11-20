@@ -177,7 +177,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.textView.didNotResignFirstResponder = NO;
     
     [UIView performWithoutAnimation:^{
-        
         // Reloads any cached text
         [self reloadTextView];
     }];
@@ -200,6 +199,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.textView.didNotResignFirstResponder = self.isMovingFromParentViewController;
     
     self.didFinishConfigurating = NO;
+    
+    // Caches the text before it's too late!
+    [self cacheTextView];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -716,6 +718,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     if (self.shouldClearTextAtRightButtonPress) {
         [self.textView setText:nil];
     }
+    
+    // Clears cache (if enabled)
+    [self clearCachedText];
 }
 
 - (void)didCommitTextEditing:(id)sender
@@ -1267,7 +1272,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (void)willTerminateApplication:(NSNotification *)notification
 {
     // Caches the text before it's too late!
-    [self cacheTextToDisk:self.textView.text];
+    [self cacheTextView];
 }
 
 
@@ -1489,8 +1494,13 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     if (self.textView.text.length > 0 || !self.isCachingEnabled) {
         return;
     }
-    
+
     self.textView.text = [self cachedText];
+}
+
+- (void)cacheTextView
+{
+    [self cacheTextToDisk:self.textView.text];
 }
 
 - (void)clearCachedText
@@ -1530,7 +1540,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return nil;
     }
     
-    return [[NSUserDefaults standardUserDefaults] objectForKey:[self keyForPersistency]];
+    NSString *key = [self keyForPersistency];
+    return [[NSUserDefaults standardUserDefaults] objectForKey:key];
 }
 
 - (void)cacheTextToDisk:(NSString *)text
@@ -1539,18 +1550,19 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
-    NSString *cachedString = [self cachedText];
-    
+    NSString *cachedText = [self cachedText];
+    NSString *key = [self keyForPersistency];
+
     // Caches text only if its a valid string and not already cached
-    if (text.length > 0 && ![text isEqualToString:cachedString]) {
-        [[NSUserDefaults standardUserDefaults] setObject:text forKey:[self keyForPersistency]];
+    if (text.length > 0 && ![text isEqualToString:cachedText]) {
+        [[NSUserDefaults standardUserDefaults] setObject:text forKey:key];
     }
     // Clears cache only if it exists
-    else if (text.length == 0 && cachedString.length > 0) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:[self keyForPersistency]];
+    else if (text.length == 0 && cachedText.length > 0) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
     }
-    // If not, skips.
     else {
+        // Skips so it doesn't hit 'synchronize' unnecessarily
         return;
     }
     
@@ -1839,9 +1851,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)dealloc
 {
-    // Caches the text before it's too late!
-    [self cacheTextToDisk:self.textView.text];
-    
     _tableView.delegate = nil;
     _tableView.dataSource = nil;
     _tableView = nil;
