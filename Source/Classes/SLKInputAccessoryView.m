@@ -30,7 +30,7 @@ NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"SLK
 NSString *SLKKeyboardHandlingKeyPath()
 {
     // Listening for the superview's frame doesn't work on iOS8 and above, so we use its center
-    if (UI_IS_IOS8_AND_HIGHER) {
+    if (SLK_IS_IOS8_AND_HIGHER) {
         return NSStringFromSelector(@selector(center));
     }
     else {

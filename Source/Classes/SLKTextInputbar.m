@@ -224,10 +224,10 @@
 
 - (NSUInteger)defaultNumberOfLines
 {
-    if (UI_IS_IPAD) {
+    if (SLK_IS_IPAD) {
         return 8;
     }
-    if (UI_IS_IPHONE4) {
+    if (SLK_IS_IPHONE4) {
         return 4;
     }
     else {

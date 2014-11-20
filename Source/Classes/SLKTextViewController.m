@@ -323,14 +323,14 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (BOOL)isPresentedInPopover
 {
-    return _presentedInPopover && UI_IS_IPAD;
+    return _presentedInPopover && SLK_IS_IPAD;
 }
 
 - (BOOL)isQuickTypeBarVisible
 {
     CGFloat quickTypeBarHeight = self.keyboardHC.constant-minimumKeyboardHeight();
     
-    if (UI_IS_IOS8_AND_HIGHER && quickTypeBarHeight > 0.0 && self.textView.autocorrectionType != UITextAutocorrectionTypeNo) {
+    if (SLK_IS_IOS8_AND_HIGHER && quickTypeBarHeight > 0.0 && self.textView.autocorrectionType != UITextAutocorrectionTypeNo) {
         return YES;
     }
     return NO;
@@ -430,7 +430,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     // Sets the minimum height of the keyboard
     if (self.isMovingKeyboard) {
-        if (!UI_IS_IOS8_AND_HIGHER && UI_IS_LANDSCAPE) {
+        if (!SLK_IS_IOS8_AND_HIGHER && SLK_IS_LANDSCAPE) {
             keyboardHeight = MIN(CGRectGetWidth([UIScreen mainScreen].bounds), CGRectGetHeight([UIScreen mainScreen].bounds));
             keyboardHeight -= MAX(endFrame.origin.x, endFrame.origin.y);
         }
@@ -861,7 +861,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
     // Fixes iOS7 oddness with inverted values on landscape orientation
-    if (!UI_IS_IOS8_AND_HIGHER && UI_IS_LANDSCAPE) {
+    if (!SLK_IS_IOS8_AND_HIGHER && SLK_IS_LANDSCAPE) {
         beginFrame = SLKRectInvert(beginFrame);
         endFrame = SLKRectInvert(endFrame);
     }
@@ -919,7 +919,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     BOOL enable = !self.isAutoCompleting;
     
     // Skips if the QuickType Bar isn't visible and it's trying to disable it. And the inverted logic.
-    if (UI_IS_IOS8_AND_HIGHER && ((enable == NO && !self.isQuickTypeBarVisible) || (enable == self.textView.isTypingSuggestionEnabled))) {
+    if (SLK_IS_IOS8_AND_HIGHER && ((enable == NO && !self.isQuickTypeBarVisible) || (enable == self.textView.isTypingSuggestionEnabled))) {
         return;
     }
     
@@ -1181,11 +1181,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [self.view layoutIfNeeded];
 }
 
-- (void)didPostCustomKeyboardNotification:(NSNotification *)notification
+- (void)didPostSLKKeyboardNotification:(NSNotification *)notification
 {
     // Used for debug only
     if ([notification.object isEqual:self.textView]) {
-        NSLog(@"%@ didPostCustomKeyboardNotification : %@", NSStringFromClass([self class]), notification);
+        NSLog(@"%@ didPostSLKKeyboardNotification : %@", NSStringFromClass([self class]), notification);
     }
 }
 
@@ -1444,7 +1444,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     if ((self.edgesForExtendedLayout & UIRectEdgeTop) > 0) {
         
         // On iOS7, the status bar isn't automatically hidden on landscape orientation
-        if (UI_IS_IPHONE && UI_IS_LANDSCAPE && !UI_IS_IOS8_AND_HIGHER) {
+        if (SLK_IS_IPHONE && SLK_IS_LANDSCAPE && !SLK_IS_IOS8_AND_HIGHER) {
             tableHeight -= CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
         }
         
@@ -1452,7 +1452,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     // On iPhone, the autocompletion view can't extend beyond the table view height
-    if (UI_IS_IPHONE && viewHeight > tableHeight) {
+    if (SLK_IS_IPHONE && viewHeight > tableHeight) {
         viewHeight = tableHeight;
     }
     
@@ -1760,10 +1760,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShowOrHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
     
 #if SLK_KEYBOARD_NOTIFICATION_DEBUG
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didPostCustomKeyboardNotification:) name:SLKKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didPostCustomKeyboardNotification:) name:SLKKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didPostCustomKeyboardNotification:) name:SLKKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didPostCustomKeyboardNotification:) name:SLKKeyboardDidHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didPostSLKKeyboardNotification:) name:SLKKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didPostSLKKeyboardNotification:) name:SLKKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didPostSLKKeyboardNotification:) name:SLKKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didPostSLKKeyboardNotification:) name:SLKKeyboardDidHideNotification object:nil];
 #endif
     
     // TextView notifications

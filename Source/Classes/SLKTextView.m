@@ -150,7 +150,7 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
 // Returns a different number of lines when landscape and only on iPhone
 - (NSUInteger)maxNumberOfLines
 {
-    if (UI_IS_IPHONE && UI_IS_LANDSCAPE) {
+    if (SLK_IS_IPHONE && SLK_IS_LANDSCAPE) {
         return 2.0;
     }
     return _maxNumberOfLines;
