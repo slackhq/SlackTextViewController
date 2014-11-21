@@ -658,11 +658,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)textDidUpdate:(BOOL)animated
 {
-    // Disables animation if not first responder
-    if (![self.textView isFirstResponder]) {
-        animated = NO;
-    }
-    
     self.textInputbar.rightButton.enabled = [self canPressRightButton];
     self.textInputbar.editortRightButton.enabled = [self canPressRightButton];
     
