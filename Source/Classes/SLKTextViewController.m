@@ -818,21 +818,13 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
-    // Updates the constraints before inserting text, if not first responder yet
-    if (![self.textView isFirstResponder]) {
-        [self.textInputbar beginTextEditing];
-    }
-    
+    [self.textInputbar beginTextEditing];
     [self.textView setText:text];
+    
     [self.textView slk_scrollToCaretPositonAnimated:YES];
     
-    // Updates the constraints after inserting text, if already first responder
-    if ([self.textView isFirstResponder]) {
-        [self.textInputbar beginTextEditing];
-    }
-    else {
-        [self presentKeyboard:YES];
-    }
+    // Brings up the keyboard if needed
+    [self presentKeyboard:YES];
 }
 
 - (void)performRightAction
