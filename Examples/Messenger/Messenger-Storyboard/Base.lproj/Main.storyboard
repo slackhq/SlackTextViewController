@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A386a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="nJp-d0-Z0H">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="0WO-Kt-Oxc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6246"/>
     </dependencies>
     <scenes>
         <!--Message View Controller-->
@@ -23,10 +24,29 @@
             </objects>
             <point key="canvasLocation" x="1302" y="492"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Tab Bar Controller-->
+        <scene sceneID="SEt-8k-R87">
+            <objects>
+                <tabBarController id="0WO-Kt-Oxc" sceneMemberID="viewController">
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="US0-fN-o9u">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="nJp-d0-Z0H" kind="relationship" relationship="viewControllers" id="nd7-Np-oUR"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bQn-nb-Tgr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-132" y="492"/>
+        </scene>
+        <!--Tab-->
         <scene sceneID="5B4-6e-pdF">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="nJp-d0-Z0H" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Tab" image="icn_editing" id="whH-lj-Whp"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="fWe-MD-oZ3">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -42,4 +62,7 @@
             <point key="canvasLocation" x="583" y="492"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="icn_editing" width="24" height="24"/>
+    </resources>
 </document>
