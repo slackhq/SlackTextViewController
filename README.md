@@ -35,6 +35,7 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 - iPhone & iPad
 - Storyboard
 - UIPopOverController & UITabBarController
+- Container view controller
 - External keyboard commands
 - Auto-Rotation
 - Localization

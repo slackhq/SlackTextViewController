@@ -449,7 +449,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         }
     }
     
-    keyboardHeight -= [self appropriateTabBarHeight];
+    keyboardHeight -= [self appropriateBottomMarginToWindow];
     keyboardHeight -= CGRectGetHeight(self.textView.inputAccessoryView.bounds);
     
     if (keyboardHeight < 0) {
@@ -472,13 +472,12 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     else return roundf(height);
 }
 
-- (CGFloat)appropriateTabBarHeight
+- (CGFloat)appropriateBottomMarginToWindow
 {
-    if (self.tabBarController.tabBar.isHidden || self.hidesBottomBarWhenPushed) {
-        return 0.0;
-    }
-    
-    return CGRectGetHeight(self.tabBarController.tabBar.frame);
+    UIWindow *window = self.view.window;
+    CGRect convertedRect = [self.view convertRect:self.view.bounds toView:window];
+    CGFloat bottomMargin = CGRectGetMaxY(window.frame) - CGRectGetMaxY(convertedRect);
+    return bottomMargin;
 }
 
 - (NSString *)appropriateKeyboardNotificationName:(NSNotification *)notification
@@ -946,7 +945,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
     if (!self.isMovingKeyboard) {
         CGFloat maxKeyboardHeight = keyboardFrame.origin.y + keyboardFrame.size.height;
-        maxKeyboardHeight -= [self appropriateTabBarHeight];
+        maxKeyboardHeight -= [self appropriateBottomMarginToWindow];
 
         return (maxKeyboardHeight > CGRectGetHeight(self.view.bounds));
     }
