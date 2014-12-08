@@ -18,8 +18,6 @@
 #import "SLKInputAccessoryView.h"
 #import "SLKUIConstants.h"
 
-#import <objc/runtime.h>
-
 NSString * const SLKKeyboardWillShowNotification =  @"SLKKeyboardWillShowNotification";
 NSString * const SLKKeyboardDidShowNotification =   @"SLKKeyboardDidShowNotification";
 NSString * const SLKKeyboardWillHideNotification =  @"SLKKeyboardWillHideNotification";
