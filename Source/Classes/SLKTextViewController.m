@@ -1645,7 +1645,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture
 {
     if ([gesture isEqual:self.singleTapGesture]) {
-        return [self.textView isFirstResponder] || self.keyboardHC.constant > 0;
+        return [self.textView isFirstResponder] && !self.isExternalKeyboardDetected;
     }
     else if ([gesture isEqual:self.verticalPanGesture]) {
         
@@ -1659,10 +1659,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         if (velocity.y < 0 && ABS(velocity.y) > ABS(velocity.x) && ![self.textInputbar.textView isFirstResponder]) {
             return YES;
         }
-        return NO;
     }
     
-    return YES;
+    return NO;
 }
 
 
