@@ -576,10 +576,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
          // Undo/Redo
          [UIKeyCommand keyCommandWithInput:@"z" modifierFlags:UIKeyModifierCommand action:@selector(didPressCommandZKeys:)],
          [UIKeyCommand keyCommandWithInput:@"z" modifierFlags:UIKeyModifierShift|UIKeyModifierCommand action:@selector(didPressCommandZKeys:)],
-         
-         // Up/Down
-         [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(didPressArrowKey:)],
-         [UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(didPressArrowKey:)]
          ];
     
     return _keyboardCommands;
@@ -612,7 +608,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 #pragma mark Up/Down Cursor Movement
 
-- (void)didPressArrowKey:(id)sender
+- (void)didPressAnyArrowKey:(id)sender
 {
     if (self.text.length == 0 || self.numberOfLines < 2) {
         return;
@@ -623,7 +619,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     if ([keyCommand.input isEqualToString:UIKeyInputUpArrow]) {
         [self moveCursorTodirection:UITextLayoutDirectionUp];
     }
-    else {
+    else if ([keyCommand.input isEqualToString:UIKeyInputDownArrow]) {
         [self moveCursorTodirection:UITextLayoutDirectionDown];
     }
 }

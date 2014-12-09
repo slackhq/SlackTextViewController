@@ -253,6 +253,12 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  */
 - (void)didPressEscapeKey:(id)sender NS_REQUIRES_SUPER;
 
+/**
+ Notifies the view controller when the user has pressed the arrow key with an external keyboard.
+ You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
+ */
+- (void)didPressArrowKey:(id)sender NS_REQUIRES_SUPER;
+
 
 ///------------------------------------------------
 /// @name Text Edition

@@ -79,4 +79,9 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 - (void)refreshFirstResponder;
 - (void)refreshInputViews;
 
+/**
+ Notifies the text view that the user pressed any arrow key. This is used to move the cursor up and down while having multiple lines.
+ */
+- (void)didPressAnyArrowKey:(id)sender;
+
 @end
