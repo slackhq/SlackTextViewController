@@ -78,7 +78,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    return [self init];
+    return [self initWithTableViewStyle:UITableViewStylePlain];
 }
 
 - (instancetype)init
@@ -92,7 +92,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     if (self = [super initWithNibName:nil bundle:nil])
     {
-        [self tableViewWithStyle:style];
+        self.scrollViewProxy = [self tableViewWithStyle:style];
         [self commonInit];
     }
     return self;
@@ -104,7 +104,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     if (self = [super initWithNibName:nil bundle:nil])
     {
-        [self collectionViewWithLayout:layout];
+        self.scrollViewProxy = [self collectionViewWithLayout:layout];
         [self commonInit];
     }
     return self;
@@ -119,11 +119,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         UITableViewStyle tableViewStyle = [[self class] tableViewStyleForCoder:decoder];
         UICollectionViewLayout *collectionViewLayout = [[self class] collectionViewLayoutForCoder:decoder];
         
-        if ([collectionViewLayout isKindOfClass:[UICollectionViewLayout class]]) {
-            [self collectionViewWithLayout:collectionViewLayout];
+        if (tableViewStyle == UITableViewStylePlain || tableViewStyle == UITableViewStyleGrouped) {
+            self.scrollViewProxy = [self tableViewWithStyle:tableViewStyle];
         }
-        else if (tableViewStyle == UITableViewStylePlain || tableViewStyle == UITableViewStyleGrouped) {
-            [self tableViewWithStyle:tableViewStyle];
+        else if ([collectionViewLayout isKindOfClass:[UICollectionViewLayout class]]) {
+            self.scrollViewProxy = [self collectionViewWithLayout:collectionViewLayout];
         }
         else {
             return nil;
@@ -158,13 +158,13 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [self.view addSubview:self.autoCompletionView];
     [self.view addSubview:self.typingIndicatorView];
     [self.view addSubview:self.textInputbar];
+    
+    [self setupViewConstraints];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [self setupViewConstraints];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -232,8 +232,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         _tableView.delegate = self;
         
         _tableView.tableFooterView = [UIView new];
-        
-        [self setScrollViewProxy:self.tableView];
     }
     return _tableView;
 }
@@ -248,8 +246,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         _collectionView.scrollsToTop = YES;
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
-        
-        [self setScrollViewProxy:self.collectionView];
     }
     return _collectionView;
 }
@@ -535,22 +531,17 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)setScrollViewProxy:(UIScrollView *)scrollView
 {
-    if (self.scrollViewProxy) {
+    if ([self.scrollViewProxy isEqual:scrollView]) {
         return;
     }
-    
-    _scrollViewProxy = scrollView;
     
     _singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapScrollView:)];
     _singleTapGesture.delegate = self;
     [_singleTapGesture requireGestureRecognizerToFail:scrollView.panGestureRecognizer];
     
-    [_scrollViewProxy addGestureRecognizer:self.singleTapGesture];
-}
-
-- (void)setbounces:(BOOL)bounces
-{
-    _bounces = bounces;
+    [scrollView addGestureRecognizer:self.singleTapGesture];
+    
+    _scrollViewProxy = scrollView;
 }
 
 - (void)setAutoCompleting:(BOOL)autoCompleting
