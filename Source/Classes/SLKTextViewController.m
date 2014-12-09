@@ -1062,19 +1062,19 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         [self hideAutoCompletionViewIfNeeded];
     }
     
-    // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
-	[self.view slk_animateLayoutIfNeededWithDuration:duration
-											  bounce:NO
-											 options:(curve<<16)|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
-										  animations:^{
-                                              [self scrollToBottomIfNeeded];
-                                          }];
-    
     // Updates and notifies about the keyboard status update
     if ([self updateKeyboardStatus:status]) {
         // Posts custom keyboard notification, if logical conditions apply
         [self postKeyboarStatusNotification:notification];
     }
+    
+    // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
+    [self.view slk_animateLayoutIfNeededWithDuration:duration
+                                              bounce:NO
+                                             options:(curve<<16)|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
+                                          animations:^{
+                                              [self scrollToBottomIfNeeded];
+                                          }];
 }
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
