@@ -156,14 +156,17 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (void)editLastMessage:(id)sender
 {
-    if (self.textView.text > 0) {
+    if (self.textView.text.length > 0) {
         return;
     }
     
-    NSString *lastMessage = [self.messages firstObject];
+    NSInteger lastSectionIndex = [self.tableView numberOfSections]-1;
+    NSInteger lastRowIndex = [self.tableView numberOfRowsInSection:lastSectionIndex]-1;
+    
+    NSString *lastMessage = [self.messages objectAtIndex:lastRowIndex];
     [self editText:lastMessage];
     
-    [self.tableView slk_scrollToTopAnimated:YES];
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:lastRowIndex inSection:lastSectionIndex] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (void)didSaveLastMessageEditing:(id)sender
@@ -222,6 +225,17 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [self.tableView slk_scrollToTopAnimated:YES];
     
     [super didPressRightButton:sender];
+}
+
+- (void)didPressArrowKey:(id)sender
+{
+    [super didPressArrowKey:sender];
+    
+    UIKeyCommand *keyCommand = (UIKeyCommand *)sender;
+    
+    if ([keyCommand.input isEqualToString:UIKeyInputUpArrow]) {
+        [self editLastMessage:nil];
+    }
 }
 
 - (NSString *)keyForTextCaching
@@ -308,18 +322,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     CGFloat cellHeight = [self.autoCompletionView.delegate tableView:self.autoCompletionView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     return cellHeight*self.searchResult.count;
-}
-
-- (NSArray *)keyCommands
-{
-    NSMutableArray *commands = [NSMutableArray arrayWithArray:[super keyCommands]];
-    
-    // Edit last message
-    [commands addObject:[UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow
-                                           modifierFlags:0
-                                                   action:@selector(editLastMessage:)]];
-    
-    return commands;
 }
 
 
@@ -487,9 +489,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     // Since SLKTextViewController uses UIScrollViewDelegate to update a few things, it is important that if you ovveride this method, to call super.
     [super scrollViewDidScroll:scrollView];
-    
-    NSLog(@"slk_isAtTop : %@", [scrollView slk_isAtTop] ? @"YES" : @"NO");
-    NSLog(@"slk_isAtBottom : %@", [scrollView slk_isAtBottom] ? @"YES" : @"NO");
 }
 
 @end
