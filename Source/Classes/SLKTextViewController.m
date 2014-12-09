@@ -316,6 +316,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (BOOL)isExternalKeyboardDetected
 {
+    if ([self.textView isFirstResponder] && self.keyboardHC.constant == 0) {
+        _externalKeyboardDetected = YES;
+    }
     return _externalKeyboardDetected;
 }
 
@@ -791,17 +794,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)didTapScrollView:(UIGestureRecognizer *)gesture
 {
-    // Skips if it is presented inside of a popover
-    if (self.isPresentedInPopover) {
-        return;
+    if (!self.isPresentedInPopover && !self.isExternalKeyboardDetected) {
+        [self dismissKeyboard:YES];
     }
-    
-    // Skips if using an external keyboard
-    if (self.isExternalKeyboardDetected) {
-        return;
-    }
-    
-    [self dismissKeyboard:YES];
 }
 
 - (void)didPanTextView:(id)sender
@@ -1027,15 +1022,13 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 {
     if (self.isAutoCompleting) {
         [self cancelAutoCompletion];
-        return;
     }
-    
-    if (self.isEditing) {
+    else if (self.isEditing) {
         [self didCancelTextEditing:sender];
-        return;
     }
-    
-    [self dismissKeyboard:YES];
+    else if (!self.isExternalKeyboardDetected) {
+        [self dismissKeyboard:YES];
+    }
 }
 
 
