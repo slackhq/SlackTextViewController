@@ -1343,13 +1343,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return [self cancelAutoCompletion];
     }
     
-    BOOL canShow = [self canShowAutoCompletion];
-    
-    // Reload the tableview before showing it
-    [self.autoCompletionView reloadData];
-    [self.autoCompletionView setContentOffset:CGPointZero];
-    
-    [self showAutoCompletionView:canShow];
+    [self showAutoCompletionView:[self canShowAutoCompletion]];
 }
 
 - (void)cancelAutoCompletion
@@ -1399,6 +1393,12 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     if (self.autoCompletionViewHC.constant == viewHeight) {
         return;
+    }
+    
+    if (show) {
+        // Reload the tableview before showing it
+        [self.autoCompletionView reloadData];
+        [self.autoCompletionView setContentOffset:CGPointZero];
     }
     
     // If the autocompletion view height is bigger than the maximum height allows, it is reduce to that size. Default 140 pts.
