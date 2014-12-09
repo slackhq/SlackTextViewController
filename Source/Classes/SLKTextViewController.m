@@ -855,7 +855,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     if (self.isInverted) {
-        [self.scrollViewProxy slk_scrollToBottomAnimated:YES];
+        [self.scrollViewProxy slk_scrollToTopAnimated:YES];
         return NO;
     }
     else {

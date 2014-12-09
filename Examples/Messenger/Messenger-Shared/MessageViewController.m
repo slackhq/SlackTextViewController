@@ -66,6 +66,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.bounces = YES;
     self.shakeToClearEnabled = YES;
     self.keyboardPanningEnabled = YES;
+    self.shouldScrollToBottomAfterKeyboardShows = NO;
     self.inverted = YES;
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -486,6 +487,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     // Since SLKTextViewController uses UIScrollViewDelegate to update a few things, it is important that if you ovveride this method, to call super.
     [super scrollViewDidScroll:scrollView];
+    
+    NSLog(@"slk_isAtTop : %@", [scrollView slk_isAtTop] ? @"YES" : @"NO");
+    NSLog(@"slk_isAtBottom : %@", [scrollView slk_isAtBottom] ? @"YES" : @"NO");
 }
 
 @end
