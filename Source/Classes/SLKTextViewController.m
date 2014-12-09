@@ -425,7 +425,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.externalKeyboardDetected = [self detectExternalKeyboardInNotification:notification];
     
     // Always return 0 if an external keyboard has been detected
-    if (self.isExternalKeyboardDetected) {
+    if (self.externalKeyboardDetected) {
         return keyboardHeight;
     }
     
