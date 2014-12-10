@@ -146,6 +146,10 @@
 
 - (void)prepareForUndo:(NSString *)description
 {
+    if (!self.undoManagerEnabled) {
+        return;
+    }
+    
     [[self.undoManager prepareWithInvocationTarget:self] setText:self.text];
     [self.undoManager setActionName:description];
 }

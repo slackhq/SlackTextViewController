@@ -69,6 +69,9 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 /** YES if autocorrection and spell checking are enabled. On iOS8, this property also controls the predictive QuickType bar from being visible. Default is YES. */
 @property (nonatomic, getter=isTypingSuggestionEnabled) BOOL typingSuggestionEnabled;
 
+/** YES if the text view supports undoing, either using UIMenuController, or with ctrl+z when using an external keyboard. Default is YES. */
+@property (nonatomic, readwrite) BOOL undoManagerEnabled;
+
 /**
  Some text view properties don't update when it's already firstResponder (auto-correction, spelling-check, etc.)
  To be able to update the text view while still being first responder, requieres to switch quickly from -resignFirstResponder to -becomeFirstResponder.

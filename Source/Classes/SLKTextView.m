@@ -69,6 +69,7 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
 {
     self.placeholderColor = [UIColor lightGrayColor];
     self.pastableMediaTypes = SLKPastableMediaTypeNone;
+    self.undoManagerEnabled = YES;
     
     self.font = [UIFont systemFontOfSize:14.0];
     self.editable = YES;
@@ -353,9 +354,11 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 - (BOOL)canBecomeFirstResponder
 {
     // Adds undo/redo items to the Menu Controller
-    UIMenuItem *undo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Undo", nil) action:@selector(undo:)];
-    UIMenuItem *redo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Redo", nil) action:@selector(redo:)];
-    [[UIMenuController sharedMenuController] setMenuItems:@[undo,redo]];
+    if (self.undoManagerEnabled) {
+        UIMenuItem *undo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Undo", nil) action:@selector(undo:)];
+        UIMenuItem *redo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Redo", nil) action:@selector(redo:)];
+        [[UIMenuController sharedMenuController] setMenuItems:@[undo,redo]];
+    }
     
     return [super canBecomeFirstResponder];
 }
@@ -368,7 +371,9 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 - (BOOL)canResignFirstResponder
 {
     // Removes undo/redo items
-    [[UIMenuController sharedMenuController] setMenuItems:@[]];
+    if (self.undoManagerEnabled) {
+        [[UIMenuController sharedMenuController] setMenuItems:@[]];
+    }
     
     return [super canResignFirstResponder];
 }
@@ -393,9 +398,11 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
         return YES;
     }
     
-    if ((action == @selector(undo:) && ![self.undoManager canUndo]) ||
-        (action == @selector(redo:) && ![self.undoManager canRedo])) {
-        return NO;
+    if (self.undoManagerEnabled) {
+        if ((action == @selector(undo:) && ![self.undoManager canUndo]) ||
+            (action == @selector(redo:) && ![self.undoManager canRedo])) {
+            return NO;
+        }
     }
     
     return [super canPerformAction:action withSender:sender];
@@ -593,6 +600,10 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (void)didPressCommandZKeys:(id)sender
 {
+    if (!self.undoManagerEnabled) {
+        return;
+    }
+    
     UIKeyCommand *keyCommand = (UIKeyCommand *)sender;
     
     if ((keyCommand.modifierFlags & UIKeyModifierShift) > 0) {
@@ -601,8 +612,10 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
             [self.undoManager redo];
         }
     }
-    else if ([self.undoManager canUndo]) {
-        [self.undoManager undo];
+    else {
+        if ([self.undoManager canUndo]) {
+            [self.undoManager undo];
+        }
     }
 }
 
@@ -623,10 +636,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
         [self moveCursorTodirection:UITextLayoutDirectionDown];
     }
 }
-
-// Based on code from Ruben Cabaco
-// https://gist.github.com/rcabaco/6765778
-//UITextPosition *p0 = (direction = UITextLayoutDirectionUp) ? self.selectedTextRange.start : self.selectedTextRange.end;
 
 - (void)moveCursorTodirection:(UITextLayoutDirection)direction
 {
@@ -650,9 +659,12 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     }
 }
 
+// Based on code from Ruben Cabaco
+// https://gist.github.com/rcabaco/6765778
+
 - (UITextPosition *)closestPositionToPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction
 {
-    // Currently only up and down are implemented.
+    // Only up/down are implemented. No real need for left/right since that is native to UITextInput.
     NSParameterAssert(direction == UITextLayoutDirectionUp || direction == UITextLayoutDirectionDown);
     
     // Translate the vertical direction to a horizontal direction.
