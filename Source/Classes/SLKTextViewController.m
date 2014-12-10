@@ -715,8 +715,13 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         [self.textView setText:nil];
     }
     
-    // Clears cache (if enabled)
+    // Clears cache
     [self clearCachedText];
+    
+    // Clears the undo manager
+    if (self.textView.undoManagerEnabled) {
+        [self.textView.undoManager removeAllActions];
+    }
 }
 
 - (void)didCommitTextEditing:(id)sender

@@ -87,7 +87,6 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
     [self addObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize)) options:NSKeyValueObservingOptionNew context:NULL];
 }
 
-
 #pragma mark - Rendering
 
 - (void)drawRect:(CGRect)rect
@@ -330,6 +329,18 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     self.placeholderLabel.textColor = color;
 }
 
+- (void)setUndoManagerEnabled:(BOOL)enabled
+{
+    if (self.undoManagerEnabled == enabled) {
+        return;
+    }
+    
+    self.undoManager.levelsOfUndo = 10;
+    [self.undoManager removeAllActions];
+    
+    _undoManagerEnabled = enabled;
+}
+
 
 #pragma mark - Super Overrides
 
@@ -399,9 +410,11 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     }
     
     if (self.undoManagerEnabled) {
-        if ((action == @selector(undo:) && ![self.undoManager canUndo]) ||
-            (action == @selector(redo:) && ![self.undoManager canRedo])) {
-            return NO;
+        if (action == @selector(undo:)) {
+            return [self.undoManager canUndo];
+        }
+        if (action == @selector(redo:)) {
+            return [self.undoManager canRedo];
         }
     }
     
