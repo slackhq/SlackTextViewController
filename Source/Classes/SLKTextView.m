@@ -451,14 +451,21 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     }
 }
 
-- (void)undoo:(id)sender
+// Safer cursor range (it sometimes exceeds the lenght of the text property).
+- (NSRange)selectedRange
 {
-    [self.undoManager undo];
-}
-
-- (void)redoo:(id)sender
-{
-    [self.undoManager redo];
+    NSString *text = self.text;
+    NSRange range = [super selectedRange];
+    
+    if (range.location > text.length) {
+        range.location = text.length;
+    }
+    
+    if (range.length > text.length) {
+        range.length = text.length;
+    }
+    
+    return range;
 }
 
 - (void)setFont:(UIFont *)font
@@ -527,6 +534,16 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     [super reloadInputViews];
     
     _didNotResignFirstResponder = NO;
+}
+
+- (void)undoo:(id)sender
+{
+    [self.undoManager undo];
+}
+
+- (void)redoo:(id)sender
+{
+    [self.undoManager redo];
 }
 
 

@@ -107,6 +107,10 @@
     NSString *text = self.text;
     NSInteger location = range.location;
     
+    if (location > text.length) {
+        location = text.length;
+    }
+    
     if (text.length == 0) {
         *rangePointer = NSMakeRange(0.0, 0.0);
         return nil;
