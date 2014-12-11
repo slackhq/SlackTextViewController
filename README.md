@@ -282,8 +282,12 @@ or the `UICollectionView` version:
 
 ##Sample Project
 
-Check out the sample project, everything is demo'd there.
-There are 3 examples for illustrating the programatic, storyboard and Swift approach (in progress).
+Check out the sample project,  everything is demo'd there.
+There are 2 main examples (different targets) for testing the programatic and storyboard approaches.
+
+A CollectionView example, using Swift, is in progress on the `swift-example` branch. The idea with this project is to build a custom collection view layout allowing to display cells from the bottom (currently working but needs serious tweaks to make it perfect).
+Feel free to contribute!
+
 
 ##XCode Templates
 
