@@ -1047,7 +1047,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)willShowOrHideKeyboard:(NSNotification *)notification
 {
-    SLKKeyboardStatus status = [self keyboardStatusForNotification:notification];
+    // Skips if the view isn't visible
+    if (!self.view.window) {
+        return;
+    }
 
     // Skips if it is presented inside of a popover
     if (self.isPresentedInPopover) {
@@ -1068,6 +1071,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
+    SLKKeyboardStatus status = [self keyboardStatusForNotification:notification];
+
     // Programatically stops scrolling before updating the view constraints (to avoid scrolling glitch)
     if (status == SLKKeyboardStatusWillShow) {
         [self.scrollViewProxy slk_stopScrolling];
@@ -1099,6 +1104,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)didShowOrHideKeyboard:(NSNotification *)notification
 {
+    // Skips if the view isn't visible
+    if (!self.view.window) {
+        return;
+    }
+    
     // Skips if it is presented inside of a popover
     if (self.isPresentedInPopover) {
         return;
@@ -1137,6 +1147,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)didChangeKeyboardFrame:(NSNotification *)notification
 {
+    // Skips if the view isn't visible
+    if (!self.view.window) {
+        return;
+    }
+    
     // Skips if it is presented inside of a popover
     if (self.isPresentedInPopover) {
         return;
@@ -1171,10 +1186,12 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)didPostSLKKeyboardNotification:(NSNotification *)notification
 {
-    // Used for debug only
-    if ([notification.object isEqual:self.textView]) {
-        NSLog(@"%@ didPostSLKKeyboardNotification : %@", NSStringFromClass([self class]), notification);
+    if (![notification.object isEqual:self.textView]) {
+        return;
     }
+    
+    // Used for debug only
+    NSLog(@"%@ didPostSLKKeyboardNotification : %@", NSStringFromClass([self class]), notification);
 }
 
 - (void)willChangeTextViewText:(NSNotification *)notification
