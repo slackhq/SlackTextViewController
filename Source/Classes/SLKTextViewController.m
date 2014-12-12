@@ -322,9 +322,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (BOOL)isExternalKeyboardDetected
 {
-    if ([self.textView isFirstResponder] && self.keyboardHC.constant == 0) {
-        _externalKeyboardDetected = YES;
-    }
     return _externalKeyboardDetected;
 }
 
@@ -805,7 +802,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
 }
 
-- (void)didPanTextView:(id)sender
+- (void)didPanTextView:(UIGestureRecognizer *)gesture
 {
     [self presentKeyboard:YES];
 }
@@ -836,6 +833,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)postKeyboarStatusNotification:(NSNotification *)notification
 {
+    NSLog(@"%s",__FUNCTION__);
+    NSLog(@"self.isExternalKeyboardDetected : %@", self.isExternalKeyboardDetected ? @"YES" : @"NO");
+    
     if (self.isExternalKeyboardDetected || self.isRotating) {
         return;
     }
@@ -1032,9 +1032,12 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     else if (self.isEditing) {
         [self didCancelTextEditing:sender];
     }
-    else if (!self.isExternalKeyboardDetected) {
-        [self dismissKeyboard:YES];
+    
+    if (self.isExternalKeyboardDetected || ([self.textView isFirstResponder] && self.keyboardHC.constant == 0)) {
+        return;
     }
+    
+    [self dismissKeyboard:YES];
 }
 
 - (void)didPressArrowKey:(id)sender
