@@ -479,7 +479,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (CGFloat)appropriateBottomMarginToWindow
 {
     UIWindow *window = self.view.window;
-    CGRect convertedRect = [self.view convertRect:self.navigationController.view.bounds toView:window];
+    CGRect convertedRect = [self.view convertRect:self.view.bounds toView:window];
     
     if (!SLK_IS_IOS8_AND_HIGHER && SLK_IS_LANDSCAPE) {
         return CGRectGetMaxX(window.frame) - CGRectGetMaxX(convertedRect);
