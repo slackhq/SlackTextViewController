@@ -479,14 +479,14 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (CGFloat)appropriateBottomMarginToWindow
 {
     UIWindow *window = self.view.window;
-    CGRect convertedRect = [self.view convertRect:self.view.bounds toView:window];
     
-    if (!SLK_IS_IOS8_AND_HIGHER && SLK_IS_LANDSCAPE) {
-        return CGRectGetMaxX(window.frame) - CGRectGetMaxX(convertedRect);
-    }
-    else {
-        return CGRectGetMaxY(window.frame) - CGRectGetMaxY(convertedRect);
-    }
+    CGRect windowRect = [window convertRect:window.frame fromView:self.view];
+    windowRect.origin = CGPointZero;
+    
+    CGRect viewRect = [window convertRect:self.view.frame fromView:window];
+    CGFloat margin = CGRectGetMaxY(windowRect) - CGRectGetMaxY(viewRect);
+    
+    return (margin > 0.0) ? margin : 0.0;
 }
 
 - (NSString *)appropriateKeyboardNotificationName:(NSNotification *)notification
