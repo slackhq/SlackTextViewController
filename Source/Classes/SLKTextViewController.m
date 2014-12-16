@@ -478,11 +478,14 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (CGFloat)appropriateBottomMarginToWindow
 {
-    if (self.tabBarController.tabBar.isHidden || self.hidesBottomBarWhenPushed)  {
-        return 0.0;
-    }
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGRect windowFrame = [window convertRect:window.frame fromView:self.view];
+    windowFrame.origin = CGPointZero;
     
-    return CGRectGetHeight(self.tabBarController.tabBar.frame);
+    CGRect viewRect = [window convertRect:self.view.frame fromView:window];
+    CGFloat margin = CGRectGetMaxY(windowFrame) - CGRectGetMaxY(viewRect);
+    
+    return (margin > 0.0) ? margin : 0.0;
 }
 
 - (NSString *)appropriateKeyboardNotificationName:(NSNotification *)notification
