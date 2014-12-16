@@ -485,7 +485,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     CGRect viewRect = [window convertRect:self.view.frame fromView:window];
     CGFloat margin = CGRectGetMaxY(windowFrame) - CGRectGetMaxY(viewRect);
     
-    return (margin > 0.0) ? margin : 0.0;
+    return (margin > 20.0) ? margin : 0.0;
 }
 
 - (NSString *)appropriateKeyboardNotificationName:(NSNotification *)notification
