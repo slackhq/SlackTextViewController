@@ -55,7 +55,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     NSMutableArray *array = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < 100; i++) {
-        NSInteger words = (arc4random() % 15)+1;
+        NSInteger words = (arc4random() % 40)+1;
         [array addObject:[LoremIpsum wordsWithNumber:words]];
     }
     

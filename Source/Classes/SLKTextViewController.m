@@ -584,6 +584,17 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     _shakeToClearEnabled = enabled;
 }
 
+- (void)setKeyboardPanningEnabled:(BOOL)enabled
+{
+    if (self.keyboardPanningEnabled == enabled) {
+        return;
+    }
+    
+    self.scrollViewProxy.keyboardDismissMode = enabled ? UIScrollViewKeyboardDismissModeInteractive : UIScrollViewKeyboardDismissModeNone;
+    
+    _keyboardPanningEnabled = enabled;
+}
+
 - (BOOL)updateKeyboardStatus:(SLKKeyboardStatus)status
 {
     // Skips if trying to update the same status
@@ -814,8 +825,16 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
+    if (!SLK_IS_LANDSCAPE) {
+        [self.textView setText:text];
+    }
+    
     [self.textInputbar beginTextEditing];
-    [self.textView setText:text];
+    
+    // Setting the text after calling -beginTextEditing is safer when in landscape orientation
+    if (SLK_IS_LANDSCAPE) {
+        [self.textView setText:text];
+    }
     
     [self.textView slk_scrollToCaretPositonAnimated:YES];
     
@@ -973,30 +992,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
 }
 
-- (void)updateKeyboardDismissModeIfNeeded
-{
-    // Skips if the keyboard panning is disabled
-    if (!self.isKeyboardPanningEnabled) {
-        return;
-    }
-    
-    UIScrollView *scrollView = self.scrollViewProxy;
-    UIScrollViewKeyboardDismissMode dismissMode = scrollView.keyboardDismissMode;
-    
-    BOOL isPannable = self.textView.inputAccessoryView ? YES : NO;
-    
-    // Enables the keyboard dismiss mode
-    if (dismissMode == UIScrollViewKeyboardDismissModeNone && isPannable) {
-        scrollView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
-    }
-    // Disables the keyboard dismiss mode
-    else if (dismissMode == UIScrollViewKeyboardDismissModeInteractive && !isPannable) {
-        scrollView.keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
-    }
-}
-
 - (void)prepareForInterfaceRotation
 {
     [self.view layoutIfNeeded];
@@ -1140,7 +1135,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     // Updates the dismiss mode and input accessory view, if needed.
     [self reloadInputAccessoryViewIfNeeded];
-    [self updateKeyboardDismissModeIfNeeded];
 
     // Very important to invalidate this flag after the keyboard is dismissed or presented
     self.movingKeyboard = NO;
@@ -1777,6 +1771,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didPostSLKKeyboardNotification:) name:SLKKeyboardDidHideNotification object:nil];
 #endif
     
+    // Keyboard Accessory View notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeKeyboardFrame:) name:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
+
     // TextView notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willChangeTextViewText:) name:SLKTextViewTextWillChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
@@ -1806,6 +1803,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKKeyboardDidHideNotification object:nil];
 #endif
+    
+    // TextView notifications
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil];
     
     // TextView notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidBeginEditingNotification object:nil];
