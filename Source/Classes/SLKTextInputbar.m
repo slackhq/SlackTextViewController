@@ -360,6 +360,7 @@
     self.editing = YES;
     
     [self updateConstraintConstants];
+    [self layoutIfNeeded];
 }
 
 - (void)endTextEdition
@@ -371,6 +372,7 @@
     self.editing = NO;
     
     [self updateConstraintConstants];
+    [self layoutIfNeeded];
 }
 
 
