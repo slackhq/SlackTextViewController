@@ -1786,6 +1786,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     // Application notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willTerminateApplication:) name:UIApplicationWillTerminateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willTerminateApplication:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 }
 
 - (void)unregisterNotifications
@@ -1821,6 +1822,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     // Application notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 }
 
 
