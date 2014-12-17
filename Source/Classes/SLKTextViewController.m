@@ -971,10 +971,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     else {
         return NO;
     }
-    
-    if (CGRectIsNull(keyboardFrame)) {
-        return NO;
-    }
 }
 
 - (void)reloadInputAccessoryViewIfNeeded
