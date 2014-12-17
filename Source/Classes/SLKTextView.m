@@ -94,7 +94,7 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
     [super drawRect:rect];
     
     self.placeholderLabel.hidden = [self shouldHidePlaceholder];
-    self.placeholderLabel.frame = [self placeholderRectForBounds:self.bounds];
+    self.placeholderLabel.frame = [self placeholderRectThatFits:self.bounds];
     [self sendSubviewToBack:self.placeholderLabel];
 }
 
@@ -306,12 +306,14 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     return NO;
 }
 
-- (CGRect)placeholderRectForBounds:(CGRect)bounds
+- (CGRect)placeholderRectThatFits:(CGRect)bounds
 {
-    CGRect rect = UIEdgeInsetsInsetRect(bounds, self.textContainerInset);
+    CGRect rect = CGRectZero;
+    rect.size = [self.placeholderLabel sizeThatFits:bounds.size];
+    rect.origin = UIEdgeInsetsInsetRect(bounds, self.textContainerInset).origin;
+    
     CGFloat padding = self.textContainer.lineFragmentPadding;
     rect.origin.x += padding;
-    rect.size.width -= padding * 2.0f;
     
     return rect;
 }
