@@ -479,13 +479,24 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (CGFloat)appropriateBottomMarginToWindow
 {
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    
     CGRect windowFrame = [window convertRect:window.frame fromView:self.view];
     windowFrame.origin = CGPointZero;
     
-    CGRect viewRect = [window convertRect:self.view.frame fromView:window];
-    CGFloat margin = CGRectGetMaxY(windowFrame) - CGRectGetMaxY(viewRect);
+    CGRect viewRect = [window convertRect:self.view.frame fromView:nil];
     
-    return (margin > 20.0) ? margin : 0.0;
+    CGFloat bottomWindow = CGRectGetMaxY(windowFrame);
+    CGFloat bottomView = CGRectGetMaxY(viewRect);
+    
+    // Retrieve the status bar's height when the in-call status bar is displayed
+    if (CGRectGetHeight([UIApplication sharedApplication].statusBarFrame) > 20.0) {
+        bottomView += CGRectGetHeight([UIApplication sharedApplication].statusBarFrame)/2.0;
+    }
+    
+    CGFloat margin = bottomWindow - bottomView;
+    
+    // Do NOT consider a status bar height gap
+    return (margin > 20) ? margin : 0.0;
 }
 
 - (NSString *)appropriateKeyboardNotificationName:(NSNotification *)notification
