@@ -21,6 +21,7 @@ extern NSString * const SLKTextViewContentSizeDidChangeNotification;
 extern NSString * const SLKTextViewDidPasteImageNotification DEPRECATED_ATTRIBUTE;
 extern NSString * const SLKTextViewDidPasteItemNotification;
 extern NSString * const SLKTextViewDidShakeNotification;
+extern NSString * const SLKTextViewDidFinishDeletingNotification;
 
 extern NSString * const SLKTextViewPastedItemContentType;
 extern NSString * const SLKTextViewPastedItemMediaType;
@@ -71,6 +72,9 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 
 /** YES if the text view supports undoing, either using UIMenuController, or with ctrl+z when using an external keyboard. Default is YES. */
 @property (nonatomic, readwrite) BOOL undoManagerEnabled;
+
+/** */
+@property (nonatomic, getter=isFastDeleting) BOOL fastDeleting;
 
 /**
  Some text view properties don't update when it's already firstResponder (auto-correction, spelling-check, etc.)

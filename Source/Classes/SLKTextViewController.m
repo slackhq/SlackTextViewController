@@ -1247,6 +1247,16 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
 }
 
+- (void)didDeleteInTextView:(NSNotification *)notification
+{
+    // Skips this if it's not the expected textView.
+    if (![self.textView isFirstResponder]) {
+        return;
+    }
+    
+    [self processTextForAutoCompletion];
+}
+
 - (void)willShowOrHideTypeIndicatorView:(NSNotification *)notification
 {
     SLKTypingIndicatorView *indicatorView = (SLKTypingIndicatorView *)notification.object;
@@ -1303,7 +1313,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)processTextForAutoCompletion
 {
-    if (self.isRotating) {
+    if (self.isRotating || self.textView.isFastDeleting) {
         return;
     }
     
@@ -1320,7 +1330,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     // Process in the background
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         
         NSRange range;
         NSString *word = [self.textView slk_wordAtCaretRange:&range];
@@ -1780,7 +1790,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewPasteboard:) name:SLKTextViewDidPasteItemNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didShakeTextView:) name:SLKTextViewDidShakeNotification object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didDeleteInTextView:) name:SLKTextViewDidFinishDeletingNotification object:nil];
+
     // TypeIndicator notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SLKTypingIndicatorViewWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowOrHideTypeIndicatorView:) name:SLKTypingIndicatorViewWillHideNotification object:nil];
@@ -1816,7 +1827,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewContentSizeDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewDidPasteItemNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewDidShakeNotification object:nil];
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewDidFinishDeletingNotification object:nil];
+
     // TypeIndicator notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTypingIndicatorViewWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTypingIndicatorViewWillHideNotification object:nil];
