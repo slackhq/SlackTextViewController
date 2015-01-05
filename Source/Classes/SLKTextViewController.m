@@ -330,16 +330,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     return _presentedInPopover && SLK_IS_IPAD;
 }
 
-- (BOOL)isQuickTypeBarVisible
-{
-    CGFloat quickTypeBarHeight = self.keyboardHC.constant-minimumKeyboardHeight();
-    
-    if (SLK_IS_IOS8_AND_HIGHER && quickTypeBarHeight > 0.0 && self.textView.autocorrectionType != UITextAutocorrectionTypeNo) {
-        return YES;
-    }
-    return NO;
-}
-
 - (SLKTextView *)textView
 {
     return self.textInputbar.textView;
