@@ -481,8 +481,8 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 {
     // Adds undo/redo items to the Menu Controller
     if (self.undoManagerEnabled) {
-        UIMenuItem *undo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Undo", nil) action:@selector(undoo:)];
-        UIMenuItem *redo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Redo", nil) action:@selector(redoo:)];
+        UIMenuItem *undo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Undo", nil) action:@selector(slk_undo:)];
+        UIMenuItem *redo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Redo", nil) action:@selector(slk_redo:)];
         [[UIMenuController sharedMenuController] setMenuItems:@[undo,redo]];
     }
     
@@ -526,13 +526,13 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     }
     
     if (self.undoManagerEnabled) {
-        if (action == @selector(undoo:)) {
+        if (action == @selector(slk_undo:)) {
             if (self.undoManager.undoActionIsDiscardable) {
                 return NO;
             }
             return [self.undoManager canUndo];
         }
-        if (action == @selector(redoo:)) {
+        if (action == @selector(slk_redo:)) {
             if (self.undoManager.redoActionIsDiscardable) {
                 return NO;
             }
@@ -628,12 +628,12 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     _didNotResignFirstResponder = NO;
 }
 
-- (void)undoo:(id)sender
+- (void)slk_undo:(id)sender
 {
     [self.undoManager undo];
 }
 
-- (void)redoo:(id)sender
+- (void)slk_redo:(id)sender
 {
     [self.undoManager redo];
 }
