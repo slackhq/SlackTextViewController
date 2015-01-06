@@ -119,14 +119,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         UITableViewStyle tableViewStyle = [[self class] tableViewStyleForCoder:decoder];
         UICollectionViewLayout *collectionViewLayout = [[self class] collectionViewLayoutForCoder:decoder];
         
-        if (tableViewStyle == UITableViewStylePlain || tableViewStyle == UITableViewStyleGrouped) {
-            self.scrollViewProxy = [self tableViewWithStyle:tableViewStyle];
-        }
-        else if ([collectionViewLayout isKindOfClass:[UICollectionViewLayout class]]) {
+        if ([collectionViewLayout isKindOfClass:[UICollectionViewLayout class]]) {
             self.scrollViewProxy = [self collectionViewWithLayout:collectionViewLayout];
         }
         else {
-            return nil;
+            self.scrollViewProxy = [self tableViewWithStyle:tableViewStyle];
         }
         
         [self commonInit];
