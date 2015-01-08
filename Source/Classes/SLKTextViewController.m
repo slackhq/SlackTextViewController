@@ -1326,31 +1326,24 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return [self cancelAutoCompletion];
     }
     
-    // Process in the background
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+    NSRange range;
+    NSString *word = [self.textView slk_wordAtCaretRange:&range];
+    
+    for (NSString *sign in self.registeredPrefixes) {
         
-        NSRange range;
-        NSString *word = [self.textView slk_wordAtCaretRange:&range];
+        NSRange keyRange = [word rangeOfString:sign];
         
-        for (NSString *sign in self.registeredPrefixes) {
+        if (keyRange.location == 0 || (keyRange.length >= 1)) {
             
-            NSRange keyRange = [word rangeOfString:sign];
+            // Captures the detected symbol prefix
+            _foundPrefix = sign;
             
-            if (keyRange.location == 0 || (keyRange.length >= 1)) {
-                
-                // Captures the detected symbol prefix
-                _foundPrefix = sign;
-                
-                // Used later for replacing the detected range with a new string alias returned in -acceptAutoCompletionWithString:
-                _foundPrefixRange = NSMakeRange(range.location, sign.length);
-            }
+            // Used later for replacing the detected range with a new string alias returned in -acceptAutoCompletionWithString:
+            _foundPrefixRange = NSMakeRange(range.location, sign.length);
         }
-        
-        // Forward to the main queue
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self handleProcessedWord:word range:range];
-        });
-    });
+    }
+    
+    [self handleProcessedWord:word range:range];
 }
 
 - (void)handleProcessedWord:(NSString *)word range:(NSRange)range

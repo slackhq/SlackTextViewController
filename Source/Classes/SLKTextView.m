@@ -403,9 +403,9 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 // Safer cursor range (it sometimes exceeds the lenght of the text property).
 - (NSRange)selectedRange
 {
-    NSString *text = self.text;
     NSRange range = [super selectedRange];
-    
+    NSString *text = self.text;
+
     if (range.location > text.length) {
         range.location = text.length;
     }
