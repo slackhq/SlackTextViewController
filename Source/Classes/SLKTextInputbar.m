@@ -269,18 +269,18 @@
     return self.contentInset.right;
 }
 
-- (BOOL)didFinishConfigurating
+- (BOOL)isViewVisible
 {
-    SEL selector = NSSelectorFromString(@"didFinishConfigurating");
+    SEL selector = NSSelectorFromString(@"isViewVisible");
     
     if ([self.controller respondsToSelector:selector]) {
         
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        BOOL didFinish = (BOOL)[self.controller performSelector:selector];
+        BOOL visible = (BOOL)[self.controller performSelector:selector];
 #pragma clang diagnostic pop
         
-        return didFinish;
+        return visible;
     }
     return NO;
 }
@@ -360,7 +360,6 @@
     self.editing = YES;
     
     [self updateConstraintConstants];
-    [self layoutIfNeeded];
 }
 
 - (void)endTextEdition
@@ -370,7 +369,6 @@
     }
     
     self.editing = NO;
-    
     [self updateConstraintConstants];
 }
 
@@ -450,14 +448,14 @@
         
         BOOL bounces = self.controller.bounces && [self.textView isFirstResponder];
         
-        if (![self didFinishConfigurating]) {
-            [self layoutIfNeeded];
-            return;
+        if ([self isViewVisible]) {
+            [self slk_animateLayoutIfNeededWithBounce:bounces
+                                              options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState
+                                           animations:NULL];
         }
-        
-		[self slk_animateLayoutIfNeededWithBounce:bounces
-										  options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState
-									   animations:NULL];
+        else {
+            [self layoutIfNeeded];
+        }
     }
 }
 
