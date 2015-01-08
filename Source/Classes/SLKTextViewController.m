@@ -57,7 +57,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 @property (nonatomic) BOOL newWordInserted;
 
 // YES if the view controller did appear and everything is finished configurating. This allows blocking some layout animations among other things.
-@property (nonatomic) BOOL didFinishConfigurating;
+@property (nonatomic) BOOL isViewVisible;
 
 // The setter of isExternalKeyboardDetected, for private use.
 @property (nonatomic, getter = isRotating) BOOL rotating;
@@ -183,7 +183,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     [self.scrollViewProxy flashScrollIndicators];
     
-    self.didFinishConfigurating = YES;
+    self.isViewVisible = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -193,7 +193,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     // Stops the keyboard from being dismissed during the navigation controller's "swipe-to-pop"
     self.textView.didNotResignFirstResponder = self.isMovingFromParentViewController;
     
-    self.didFinishConfigurating = NO;
+    self.isViewVisible = NO;
     
     // Caches the text before it's too late!
     [self cacheTextView];
@@ -1204,7 +1204,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     // Animated only if the view already appeared.
-    [self textDidUpdate:self.didFinishConfigurating];
+    [self textDidUpdate:self.isViewVisible];
 }
 
 - (void)didChangeTextViewContentSize:(NSNotification *)notification
@@ -1215,7 +1215,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     // Animated only if the view already appeared.
-    [self textDidUpdate:self.didFinishConfigurating];
+    [self textDidUpdate:self.isViewVisible];
 }
 
 - (void)didChangeTextViewPasteboard:(NSNotification *)notification
