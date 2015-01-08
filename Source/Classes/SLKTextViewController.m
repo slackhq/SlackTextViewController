@@ -1885,13 +1885,16 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     _autoCompletionView.dataSource = nil;
     _autoCompletionView = nil;
     
+    _textInputbar.textView.delegate = nil;
     _textInputbar = nil;
     _typingIndicatorView = nil;
     
     _registeredPrefixes = nil;
     _keyboardCommands = nil;
 
+    _singleTapGesture.delegate = nil;
     _singleTapGesture = nil;
+    _verticalPanGesture.delegate = nil;
     _verticalPanGesture = nil;
     _scrollViewHC = nil;
     _textInputbarHC = nil;
