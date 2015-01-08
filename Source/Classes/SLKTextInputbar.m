@@ -372,7 +372,6 @@
     self.editing = NO;
     
     [self updateConstraintConstants];
-    [self layoutIfNeeded];
 }
 
 
