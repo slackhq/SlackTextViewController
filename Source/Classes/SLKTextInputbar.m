@@ -32,12 +32,22 @@
 @property (nonatomic, strong) NSLayoutConstraint *accessoryViewHC;
 
 @property (nonatomic, strong) UILabel *charCountLabel;
+@property (nonatomic, strong) Class textViewClass;
 
 @end
 
 @implementation SLKTextInputbar
 
 #pragma mark - Initialization
+
+- (instancetype)initWithTextViewClass:(Class)textViewClass
+{
+    if (self = [super init]) {
+        self.textViewClass = textViewClass;
+        [self commonInit];
+    }
+    return self;
+}
 
 - (id)init
 {
@@ -106,7 +116,8 @@
 {
     if (!_textView)
     {
-        _textView = [SLKTextView new];
+        Class TextViewClass = self.textViewClass ? self.textViewClass : [SLKTextView class];
+        _textView = [TextViewClass new];
         _textView.translatesAutoresizingMaskIntoConstraints = NO;
         _textView.font = [UIFont systemFontOfSize:15.0];
         _textView.maxNumberOfLines = [self defaultNumberOfLines];

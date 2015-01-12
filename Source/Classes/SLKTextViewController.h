@@ -400,4 +400,15 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** UIGestureRecognizerDelegate */
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer NS_REQUIRES_SUPER;
 
+
+///------------------------------------------------
+/// @name Customization
+///------------------------------------------------
+/**
+ Allows for customizing behavior and appearance by using a subclass of SLKTextView
+ 
+ @param textViewClass The class of the SLKTextView subclass
+ */
+- (void)registerClassForTextView:(Class)textViewClass;
+
 @end
