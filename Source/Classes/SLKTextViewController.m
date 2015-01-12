@@ -25,7 +25,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 @interface SLKTextViewController () <UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
-    CGPoint _draggingOffset;
+    CGPoint _scrollViewOffsetBeforeDragging;
+    CGFloat _keyboardHeightBeforeDragging;
 }
 
 // The shared scrollView pointer, either a tableView or collectionView
@@ -1167,13 +1168,24 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.keyboardHC.constant = [self appropriateKeyboardHeight:notification];
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
-    if (self.isInverted && self.isMovingKeyboard && !CGPointEqualToPoint(self.scrollViewProxy.contentOffset, _draggingOffset)) {
+    // layoutIfNeeded must be called before any further scrollView internal adjustments (content offset and size)
+    [self.view layoutIfNeeded];
+    
+    
+    // Overrides the scrollView's contentOffset to allow following the same position when dragging the keyboard
+    CGPoint offset = _scrollViewOffsetBeforeDragging;
+    
+    if (self.isInverted) {
         if (!self.scrollViewProxy.isDecelerating && self.scrollViewProxy.isTracking) {
-            self.scrollViewProxy.contentOffset = _draggingOffset;
+            self.scrollViewProxy.contentOffset = _scrollViewOffsetBeforeDragging;
         }
     }
-    
-    [self.view layoutIfNeeded];
+    else {
+        CGFloat keyboardHeightDelta = _keyboardHeightBeforeDragging-self.keyboardHC.constant;
+        offset.y -= keyboardHeightDelta;
+        
+        self.scrollViewProxy.contentOffset = offset;
+    }
 }
 
 - (void)didPostSLKKeyboardNotification:(NSNotification *)notification
@@ -1658,7 +1670,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (!self.isMovingKeyboard) {
-        _draggingOffset = scrollView.contentOffset;
+        _scrollViewOffsetBeforeDragging = scrollView.contentOffset;
+        _keyboardHeightBeforeDragging = self.keyboardHC.constant;
     }
 }
 
