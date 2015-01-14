@@ -360,6 +360,14 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     return view;
 }
 
+- (UIModalPresentationStyle)modalPresentationStyle
+{
+    if (self.navigationController) {
+        return self.navigationController.modalPresentationStyle;
+    }
+    return [super modalPresentationStyle];
+}
+
 - (CGFloat)deltaInputbarHeight
 {
     return self.textView.intrinsicContentSize.height-self.textView.font.lineHeight;
@@ -482,6 +490,15 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     CGFloat margin = bottomWindow - bottomView;
+    
+    if (SLK_IS_IPAD && self.modalPresentationStyle == UIModalPresentationFormSheet) {
+
+        margin /= 2.0;
+        
+        if (SLK_IS_LANDSCAPE) {
+            margin += margin-CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
+        }
+    }
     
     // Do NOT consider a status bar height gap
     return (margin > 20) ? margin : 0.0;
