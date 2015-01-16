@@ -1350,7 +1350,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     NSString *text = self.textView.text;
     
-    // No need to process for autocompletion if there is no text to process
+    // Skip, when o text to process
     if (text.length == 0) {
         return [self cancelAutoCompletion];
     }
@@ -1358,27 +1358,30 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     NSRange range;
     NSString *word = [self.textView slk_wordAtCaretRange:&range];
     
-    for (NSString *sign in self.registeredPrefixes) {
+    for (NSString *prefix in self.registeredPrefixes) {
         
-        NSRange keyRange = [word rangeOfString:sign];
+        NSRange keyRange = [word rangeOfString:prefix];
         
         if (keyRange.location == 0 || (keyRange.length >= 1)) {
             
             // Captures the detected symbol prefix
-            _foundPrefix = sign;
+            _foundPrefix = prefix;
             
             // Used later for replacing the detected range with a new string alias returned in -acceptAutoCompletionWithString:
-            _foundPrefixRange = NSMakeRange(range.location, sign.length);
+            _foundPrefixRange = NSMakeRange(range.location, prefix.length);
         }
     }
     
-    [self handleProcessedWord:word range:range];
+    // Forward to the main queue, to be sure it goes into the next run loop
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self handleProcessedWord:word range:range];
+    });
 }
 
 - (void)handleProcessedWord:(NSString *)word range:(NSRange)range
 {
     // Cancel autocompletion if the cursor is placed before the prefix
-    if (self.textView.selectedRange.location <= _foundPrefixRange.location) {
+    if (self.textView.selectedRange.location <= self.foundPrefixRange.location) {
         return [self cancelAutoCompletion];
     }
     
