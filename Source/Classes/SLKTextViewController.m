@@ -1089,14 +1089,14 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         [self.scrollViewProxy slk_stopScrolling];
     }
     
-    // Updates the height constraints' constants
-    self.keyboardHC.constant = [self appropriateKeyboardHeight:notification];
-    self.scrollViewHC.constant = [self appropriateScrollViewHeight];
-    
     // Hides the autocompletion view if the keyboard is being dismissed
     if (![self.textView isFirstResponder] || status == SLKKeyboardStatusWillHide) {
         [self hideAutoCompletionViewIfNeeded];
     }
+    
+    // Updates the height constraints' constants
+    self.keyboardHC.constant = [self appropriateKeyboardHeight:notification];
+    self.scrollViewHC.constant = [self appropriateScrollViewHeight];
     
     // Updates and notifies about the keyboard status update
     if ([self updateKeyboardStatus:status]) {
