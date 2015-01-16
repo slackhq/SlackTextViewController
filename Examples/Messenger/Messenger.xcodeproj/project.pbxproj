@@ -29,6 +29,9 @@
 		4F86BFCD19F050AF007A3D4A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F86BFCB19F050AF007A3D4A /* Main.storyboard */; };
 		4F86BFD219F050AF007A3D4A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F86BFD019F050AF007A3D4A /* LaunchScreen.xib */; };
 		4F86BFE519F050DD007A3D4A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F86BF8E19F01234007A3D4A /* Images.xcassets */; };
+		4F8ADA771A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
+		4F8ADA781A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
+		4F8ADA791A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
 		8C6D809F3C95C912F87F0D17 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +67,8 @@
 		4F86BFCC19F050AF007A3D4A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4F86BFD119F050AF007A3D4A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		4F86BFE719F05519007A3D4A /* Bridge-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridge-Header.h"; sourceTree = "<group>"; };
+		4F8ADA751A68C37400023752 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
+		4F8ADA761A68C37400023752 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		622BF1F6C9CF013275EF6275 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		C905E5DB18A83F74BD092CDD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		DDFA9095EABC480682E6396C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -221,6 +226,8 @@
 				4F86BF9219F01234007A3D4A /* MessageViewController.m */,
 				4F86BF8F19F01234007A3D4A /* MessageTableViewCell.h */,
 				4F86BF9019F01234007A3D4A /* MessageTableViewCell.m */,
+				4F8ADA751A68C37400023752 /* Message.h */,
+				4F8ADA761A68C37400023752 /* Message.m */,
 				4F86BF8E19F01234007A3D4A /* Images.xcassets */,
 				4F86BFE719F05519007A3D4A /* Bridge-Header.h */,
 			);
@@ -489,6 +496,7 @@
 			files = (
 				4F86BF9719F01234007A3D4A /* MessageViewController.m in Sources */,
 				4F3EDB5D199ED00F004C15D6 /* AppDelegate.m in Sources */,
+				4F8ADA771A68C37400023752 /* Message.m in Sources */,
 				4F86BF9519F01234007A3D4A /* MessageTableViewCell.m in Sources */,
 				4F3EDB59199ED00F004C15D6 /* main.m in Sources */,
 			);
@@ -500,6 +508,7 @@
 			files = (
 				4F86BF9819F01234007A3D4A /* MessageViewController.m in Sources */,
 				4F86BF9619F01234007A3D4A /* MessageTableViewCell.m in Sources */,
+				4F8ADA781A68C37400023752 /* Message.m in Sources */,
 				4F86BF6D19F011D0007A3D4A /* AppDelegate.m in Sources */,
 				4F86BF6A19F011D0007A3D4A /* main.m in Sources */,
 			);
@@ -510,6 +519,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F86BFCA19F050AF007A3D4A /* MessageViewController.swift in Sources */,
+				4F8ADA791A68C37400023752 /* Message.m in Sources */,
 				4F86BFC819F050AF007A3D4A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

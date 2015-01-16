@@ -9,14 +9,18 @@
 #import <UIKit/UIKit.h>
 
 #define kAvatarSize 30.0
-#define kMinimumHeight 40.0
+#define kMinimumHeight 50.0
 
 @interface MessageTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) NSIndexPath *indexPath;
-@property (nonatomic) BOOL needsPlaceholder;
-@property (nonatomic) BOOL usedForMessage;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *bodyLabel;
+@property (nonatomic, strong) UIImageView *tumbnailView;
+@property (nonatomic, strong) UIImageView *attachmentView;
 
-- (void)setPlaceholder:(UIImage *)image scale:(CGFloat)scale;
+@property (nonatomic, strong) NSIndexPath *indexPath;
+
+@property (nonatomic, readonly) BOOL needsPlaceholder;
+@property (nonatomic) BOOL usedForMessage;
 
 @end
