@@ -360,6 +360,10 @@
     self.editing = YES;
     
     [self updateConstraintConstants];
+    
+    if (!self.isFirstResponder) {
+        [self layoutIfNeeded];
+    }
 }
 
 - (void)endTextEdition
