@@ -35,14 +35,18 @@
                             @"attachmentView": self.attachmentView,
                             };
     
-    NSDictionary *metrics = @{@"thumbSize": @(kAvatarSize)};
+    NSDictionary *metrics = @{@"tumbSize": @(kAvatarSize),
+                              @"trailing": @10,
+                              @"leading": @5,
+                              @"attchSize": @80,
+                              };
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[tumbnailView(30)]-10-[titleLabel(>=0)]-10-|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[tumbnailView(30)]-10-[bodyLabel(>=0)]-10-|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[tumbnailView(30)]-10-[attachmentView]-10-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leading-[tumbnailView(tumbSize)]-trailing-[titleLabel(>=0)]-trailing-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leading-[tumbnailView(tumbSize)]-trailing-[bodyLabel(>=0)]-trailing-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leading-[tumbnailView(tumbSize)]-trailing-[attachmentView]-trailing-|" options:0 metrics:metrics views:views]];
 
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[tumbnailView(30)]-(>=0)-|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[titleLabel]-(5)-[bodyLabel(>=0)]-(5)-[attachmentView(>=0,<=80)]-10-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-trailing-[tumbnailView(tumbSize)]-(>=0)-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[titleLabel]-leading-[bodyLabel(>=0)]-leading-[attachmentView(>=0,<=attchSize)]-trailing-|" options:0 metrics:metrics views:views]];
 }
 
 - (void)prepareForReuse
