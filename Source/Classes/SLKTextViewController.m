@@ -1609,6 +1609,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)registerClassForTextView:(Class)textViewClass
 {
+    if (textViewClass == nil) {
+        return;
+    }
+    
     NSAssert([textViewClass isSubclassOfClass:[SLKTextView class]], @"The registered class is invalid, it must be a subclass of SLKTextView.");
     self.textViewClass = textViewClass;
 }
