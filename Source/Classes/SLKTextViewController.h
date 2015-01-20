@@ -386,6 +386,18 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 
 ///------------------------------------------------
+/// @name Customization
+///------------------------------------------------
+/**
+ Registers a class for customizing the behavior and appearance of the text view.
+ You need to call this method inside of any initialization method.
+ 
+ @param textViewClass A SLKTextView subclass.
+ */
+- (void)registerClassForTextView:(Class)textViewClass;
+
+
+///------------------------------------------------
 /// @name Delegate Methods Requiring Super
 ///------------------------------------------------
 
@@ -399,16 +411,5 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /** UIGestureRecognizerDelegate */
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer NS_REQUIRES_SUPER;
-
-
-///------------------------------------------------
-/// @name Customization
-///------------------------------------------------
-/**
- Allows for customizing behavior and appearance by using a subclass of SLKTextView
- 
- @param textViewClass The class of the SLKTextView subclass
- */
-- (void)registerClassForTextView:(Class)textViewClass;
 
 @end

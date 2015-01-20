@@ -32,6 +32,7 @@
 @property (nonatomic, strong) NSLayoutConstraint *accessoryViewHC;
 
 @property (nonatomic, strong) UILabel *charCountLabel;
+
 @property (nonatomic, strong) Class textViewClass;
 
 @end
@@ -116,8 +117,9 @@
 {
     if (!_textView)
     {
-        Class TextViewClass = self.textViewClass ? self.textViewClass : [SLKTextView class];
-        _textView = [TextViewClass new];
+        Class class = self.textViewClass ? : [SLKTextView class];
+        
+        _textView = [class new];
         _textView.translatesAutoresizingMaskIntoConstraints = NO;
         _textView.font = [UIFont systemFontOfSize:15.0];
         _textView.maxNumberOfLines = [self defaultNumberOfLines];
@@ -127,7 +129,7 @@
         _textView.keyboardType = UIKeyboardTypeTwitter;
         _textView.returnKeyType = UIReturnKeyDefault;
         _textView.enablesReturnKeyAutomatically = YES;
-        _textView.scrollIndicatorInsets = UIEdgeInsetsMake(0, -1, 0, 1);
+        _textView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, -1.0, 0.0, 1.0);
         _textView.textContainerInset = UIEdgeInsetsMake(8.0, 4.0, 8.0, 0.0);
         _textView.layer.cornerRadius = 5.0;
         _textView.layer.borderWidth = 0.5;
