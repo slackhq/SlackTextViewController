@@ -26,11 +26,11 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 
 @property (nonatomic, strong) NSMutableArray *usernames;
 @property (nonatomic, strong) NSMutableArray *timers;
-@property (nonatomic, strong) UILabel *indicatorLabel;
 
 @end
 
 @implementation SLKTypingIndicatorView
+@synthesize textLabel = _textLabel;
 
 #pragma mark - Initializer
 
@@ -60,7 +60,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
     
     self.backgroundColor = [UIColor whiteColor];
     
-    [self addSubview:self.indicatorLabel];
+    [self addSubview:self.textLabel];
     
     [self setupConstraints];
 }
@@ -81,18 +81,18 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 
 #pragma mark - Getters
 
-- (UILabel *)indicatorLabel
+- (UILabel *)textLabel
 {
-    if (!_indicatorLabel)
+    if (!_textLabel)
     {
-        _indicatorLabel = [UILabel new];
-        _indicatorLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        _indicatorLabel.font = [UIFont systemFontOfSize:12.0];
-        _indicatorLabel.textColor =[UIColor grayColor];
-        _indicatorLabel.backgroundColor = [UIColor clearColor];
-        _indicatorLabel.userInteractionEnabled = NO;
+        _textLabel = [UILabel new];
+        _textLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        _textLabel.font = [UIFont systemFontOfSize:12.0];
+        _textLabel.textColor =[UIColor grayColor];
+        _textLabel.backgroundColor = [UIColor clearColor];
+        _textLabel.userInteractionEnabled = NO;
     }
-    return _indicatorLabel;
+    return _textLabel;
 }
 
 - (NSAttributedString *)attributedString
@@ -190,7 +190,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
     
     NSAttributedString *text = [self attributedString];
     
-    _indicatorLabel.attributedText = text;
+    _textLabel.attributedText = text;
     
     if (!self.isVisible) {
         [self setVisible:YES];
@@ -206,7 +206,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
     [_usernames removeObject:username];
     
     if (_usernames.count > 0) {
-        _indicatorLabel.attributedText = [self attributedString];
+        _textLabel.attributedText = [self attributedString];
     }
     else if (self.isVisible) {
         [self setVisible:NO];
@@ -256,7 +256,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 {
     [self invalidateTimers];
     
-    _indicatorLabel.text = nil;
+    _textLabel.text = nil;
     
     [_usernames removeAllObjects];
 }
@@ -266,10 +266,10 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 
 - (void)setupConstraints
 {
-    NSNumber *lineHeight = @(roundf(self.indicatorLabel.font.lineHeight));
+    NSNumber *lineHeight = @(roundf(self.textLabel.font.lineHeight));
     NSNumber *padding = @(roundf((self.height-[lineHeight floatValue]) / 2.0));
     
-    NSDictionary *views = @{@"label": self.indicatorLabel};
+    NSDictionary *views = @{@"label": self.textLabel};
     NSDictionary *metrics = @{@"lineHeight": lineHeight, @"padding": padding};
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=padding)-[label(lineHeight)]-(<=padding)-|" options:0 metrics:metrics views:views]];
@@ -301,7 +301,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 {
     [self clean];
     
-    _indicatorLabel = nil;
+    _textLabel = nil;
     _usernames = nil;
     _timers = nil;
 }

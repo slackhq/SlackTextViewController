@@ -22,6 +22,9 @@ extern NSString * const SLKTypingIndicatorViewWillHideNotification;
 /** @name A custom view to display an indicator of users typing. */
 @interface SLKTypingIndicatorView : UIView
 
+/** The text label used to display the typing indicator content. */
+@property (nonatomic, readonly) UILabel *textLabel;
+
 /** The amount of time a name should keep visible. If is zero, the indicator will not remove nor disappear automatically. Default is 6.0 seconds*/
 @property (nonatomic, readwrite) NSTimeInterval interval;
 
