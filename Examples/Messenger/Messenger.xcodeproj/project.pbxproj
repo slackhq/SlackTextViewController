@@ -14,6 +14,7 @@
 		4F3EDB51199ED00F004C15D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB50199ED00F004C15D6 /* UIKit.framework */; };
 		4F3EDB59199ED00F004C15D6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB58199ED00F004C15D6 /* main.m */; };
 		4F3EDB5D199ED00F004C15D6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB5C199ED00F004C15D6 /* AppDelegate.m */; };
+		4F7C6BA51A6E208E006E3FAB /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */; };
 		4F86BF6A19F011D0007A3D4A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF6919F011D0007A3D4A /* main.m */; };
 		4F86BF6D19F011D0007A3D4A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF6C19F011D0007A3D4A /* AppDelegate.m */; };
 		4F86BF7319F011D0007A3D4A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F86BF7119F011D0007A3D4A /* Main.storyboard */; };
@@ -48,6 +49,8 @@
 		4F3EDB58199ED00F004C15D6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4F3EDB5B199ED00F004C15D6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4F3EDB5C199ED00F004C15D6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		4F7C6BA31A6E208E006E3FAB /* MessageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTextView.h; sourceTree = "<group>"; };
+		4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTextView.m; sourceTree = "<group>"; };
 		4F86BF6519F011D0007A3D4A /* Messenger-Storyboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Messenger-Storyboard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F86BF6819F011D0007A3D4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F86BF6919F011D0007A3D4A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -226,6 +229,8 @@
 				4F86BF9219F01234007A3D4A /* MessageViewController.m */,
 				4F86BF8F19F01234007A3D4A /* MessageTableViewCell.h */,
 				4F86BF9019F01234007A3D4A /* MessageTableViewCell.m */,
+				4F7C6BA31A6E208E006E3FAB /* MessageTextView.h */,
+				4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */,
 				4F8ADA751A68C37400023752 /* Message.h */,
 				4F8ADA761A68C37400023752 /* Message.m */,
 				4F86BF8E19F01234007A3D4A /* Images.xcassets */,
@@ -499,6 +504,7 @@
 				4F8ADA771A68C37400023752 /* Message.m in Sources */,
 				4F86BF9519F01234007A3D4A /* MessageTableViewCell.m in Sources */,
 				4F3EDB59199ED00F004C15D6 /* main.m in Sources */,
+				4F7C6BA51A6E208E006E3FAB /* MessageTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

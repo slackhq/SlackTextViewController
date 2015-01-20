@@ -8,6 +8,7 @@
 
 #import "MessageViewController.h"
 #import "MessageTableViewCell.h"
+#import "MessageTextView.h"
 #import "Message.h"
 
 #import <LoremIpsum/LoremIpsum.h>
@@ -33,7 +34,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     self = [super initWithTableViewStyle:UITableViewStylePlain];
     if (self) {
-        
+        // Register a subclass of SLKTextView, if you need any special appearance and/or behavior customisation.
+        [self registerClassForTextView:[MessageTextView class]];
     }
     return self;
 }
@@ -78,11 +80,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:MessengerCellIdentifier];
 
-    self.textView.placeholder = NSLocalizedString(@"Message", nil);
-    self.textView.placeholderColor = [UIColor lightGrayColor];
-    self.textView.layer.borderColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0].CGColor;
-    self.textView.pastableMediaTypes = SLKPastableMediaTypeAll;
-    
     [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
     [self.leftButton setTintColor:[UIColor grayColor]];
     
