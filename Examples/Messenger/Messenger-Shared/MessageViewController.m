@@ -538,4 +538,18 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [super scrollViewDidScroll:scrollView];
 }
 
+
+#pragma mark - UIScrollViewDelegate Methods
+
+/** UITextViewDelegate */
+- (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    return [super textView:textView shouldChangeTextInRange:range replacementText:text];
+}
+
+- (void)textViewDidChangeSelection:(SLKTextView *)textView
+{
+    [super textViewDidChangeSelection:textView];
+}
+
 @end

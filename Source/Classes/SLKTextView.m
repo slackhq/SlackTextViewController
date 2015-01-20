@@ -471,6 +471,13 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
         [self deleteBackward];
     }
     
+    if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)]) {
+        NSRange range = self.selectedRange;
+        if (range.location > 0) range.location--;
+        if (range.length == 0 && self.text.length > 0) range.length++;
+        return [self.delegate textView:self shouldChangeTextInRange:range replacementText:@"^H"];
+    }
+    
     return self.hasText;
 }
 
