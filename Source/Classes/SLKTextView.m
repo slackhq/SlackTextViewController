@@ -97,18 +97,6 @@ static NSTimeInterval kDeleteMaxTimeInterval = 0.5;
 }
 
 
-#pragma mark - Rendering
-
-- (void)drawRect:(CGRect)rect
-{
-    [super drawRect:rect];
-    
-    self.placeholderLabel.hidden = [self shouldHidePlaceholder];
-    self.placeholderLabel.frame = [self placeholderRectThatFits:self.bounds];
-    [self sendSubviewToBack:self.placeholderLabel];
-}
-
-
 #pragma mark - UIView Overrides
 
 - (CGSize)intrinsicContentSize
@@ -119,6 +107,22 @@ static NSTimeInterval kDeleteMaxTimeInterval = 0.5;
 + (BOOL)requiresConstraintBasedLayout
 {
     return YES;
+}
+
+- (void)layoutIfNeeded
+{
+    [super layoutIfNeeded];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    self.placeholderLabel.hidden = [self shouldHidePlaceholder];
+    if (!self.placeholderLabel.hidden) {
+        self.placeholderLabel.frame = [self placeholderRectThatFits:self.bounds];
+        [self sendSubviewToBack:self.placeholderLabel];
+    }
 }
 
 
