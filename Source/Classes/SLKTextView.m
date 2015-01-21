@@ -668,7 +668,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     }
     
     if (self.placeholderLabel.hidden != [self shouldHidePlaceholder]) {
-        [self setNeedsDisplay];
+        [self setNeedsLayout];
     }
     
     [self flashScrollIndicatorsIfNeeded];
