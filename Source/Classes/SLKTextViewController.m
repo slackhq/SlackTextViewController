@@ -178,6 +178,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [UIView performWithoutAnimation:^{
         // Reloads any cached text
         [self reloadTextView];
+        [self updateContentInset];
     }];
 }
 
@@ -475,6 +476,18 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     else return roundf(height);
 }
 
+- (CGFloat)topBarsHeight
+{
+    CGFloat height = CGRectGetHeight(self.navigationController.navigationBar.frame);
+    
+    if (SLK_IS_IPHONE && SLK_IS_LANDSCAPE && SLK_IS_IOS8_AND_HIGHER) {
+        return height;
+    }
+    
+    height += CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
+    return height;
+}
+
 - (CGFloat)appropriateBottomMarginToWindow
 {
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
@@ -592,13 +605,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     _inverted = inverted;
-    
-    self.scrollViewProxy.transform = CGAffineTransformMake(1, 0, 0, inverted ? -1 : 1, 0, 0);
-    self.edgesForExtendedLayout = inverted ? UIRectEdgeNone : UIRectEdgeAll;
-    
-    if (!inverted && ((self.edgesForExtendedLayout & UIRectEdgeBottom) > 0)) {
-        self.edgesForExtendedLayout = self.edgesForExtendedLayout & ~UIRectEdgeBottom;
-    }
+
+    self.scrollViewProxy.transform = inverted ? CGAffineTransformMake(1, 0, 0, -1, 0, 0) : CGAffineTransformIdentity;
+    self.automaticallyAdjustsScrollViewInsets = inverted ? NO : YES;
 }
 
 - (void)setUndoShakingEnabled:(BOOL)enabled
@@ -1008,6 +1017,14 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         self.textView.inputAccessoryView = [self emptyInputAccessoryView];
         [self.textView refreshInputViews];
     }
+}
+
+- (void)updateContentInset
+{
+    UIEdgeInsets contentInset = UIEdgeInsetsMake(0.0, 0.0, self.inverted ? [self topBarsHeight] : 0.0, 0.0);
+    
+    self.scrollViewProxy.contentInset = contentInset;
+    self.scrollViewProxy.scrollIndicatorInsets = contentInset;
 }
 
 - (void)prepareForInterfaceRotation
@@ -1474,17 +1491,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     CGFloat tableHeight = self.scrollViewHC.constant + self.autoCompletionViewHC.constant;
-    
-    // Only when the view extends its layout beyond it top edge
-    if ((self.edgesForExtendedLayout & UIRectEdgeTop) > 0) {
-        
-        // On iOS7, the status bar isn't automatically hidden on landscape orientation
-        if (SLK_IS_IPHONE && SLK_IS_LANDSCAPE && !SLK_IS_IOS8_AND_HIGHER) {
-            tableHeight -= CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
-        }
-        
-        tableHeight -= CGRectGetHeight(self.navigationController.navigationBar.frame);
-    }
     
     // On iPhone, the autocompletion view can't extend beyond the table view height
     if (SLK_IS_IPHONE && viewHeight > tableHeight) {
