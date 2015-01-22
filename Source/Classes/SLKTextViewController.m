@@ -484,6 +484,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return height;
     }
     
+    if (self.isPresentedInPopover) {
+        return height;
+    }
+    
     height += CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
     return height;
 }
