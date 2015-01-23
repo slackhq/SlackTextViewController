@@ -521,7 +521,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         
         [item appendString:@" "];
         
-        [self acceptAutoCompletionWithString:item];
+        [self acceptAutoCompletionWithString:item keepPrefix:YES];
     }
 }
 

@@ -352,11 +352,20 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)cancelAutoCompletion;
 
 /** 
- Accepts the autocompletion, replacing the detected key and word with a new string.
+ Accepts the autocompletion, replacing the detected word with a new string, keeping the prefix.
+ This method is an abstraction of -acceptAutoCompletionWithString:keepPrefix:
  
  @param string The string to be used for replacing autocompletion placeholders.
  */
 - (void)acceptAutoCompletionWithString:(NSString *)string;
+
+/**
+ Accepts the autocompletion, replacing the detected word with a new string, and optionally replacing the prefix too.
+ 
+ @param string The string to be used for replacing autocompletion placeholders.
+ @param keepPrefix YES if the prefix shouldn't be replaced.
+ */
+- (void)acceptAutoCompletionWithString:(NSString *)string keepPrefix:(BOOL)keepPrefix;
 
 
 ///------------------------------------------------
