@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		35A4C7C11DE3FD17F022DC0C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
+		49FEFA70DA01AB47666A8D63 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
 		4A8EFBBFAC0F49199AAABF46 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
 		4F3EDB4D199ED00F004C15D6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB4C199ED00F004C15D6 /* Foundation.framework */; };
 		4F3EDB4F199ED00F004C15D6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB4E199ED00F004C15D6 /* CoreGraphics.framework */; };
@@ -33,6 +34,16 @@
 		4F8ADA771A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
 		4F8ADA781A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
 		4F8ADA791A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
+		71BE10071A72F3130083EE32 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 71BE10061A72F3130083EE32 /* main.m */; };
+		71BE100A1A72F3130083EE32 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 71BE10091A72F3130083EE32 /* AppDelegate.m */; };
+		71BE10281A72F3E50083EE32 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF9219F01234007A3D4A /* MessageViewController.m */; };
+		71BE10291A72F3E50083EE32 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF9019F01234007A3D4A /* MessageTableViewCell.m */; };
+		71BE102A1A72F3E50083EE32 /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */; };
+		71BE102B1A72F3E50083EE32 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
+		71BE102C1A72F4180083EE32 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB4E199ED00F004C15D6 /* CoreGraphics.framework */; };
+		71BE102D1A72F41E0083EE32 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB50199ED00F004C15D6 /* UIKit.framework */; };
+		71BE102E1A72F4250083EE32 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB4C199ED00F004C15D6 /* Foundation.framework */; };
+		71BE102F1A72F42F0083EE32 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F86BF8E19F01234007A3D4A /* Images.xcassets */; };
 		8C6D809F3C95C912F87F0D17 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +84,11 @@
 		4F8ADA751A68C37400023752 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		4F8ADA761A68C37400023752 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		622BF1F6C9CF013275EF6275 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		71BE10021A72F3130083EE32 /* Messenger-Programatic-iPad-Sheet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Messenger-Programatic-iPad-Sheet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		71BE10051A72F3130083EE32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		71BE10061A72F3130083EE32 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		71BE10081A72F3130083EE32 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		71BE10091A72F3130083EE32 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		C905E5DB18A83F74BD092CDD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		DDFA9095EABC480682E6396C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -102,6 +118,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				35A4C7C11DE3FD17F022DC0C /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		71BE0FFF1A72F3130083EE32 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71BE102E1A72F4250083EE32 /* Foundation.framework in Frameworks */,
+				71BE102D1A72F41E0083EE32 /* UIKit.framework in Frameworks */,
+				71BE102C1A72F4180083EE32 /* CoreGraphics.framework in Frameworks */,
+				49FEFA70DA01AB47666A8D63 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,6 +181,7 @@
 				4F3EDB49199ED00F004C15D6 /* Messenger.app */,
 				4F86BF6519F011D0007A3D4A /* Messenger-Storyboard.app */,
 				4F86BFC319F050AF007A3D4A /* Messenger-Swift.app */,
+				71BE10021A72F3130083EE32 /* Messenger-Programatic-iPad-Sheet.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -216,6 +244,7 @@
 			children = (
 				4F86BF8D19F01234007A3D4A /* Shared */,
 				4F3EDB52199ED00F004C15D6 /* Programatic Example */,
+				71BE10031A72F3130083EE32 /* Messenger iPad Sheet Example */,
 				4F86BF6619F011D0007A3D4A /* Storyboard Example */,
 				4F86BFC419F050AF007A3D4A /* Swift Example */,
 			);
@@ -268,6 +297,26 @@
 				C905E5DB18A83F74BD092CDD /* Pods.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		71BE10031A72F3130083EE32 /* Messenger iPad Sheet Example */ = {
+			isa = PBXGroup;
+			children = (
+				71BE10081A72F3130083EE32 /* AppDelegate.h */,
+				71BE10091A72F3130083EE32 /* AppDelegate.m */,
+				71BE10041A72F3130083EE32 /* Supporting Files */,
+			);
+			name = "Messenger iPad Sheet Example";
+			path = "Messenger-Programatic-iPad-Sheet";
+			sourceTree = "<group>";
+		};
+		71BE10041A72F3130083EE32 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				71BE10051A72F3130083EE32 /* Info.plist */,
+				71BE10061A72F3130083EE32 /* main.m */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,6 +379,25 @@
 			productReference = 4F86BFC319F050AF007A3D4A /* Messenger-Swift.app */;
 			productType = "com.apple.product-type.application";
 		};
+		71BE10011A72F3130083EE32 /* Messenger-Programatic-iPad-Sheet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 71BE10221A72F3130083EE32 /* Build configuration list for PBXNativeTarget "Messenger-Programatic-iPad-Sheet" */;
+			buildPhases = (
+				8D98662D95A755657E54323F /* Check Pods Manifest.lock */,
+				71BE0FFE1A72F3130083EE32 /* Sources */,
+				71BE0FFF1A72F3130083EE32 /* Frameworks */,
+				71BE10001A72F3130083EE32 /* Resources */,
+				57A4299BBA1384EEA0F08157 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Messenger-Programatic-iPad-Sheet";
+			productName = "Messenger-Programatic-iPad-Sheet";
+			productReference = 71BE10021A72F3130083EE32 /* Messenger-Programatic-iPad-Sheet.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -347,6 +415,9 @@
 					};
 					4F86BFC219F050AF007A3D4A = {
 						CreatedOnToolsVersion = 6.0.1;
+					};
+					71BE10011A72F3130083EE32 = {
+						CreatedOnToolsVersion = 6.1.1;
 					};
 				};
 			};
@@ -366,6 +437,7 @@
 				4F3EDB48199ED00F004C15D6 /* Messenger-Programatic */,
 				4F86BF6419F011D0007A3D4A /* Messenger-Storyboard */,
 				4F86BFC219F050AF007A3D4A /* Messenger-Swift */,
+				71BE10011A72F3130083EE32 /* Messenger-Programatic-iPad-Sheet */,
 			);
 		};
 /* End PBXProject section */
@@ -399,9 +471,32 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		71BE10001A72F3130083EE32 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71BE102F1A72F42F0083EE32 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		57A4299BBA1384EEA0F08157 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		598FDC5936E74A05A38CC639 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -418,6 +513,21 @@
 			showEnvVarsInLog = 0;
 		};
 		5EA63F26E6C2C54F5E2EC192 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		8D98662D95A755657E54323F /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -527,6 +637,19 @@
 				4F86BFCA19F050AF007A3D4A /* MessageViewController.swift in Sources */,
 				4F8ADA791A68C37400023752 /* Message.m in Sources */,
 				4F86BFC819F050AF007A3D4A /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		71BE0FFE1A72F3130083EE32 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71BE10281A72F3E50083EE32 /* MessageViewController.m in Sources */,
+				71BE10291A72F3E50083EE32 /* MessageTableViewCell.m in Sources */,
+				71BE102A1A72F3E50083EE32 /* MessageTextView.m in Sources */,
+				71BE102B1A72F3E50083EE32 /* Message.m in Sources */,
+				71BE100A1A72F3130083EE32 /* AppDelegate.m in Sources */,
+				71BE10071A72F3130083EE32 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -763,6 +886,42 @@
 			};
 			name = Release;
 		};
+		71BE10231A72F3130083EE32 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 622BF1F6C9CF013275EF6275 /* Pods.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Messenger-Programatic-iPad-Sheet/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		71BE10241A72F3130083EE32 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C905E5DB18A83F74BD092CDD /* Pods.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Messenger-Programatic-iPad-Sheet/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -798,6 +957,15 @@
 			buildConfigurations = (
 				4F86BFDF19F050AF007A3D4A /* Debug */,
 				4F86BFE019F050AF007A3D4A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		71BE10221A72F3130083EE32 /* Build configuration list for PBXNativeTarget "Messenger-Programatic-iPad-Sheet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				71BE10231A72F3130083EE32 /* Debug */,
+				71BE10241A72F3130083EE32 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
