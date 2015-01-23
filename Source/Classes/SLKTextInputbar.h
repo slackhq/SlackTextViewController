@@ -54,7 +54,7 @@ typedef NS_ENUM(NSUInteger, SLKCounterStyle) {
 /** The maximum character count allowed. If larger than 0, a character count label will be displayed on top of the right button. Default is 0, which means infinite.*/
 @property (nonatomic, readwrite) NSUInteger maxCharCount;
 
-/** The character counter formatting. Ignored if maxCharCount is 0. Default is Split mode. */
+/** The character counter formatting. Ignored if maxCharCount is 0. Default is None. */
 @property (nonatomic, assign) SLKCounterStyle counterStyle;
 
 /** YES if the maxmimum character count has been exceeded. */
