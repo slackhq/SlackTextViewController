@@ -347,6 +347,8 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 - (void)setPlaceholder:(NSString *)placeholder
 {
     self.placeholderLabel.text = placeholder;
+    
+    [self setNeedsLayout];
 }
 
 - (void)setPlaceholderColor:(UIColor *)color
