@@ -24,8 +24,8 @@
 #import "UIView+SLKAdditions.h"
 
 /**
- UIKeyboard notification replacement, posting reliably only when showing/hiding the
- keyboard (not when resizing keyboard, or with inputAccessoryView reloads, etc.). Only triggered when using SLKTextViewController's text view.
+ UIKeyboard notification replacement, posting reliably only when showing/hiding the keyboard (not when resizing keyboard, or with inputAccessoryView reloads, etc).
+ Only triggered when using SLKTextViewController's text view.
  */
 extern NSString *const SLKKeyboardWillShowNotification;
 extern NSString *const SLKKeyboardDidShowNotification;
@@ -98,6 +98,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, readonly) UIButton *rightButton;
 
 
+#pragma mark - Initialization
 ///------------------------------------------------
 /// @name Initialization
 ///------------------------------------------------
@@ -141,6 +142,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 + (UICollectionViewLayout *)collectionViewLayoutForCoder:(NSCoder *)decoder;
 
 
+#pragma mark - Keyboard Handling
 ///------------------------------------------------
 /// @name Keyboard Handling
 ///------------------------------------------------
@@ -168,8 +170,9 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status;
 
 
+#pragma mark - Interaction Notifications
 ///------------------------------------------------
-/// @name Text Typing Notifications
+/// @name Interaction Notifications
 ///------------------------------------------------
 
 /**
@@ -260,6 +263,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)didPressArrowKey:(id)sender NS_REQUIRES_SUPER;
 
 
+#pragma mark - Text Edition
 ///------------------------------------------------
 /// @name Text Edition
 ///------------------------------------------------
@@ -292,6 +296,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)didCancelTextEditing:(id)sender NS_REQUIRES_SUPER;
 
 
+#pragma mark - Text Auto-Completion
 ///------------------------------------------------
 /// @name Text Auto-Completion
 ///------------------------------------------------
@@ -368,6 +373,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)acceptAutoCompletionWithString:(NSString *)string keepPrefix:(BOOL)keepPrefix;
 
 
+#pragma mark - Text Caching
 ///------------------------------------------------
 /// @name Text Caching
 ///------------------------------------------------
@@ -394,6 +400,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 + (void)clearAllCachedText;
 
 
+#pragma mark - Customization
 ///------------------------------------------------
 /// @name Customization
 ///------------------------------------------------
@@ -406,6 +413,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)registerClassForTextView:(Class)textViewClass;
 
 
+#pragma mark - Delegate Methods Requiring Super
 ///------------------------------------------------
 /// @name Delegate Methods Requiring Super
 ///------------------------------------------------

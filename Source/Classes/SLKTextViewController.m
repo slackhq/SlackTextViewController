@@ -413,7 +413,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     if (self.isEditing) {
-        height += self.textInputbar.accessoryViewHeight;
+        height += self.textInputbar.editorContentViewHeight;
     }
     
     return roundf(height);
@@ -1321,7 +1321,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
-    self.typingIndicatorViewHC.constant = indicatorView.isVisible ?  0.0 : indicatorView.height;
+    self.typingIndicatorViewHC.constant = indicatorView.isVisible ?  0.0 : indicatorView.intrinsicContentSize.height;
     self.scrollViewHC.constant -= self.typingIndicatorViewHC.constant;
     
     [self.view slk_animateLayoutIfNeededWithBounce:self.bounces
@@ -1798,7 +1798,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.scrollViewHC.constant = [self appropriateScrollViewHeight];
 
     if (self.isEditing) {
-        self.textInputbarHC.constant += self.textInputbar.accessoryViewHeight;
+        self.textInputbarHC.constant += self.textInputbar.editorContentViewHeight;
     }
 }
 

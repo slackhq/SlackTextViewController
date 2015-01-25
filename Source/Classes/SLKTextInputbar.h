@@ -51,15 +51,8 @@ typedef NS_ENUM(NSUInteger, SLKCounterStyle) {
 /** The inner padding to use when laying out content in the view. Default is {5, 8, 5, 8}. */
 @property (nonatomic, assign) UIEdgeInsets contentInset;
 
-/** The maximum character count allowed. If larger than 0, a character count label will be displayed on top of the right button. Default is 0, which means infinite.*/
-@property (nonatomic, readwrite) NSUInteger maxCharCount;
 
-/** The character counter formatting. Ignored if maxCharCount is 0. Default is None. */
-@property (nonatomic, assign) SLKCounterStyle counterStyle;
-
-/** YES if the maxmimum character count has been exceeded. */
-@property (nonatomic, readonly) BOOL limitExceeded;
-
+#pragma mark - Initialization
 ///------------------------------------------------
 /// @name Initialization
 ///------------------------------------------------
@@ -73,12 +66,13 @@ typedef NS_ENUM(NSUInteger, SLKCounterStyle) {
 - (instancetype)initWithTextViewClass:(Class)textViewClass;
 
 
+#pragma mark - Text Editing
 ///------------------------------------------------
 /// @name Text Editing
 ///------------------------------------------------
 
-/** The view displayed on top of the below the text input bar when editing a message. */
-@property (nonatomic, strong) UIView *accessoryView;
+/** The view displayed on top if the text input bar, containing the button outlets, when editing is enabled. */
+@property (nonatomic, strong) UIView *editorContentView;
 
 /** The title label displayed in the middle of the accessoryView. */
 @property (nonatomic, strong) UILabel *editorTitle;
@@ -90,7 +84,7 @@ typedef NS_ENUM(NSUInteger, SLKCounterStyle) {
 @property (nonatomic, strong) UIButton *editortRightButton;
 
 /** The accessory view's maximum height. Default is 38. */
-@property (nonatomic, assign) CGFloat accessoryViewHeight;
+@property (nonatomic, assign) CGFloat editorContentViewHeight;
 
 /** A Boolean value indicating whether the control is in edit mode. */
 @property (nonatomic, getter = isEditing) BOOL editing;
@@ -112,5 +106,20 @@ typedef NS_ENUM(NSUInteger, SLKCounterStyle) {
  End editing the text, by updating the 'editing' flag and the view constraints.
  */
 - (void)endTextEdition;
+
+
+#pragma mark - Text Counting
+///------------------------------------------------
+/// @name Text Counting
+///------------------------------------------------
+
+/** The maximum character count allowed. If larger than 0, a character count label will be displayed on top of the right button. Default is 0, which means infinite.*/
+@property (nonatomic, readwrite) NSUInteger maxCharCount;
+
+/** The character counter formatting. Ignored if maxCharCount is 0. Default is None. */
+@property (nonatomic, assign) SLKCounterStyle counterStyle;
+
+/** YES if the maxmimum character count has been exceeded. */
+@property (nonatomic, readonly) BOOL limitExceeded;
 
 @end
