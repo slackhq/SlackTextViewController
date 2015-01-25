@@ -83,7 +83,7 @@ typedef NS_ENUM(NSUInteger, SLKCounterStyle) {
 /** The 'accept' button displayed right in the accessoryView. */
 @property (nonatomic, strong) UIButton *editortRightButton;
 
-/** The accessory view's maximum height. Default is 38. */
+/** The accessory view's maximum height. Default is 38 pts. */
 @property (nonatomic, assign) CGFloat editorContentViewHeight;
 
 /** A Boolean value indicating whether the control is in edit mode. */
@@ -113,7 +113,7 @@ typedef NS_ENUM(NSUInteger, SLKCounterStyle) {
 /// @name Text Counting
 ///------------------------------------------------
 
-/** The maximum character count allowed. If larger than 0, a character count label will be displayed on top of the right button. Default is 0, which means infinite.*/
+/** The maximum character count allowed. If larger than 0, a character count label will be displayed on top of the right button. Default is 0, which means limitless.*/
 @property (nonatomic, readwrite) NSUInteger maxCharCount;
 
 /** The character counter formatting. Ignored if maxCharCount is 0. Default is None. */

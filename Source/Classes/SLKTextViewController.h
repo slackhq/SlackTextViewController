@@ -344,7 +344,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (CGFloat)heightForAutoCompletionView;
 
 /**
- Returns the maximum height for the autocompletion view. Default is 140.0.
+ Returns the maximum height for the autocompletion view. Default is 140 pts.
  You can override this method to return a custom max height.
 
  @return The autocompletion view's max height.
