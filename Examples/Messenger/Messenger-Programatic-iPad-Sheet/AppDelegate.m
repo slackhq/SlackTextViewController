@@ -26,7 +26,6 @@
     [self.window makeKeyAndVisible];
     
     [self.window.rootViewController presentViewController:navVC animated:YES completion:nil];
-    
     return YES;
 }
 

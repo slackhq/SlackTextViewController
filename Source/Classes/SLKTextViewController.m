@@ -983,26 +983,34 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (BOOL)detectExternalKeyboardInNotification:(NSNotification *)notification
 {
-    CGRect targetRect = CGRectZero;
     
-    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-        targetRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    }
-    else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
-        targetRect = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    }
-    
-    CGRect keyboardFrame = [self.view convertRect:[self.view.window convertRect:targetRect fromWindow:nil] fromView:nil];
-
     if (!self.isMovingKeyboard) {
-        CGFloat maxKeyboardHeight = keyboardFrame.origin.y + keyboardFrame.size.height;
-        maxKeyboardHeight -= [self appropriateBottomMarginToWindow];
-
-        return (maxKeyboardHeight > CGRectGetHeight(self.view.bounds));
+        // based on http://stackoverflow.com/a/5760910/287403
+        // we can determine if the external keyboard is showing by adding the origin.y of the target finish rect
+        // (end when showing, begin when hiding) to the inputAccessoryHeight
+        // If it's greater than the window height, it's an external keyboard
+        CGFloat inputAccessoryHeight = self.textView.inputAccessoryView.frame.size.height;
+        CGRect beginRect = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+        CGRect endRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+        
+        if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+            if (endRect.origin.y + inputAccessoryHeight >= self.view.window.frame.size.height) {
+                NSLog(@"External");
+                return YES;
+            }
+        }
+        else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
+            // the additional logic check here (== to width) accounts for a glitch where the window has rotated it's coordinates
+            // but the beginRect doesn't yet reflect that.
+            if (beginRect.origin.y + inputAccessoryHeight >= self.view.window.frame.size.height ||
+                beginRect.origin.y + inputAccessoryHeight == self.view.window.frame.size.width) {
+                NSLog(@"External");
+                return YES;
+            }
+        }
     }
-    else {
-        return NO;
-    }
+    NSLog(@"Not External");
+    return NO;
 }
 
 - (void)reloadInputAccessoryViewIfNeeded
