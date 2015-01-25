@@ -22,20 +22,29 @@ extern NSString * const SLKTypingIndicatorViewWillHideNotification;
 /** @name A custom view to display an indicator of users typing. */
 @interface SLKTypingIndicatorView : UIView
 
-/** The text label used to display the typing indicator content. */
-@property (nonatomic, readonly) UILabel *textLabel;
-
 /** The amount of time a name should keep visible. If is zero, the indicator will not remove nor disappear automatically. Default is 6.0 seconds*/
 @property (nonatomic, readwrite) NSTimeInterval interval;
-
-/** The height of the view. Default is 26.0 */
-@property (nonatomic, readwrite) CGFloat height;
 
 /** If YES, the user can dismiss the indicator by tapping on it. Default is YES. */
 @property (nonatomic, readwrite) BOOL canResignByTouch;
 
 /** Returns YES if the indicator is visible. */
 @property (nonatomic, readwrite, getter = isVisible) BOOL visible;
+
+/** The appropriate height of the view. */
+@property (nonatomic, readonly) CGFloat height;
+
+/** The color of the text. Default is grayColor. */
+@property (nonatomic, strong) UIColor *textColor;
+
+/** The font of the text. Default is system font, 12 pts. */
+@property (nonatomic, strong) UIFont *textFont;
+
+/** The font to be used when matching a username string. Default is system bold font, 12 pts. */
+@property (nonatomic, strong) UIFont *highlightFont;
+
+/** The inner padding to use when laying out content in the view. Default is {10, 40, 10, 10}. */
+@property (nonatomic, assign) UIEdgeInsets contentInset;
 
 /**
  Inserts a user name, only if that user name is not yet on the list.

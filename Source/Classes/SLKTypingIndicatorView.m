@@ -15,6 +15,7 @@
 //
 
 #import "SLKTypingIndicatorView.h"
+#import "UIView+SLKAdditions.h"
 #import "SLKUIConstants.h"
 
 NSString * const SLKTypingIndicatorViewWillShowNotification =   @"SLKTypingIndicatorViewWillShowNotification";
@@ -24,13 +25,19 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 
 @interface SLKTypingIndicatorView ()
 
+// The text label used to display the typing indicator content.
+@property (nonatomic, strong) UILabel *textLabel;
+
 @property (nonatomic, strong) NSMutableArray *usernames;
 @property (nonatomic, strong) NSMutableArray *timers;
+
+// Auto-Layout margin constraints used for updating their constants
+@property (nonatomic, strong) NSLayoutConstraint *leftContraint;
+@property (nonatomic, strong) NSLayoutConstraint *rightContraint;
 
 @end
 
 @implementation SLKTypingIndicatorView
-@synthesize textLabel = _textLabel;
 
 #pragma mark - Initializer
 
@@ -52,11 +59,15 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 
 - (void)commonInit
 {
-    self.height = 30.0;
     self.interval = 6.0;
     self.canResignByTouch = YES;
     self.usernames = [NSMutableArray new];
     self.timers = [NSMutableArray new];
+    
+    self.textColor = [UIColor grayColor];
+    self.textFont = [UIFont systemFontOfSize:12.0];
+    self.highlightFont = [UIFont boldSystemFontOfSize:12.0];
+    self.contentInset = UIEdgeInsetsMake(10.0, 40.0, 10.0, 10.0);
     
     self.backgroundColor = [UIColor whiteColor];
     
@@ -70,7 +81,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 
 - (CGSize)intrinsicContentSize
 {
-    return CGSizeMake(UIViewNoIntrinsicMetric, self.height);
+    return CGSizeMake(UIViewNoIntrinsicMetric, [self height]);
 }
 
 + (BOOL)requiresConstraintBasedLayout
@@ -87,44 +98,48 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
     {
         _textLabel = [UILabel new];
         _textLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        _textLabel.font = [UIFont systemFontOfSize:12.0];
-        _textLabel.textColor =[UIColor grayColor];
         _textLabel.backgroundColor = [UIColor clearColor];
         _textLabel.userInteractionEnabled = NO;
+        _textLabel.hidden = YES;
     }
     return _textLabel;
 }
 
 - (NSAttributedString *)attributedString
 {
-    if (_usernames.count == 0) {
+    if (self.usernames.count == 0) {
         return nil;
     }
     
     NSString *text = nil;
+    NSString *firstObject = [self.usernames firstObject];
+    NSString *lastObject = [self.usernames lastObject];
     
-    if (_usernames.count == 1) {
-        text = [NSString stringWithFormat:NSLocalizedString(@"%@ is typing", nil), [_usernames firstObject]];
+    if (self.usernames.count == 1) {
+        text = [NSString stringWithFormat:NSLocalizedString(@"%@ is typing", nil), firstObject];
     }
-    else if (_usernames.count == 2) {
-        text = [NSString stringWithFormat:NSLocalizedString(@"%@ & %@ are typing", nil), [_usernames firstObject], [_usernames lastObject]];
+    else if (self.usernames.count == 2) {
+        text = [NSString stringWithFormat:NSLocalizedString(@"%@ & %@ are typing", nil), firstObject, lastObject];
     }
-    else if (_usernames.count > 2) {
+    else if (self.usernames.count > 2) {
         text = NSLocalizedString(@"Several people are typing", nil);
     }
-    
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
     
     NSMutableParagraphStyle *style  = [[NSMutableParagraphStyle alloc] init];
     style.alignment = NSTextAlignmentLeft;
     style.lineBreakMode = NSLineBreakByTruncatingTail;
     style.minimumLineHeight = 10.0;
     
-    [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0.0, text.length)];
+    NSDictionary *attributes = @{NSFontAttributeName: self.textFont,
+                                 NSForegroundColorAttributeName: self.textColor,
+                                 NSParagraphStyleAttributeName: style,
+                                 };
     
-    if (_usernames.count <= 2) {
-        [attributedString addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:12.0] range:[text rangeOfString:[_usernames firstObject]]];
-        [attributedString addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:12.0] range:[text rangeOfString:[_usernames lastObject]]];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];
+    
+    if (self.usernames.count <= 2) {
+        [attributedString addAttribute:NSFontAttributeName value:self.highlightFont range:[text rangeOfString:firstObject]];
+        [attributedString addAttribute:NSFontAttributeName value:self.highlightFont range:[text rangeOfString:lastObject]];
     }
     
     return attributedString;
@@ -132,13 +147,20 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 
 - (NSTimer *)timerWithIdentifier:(NSString *)identifier
 {
-    for (NSTimer *timer in _timers) {
+    for (NSTimer *timer in self.timers) {
         if ([identifier isEqualToString:[timer.userInfo objectForKey:SLKTypingIndicatorViewIdentifier]]) {
             return timer;
         }
     }
-    
     return nil;
+}
+
+- (CGFloat)height
+{
+    CGFloat height = self.textFont.lineHeight;
+    height += self.contentInset.top;
+    height += self.contentInset.bottom;
+    return height;
 }
 
 
@@ -146,12 +168,21 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 
 - (void)setVisible:(BOOL)visible
 {
-    if (visible == _visible) {
+    if (visible == self.visible) {
         return;
     }
     
     NSString *notificationName = visible ? SLKTypingIndicatorViewWillShowNotification : SLKTypingIndicatorViewWillHideNotification;
     [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
+    
+    if (visible) {
+        self.textLabel.hidden = NO;
+    }
+    else {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.textLabel.hidden = YES;
+        });
+    }
     
     _visible = visible;
     
@@ -159,6 +190,23 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
         [self clean];
     }
 }
+
+- (void)setContentInset:(UIEdgeInsets)insets
+{
+    if (UIEdgeInsetsEqualToEdgeInsets(self.contentInset, insets)) {
+        return;
+    }
+    
+    if (UIEdgeInsetsEqualToEdgeInsets(self.contentInset, UIEdgeInsetsZero)) {
+        _contentInset = insets;
+        return;
+    }
+    
+    _contentInset = insets;
+    
+    [self updateConstraintConstants];
+}
+
 
 #pragma mark - Public Methods
 
@@ -168,7 +216,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
         return;
     }
     
-    BOOL isShowing = [_usernames containsObject:username];
+    BOOL isShowing = [self.usernames containsObject:username];
     
     if (_interval > 0.0) {
         
@@ -179,18 +227,16 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
         
         NSTimer *timer = [NSTimer timerWithTimeInterval:_interval target:self selector:@selector(shouldRemoveUsername:) userInfo:@{SLKTypingIndicatorViewIdentifier: username} repeats:NO];
         [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
-        [_timers addObject:timer];
+        [self.timers addObject:timer];
     }
     
     if (isShowing) {
         return;
     }
     
-    [_usernames addObject:username];
+    [self.usernames addObject:username];
     
-    NSAttributedString *text = [self attributedString];
-    
-    _textLabel.attributedText = text;
+    self.textLabel.attributedText = [self attributedString];
     
     if (!self.isVisible) {
         [self setVisible:YES];
@@ -199,14 +245,14 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 
 - (void)removeUsername:(NSString *)username
 {
-    if (!username || ![_usernames containsObject:username]) {
+    if (!username || ![self.usernames containsObject:username]) {
         return;
     }
+
+    [self.usernames removeObject:username];
     
-    [_usernames removeObject:username];
-    
-    if (_usernames.count > 0) {
-        _textLabel.attributedText = [self attributedString];
+    if (self.usernames.count > 0) {
+        self.textLabel.attributedText = [self attributedString];
     }
     else if (self.isVisible) {
         [self setVisible:NO];
@@ -221,7 +267,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 }
 
 
-#pragma mark - Dimissing Methods
+#pragma mark - Private Methods
 
 - (void)shouldRemoveUsername:(NSTimer *)timer
 {
@@ -231,34 +277,31 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
     [self invalidateTimer:timer];
 }
 
-
-#pragma mark - Cleaning Methods
-
 - (void)invalidateTimer:(NSTimer *)timer
 {
     if (timer) {
         [timer invalidate];
-        [_timers removeObject:timer];
+        [self.timers removeObject:timer];
         timer = nil;
     }
 }
 
 - (void)invalidateTimers
 {
-    for (NSTimer *timer in _timers) {
+    for (NSTimer *timer in self.timers) {
         [timer invalidate];
     }
     
-    [_timers removeAllObjects];
+    [self.timers removeAllObjects];
 }
 
 - (void)clean
 {
     [self invalidateTimers];
     
-    _textLabel.text = nil;
+    self.textLabel.text = nil;
     
-    [_usernames removeAllObjects];
+    [self.usernames removeAllObjects];
 }
 
 
@@ -266,16 +309,21 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 
 - (void)setupConstraints
 {
-    NSNumber *lineHeight = @(roundf(self.textLabel.font.lineHeight));
-    NSNumber *padding = @(roundf((self.height-[lineHeight floatValue]) / 2.0));
+    NSDictionary *views = @{@"textLabel": self.textLabel};
+
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[textLabel]|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(0)-[textLabel]-(0@750)-|" options:0 metrics:nil views:views]];
     
-    NSDictionary *views = @{@"label": self.textLabel};
-    NSDictionary *metrics = @{@"lineHeight": lineHeight, @"padding": padding};
+    self.leftContraint = [[self slk_constraintsForAttribute:NSLayoutAttributeLeading] firstObject];
+    self.rightContraint = [[self slk_constraintsForAttribute:NSLayoutAttributeTrailing] firstObject];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=padding)-[label(lineHeight)]-(<=padding)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(40)-[label]-(<=20)-|" options:0 metrics:metrics views:views]];
-    
-    [self layoutIfNeeded];
+    [self updateConstraintConstants];
+}
+
+- (void)updateConstraintConstants
+{
+    self.leftContraint.constant = self.contentInset.left;
+    self.rightContraint.constant = self.contentInset.right;
 }
 
 
