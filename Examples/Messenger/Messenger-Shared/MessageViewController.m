@@ -113,7 +113,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self.textView becomeFirstResponder];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.textView becomeFirstResponder];
+    });
 }
 
 
