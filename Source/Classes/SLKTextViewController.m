@@ -432,21 +432,23 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return keyboardHeight;
     }
     
+    // grab the base view for conversions as we don't want window coordinates in < iOS 8
+    UIView *baseView = ((UIWindow *)self.view.window).rootViewController.view;
+    
+    CGRect endFrameConverted = [baseView convertRect:endFrame fromView:nil];
+    
+    // It's a little weird to convert a view's frame to it's own coordinate space, but it fixes the coordiante system rotation issue
+    CGRect baseViewConverted = [baseView convertRect:baseView.frame fromView:nil];
+
+    
     // Sets the minimum height of the keyboard
     if (self.isMovingKeyboard) {
-        if (!SLK_IS_IOS8_AND_HIGHER && SLK_IS_LANDSCAPE) {
-            keyboardHeight = MIN(CGRectGetWidth([UIScreen mainScreen].bounds), CGRectGetHeight([UIScreen mainScreen].bounds));
-            keyboardHeight -= MAX(endFrame.origin.x, endFrame.origin.y);
-        }
-        else {
-            keyboardHeight = CGRectGetHeight([UIScreen mainScreen].bounds);
-            keyboardHeight -= endFrame.origin.y;
-        }
+        keyboardHeight = baseViewConverted.size.height;
+        keyboardHeight -= endFrameConverted.origin.y;
     }
     else {
         if ([notification.name isEqualToString:UIKeyboardWillShowNotification] || [notification.name isEqualToString:UIKeyboardDidShowNotification]) {
-            CGRect convertedRect = [self.view convertRect:endFrame toView:self.view.window];
-            keyboardHeight = CGRectGetHeight(convertedRect);
+            keyboardHeight = endFrameConverted.size.height;
         }
         else {
             keyboardHeight = 0.0;
@@ -459,6 +461,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     if (keyboardHeight < 0) {
         keyboardHeight = 0.0;
     }
+    
+    NSLog(@"keyboardHeight %f", keyboardHeight);
     
     return keyboardHeight;
 }
@@ -494,20 +498,23 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (CGFloat)appropriateBottomMarginToWindow
 {
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+
+    // grab the base view for conversions as we don't want window coordinates in < iOS 8
+    UIView *baseView = ((UIWindow *)self.view.window).rootViewController.view;
+
+    // It's a little weird to convert a view's frame to it's own coordinate space, but it fixes the coordiante system rotation issue
+    CGRect baseViewConverted = [baseView convertRect:baseView.frame fromView:nil];
     
-    CGRect windowFrame = [window convertRect:window.frame fromView:self.view];
-    windowFrame.origin = CGPointZero;
+    CGRect viewRect = self.view.frame;
     
-    CGRect viewRect = [window convertRect:self.view.frame fromView:nil];
-    
-    CGFloat bottomWindow = CGRectGetMaxY(windowFrame);
+    CGFloat bottomWindow = CGRectGetMaxY(baseViewConverted);
     CGFloat bottomView = CGRectGetMaxY(viewRect);
     
-    // Retrieve the status bar's height when the in-call status bar is displayed
-    if (CGRectGetHeight([UIApplication sharedApplication].statusBarFrame) > 20.0) {
-        bottomView += CGRectGetHeight([UIApplication sharedApplication].statusBarFrame)/2.0;
-    }
+    // Need the statusBarFrame in the correct coordinate space as well
+    CGFloat statusBarHeight = [baseView convertRect:[UIApplication sharedApplication].statusBarFrame fromView:nil].size.height;
+    
+    // the status bar should be part of our equation here
+    bottomView += statusBarHeight;
     
     CGFloat margin = bottomWindow - bottomView;
     
@@ -516,9 +523,23 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         margin /= 2.0;
         
         if (SLK_IS_LANDSCAPE) {
-            margin += margin-CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
+            margin += margin;
+        } else if (SLK_IS_IOS8_AND_HIGHER) {
+            // For some reason in iOS 8 portrait only, we lose 10 pts somewhere
+            // haven't worked out why yet. Perhaps a bug?
+            margin += 10;
         }
     }
+    
+    NSLog(@"baseViewConverted %@", NSStringFromCGRect(baseViewConverted));
+    NSLog(@"viewRect %@", NSStringFromCGRect(viewRect));
+    
+    NSLog(@"bottomWindow %f", bottomWindow);
+    NSLog(@"bottomView %f", bottomView);
+    NSLog(@"statusBarHeight %f", statusBarHeight);
+    NSLog(@"margin %f", margin);
+    
+    
     
     // Do NOT consider a status bar height gap
     return (margin > 20) ? margin : 0.0;
@@ -999,24 +1020,24 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
         // It's a little weird to convert a view's frame to it's own coordinate space, but it fixes the coordiante system rotation issue
         CGRect baseViewConverted = [baseView convertRect:baseView.frame fromView:nil];
-        CGRect windowCoordinates = ((UIWindow *)self.view.window).bounds;
+//        CGRect windowCoordinates = ((UIWindow *)self.view.window).bounds;
         
         // we want these rects in the correct coordinate space as well
         CGRect convertBegin = [baseView convertRect:beginRect fromView:nil];
         CGRect convertEnd = [baseView convertRect:endRect fromView:nil];
         
-        NSLog(@"%@", notification.name);
-        NSLog(@"begin Rect %@", NSStringFromCGRect(beginRect));
-        NSLog(@"end Rect %@", NSStringFromCGRect(endRect));
-        NSLog(@"convertBegin %@", NSStringFromCGRect(convertBegin));
-        NSLog(@"convertEnd %@", NSStringFromCGRect(convertEnd));
-        NSLog(@"windowCoordinates %@", NSStringFromCGRect(windowCoordinates));
-        NSLog(@"baseView %@", NSStringFromCGRect(baseView.frame));
-        NSLog(@"baseView converted %@", NSStringFromCGRect(baseViewConverted));
+//        NSLog(@"%@", notification.name);
+//        NSLog(@"begin Rect %@", NSStringFromCGRect(beginRect));
+//        NSLog(@"end Rect %@", NSStringFromCGRect(endRect));
+//        NSLog(@"convertBegin %@", NSStringFromCGRect(convertBegin));
+//        NSLog(@"convertEnd %@", NSStringFromCGRect(convertEnd));
+//        NSLog(@"windowCoordinates %@", NSStringFromCGRect(windowCoordinates));
+//        NSLog(@"baseView %@", NSStringFromCGRect(baseView.frame));
+//        NSLog(@"baseView converted %@", NSStringFromCGRect(baseViewConverted));
         
         if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
             if (convertEnd.origin.y + inputAccessoryHeight >= baseViewConverted.size.height) {
-                NSLog(@"External");
+//                NSLog(@"External");
                 return YES;
             }
         }
@@ -1025,12 +1046,12 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
             // but the beginRect doesn't yet reflect that. It should never cause a false positive
             if (convertBegin.origin.y + inputAccessoryHeight >= baseViewConverted.size.height ||
                 convertBegin.origin.y + inputAccessoryHeight == baseViewConverted.size.width) {
-                NSLog(@"External");
+//                NSLog(@"External");
                 return YES;
             }
         }
     }
-    NSLog(@"Not External");
+//    NSLog(@"Not External");
     return NO;
 }
 
