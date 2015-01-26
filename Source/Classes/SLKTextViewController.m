@@ -988,22 +988,43 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         // based on http://stackoverflow.com/a/5760910/287403
         // we can determine if the external keyboard is showing by adding the origin.y of the target finish rect
         // (end when showing, begin when hiding) to the inputAccessoryHeight
-        // If it's greater than the window height, it's an external keyboard
+        // If it's greater(or equal) the window height, it's an external keyboard
         CGFloat inputAccessoryHeight = self.textView.inputAccessoryView.frame.size.height;
         CGRect beginRect = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
         CGRect endRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
         
+        // grab the base view for conversions as we don't want window coordinates in < iOS 8
+        // iOS 8 fixes the whole coordinate system issue for us, but iOS 7 doesn't rotate the app window coordinate space
+        UIView *baseView = ((UIWindow *)self.view.window).rootViewController.view;
+
+        // It's a little weird to convert a view's frame to it's own coordinate space, but it fixes the coordiante system rotation issue
+        CGRect baseViewConverted = [baseView convertRect:baseView.frame fromView:nil];
+        CGRect windowCoordinates = ((UIWindow *)self.view.window).bounds;
+        
+        // we want these rects in the correct coordinate space as well
+        CGRect convertBegin = [baseView convertRect:beginRect fromView:nil];
+        CGRect convertEnd = [baseView convertRect:endRect fromView:nil];
+        
+        NSLog(@"%@", notification.name);
+        NSLog(@"begin Rect %@", NSStringFromCGRect(beginRect));
+        NSLog(@"end Rect %@", NSStringFromCGRect(endRect));
+        NSLog(@"convertBegin %@", NSStringFromCGRect(convertBegin));
+        NSLog(@"convertEnd %@", NSStringFromCGRect(convertEnd));
+        NSLog(@"windowCoordinates %@", NSStringFromCGRect(windowCoordinates));
+        NSLog(@"baseView %@", NSStringFromCGRect(baseView.frame));
+        NSLog(@"baseView converted %@", NSStringFromCGRect(baseViewConverted));
+        
         if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-            if (endRect.origin.y + inputAccessoryHeight >= self.view.window.frame.size.height) {
+            if (convertEnd.origin.y + inputAccessoryHeight >= baseViewConverted.size.height) {
                 NSLog(@"External");
                 return YES;
             }
         }
         else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
-            // the additional logic check here (== to width) accounts for a glitch where the window has rotated it's coordinates
-            // but the beginRect doesn't yet reflect that.
-            if (beginRect.origin.y + inputAccessoryHeight >= self.view.window.frame.size.height ||
-                beginRect.origin.y + inputAccessoryHeight == self.view.window.frame.size.width) {
+            // the additional logic check here (== to width) accounts for a glitch (iOS 8 only?) where the window has rotated it's coordinates
+            // but the beginRect doesn't yet reflect that. It should never cause a false positive
+            if (convertBegin.origin.y + inputAccessoryHeight >= baseViewConverted.size.height ||
+                convertBegin.origin.y + inputAccessoryHeight == baseViewConverted.size.width) {
                 NSLog(@"External");
                 return YES;
             }
