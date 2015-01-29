@@ -478,6 +478,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (CGFloat)topBarsHeight
 {
+    // No need to adjust if the edge isn't available
+    if ((self.edgesForExtendedLayout & UIRectEdgeTop) == 0) {
+        return 0.0;
+    }
+    
     CGFloat height = CGRectGetHeight(self.navigationController.navigationBar.frame);
     
     if (SLK_IS_IPHONE && SLK_IS_LANDSCAPE && SLK_IS_IOS8_AND_HIGHER) {
