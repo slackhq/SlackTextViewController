@@ -40,6 +40,16 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     return self;
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        // Register a subclass of SLKTextView, if you need any special appearance and/or behavior customisation.
+        [self registerClassForTextView:[MessageTextView class]];
+    }
+    return self;
+}
+
 + (UITableViewStyle)tableViewStyleForCoder:(NSCoder *)decoder
 {
     return UITableViewStylePlain;
