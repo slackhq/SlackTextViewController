@@ -178,7 +178,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [UIView performWithoutAnimation:^{
         // Reloads any cached text
         [self reloadTextView];
-        [self updateContentInset];
     }];
 }
 
@@ -212,6 +211,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
+    
+    [self adjustContentConfigurationIfNeeded];
 }
 
 - (void)viewDidLayoutSubviews
@@ -1028,12 +1029,21 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
 }
 
-- (void)updateContentInset
+- (void)adjustContentConfigurationIfNeeded
 {
-    UIEdgeInsets contentInset = UIEdgeInsetsMake(0.0, 0.0, self.inverted ? [self topBarsHeight] : 0.0, 0.0);
+    // When inverted, we need to substract the top bars height (generally status bar + navigation bar's) to align the top of the
+    // scrollview correctly to its top edge.
+    if (self.inverted) {
+        UIEdgeInsets contentInset = UIEdgeInsetsMake(0.0, 0.0, [self topBarsHeight], 0.0);
+        self.scrollViewProxy.contentInset = contentInset;
+        self.scrollViewProxy.scrollIndicatorInsets = contentInset;
+    }
     
-    self.scrollViewProxy.contentInset = contentInset;
-    self.scrollViewProxy.scrollIndicatorInsets = contentInset;
+    // Substracts the bottom edge rect if present. This fixes the text input layout when using inside of a view controller container
+    // such as a UITabBarController or a custom container
+    if (((self.edgesForExtendedLayout & UIRectEdgeBottom) > 0)) {
+        self.edgesForExtendedLayout = self.edgesForExtendedLayout & ~UIRectEdgeBottom;
+    }
 }
 
 - (void)prepareForInterfaceRotation
