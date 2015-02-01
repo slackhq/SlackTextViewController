@@ -57,7 +57,6 @@
     
     self.titleLabel.font = [UIFont boldSystemFontOfSize:16.0];
     self.bodyLabel.font = [UIFont systemFontOfSize:16.0];
-    self.tumbnailView.image = nil;
     self.attachmentView.image = nil;
 }
 
