@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		35A4C7C11DE3FD17F022DC0C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
 		4A8EFBBFAC0F49199AAABF46 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
+		4F3031751A7E930F00BD944D /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */; };
 		4F3EDB4D199ED00F004C15D6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB4C199ED00F004C15D6 /* Foundation.framework */; };
 		4F3EDB4F199ED00F004C15D6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB4E199ED00F004C15D6 /* CoreGraphics.framework */; };
 		4F3EDB51199ED00F004C15D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB50199ED00F004C15D6 /* UIKit.framework */; };
@@ -517,6 +518,7 @@
 				4F8ADA781A68C37400023752 /* Message.m in Sources */,
 				4F86BF6D19F011D0007A3D4A /* AppDelegate.m in Sources */,
 				4F86BF6A19F011D0007A3D4A /* main.m in Sources */,
+				4F3031751A7E930F00BD944D /* MessageTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
