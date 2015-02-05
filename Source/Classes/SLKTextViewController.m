@@ -620,11 +620,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.automaticallyAdjustsScrollViewInsets = inverted ? NO : YES;
 }
 
-- (void)setUndoShakingEnabled:(BOOL)enabled
-{
-    _shakeToClearEnabled = enabled;
-}
-
 - (void)setKeyboardPanningEnabled:(BOOL)enabled
 {
     if (self.keyboardPanningEnabled == enabled) {
@@ -825,11 +820,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (CGFloat)maximumHeightForAutoCompletionView
 {
     return 140.0;
-}
-
-- (void)didPasteImage:(UIImage *)image
-{
-    // Deprecated. User -didPasteMediaContent: instead.
 }
 
 - (void)didPasteMediaContent:(NSDictionary *)userInfo

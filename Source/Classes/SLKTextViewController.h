@@ -62,7 +62,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /** YES if text view's content can be cleaned with a shake gesture. Default is NO. */
 @property (nonatomic, assign) BOOL shakeToClearEnabled;
-@property (nonatomic, assign) BOOL undoShakingEnabled DEPRECATED_MSG_ATTRIBUTE("Use -shakeToClearEnabled instead");
 
 /** YES if keyboard can be dismissed gradually with a vertical panning gesture. Default is YES. */
 @property (nonatomic, assign, getter = isKeyboardPanningEnabled) BOOL keyboardPanningEnabled;
@@ -212,14 +211,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @return YES if the right button can be pressed.
  */
 - (BOOL)canPressRightButton;
-
-/**
- Notifies the view controller when the user has pasted an image inside of the text view.
- You can override this method to perform additional tasks associated with image pasting.
- 
- @param image The image that has been pasted. Only JPG or PNG are supported.
- */
-- (void)didPasteImage:(UIImage *)image DEPRECATED_MSG_ATTRIBUTE("Use -didPasteMediaContent: instead");
 
 /** 
  Notifies the view controller when the user has pasted a supported media content (images and/or videos).
