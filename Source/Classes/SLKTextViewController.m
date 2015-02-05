@@ -780,7 +780,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
-    [self didCancelTextEditing:sender];
+    [self.textInputbar endTextEdition];
+    [self.textView setText:nil];
 }
 
 - (void)didCancelTextEditing:(id)sender
@@ -790,8 +791,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     [self.textInputbar endTextEdition];
-    
     [self.textView setText:nil];
+    
+    // Restores any previous cached text before entering in editing mode
+    [self reloadTextView];
 }
 
 - (BOOL)canShowTypeIndicator
@@ -865,6 +868,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     if (![self.textInputbar canEditText:text]) {
         return;
     }
+    
+    // Caches the current text, in case the user cancels the edition
+    [self cacheTextToDisk:self.textView.text];
     
     if (!SLK_IS_LANDSCAPE) {
         [self.textView setText:text];
