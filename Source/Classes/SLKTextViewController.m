@@ -955,7 +955,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
-    BOOL enable = !self.isAutoCompleting;
+    BOOL enable = (!self.isAutoCompleting && self.foundPrefix.length == 0);
     
     // Skips if the QuickType Bar isn't visible and it's trying to disable it. And the inverted logic.
     if (enable == self.textView.isTypingSuggestionEnabled) {
@@ -1393,6 +1393,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     NSRange range;
     NSString *word = [self.textView slk_wordAtCaretRange:&range];
     
+    [self invalidateAutoCompletion];
+    
     for (NSString *prefix in self.registeredPrefixes) {
         
         NSRange keyRange = [word rangeOfString:prefix];
@@ -1447,13 +1449,18 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)cancelAutoCompletion
 {
+    [self invalidateAutoCompletion];
+    
+    [self hideAutoCompletionViewIfNeeded];
+}
+
+- (void)invalidateAutoCompletion
+{
     _foundPrefix = nil;
     _foundWord = nil;
     _foundPrefixRange = NSMakeRange(0,0);
     
     [self.autoCompletionView setContentOffset:CGPointZero];
-    
-    [self hideAutoCompletionViewIfNeeded];
 }
 
 - (void)acceptAutoCompletionWithString:(NSString *)string
@@ -1512,7 +1519,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     if (show) {
         // Reload the tableview before showing it
         [self.autoCompletionView reloadData];
-        [self.autoCompletionView setContentOffset:CGPointZero];
     }
     
     // If the autocompletion view height is bigger than the maximum height allows, it is reduce to that size. Default 140 pts.
