@@ -584,7 +584,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)setScrollViewProxy:(UIScrollView *)scrollView
 {
-    if ([self.scrollViewProxy isEqual:scrollView]) {
+    if ([_scrollViewProxy isEqual:scrollView]) {
         return;
     }
     
@@ -599,7 +599,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)setAutoCompleting:(BOOL)autoCompleting
 {
-    if (self.autoCompleting == autoCompleting) {
+    if (_autoCompleting == autoCompleting) {
         return;
     }
     
@@ -610,7 +610,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)setInverted:(BOOL)inverted
 {
-    if (self.isInverted == inverted) {
+    if (_inverted == inverted) {
         return;
     }
     
@@ -622,19 +622,19 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)setKeyboardPanningEnabled:(BOOL)enabled
 {
-    if (self.keyboardPanningEnabled == enabled) {
+    if (_keyboardPanningEnabled == enabled) {
         return;
     }
     
-    self.scrollViewProxy.keyboardDismissMode = enabled ? UIScrollViewKeyboardDismissModeInteractive : UIScrollViewKeyboardDismissModeNone;
-    
     _keyboardPanningEnabled = enabled;
+    
+    self.scrollViewProxy.keyboardDismissMode = enabled ? UIScrollViewKeyboardDismissModeInteractive : UIScrollViewKeyboardDismissModeNone;
 }
 
 - (BOOL)updateKeyboardStatus:(SLKKeyboardStatus)status
 {
     // Skips if trying to update the same status
-    if (self.keyboardStatus == status) {
+    if (_keyboardStatus == status) {
         return NO;
     }
     
