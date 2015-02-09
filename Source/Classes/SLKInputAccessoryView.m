@@ -43,8 +43,8 @@ NSString *SLKKeyboardHandlingKeyPath()
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
-    [self removeSuperviewObserver];
-    [self addSuperviewObserver:newSuperview];
+    [self _removeSuperviewObserver];
+    [self _addSuperviewObserver:newSuperview];
     
     [super willMoveToSuperview:newSuperview];
 }
@@ -52,7 +52,7 @@ NSString *SLKKeyboardHandlingKeyPath()
 
 #pragma mark - Superview handling
 
-- (void)addSuperviewObserver:(UIView *)superview
+- (void)_addSuperviewObserver:(UIView *)superview
 {
     if (_observedSuperview || !superview) {
         return;
@@ -63,7 +63,7 @@ NSString *SLKKeyboardHandlingKeyPath()
     [superview addObserver:self forKeyPath:SLKKeyboardHandlingKeyPath() options:0 context:NULL];
 }
 
-- (void)removeSuperviewObserver
+- (void)_removeSuperviewObserver
 {
     if (!_observedSuperview) {
         return;
@@ -77,7 +77,7 @@ NSString *SLKKeyboardHandlingKeyPath()
 
 #pragma mark - Events
 
-- (void)didChangeKeyboardFrame:(CGRect)frame
+- (void)_didChangeKeyboardFrame:(CGRect)frame
 {
     NSDictionary *userInfo = @{UIKeyboardFrameEndUserInfoKey:[NSValue valueWithCGRect:frame]};
     [[NSNotificationCenter defaultCenter] postNotificationName:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil userInfo:userInfo];
@@ -89,7 +89,7 @@ NSString *SLKKeyboardHandlingKeyPath()
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ([object isEqual:self.superview] && [keyPath isEqualToString:SLKKeyboardHandlingKeyPath()]) {
-        [self didChangeKeyboardFrame:self.superview.frame];
+        [self _didChangeKeyboardFrame:self.superview.frame];
     }
     else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -100,7 +100,7 @@ NSString *SLKKeyboardHandlingKeyPath()
 
 - (void)dealloc
 {
-    [self removeSuperviewObserver];
+    [self _removeSuperviewObserver];
 }
 
 @end

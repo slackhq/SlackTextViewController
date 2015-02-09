@@ -61,7 +61,7 @@ static NSTimeInterval kDeleteMaxTimeInterval = 0.5;
 - (instancetype)init
 {
     if (self = [super init]) {
-        [self commonInit];
+        [self _commonInit];
     }
     return self;
 }
@@ -69,12 +69,12 @@ static NSTimeInterval kDeleteMaxTimeInterval = 0.5;
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
     if (self = [super initWithCoder:coder]) {
-        [self commonInit];
+        [self _commonInit];
     }
     return self;
 }
 
-- (void)commonInit
+- (void)_commonInit
 {
     self.placeholderColor = [UIColor lightGrayColor];
     self.pastableMediaTypes = SLKPastableMediaTypeNone;
@@ -89,9 +89,9 @@ static NSTimeInterval kDeleteMaxTimeInterval = 0.5;
     self.dataDetectorTypes = UIDataDetectorTypeNone;
     
     // UITextView notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBeginEditing:) name:UITextViewTextDidBeginEditingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeText:) name:UITextViewTextDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEndEditing:) name:UITextViewTextDidEndEditingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_didBeginEditing:) name:UITextViewTextDidBeginEditingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_didChangeText:) name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_didEndEditing:) name:UITextViewTextDidEndEditingNotification object:nil];
     
     [self addObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize)) options:NSKeyValueObservingOptionNew context:NULL];
 }
@@ -118,9 +118,9 @@ static NSTimeInterval kDeleteMaxTimeInterval = 0.5;
 {
     [super layoutSubviews];
     
-    self.placeholderLabel.hidden = [self shouldHidePlaceholder];
+    self.placeholderLabel.hidden = [self _shouldHidePlaceholder];
     if (!self.placeholderLabel.hidden) {
-        self.placeholderLabel.frame = [self placeholderRectThatFits:self.bounds];
+        self.placeholderLabel.frame = [self _placeholderRectThatFits:self.bounds];
         [self sendSubviewToBack:self.placeholderLabel];
     }
 }
@@ -144,6 +144,15 @@ static NSTimeInterval kDeleteMaxTimeInterval = 0.5;
         [self addSubview:_placeholderLabel];
     }
     return _placeholderLabel;
+}
+
+- (NSTimer *)deletionTimer
+{
+    if (!_deletionTimer) {
+        _deletionTimer = [NSTimer timerWithTimeInterval:kDeleteMaxTimeInterval target:self selector:@selector(_shouldRefreshFirstResponder:) userInfo:nil repeats:NO];
+        [[NSRunLoop currentRunLoop] addTimer:_deletionTimer forMode:NSRunLoopCommonModes];
+    }
+    return _deletionTimer;
 }
 
 - (NSString *)placeholder
@@ -171,9 +180,9 @@ static NSTimeInterval kDeleteMaxTimeInterval = 0.5;
 }
 
 // Returns only a supported pasted item
-- (id)pastedItem
+- (id)_pastedItem
 {
-    NSString *contentType = [self pasteboardContentType];
+    NSString *contentType = [self _pasteboardContentType];
     NSData *data = [[UIPasteboard generalPasteboard] dataForPasteboardType:contentType];
 
     if (data && [data isKindOfClass:[NSData class]])
@@ -196,27 +205,27 @@ static NSTimeInterval kDeleteMaxTimeInterval = 0.5;
 }
 
 // Checks if any supported media found in the general pasteboard
-- (BOOL)isPasteboardItemSupported
+- (BOOL)_isPasteboardItemSupported
 {
-    if ([self pasteboardContentType].length > 0) {
+    if ([self _pasteboardContentType].length > 0) {
         return YES;
     }
     return NO;
 }
 
-- (NSString *)pasteboardContentType
+- (NSString *)_pasteboardContentType
 {
     NSArray *pasteboardTypes = [[UIPasteboard generalPasteboard] pasteboardTypes];
     NSMutableArray *subpredicates = [NSMutableArray new];
     
-    for (NSString *type in [self supportedMediaTypes]) {
+    for (NSString *type in [self _supportedMediaTypes]) {
         [subpredicates addObject:[NSPredicate predicateWithFormat:@"SELF == %@", type]];
     }
     
     return [[pasteboardTypes filteredArrayUsingPredicate:[NSCompoundPredicate orPredicateWithSubpredicates:subpredicates]] firstObject];
 }
 
-- (NSArray *)supportedMediaTypes
+- (NSArray *)_supportedMediaTypes
 {
     if (self.pastableMediaTypes == SLKPastableMediaTypeNone) {
         return nil;
@@ -312,7 +321,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     return NO;
 }
 
-- (BOOL)shouldHidePlaceholder
+- (BOOL)_shouldHidePlaceholder
 {
     if (self.placeholder.length == 0 || self.text.length > 0) {
         return YES;
@@ -320,7 +329,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     return NO;
 }
 
-- (CGRect)placeholderRectThatFits:(CGRect)bounds
+- (CGRect)_placeholderRectThatFits:(CGRect)bounds
 {
     CGRect rect = CGRectZero;
     rect.size = [self.placeholderLabel sizeThatFits:bounds.size];
@@ -330,15 +339,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     rect.origin.x += padding;
     
     return rect;
-}
-
-- (NSTimer *)deletionTimer
-{
-    if (!_deletionTimer) {
-        _deletionTimer = [NSTimer timerWithTimeInterval:kDeleteMaxTimeInterval target:self selector:@selector(shouldRefreshFirstResponder:) userInfo:nil repeats:NO];
-        [[NSRunLoop currentRunLoop] addTimer:_deletionTimer forMode:NSRunLoopCommonModes];
-    }
-    return _deletionTimer;
 }
 
 
@@ -369,7 +369,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     _undoManagerEnabled = enabled;
 }
 
-- (void)invalidateDeletionTimer
+- (void)_invalidateDeletionTimer
 {
     if (!_deletionTimer) {
         return;
@@ -379,7 +379,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     _deletionTimer = nil;
 }
 
-- (void)invalidateFastDeletion
+- (void)_invalidateFastDeletion
 {
     _fastDeleting = NO;
     _lastDeletionTimeInterval = 0;
@@ -391,7 +391,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 - (void)setText:(NSString *)text
 {
     // Registers for undo management
-    [self prepareForUndo:@"Text Set"];
+    [self slk_prepareForUndo:@"Text Set"];
     
     [super setText:text];
     
@@ -401,26 +401,9 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 - (void)setAttributedText:(NSAttributedString *)attributedText
 {
     // Registers for undo management
-    [self prepareForUndo:@"Attributed Text Set"];
+    [self slk_prepareForUndo:@"Attributed Text Set"];
     
     [super setAttributedText:attributedText];
-}
-
-// Safer cursor range (it sometimes exceeds the lenght of the text property).
-- (NSRange)selectedRange
-{
-    NSRange range = [super selectedRange];
-    NSString *text = self.text;
-
-    if (range.location > text.length) {
-        range.location = text.length;
-    }
-    
-    if (range.length > text.length) {
-        range.length = text.length;
-    }
-    
-    return range;
 }
 
 - (void)setFont:(UIFont *)font
@@ -439,6 +422,23 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     self.placeholderLabel.textAlignment = textAlignment;
 }
 
+// Safer cursor range (it sometimes exceeds the lenght of the text property).
+- (NSRange)selectedRange
+{
+    NSRange range = [super selectedRange];
+    NSString *text = self.text;
+    
+    if (range.location > text.length) {
+        range.location = text.length;
+    }
+    
+    if (range.length > text.length) {
+        range.length = text.length;
+    }
+    
+    return range;
+}
+
 
 #pragma mark - UITextInputTraits Overrides
 
@@ -446,7 +446,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 {
     [super insertText:text];
     
-    [self invalidateFastDeletion];
+    [self _invalidateFastDeletion];
 }
 
 - (void)deleteBackward
@@ -464,7 +464,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
     // Makes sure the first responder is refreshed when the user released the backward key
     if (self.isFastDeleting) {
-        [self invalidateDeletionTimer];
+        [self _invalidateDeletionTimer];
         [self deletionTimer];
     }
 }
@@ -494,8 +494,8 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 {
     // Adds undo/redo items to the Menu Controller
     if (self.undoManagerEnabled) {
-        UIMenuItem *undo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Undo", nil) action:@selector(slk_undo:)];
-        UIMenuItem *redo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Redo", nil) action:@selector(slk_redo:)];
+        UIMenuItem *undo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Undo", nil) action:@selector(_undo:)];
+        UIMenuItem *redo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Redo", nil) action:@selector(_redo:)];
         [[UIMenuController sharedMenuController] setMenuItems:@[undo,redo]];
     }
     
@@ -534,18 +534,18 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
         return YES;
     }
 
-    if (action == @selector(paste:) && [self isPasteboardItemSupported]) {
+    if (action == @selector(paste:) && [self _isPasteboardItemSupported]) {
         return YES;
     }
     
     if (self.undoManagerEnabled) {
-        if (action == @selector(slk_undo:)) {
+        if (action == @selector(_undo:)) {
             if (self.undoManager.undoActionIsDiscardable) {
                 return NO;
             }
             return [self.undoManager canUndo];
         }
-        if (action == @selector(slk_redo:)) {
+        if (action == @selector(_redo:)) {
             if (self.undoManager.redoActionIsDiscardable) {
                 return NO;
             }
@@ -558,7 +558,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (void)paste:(id)sender
 {
-    id pastedItem = [self pastedItem];
+    id pastedItem = [self _pastedItem];
     
     if ([pastedItem isKindOfClass:[NSDictionary class]])
     {
@@ -581,7 +581,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 #pragma mark - Custom Actions
 
-- (void)flashScrollIndicatorsIfNeeded
+- (void)_flashScrollIndicatorsIfNeeded
 {
     if (self.numberOfLines == self.maxNumberOfLines+1) {
         if (!_didFlashScrollIndicators) {
@@ -610,11 +610,11 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     }
 }
 
-- (void)shouldRefreshFirstResponder:(NSTimer *)timer
+- (void)_shouldRefreshFirstResponder:(NSTimer *)timer
 {
     [self refreshFirstResponder];
-    [self invalidateDeletionTimer];
-    [self invalidateFastDeletion];
+    [self _invalidateDeletionTimer];
+    [self _invalidateFastDeletion];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewDidFinishDeletingNotification object:self];
 }
@@ -641,12 +641,12 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     _didNotResignFirstResponder = NO;
 }
 
-- (void)slk_undo:(id)sender
+- (void)_undo:(id)sender
 {
     [self.undoManager undo];
 }
 
-- (void)slk_redo:(id)sender
+- (void)_redo:(id)sender
 {
     [self.undoManager redo];
 }
@@ -654,7 +654,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 #pragma mark - Notification Events
 
-- (void)didBeginEditing:(NSNotification *)notification
+- (void)_didBeginEditing:(NSNotification *)notification
 {
     if (![notification.object isEqual:self]) {
         return;
@@ -663,20 +663,20 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     // Do something
 }
 
-- (void)didChangeText:(NSNotification *)notification
+- (void)_didChangeText:(NSNotification *)notification
 {
     if (![notification.object isEqual:self]) {
         return;
     }
     
-    if (self.placeholderLabel.hidden != [self shouldHidePlaceholder]) {
+    if (self.placeholderLabel.hidden != [self _shouldHidePlaceholder]) {
         [self setNeedsLayout];
     }
     
-    [self flashScrollIndicatorsIfNeeded];
+    [self _flashScrollIndicatorsIfNeeded];
 }
 
-- (void)didEndEditing:(NSNotification *)notification
+- (void)_didEndEditing:(NSNotification *)notification
 {
     if (![notification.object isEqual:self]) {
         return;
@@ -719,13 +719,13 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     
     _keyboardCommands = @[
          // Return
-         [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:UIKeyModifierShift action:@selector(didPressLineBreakKeys:)],
-         [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:UIKeyModifierAlternate action:@selector(didPressLineBreakKeys:)],
-         [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:UIKeyModifierControl action:@selector(didPressLineBreakKeys:)],
+         [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:UIKeyModifierShift action:@selector(_didPressLineBreakKeys:)],
+         [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:UIKeyModifierAlternate action:@selector(_didPressLineBreakKeys:)],
+         [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:UIKeyModifierControl action:@selector(_didPressLineBreakKeys:)],
          
          // Undo/Redo
-         [UIKeyCommand keyCommandWithInput:@"z" modifierFlags:UIKeyModifierCommand action:@selector(didPressCommandZKeys:)],
-         [UIKeyCommand keyCommandWithInput:@"z" modifierFlags:UIKeyModifierShift|UIKeyModifierCommand action:@selector(didPressCommandZKeys:)],
+         [UIKeyCommand keyCommandWithInput:@"z" modifierFlags:UIKeyModifierCommand action:@selector(_didPressCommandZKeys:)],
+         [UIKeyCommand keyCommandWithInput:@"z" modifierFlags:UIKeyModifierShift|UIKeyModifierCommand action:@selector(_didPressCommandZKeys:)],
          ];
     
     return _keyboardCommands;
@@ -734,14 +734,14 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 #pragma mark Line Break
 
-- (void)didPressLineBreakKeys:(id)sender
+- (void)_didPressLineBreakKeys:(id)sender
 {
     [self slk_insertNewLineBreak];
 }
 
 #pragma mark Undo/Redo Text
 
-- (void)didPressCommandZKeys:(id)sender
+- (void)_didPressCommandZKeys:(id)sender
 {
     if (!self.undoManagerEnabled) {
         return;
@@ -773,25 +773,25 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     UIKeyCommand *keyCommand = (UIKeyCommand *)sender;
     
     if ([keyCommand.input isEqualToString:UIKeyInputUpArrow]) {
-        [self moveCursorTodirection:UITextLayoutDirectionUp];
+        [self _moveCursorTodirection:UITextLayoutDirectionUp];
     }
     else if ([keyCommand.input isEqualToString:UIKeyInputDownArrow]) {
-        [self moveCursorTodirection:UITextLayoutDirectionDown];
+        [self _moveCursorTodirection:UITextLayoutDirectionDown];
     }
 }
 
-- (void)moveCursorTodirection:(UITextLayoutDirection)direction
+- (void)_moveCursorTodirection:(UITextLayoutDirection)direction
 {
     UITextPosition *start = (direction == UITextLayoutDirectionUp) ? self.selectedTextRange.start : self.selectedTextRange.end;
     
-    if ([self isNewVerticalMovementForPosition:start inDirection:direction]) {
+    if ([self _isNewVerticalMovementForPosition:start inDirection:direction]) {
         self.verticalMoveDirection = direction;
         self.verticalMoveStartCaretRect = [self caretRectForPosition:start];
     }
     
     if (start) {
         
-        UITextPosition *end = [self closestPositionToPosition:start inDirection:direction];
+        UITextPosition *end = [self _closestPositionToPosition:start inDirection:direction];
         
         if (end) {
             self.verticalMoveLastCaretRect = [self caretRectForPosition:end];
@@ -805,7 +805,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 // Based on code from Ruben Cabaco
 // https://gist.github.com/rcabaco/6765778
 
-- (UITextPosition *)closestPositionToPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction
+- (UITextPosition *)_closestPositionToPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction
 {
     // Only up/down are implemented. No real need for left/right since that is native to UITextInput.
     NSParameterAssert(direction == UITextLayoutDirectionUp || direction == UITextLayoutDirectionDown);
@@ -853,7 +853,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     return closestPosition;
 }
 
-- (BOOL)isNewVerticalMovementForPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction
+- (BOOL)_isNewVerticalMovementForPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction
 {
     CGRect caretRect = [self caretRectForPosition:position];
     BOOL noPreviousStartPosition = CGRectEqualToRect(self.verticalMoveStartCaretRect, CGRectZero);
@@ -872,6 +872,9 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
+    
+    [self _invalidateDeletionTimer];
+    [self _invalidateFastDeletion];
     
     _placeholderLabel = nil;
 }

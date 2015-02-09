@@ -68,6 +68,6 @@
  
  @param description A simple description associated with the Undo or Redo command.
  */
-- (void)prepareForUndo:(NSString *)description;
+- (void)slk_prepareForUndo:(NSString *)description;
 
 @end

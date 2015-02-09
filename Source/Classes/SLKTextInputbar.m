@@ -45,7 +45,7 @@
 {
     if (self = [super init]) {
         self.textViewClass = textViewClass;
-        [self commonInit];
+        [self _commonInit];
     }
     return self;
 }
@@ -53,7 +53,7 @@
 - (id)init
 {
     if (self = [super init]) {
-        [self commonInit];
+        [self _commonInit];
     }
     return self;
 }
@@ -61,12 +61,12 @@
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
     if (self = [super initWithCoder:coder]) {
-        [self commonInit];
+        [self _commonInit];
     }
     return self;
 }
 
-- (void)commonInit
+- (void)_commonInit
 {
     self.autoHideRightButton = YES;
     self.editorContentViewHeight = 38.0;
@@ -78,11 +78,11 @@
     [self addSubview:self.textView];
     [self addSubview:self.charCountLabel];
 
-    [self setupViewConstraints];
-    [self updateConstraintConstants];
+    [self _setupViewConstraints];
+    [self _updateConstraintConstants];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
     
     [self.leftButton.imageView addObserver:self forKeyPath:NSStringFromSelector(@selector(image)) options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
 }
@@ -96,7 +96,7 @@
         return;
     }
     
-    [self updateConstraintConstants];
+    [self _updateConstraintConstants];
     [super layoutIfNeeded];
 }
 
@@ -122,7 +122,7 @@
         _textView = [class new];
         _textView.translatesAutoresizingMaskIntoConstraints = NO;
         _textView.font = [UIFont systemFontOfSize:15.0];
-        _textView.maxNumberOfLines = [self defaultNumberOfLines];
+        _textView.maxNumberOfLines = [self _defaultNumberOfLines];
         
         _textView.typingSuggestionEnabled = YES;
         _textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
@@ -235,7 +235,7 @@
     return _charCountLabel;
 }
 
-- (NSUInteger)defaultNumberOfLines
+- (NSUInteger)_defaultNumberOfLines
 {
     if (SLK_IS_IPAD) {
         return 8;
@@ -258,7 +258,7 @@
     return NO;
 }
 
-- (CGFloat)appropriateRightButtonWidth
+- (CGFloat)_appropriateRightButtonWidth
 {
     NSString *title = [self.rightButton titleForState:UIControlStateNormal];
     CGSize rigthButtonSize = [title sizeWithAttributes:@{NSFontAttributeName: self.rightButton.titleLabel.font}];
@@ -271,7 +271,7 @@
     return rigthButtonSize.width+self.contentInset.right;
 }
 
-- (CGFloat)appropriateRightButtonMargin
+- (CGFloat)_appropriateRightButtonMargin
 {
     if (self.autoHideRightButton) {
         if (self.textView.text.length == 0) {
@@ -316,7 +316,7 @@
     
     _autoHideRightButton = hide;
     
-    self.rightButtonWC.constant = [self appropriateRightButtonWidth];
+    self.rightButtonWC.constant = [self _appropriateRightButtonWidth];
     [self layoutIfNeeded];
 }
 
@@ -335,10 +335,10 @@
     
     // Add new constraints
     [self removeConstraints:self.constraints];
-    [self setupViewConstraints];
+    [self _setupViewConstraints];
     
     // Add constant values and refresh layout
-    [self updateConstraintConstants];
+    [self _updateConstraintConstants];
     [super layoutIfNeeded];
 }
 
@@ -372,7 +372,7 @@
     
     self.editing = YES;
     
-    [self updateConstraintConstants];
+    [self _updateConstraintConstants];
     
     if (!self.isFirstResponder) {
         [self layoutIfNeeded];
@@ -386,7 +386,7 @@
     }
     
     self.editing = NO;
-    [self updateConstraintConstants];
+    [self _updateConstraintConstants];
 }
 
 
@@ -434,7 +434,7 @@
 
 #pragma mark - Notification Events
 
-- (void)didChangeTextViewText:(NSNotification *)notification
+- (void)_didChangeTextViewText:(NSNotification *)notification
 {
     SLKTextView *textView = (SLKTextView *)notification.object;
     
@@ -450,14 +450,14 @@
     
     if (self.autoHideRightButton && !self.isEditing)
     {
-        CGFloat rightButtonNewWidth = [self appropriateRightButtonWidth];
+        CGFloat rightButtonNewWidth = [self _appropriateRightButtonWidth];
         
         if (self.rightButtonWC.constant == rightButtonNewWidth) {
             return;
         }
         
         self.rightButtonWC.constant = rightButtonNewWidth;
-        self.rightMarginWC.constant = [self appropriateRightButtonMargin];
+        self.rightMarginWC.constant = [self _appropriateRightButtonMargin];
         
         if (rightButtonNewWidth > 0) {
             [self.rightButton sizeToFit];
@@ -476,7 +476,7 @@
     }
 }
 
-- (void)didChangeTextViewContentSize:(NSNotification *)notification
+- (void)_didChangeTextViewContentSize:(NSNotification *)notification
 {
     if (self.maxCharCount > 0) {
         BOOL shouldHide = (self.textView.numberOfLines == 1) || self.editing;
@@ -487,7 +487,7 @@
 
 #pragma mark - View Auto-Layout
 
-- (void)setupViewConstraints
+- (void)_setupViewConstraints
 {
     UIImage *leftButtonImg = [self.leftButton imageForState:UIControlStateNormal];
     
@@ -533,7 +533,7 @@
     self.rightMarginWC = [self slk_constraintsForAttribute:NSLayoutAttributeTrailing][0];
 }
 
-- (void)updateConstraintConstants
+- (void)_updateConstraintConstants
 {
     CGFloat zero = 0.0;
 
@@ -561,8 +561,8 @@
         self.leftButtonWC.constant = roundf(leftButtonSize.width);
         self.leftMarginWC.constant = (leftButtonSize.width > 0) ? self.contentInset.left : zero;
         
-        self.rightButtonWC.constant = [self appropriateRightButtonWidth];
-        self.rightMarginWC.constant = [self appropriateRightButtonMargin];
+        self.rightButtonWC.constant = [self _appropriateRightButtonWidth];
+        self.rightMarginWC.constant = [self _appropriateRightButtonMargin];
     }
 }
 
@@ -578,7 +578,7 @@
             return;
         }
         
-        [self updateConstraintConstants];
+        [self _updateConstraintConstants];
     }
     else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

@@ -44,7 +44,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 - (id)init
 {
     if (self = [super init]) {
-        [self commonInit];
+        [self _commonInit];
     }
     return self;
 }
@@ -52,12 +52,12 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
     if (self = [super initWithCoder:coder]) {
-        [self commonInit];
+        [self _commonInit];
     }
     return self;
 }
 
-- (void)commonInit
+- (void)_commonInit
 {
     self.interval = 6.0;
     self.canResignByTouch = YES;
@@ -73,7 +73,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
     
     [self addSubview:self.textLabel];
     
-    [self setupConstraints];
+    [self _setupConstraints];
 }
 
 
@@ -145,7 +145,16 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
     return attributedString;
 }
 
-- (NSTimer *)timerWithIdentifier:(NSString *)identifier
+- (CGFloat)height
+{
+    CGFloat height = self.textFont.lineHeight;
+    height += self.contentInset.top;
+    height += self.contentInset.bottom;
+    return height;
+}
+
+
+- (NSTimer *)_timerWithIdentifier:(NSString *)identifier
 {
     for (NSTimer *timer in self.timers) {
         if ([identifier isEqualToString:[timer.userInfo objectForKey:SLKTypingIndicatorViewIdentifier]]) {
@@ -153,14 +162,6 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
         }
     }
     return nil;
-}
-
-- (CGFloat)height
-{
-    CGFloat height = self.textFont.lineHeight;
-    height += self.contentInset.top;
-    height += self.contentInset.bottom;
-    return height;
 }
 
 
@@ -187,7 +188,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
     _visible = visible;
     
     if (!visible) {
-        [self clean];
+        [self _cleanAll];
     }
 }
 
@@ -204,7 +205,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
     
     _contentInset = insets;
     
-    [self updateConstraintConstants];
+    [self _updateConstraintConstants];
 }
 
 
@@ -221,11 +222,11 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
     if (_interval > 0.0) {
         
         if (isShowing) {
-            NSTimer *timer = [self timerWithIdentifier:username];
-            [self invalidateTimer:timer];
+            NSTimer *timer = [self _timerWithIdentifier:username];
+            [self _invalidateTimer:timer];
         }
         
-        NSTimer *timer = [NSTimer timerWithTimeInterval:_interval target:self selector:@selector(shouldRemoveUsername:) userInfo:@{SLKTypingIndicatorViewIdentifier: username} repeats:NO];
+        NSTimer *timer = [NSTimer timerWithTimeInterval:_interval target:self selector:@selector(_shouldRemoveUsername:) userInfo:@{SLKTypingIndicatorViewIdentifier: username} repeats:NO];
         [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
         [self.timers addObject:timer];
     }
@@ -269,15 +270,15 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 
 #pragma mark - Private Methods
 
-- (void)shouldRemoveUsername:(NSTimer *)timer
+- (void)_shouldRemoveUsername:(NSTimer *)timer
 {
     NSString *identifier = [timer.userInfo objectForKey:SLKTypingIndicatorViewIdentifier];
     
     [self removeUsername:identifier];
-    [self invalidateTimer:timer];
+    [self _invalidateTimer:timer];
 }
 
-- (void)invalidateTimer:(NSTimer *)timer
+- (void)_invalidateTimer:(NSTimer *)timer
 {
     if (timer) {
         [timer invalidate];
@@ -286,7 +287,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
     }
 }
 
-- (void)invalidateTimers
+- (void)_invalidateTimers
 {
     for (NSTimer *timer in self.timers) {
         [timer invalidate];
@@ -295,9 +296,9 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
     [self.timers removeAllObjects];
 }
 
-- (void)clean
+- (void)_cleanAll
 {
-    [self invalidateTimers];
+    [self _invalidateTimers];
     
     self.textLabel.text = nil;
     
@@ -307,7 +308,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 
 #pragma mark - View Auto-Layout
 
-- (void)setupConstraints
+- (void)_setupConstraints
 {
     NSDictionary *views = @{@"textLabel": self.textLabel};
 
@@ -317,10 +318,10 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
     self.leftContraint = [[self slk_constraintsForAttribute:NSLayoutAttributeLeading] firstObject];
     self.rightContraint = [[self slk_constraintsForAttribute:NSLayoutAttributeTrailing] firstObject];
     
-    [self updateConstraintConstants];
+    [self _updateConstraintConstants];
 }
 
-- (void)updateConstraintConstants
+- (void)_updateConstraintConstants
 {
     self.leftContraint.constant = self.contentInset.left;
     self.rightContraint.constant = self.contentInset.right;
@@ -347,7 +348,7 @@ NSString * const SLKTypingIndicatorViewWillHideNotification =   @"SLKTypingIndic
 
 - (void)dealloc
 {
-    [self clean];
+    [self _cleanAll];
     
     _textLabel = nil;
     _usernames = nil;
