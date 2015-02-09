@@ -422,23 +422,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     self.placeholderLabel.textAlignment = textAlignment;
 }
 
-// Safer cursor range (it sometimes exceeds the lenght of the text property).
-- (NSRange)selectedRange
-{
-    NSRange range = [super selectedRange];
-    NSString *text = self.text;
-    
-    if (range.location > text.length) {
-        range.location = text.length;
-    }
-    
-    if (range.length > text.length) {
-        range.length = text.length;
-    }
-    
-    return range;
-}
-
 
 #pragma mark - UITextInputTraits Overrides
 
