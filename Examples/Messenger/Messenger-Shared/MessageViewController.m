@@ -328,22 +328,13 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     self.searchResult = nil;
     
-    if ([prefix isEqualToString:@"@"] && word.length > 0)
-    {
-        array = self.users;
-        
-        if (word.length > 0) {
-            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self !=[c] %@", word, word]];
-        }
+    if ([prefix isEqualToString:@"@"] && word.length > 0) {
+        array = [self.users filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self !=[c] %@", word, word]];
     }
-    else if ([prefix isEqualToString:@"#"])
-    {
-        array = self.channels;
-        if (word.length > 0) {
-            array = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
-        }
+    else if ([prefix isEqualToString:@"#"] && word.length > 0) {
+        array = [self.channels filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
     }
-    else if ([prefix isEqualToString:@":"] && word.length > 1) {
+    else if ([prefix isEqualToString:@":"] && word.length > 0) {
         array = [self.emojis filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
     }
     
