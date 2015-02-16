@@ -394,7 +394,7 @@
 
 - (void)updateCounter
 {
-    NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     NSString *counter = nil;
     
     if (self.counterStyle == SLKCounterStyleNone) {
@@ -442,6 +442,8 @@
     if (![textView isEqual:self.textView]) {
         return;
     }
+    
+    NSLog(@"%s",__FUNCTION__);
     
     // Updates the char counter label
     if (self.maxCharCount > 0) {

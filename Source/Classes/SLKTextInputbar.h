@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, SLKCounterStyle) {
  The maximum number of lines is configured by default, to best fit each devices dimensions.
  For iPhone 4       (<=480pts): 4 lines
  For iPhone 5 & 6   (>=568pts): 6 lines
- For iPad           (>=768pts): 8 lines: 8 lines
+ For iPad           (>=768pts): 8 lines
  */
 @property (nonatomic, strong) SLKTextView *textView;
 
