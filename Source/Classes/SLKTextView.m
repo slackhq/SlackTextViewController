@@ -508,11 +508,13 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     if (self.isTypingSuggestionEnabled == enabled) {
         return;
     }
-
+    
     _typingSuggestionEnabled = enabled;
     
     self.autocorrectionType = enabled ? UITextAutocorrectionTypeDefault : UITextAutocorrectionTypeNo;
     self.spellCheckingType = enabled ? UITextSpellCheckingTypeDefault : UITextSpellCheckingTypeNo;
+    
+    [self refreshFirstResponder];
 }
 
 - (void)refreshFirstResponder

@@ -953,11 +953,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     BOOL enable = !self.isAutoCompleting;
     
-    // Skips if the QuickType Bar isn't visible and it's trying to disable it. And the inverted logic.
-    if (enable == self.textView.isTypingSuggestionEnabled) {
-        return;
-    }
-    
     // During text autocompletion, the iOS 8 QuickType bar is hidden and auto-correction and spell checking are disabled.
     [self.textView setTypingSuggestionEnabled:enable];
 }
@@ -1122,7 +1117,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         [self.scrollViewProxy slk_stopScrolling];
     }
     
-    // Hides the autocompletion view if the keyboard is being dismissed
+    // Hides the auto-completion view if the keyboard is being dismissed
     if (![self.textView isFirstResponder] || status == SLKKeyboardStatusWillHide) {
         [self _hideAutoCompletionViewIfNeeded];
     }
@@ -1366,7 +1361,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
-    // Avoids text processing for autocompletion if the registered prefix list is empty.
+    // Avoids text processing for auto-completion if the registered prefix list is empty.
     if (self.registeredPrefixes.count == 0) {
         return;
     }
@@ -1405,7 +1400,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)_handleProcessedWord:(NSString *)word range:(NSRange)range
 {
-    // Cancel autocompletion if the cursor is placed before the prefix
+    // Cancel auto-completion if the cursor is placed before the prefix
     if (self.textView.selectedRange.location <= self.foundPrefixRange.location) {
         return [self cancelAutoCompletion];
     }
@@ -1509,14 +1504,14 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         [self.autoCompletionView reloadData];
     }
     
-    // If the autocompletion view height is bigger than the maximum height allows, it is reduce to that size. Default 140 pts.
+    // If the auto-completion view height is bigger than the maximum height allows, it is reduce to that size. Default 140 pts.
     if (viewHeight > [self maximumHeightForAutoCompletionView]) {
         viewHeight = [self maximumHeightForAutoCompletionView];
     }
     
     CGFloat tableHeight = self.scrollViewHC.constant + self.autoCompletionViewHC.constant;
     
-    // On iPhone, the autocompletion view can't extend beyond the table view height
+    // On iPhone, the auto-completion view can't extend beyond the table view height
     if (SLK_IS_IPHONE && viewHeight > tableHeight) {
         viewHeight = tableHeight;
     }
