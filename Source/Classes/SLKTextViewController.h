@@ -112,7 +112,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param style A constant that specifies the style of main table view that the controller object is to manage (UITableViewStylePlain or UITableViewStyleGrouped).
  @return An initialized SLKTextViewController object or nil if the object could not be created.
  */
-- (instancetype)initWithTableViewStyle:(UITableViewStyle)style;
+- (instancetype)initWithTableViewStyle:(UITableViewStyle)style NS_DESIGNATED_INITIALIZER;
 
 /**
  Initializes a collection view controller and configures the collection view with the provided layout.
@@ -121,12 +121,20 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param layout The layout object to associate with the collection view. The layout controls how the collection view presents its cells and supplementary views.
  @return An initialized SLKTextViewController object or nil if the object could not be created.
  */
-- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout;
+- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout NS_DESIGNATED_INITIALIZER;
+
+/**
+ Initializes either a table or collection view controller.
+ You must override either +tableViewStyleForCoder: or +collectionViewLayoutForCoder: to define witch view to be layed out.
+ 
+ @param decoder An unarchiver object.
+ @return An initialized SLKTextViewController object or nil if the object could not be created.
+ */
+- (instancetype)initWithCoder:(NSCoder *)decoder NS_DESIGNATED_INITIALIZER;
 
 /**
  Returns the tableView style to be configured when using Interface Builder. Default is UITableViewStylePlain.
  You must override this method if you want to configure a tableView.
- You should not override -initWithCoder:
  
  @param decoder An unarchiver object.
  @return The tableView style to be used in the new instantiated tableView.
@@ -136,7 +144,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /**
  Returns the tableView style to be configured when using Interface Builder. Default is nil.
  You must override this method if you want to configure a collectionView.
- You should not override -initWithCoder:
  
  @param decoder An unarchiver object.
  @return The collectionView style to be used in the new instantiated collectionView.
