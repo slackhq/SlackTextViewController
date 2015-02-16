@@ -1030,7 +1030,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     // When inverted, we need to substract the top bars height (generally status bar + navigation bar's) to align the top of the
     // scrollview correctly to its top edge.
     if (self.inverted) {
-        UIEdgeInsets contentInset = UIEdgeInsetsMake(0.0, 0.0, [self _topBarsHeight], 0.0);
+        UIEdgeInsets contentInset = self.scrollViewProxy.contentInset;
+        contentInset.bottom = [self _topBarsHeight];
+        
         self.scrollViewProxy.contentInset = contentInset;
         self.scrollViewProxy.scrollIndicatorInsets = contentInset;
     }
