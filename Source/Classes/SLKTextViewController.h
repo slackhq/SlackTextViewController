@@ -54,8 +54,11 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** The typing indicator used to display user names horizontally. */
 @property (nonatomic, readonly) SLKTypingIndicatorView *typingIndicatorView;
 
-/** The single tap gesture used to dismiss the keyboard */
+/** A single tap gesture used to dismiss the keyboard. */
 @property (nonatomic, readonly) UIGestureRecognizer *singleTapGesture;
+
+/** A vertical pan gesture used for bringing the keyboard from the bottom. */
+@property (nonatomic, readonly) UIPanGestureRecognizer *verticalPanGesture;
 
 /** YES if control's animation should have bouncy effects. Default is YES. */
 @property (nonatomic, assign) BOOL bounces;

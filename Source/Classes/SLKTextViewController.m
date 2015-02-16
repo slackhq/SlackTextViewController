@@ -39,9 +39,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 @property (nonatomic, strong) NSLayoutConstraint *autoCompletionViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *keyboardHC;
 
-// The pan gesture used for bringing the keyboard from the bottom
-@property (nonatomic, strong) UIPanGestureRecognizer *verticalPanGesture;
-
 // The keyboard commands available for external keyboards
 @property (nonatomic, strong) NSArray *keyboardCommands;
 
@@ -210,8 +207,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)viewWillLayoutSubviews
 {
-    NSLog(@"%s",__FUNCTION__);
-    
     [super viewWillLayoutSubviews];
     
     [self _adjustContentConfigurationIfNeeded];
@@ -219,8 +214,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)viewDidLayoutSubviews
 {
-    NSLog(@"%s",__FUNCTION__);
-    
     [super viewDidLayoutSubviews];
 }
 
@@ -247,8 +240,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         _tableView.scrollsToTop = YES;
         _tableView.dataSource = self;
         _tableView.delegate = self;
-        
-        _tableView.tableFooterView = [UIView new];
     }
     return _tableView;
 }
@@ -296,8 +287,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         
         _textInputbar.textView.delegate = self;
         
-        self.verticalPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_didPanTextView:)];
-        self.verticalPanGesture.delegate = self;
+        _verticalPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_didPanTextView:)];
+        _verticalPanGesture.delegate = self;
+        
         [_textInputbar.textView addGestureRecognizer:self.verticalPanGesture];
     }
     return _textInputbar;
