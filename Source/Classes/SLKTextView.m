@@ -22,18 +22,12 @@ NSString * const SLKTextViewTextWillChangeNotification =        @"SLKTextViewTex
 NSString * const SLKTextViewContentSizeDidChangeNotification =  @"SLKTextViewContentSizeDidChangeNotification";
 NSString * const SLKTextViewDidPasteItemNotification =          @"SLKTextViewDidPasteItemNotification";
 NSString * const SLKTextViewDidShakeNotification =              @"SLKTextViewDidShakeNotification";
-NSString * const SLKTextViewDidFinishDeletingNotification =     @"SLKTextViewDidFinishDeletingNotification";
 
 NSString * const SLKTextViewPastedItemContentType =             @"SLKTextViewPastedItemContentType";
 NSString * const SLKTextViewPastedItemMediaType =               @"SLKTextViewPastedItemMediaType";
 NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPastedItemData";
 
-static NSTimeInterval kDeleteMaxTimeInterval = 0.5;
-
 @interface SLKTextView ()
-{
-    NSTimeInterval _lastDeletionTimeInterval;
-}
 
 // The label used as placeholder
 @property (nonatomic, strong) UILabel *placeholderLabel;
@@ -48,9 +42,6 @@ static NSTimeInterval kDeleteMaxTimeInterval = 0.5;
 
 // Used for detecting if the scroll indicator was previously flashed
 @property (nonatomic) BOOL didFlashScrollIndicators;
-
-// Used to refresh the first responder's
-@property (nonatomic, strong) NSTimer *deletionTimer;
 
 @end
 
@@ -144,15 +135,6 @@ static NSTimeInterval kDeleteMaxTimeInterval = 0.5;
         [self addSubview:_placeholderLabel];
     }
     return _placeholderLabel;
-}
-
-- (NSTimer *)deletionTimer
-{
-    if (!_deletionTimer) {
-        _deletionTimer = [NSTimer timerWithTimeInterval:kDeleteMaxTimeInterval target:self selector:@selector(_shouldRefreshFirstResponder:) userInfo:nil repeats:NO];
-        [[NSRunLoop currentRunLoop] addTimer:_deletionTimer forMode:NSRunLoopCommonModes];
-    }
-    return _deletionTimer;
 }
 
 - (NSString *)placeholder
@@ -369,22 +351,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     _undoManagerEnabled = enabled;
 }
 
-- (void)_invalidateDeletionTimer
-{
-    if (!_deletionTimer) {
-        return;
-    }
-    
-    [_deletionTimer invalidate];
-    _deletionTimer = nil;
-}
-
-- (void)_invalidateFastDeletion
-{
-    _fastDeleting = NO;
-    _lastDeletionTimeInterval = 0;
-}
-
 
 #pragma mark - UITextView Overrides
 
@@ -428,46 +394,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 - (void)insertText:(NSString *)text
 {
     [super insertText:text];
-    
-    [self _invalidateFastDeletion];
-}
-
-- (void)deleteBackward
-{
-    // No need to call super on iOS8, or it will delete 2 characters at once
-    if (!SLK_IS_IOS8_AND_HIGHER) {
-        [super deleteBackward];
-    }
-    
-    NSTimeInterval deletionTimestamp = [[NSDate date] timeIntervalSince1970];
-    NSTimeInterval delta = roundf(100.0 * (deletionTimestamp - _lastDeletionTimeInterval)) / 100.0;
-    
-    _fastDeleting = (self.hasText && delta <= kDeleteMaxTimeInterval);
-    _lastDeletionTimeInterval = deletionTimestamp;
-
-    // Makes sure the first responder is refreshed when the user released the backward key
-    if (self.isFastDeleting) {
-        [self _invalidateDeletionTimer];
-        [self deletionTimer];
-    }
-}
-
-// Used on iOS8 to trigger 'deleteBackward' since it's no longer called by super.
-// 'keyboardInputShouldDelete:' should be safe, since it doesn't call super, but it is still considered a private API.
-- (BOOL)keyboardInputShouldDelete:(__unused id <UITextInput>)textInput
-{
-    if (SLK_IS_IOS8_AND_HIGHER) {
-        [self deleteBackward];
-    }
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)]) {
-        NSRange range = self.selectedRange;
-        if (range.location > 0) range.location--;
-        if (range.length == 0 && self.text.length > 0) range.length++;
-        return [self.delegate textView:self shouldChangeTextInRange:range replacementText:@"^H"];
-    }
-    
-    return self.hasText;
 }
 
 
@@ -587,19 +513,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     
     self.autocorrectionType = enabled ? UITextAutocorrectionTypeDefault : UITextAutocorrectionTypeNo;
     self.spellCheckingType = enabled ? UITextSpellCheckingTypeDefault : UITextSpellCheckingTypeNo;
-    
-    if (!self.isFastDeleting) {
-        [self refreshFirstResponder];
-    }
-}
-
-- (void)_shouldRefreshFirstResponder:(NSTimer *)timer
-{
-    [self refreshFirstResponder];
-    [self _invalidateDeletionTimer];
-    [self _invalidateFastDeletion];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewDidFinishDeletingNotification object:self];
 }
 
 - (void)refreshFirstResponder
@@ -855,9 +768,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
-    
-    [self _invalidateDeletionTimer];
-    [self _invalidateFastDeletion];
     
     _placeholderLabel = nil;
 }
