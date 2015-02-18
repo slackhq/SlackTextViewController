@@ -45,7 +45,7 @@
 {
     if (self = [super init]) {
         self.textViewClass = textViewClass;
-        [self _commonInit];
+        [self slk_commonInit];
     }
     return self;
 }
@@ -53,7 +53,7 @@
 - (id)init
 {
     if (self = [super init]) {
-        [self _commonInit];
+        [self slk_commonInit];
     }
     return self;
 }
@@ -61,12 +61,12 @@
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
     if (self = [super initWithCoder:coder]) {
-        [self _commonInit];
+        [self slk_commonInit];
     }
     return self;
 }
 
-- (void)_commonInit
+- (void)slk_commonInit
 {
     self.autoHideRightButton = YES;
     self.editorContentViewHeight = 38.0;
@@ -78,11 +78,11 @@
     [self addSubview:self.textView];
     [self addSubview:self.charCountLabel];
 
-    [self _setupViewConstraints];
-    [self _updateConstraintConstants];
+    [self slk_setupViewConstraints];
+    [self slk_updateConstraintConstants];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
     
     [self.leftButton.imageView addObserver:self forKeyPath:NSStringFromSelector(@selector(image)) options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
 }
@@ -96,7 +96,7 @@
         return;
     }
     
-    [self _updateConstraintConstants];
+    [self slk_updateConstraintConstants];
     [super layoutIfNeeded];
 }
 
@@ -122,7 +122,7 @@
         _textView = [class new];
         _textView.translatesAutoresizingMaskIntoConstraints = NO;
         _textView.font = [UIFont systemFontOfSize:15.0];
-        _textView.maxNumberOfLines = [self _defaultNumberOfLines];
+        _textView.maxNumberOfLines = [self slk_defaultNumberOfLines];
         
         _textView.typingSuggestionEnabled = YES;
         _textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
@@ -138,7 +138,7 @@
         // Adds an aditional action to a private gesture to detect when the magnifying glass becomes visible
         for (UIGestureRecognizer *gesture in _textView.gestureRecognizers) {
             if ([gesture isKindOfClass:NSClassFromString(@"UIVariableDelayLoupeGesture")]) {
-                [gesture addTarget:self action:@selector(willShowLoupe:)];
+                [gesture addTarget:self action:@selector(slk_willShowLoupe:)];
             }
         }
     }
@@ -235,7 +235,7 @@
     return _charCountLabel;
 }
 
-- (NSUInteger)_defaultNumberOfLines
+- (NSUInteger)slk_defaultNumberOfLines
 {
     if (SLK_IS_IPAD) {
         return 8;
@@ -248,7 +248,7 @@
     }
 }
 
-- (BOOL)limitExceeded
+- (BOOL)slk_limitExceeded
 {
     NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
@@ -258,7 +258,7 @@
     return NO;
 }
 
-- (CGFloat)_appropriateRightButtonWidth
+- (CGFloat)slk_appropriateRightButtonWidth
 {
     NSString *title = [self.rightButton titleForState:UIControlStateNormal];
     CGSize rigthButtonSize = [title sizeWithAttributes:@{NSFontAttributeName: self.rightButton.titleLabel.font}];
@@ -271,7 +271,7 @@
     return rigthButtonSize.width+self.contentInset.right;
 }
 
-- (CGFloat)_appropriateRightButtonMargin
+- (CGFloat)slk_appropriateRightButtonMargin
 {
     if (self.autoHideRightButton) {
         if (self.textView.text.length == 0) {
@@ -316,7 +316,7 @@
     
     _autoHideRightButton = hide;
     
-    self.rightButtonWC.constant = [self _appropriateRightButtonWidth];
+    self.rightButtonWC.constant = [self slk_appropriateRightButtonWidth];
     [self layoutIfNeeded];
 }
 
@@ -335,10 +335,10 @@
     
     // Add new constraints
     [self removeConstraints:self.constraints];
-    [self _setupViewConstraints];
+    [self slk_setupViewConstraints];
     
     // Add constant values and refresh layout
-    [self _updateConstraintConstants];
+    [self slk_updateConstraintConstants];
     [super layoutIfNeeded];
 }
 
@@ -372,7 +372,7 @@
     
     self.editing = YES;
     
-    [self _updateConstraintConstants];
+    [self slk_updateConstraintConstants];
     
     if (!self.isFirstResponder) {
         [self layoutIfNeeded];
@@ -386,13 +386,13 @@
     }
     
     self.editing = NO;
-    [self _updateConstraintConstants];
+    [self slk_updateConstraintConstants];
 }
 
 
 #pragma mark - Character Counter
 
-- (void)updateCounter
+- (void)slk_updateCounter
 {
     NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     NSString *counter = nil;
@@ -408,13 +408,13 @@
     }
     
     self.charCountLabel.text = counter;
-    self.charCountLabel.textColor = [self limitExceeded] ?  [UIColor redColor] : [UIColor lightGrayColor];
+    self.charCountLabel.textColor = [self slk_limitExceeded] ?  [UIColor redColor] : [UIColor lightGrayColor];
 }
 
 
 #pragma mark - Magnifying Glass handling
 
-- (void)willShowLoupe:(UIGestureRecognizer *)gesture
+- (void)slk_willShowLoupe:(UIGestureRecognizer *)gesture
 {
     if (gesture.state == UIGestureRecognizerStateChanged) {
         self.textView.loupeVisible = YES;
@@ -434,7 +434,7 @@
 
 #pragma mark - Notification Events
 
-- (void)_didChangeTextViewText:(NSNotification *)notification
+- (void)slk_didChangeTextViewText:(NSNotification *)notification
 {
     SLKTextView *textView = (SLKTextView *)notification.object;
     
@@ -443,23 +443,21 @@
         return;
     }
     
-    NSLog(@"%s",__FUNCTION__);
-    
     // Updates the char counter label
     if (self.maxCharCount > 0) {
-        [self updateCounter];
+        [self slk_updateCounter];
     }
     
     if (self.autoHideRightButton && !self.isEditing)
     {
-        CGFloat rightButtonNewWidth = [self _appropriateRightButtonWidth];
+        CGFloat rightButtonNewWidth = [self slk_appropriateRightButtonWidth];
         
         if (self.rightButtonWC.constant == rightButtonNewWidth) {
             return;
         }
         
         self.rightButtonWC.constant = rightButtonNewWidth;
-        self.rightMarginWC.constant = [self _appropriateRightButtonMargin];
+        self.rightMarginWC.constant = [self slk_appropriateRightButtonMargin];
         
         if (rightButtonNewWidth > 0) {
             [self.rightButton sizeToFit];
@@ -478,7 +476,7 @@
     }
 }
 
-- (void)_didChangeTextViewContentSize:(NSNotification *)notification
+- (void)slk_didChangeTextViewContentSize:(NSNotification *)notification
 {
     if (self.maxCharCount > 0) {
         BOOL shouldHide = (self.textView.numberOfLines == 1) || self.editing;
@@ -489,7 +487,7 @@
 
 #pragma mark - View Auto-Layout
 
-- (void)_setupViewConstraints
+- (void)slk_setupViewConstraints
 {
     UIImage *leftButtonImg = [self.leftButton imageForState:UIControlStateNormal];
     
@@ -535,7 +533,7 @@
     self.rightMarginWC = [self slk_constraintsForAttribute:NSLayoutAttributeTrailing][0];
 }
 
-- (void)_updateConstraintConstants
+- (void)slk_updateConstraintConstants
 {
     CGFloat zero = 0.0;
 
@@ -563,8 +561,8 @@
         self.leftButtonWC.constant = roundf(leftButtonSize.width);
         self.leftMarginWC.constant = (leftButtonSize.width > 0) ? self.contentInset.left : zero;
         
-        self.rightButtonWC.constant = [self _appropriateRightButtonWidth];
-        self.rightMarginWC.constant = [self _appropriateRightButtonMargin];
+        self.rightButtonWC.constant = [self slk_appropriateRightButtonWidth];
+        self.rightMarginWC.constant = [self slk_appropriateRightButtonMargin];
     }
 }
 
@@ -580,7 +578,7 @@
             return;
         }
         
-        [self _updateConstraintConstants];
+        [self slk_updateConstraintConstants];
     }
     else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

@@ -34,7 +34,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     self = [super initWithTableViewStyle:UITableViewStylePlain];
     if (self) {
-        // Do something
+        // Register a subclass of SLKTextView, if you need any special appearance and/or behavior customisation.
+        [self registerClassForTextView:[MessageTextView class]];
     }
     return self;
 }
