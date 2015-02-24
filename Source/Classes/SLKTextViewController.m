@@ -68,6 +68,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 @implementation SLKTextViewController
 @synthesize tableView = _tableView;
 @synthesize collectionView = _collectionView;
+@synthesize scrollView = _scrollView;
 @synthesize typingIndicatorView = _typingIndicatorView;
 @synthesize textInputbar = _textInputbar;
 @synthesize autoCompletionView = _autoCompletionView;
@@ -107,6 +108,24 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     {
         self.scrollViewProxy = [self collectionViewWithLayout:layout];
         [self slk_commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithScrollView:(UIScrollView *)scrollView
+{
+    NSAssert([self class] != [SLKTextViewController class], @"Oops! You must subclass SLKTextViewController.");
+
+    if (self = [super initWithNibName:nil bundle:nil])
+    {
+        _scrollView = scrollView;
+
+        _scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+        _scrollView.backgroundColor = [UIColor whiteColor];
+        _scrollView.scrollsToTop = YES;
+
+        self.scrollViewProxy = _scrollView;
+        [self _commonInit];
     }
     return self;
 }
@@ -1945,6 +1964,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     _collectionView.delegate = nil;
     _collectionView.dataSource = nil;
     _collectionView = nil;
+
+    _scrollView = nil;
     
     _autoCompletionView.delegate = nil;
     _autoCompletionView.dataSource = nil;
