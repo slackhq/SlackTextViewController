@@ -56,7 +56,7 @@ Start by creating a new subclass of `SLKTextViewController`.
 
 In the init overriding method, if you wish to use the `UITableView` version, call:
 ```
-[super initWithStyle:UITableViewStylePlain]
+[super initWithTableViewStyle:UITableViewStylePlain]
 ```
 
 or the `UICollectionView` version:
@@ -67,7 +67,7 @@ or the `UICollectionView` version:
 
 Protocols like `UITableViewDelegate` and `UITableViewDataSource` are already setup for you. You will be able to call whatever delegate and data source methods you need for customising your control.
 
-Calling `[super init]` will call `[super initWithStyle:UITableViewStylePlain]` by default.
+Calling `[super init]` will call `[super initWithTableViewStyle:UITableViewStylePlain]` by default.
 
 
 ###Growing Text View
