@@ -119,13 +119,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     if (self = [super initWithNibName:nil bundle:nil])
     {
         _scrollView = scrollView;
-
-        _scrollView.translatesAutoresizingMaskIntoConstraints = NO;
-        _scrollView.backgroundColor = [UIColor whiteColor];
-        _scrollView.scrollsToTop = YES;
+        _scrollView.translatesAutoresizingMaskIntoConstraints = NO; // Makes sure the scrollView plays nice with auto-layout
 
         self.scrollViewProxy = _scrollView;
-        [self _commonInit];
+        [self slk_commonInit];
     }
     return self;
 }

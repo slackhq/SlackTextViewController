@@ -48,7 +48,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** The main collection view managed by the controller object. Not nil if the controller is initialised with -initWithCollectionViewLayout: */
 @property (nonatomic, readonly) UICollectionView *collectionView;
 
-/** The main scroll view view managed by the controller object. Not nil if the controller is initialised with -initWithScrollView: */
+/** The main scroll view managed by the controller object. Not nil if the controller is initialised with -initWithScrollView: */
 @property (nonatomic, readonly) UIScrollView *scrollView;
 
 /** The bottom toolbar containing a text view and buttons. */
@@ -127,8 +127,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout NS_DESIGNATED_INITIALIZER;
 
 /**
- Initializes a text view controller to manage an arbitraty scroll view. The caller is responsible for configuration 
- of the scroll view, including wiring the delegate.
+ Initializes a text view controller to manage an arbitraty scroll view. The caller is responsible for configuration of the scroll view, including wiring the delegate.
 
  @param a UISCrollView to be used as the main content area.
  @return An initialized SLKTextViewController object or nil if the object could not be created.
