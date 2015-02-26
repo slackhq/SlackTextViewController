@@ -40,7 +40,7 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 };
 
 /** @name A drop-in UIViewController subclass with a growing text input view and other useful messaging features. */
-NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController <UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
+NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController <UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate, UIAlertViewDelegate>
 
 /** The main table view managed by the controller object. Created by default initializing with -init or initWithNibName:bundle: */
 @property (nonatomic, readonly) UITableView *tableView;

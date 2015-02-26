@@ -23,7 +23,7 @@ NSString * const SLKKeyboardDidShowNotification =   @"SLKKeyboardDidShowNotifica
 NSString * const SLKKeyboardWillHideNotification =  @"SLKKeyboardWillHideNotification";
 NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotification";
 
-@interface SLKTextViewController () <UIGestureRecognizerDelegate, UIAlertViewDelegate>
+@interface SLKTextViewController ()
 {
     CGPoint _scrollViewOffsetBeforeDragging;
     CGFloat _keyboardHeightBeforeDragging;
