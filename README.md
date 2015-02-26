@@ -12,31 +12,32 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 ## Features
 
 ### Core
-- Works out of the box with UITableView or UICollectionView
-- Growing text view, with line count limit support
-- Customizable: provides left and right button, and toolbar outlets
-- Tap gesture for dismissing the keyboard
-- Pan gesture for sliding down the keyboard
+- Works out of the box with [UITableView or UICollectionView or UIScrollView](https://github.com/slackhq/SlackTextViewController/tree/swift-example#subclassing)
+- [Growing Text View](https://github.com/slackhq/SlackTextViewController#growing-text-view), with line count limit support
 - Flexible UI built with Auto Layout
+- Customizable: provides left and right button, and toolbar outlets
+- Tap Gesture for dismissing the keyboard
+- [Panning Gesture](https://github.com/slackhq/SlackTextViewController#panning-gesture) for sliding down the keyboard
+- [External keyboard](https://github.com/slackhq/SlackTextViewController#external-keyboard) commands support
 - Undo/Redo (with keyboard commands and UIMenuController)
-- Text appending APIs
+- Text Appending APIs
 
 ### Optional
-- Autocomplete mode by registering any prefix key (`@`, `#`, `/`)
-- Edit mode
-- Typing indicator display
-- Shake gesture for undo
-- Multimedia pasting (png, gif, mov, etc.)
-- Inverted mode for displaying cells upside-down (using CATransform) -- a necessary hack for some messaging apps (including ours)
-- Bouncy animations
+- [Autocomplete Mode](https://github.com/slackhq/SlackTextViewController#autocompletion) by registering any prefix key (`@`, `#`, `/`)
+- [Edit Mode](https://github.com/slackhq/SlackTextViewController#edit-mode)
+- [Typing Indicator](https://github.com/slackhq/SlackTextViewController#typing-indicator) display
+- [Shake Gesture](https://github.com/slackhq/SlackTextViewController#shake-gesture) for clearing text view
+- Multimedia Pasting (png, gif, mov, etc.)
+- [Inverted Mode](https://github.com/slackhq/SlackTextViewController#inverted-mode) for displaying cells upside-down (using CATransform) -- a necessary hack for some messaging apps. `YES` by default, so beware, your entire cells might be flipped!
+- Bouncy Animations
 
 ### Compatibility
+- Swift: (a sample project is available in a different branch for now) (https://github.com/slackhq/SlackTextViewController/tree/swift-example)
 - iOS 7 & 8
 - iPhone & iPad
-- Storyboard
+- [Storyboard](https://github.com/slackhq/SlackTextViewController#storyboard)
 - UIPopOverController & UITabBarController
-- Container view controller
-- External keyboard commands
+- Container View Controller
 - Auto-Rotation
 - Localization
 
@@ -50,7 +51,7 @@ pod 'SlackTextViewController'
 ##How to use
 
 ###Subclassing
-`SLKTextViewController` is meant to be subclassed, like you would normally do with UITableViewController or UICollectionViewController. This pattern is a convenient way of extending UIViewController. SlackTextViewController manages a lot behind the scenes while still providing the ability to add custom behaviours. You may override methods, and decide to call super and  perform additional logic, or not to call super and override default logic.
+`SLKTextViewController` is meant to be subclassed, like you would normally do with UITableViewController or UICollectionViewController or UIScrollView. This pattern is a convenient way of extending UIViewController. SlackTextViewController manages a lot behind the scenes while still providing the ability to add custom behaviours. You may override methods, and decide to call super and  perform additional logic, or not to call super and override default logic.
 
 Start by creating a new subclass of `SLKTextViewController`.
 
@@ -62,6 +63,11 @@ In the init overriding method, if you wish to use the `UITableView` version, cal
 or the `UICollectionView` version:
 ```
 [super initWithCollectionViewLayout:[UICollectionViewFlowLayout new]]
+```
+
+or the `UIScrollView` version:
+```
+[super initWithScrollView:self.myStrongScrollView]
 ```
 
 
