@@ -44,7 +44,7 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 ## Installation
 
 Available in [Cocoa Pods](http://cocoapods.org/?q=SlackTextViewController)
-```
+```ruby
 pod 'SlackTextViewController'
 ```
 
@@ -56,17 +56,17 @@ pod 'SlackTextViewController'
 Start by creating a new subclass of `SLKTextViewController`.
 
 In the init overriding method, if you wish to use the `UITableView` version, call:
-```
+```objc
 [super initWithTableViewStyle:UITableViewStylePlain]
 ```
 
 or the `UICollectionView` version:
-```
+```objc
 [super initWithCollectionViewLayout:[UICollectionViewFlowLayout new]]
 ```
 
 or the `UIScrollView` version:
-```
+```objc
 [super initWithScrollView:self.myStrongScrollView]
 ```
 
@@ -99,7 +99,7 @@ To set up autocompletion in your app, follow these simple steps:
 
 #### 1. Registration
 You must first register all the prefixes you'd like to support for autocompletion detection:
-````
+````objc
 [self registerPrefixesForAutoCompletion:@[@"#"]];
 ````
 
@@ -108,7 +108,7 @@ Every time a new character is inserted in the text view, the nearest word to the
 
 Once the prefix has been detected, `-canShowAutoCompletion` will be called. This is the perfect place to populate your data source, and return a BOOL if the autocompletion view should actually be shown. So you must override it in your subclass, to be able to perform additional tasks. Default returns NO.
 
-````
+````objc
 - (BOOL)canShowAutoCompletion
 {
     NSString *prefix = self.foundPrefix;
@@ -139,7 +139,7 @@ You don't need to call `-reloadData` yourself, since it will be called automatic
 
 The maximum height of the autocompletion view is set to 140 pts by default. You can update this value anytime, so the view automatically adjusts based on the amount of displayed cells.
 
-````
+````objc
 - (CGFloat)heightForAutoCompletionView
 {
     CGFloat cellHeight = 34.0;
@@ -151,7 +151,7 @@ The maximum height of the autocompletion view is set to 140 pts by default. You 
 
 If the user selects any autocompletion view cell on `-tableView:didSelectRowAtIndexPath:`, you must call `-acceptAutoCompletionWithString:` to commit autocompletion. That method expects a string matching the selected item, that you would like to be inserted in the text view.
 
-`````
+`````objc
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([tableView isEqual:self.autoCompletionView]) {
@@ -176,7 +176,7 @@ To enable edit mode, you simply need to call `[self editText:@"hello"];`, and th
 
 To capture the "Accept" or "Cancel" events, you must override the following methods.
 
-````
+````objc
 - (void)didCommitTextEditing:(id)sender
 {
     NSString *message = [self.textView.text copy];
@@ -228,7 +228,7 @@ If you don't override `-willRequestUndo` and `undoShakingEnabled` is set to `YES
 
 Some UITableView layouts may require that new messages enter from bottom to top. To enable this, you must use the `inverted` flag property. This will actually invert the UITableView or UICollectionView, so you will need to do a transform adjustment in your UITableViewDataSource method `-tableView:cellForRowAtIndexPath:` for the cells to show correctly.
 
-````
+````objc
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:chatCellIdentifier];
@@ -251,7 +251,7 @@ There a few basic key commands enabled by default:
 
 To add additional key commands, simply override `-keyCommands` and append `super`'s array.
 
-`````
+`````objc
 - (NSArray *)keyCommands
 {
     NSMutableArray *commands = [NSMutableArray arrayWithArray:[super keyCommands]];
@@ -270,7 +270,7 @@ To add additional key commands, simply override `-keyCommands` and append `super
 When using SlackTextViewController with storyboards, instead of overriding the traditional `initWithCoder:` you will need to override any of the two custom methods below. This approach helps preserving the exact same features from the programatic approach, but also limits the edition of the nib of your `SLKTextViewController` subclass since it doesn't layout subviews from the nib (subviews are still initialized and layed out programatically).
 
 if you wish to use the `UITableView` version, call:
-```
+```objc
 + (UITableViewStyle)tableViewStyleForCoder:(NSCoder *)decoder
 {
     return UITableViewStylePlain;
@@ -278,7 +278,7 @@ if you wish to use the `UITableView` version, call:
 ```
 
 or the `UICollectionView` version:
-```
+```objc
 + (UICollectionViewLayout *)collectionViewLayoutForCoder:(NSCoder *)decoder
 {
     return [UICollectionViewFlowLayout new];
@@ -302,6 +302,8 @@ Feel free to contribute!
 We have prepared a set of useful XCode templates so you can quickly start using SlackTextViewController.
 
 To install them, open up your terminal and type:
-```sh ./SlackTextViewController/File\ Templates/install.sh```
+```bash
+sh ./SlackTextViewController/File\ Templates/install.sh
+```
 
 These templates are also available in [Alcatraz](https://github.com/supermarin/Alcatraz).
