@@ -435,11 +435,17 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     // grab the base view for conversions as we don't want window coordinates in < iOS 8
     UIView *baseView = ((UIWindow *)self.view.window).rootViewController.view;
     
-    CGRect endFrameConverted = [baseView convertRect:endFrame fromView:nil];
     
     // It's a little weird to convert a view's frame to it's own coordinate space, but it fixes the coordiante system rotation issue
     CGRect baseViewConverted = [baseView convertRect:baseView.frame fromView:nil];
 
+    // TODO: Need to correctly convert the endframe kicked for iOS 7 from UIPeripheralHostView
+    CGRect endFrameConverted;
+    if(!SLK_IS_IOS8_AND_HIGHER && (endFrame.size.width == baseViewConverted.size.height || endFrame.size.height == baseViewConverted.size.width)) {
+        endFrameConverted = SLKRectInvert(endFrame);
+    } else {
+        endFrameConverted = endFrame;
+    }
     
     // Sets the minimum height of the keyboard
     if (self.isMovingKeyboard) {
@@ -454,7 +460,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
             keyboardHeight = 0.0;
         }
     }
-    
     keyboardHeight -= [self appropriateBottomMarginToWindow];
     keyboardHeight -= CGRectGetHeight(self.textView.inputAccessoryView.bounds);
     
@@ -462,6 +467,14 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         keyboardHeight = 0.0;
     }
     
+    CGRect bounds = [UIScreen mainScreen].bounds;
+    NSLog(@"%@", notification.name);
+    NSLog(@"bounds %@", NSStringFromCGRect(bounds));
+    NSLog(@"endFrame %@", NSStringFromCGRect(endFrame));
+    NSLog(@"endFrameConverted %@", NSStringFromCGRect(endFrameConverted));
+    NSLog(@"baseView frame %@", NSStringFromCGRect(baseView.frame));
+    NSLog(@"baseView bounds %@", NSStringFromCGRect(baseView.bounds));
+    NSLog(@"baseViewConverted %@", NSStringFromCGRect(baseViewConverted));
     NSLog(@"keyboardHeight %f", keyboardHeight);
     
     return keyboardHeight;
@@ -485,6 +498,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     CGFloat height = CGRectGetHeight(self.navigationController.navigationBar.frame);
     
     if (SLK_IS_IPHONE && SLK_IS_LANDSCAPE && SLK_IS_IOS8_AND_HIGHER) {
+        return height;
+    }
+    
+    if (SLK_IS_IPAD && self.modalPresentationStyle == UIModalPresentationFormSheet) {
         return height;
     }
     
@@ -531,14 +548,14 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         }
     }
     
-    NSLog(@"baseViewConverted %@", NSStringFromCGRect(baseViewConverted));
-    NSLog(@"viewRect %@", NSStringFromCGRect(viewRect));
-    
-    NSLog(@"bottomWindow %f", bottomWindow);
-    NSLog(@"bottomView %f", bottomView);
-    NSLog(@"statusBarHeight %f", statusBarHeight);
-    NSLog(@"margin %f", margin);
-    
+//    NSLog(@"baseViewConverted %@", NSStringFromCGRect(baseViewConverted));
+//    NSLog(@"viewRect %@", NSStringFromCGRect(viewRect));
+//    
+//    NSLog(@"bottomWindow %f", bottomWindow);
+//    NSLog(@"bottomView %f", bottomView);
+//    NSLog(@"statusBarHeight %f", statusBarHeight);
+//    NSLog(@"margin %f", margin);
+//    
     
     
     // Do NOT consider a status bar height gap
