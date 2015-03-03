@@ -432,16 +432,14 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return keyboardHeight;
     }
     
-    // grab the base view for conversions as we don't want window coordinates in < iOS 8
-    UIView *baseView = ((UIWindow *)self.view.window).rootViewController.view;
+    // Convert the main screen bounds into the correct coordinate space but ignore the origin
+    CGRect bounds = [self.view convertRect:[UIScreen mainScreen].bounds fromView:nil];
+    bounds = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
     
-    
-    // It's a little weird to convert a view's frame to it's own coordinate space, but it fixes the coordiante system rotation issue
-    CGRect baseViewConverted = [baseView convertRect:baseView.frame fromView:nil];
-
-    // TODO: Need to correctly convert the endframe kicked for iOS 7 from UIPeripheralHostView
+    // Need to correctly convert the endframe kicked out for iOS 7
     CGRect endFrameConverted;
-    if(!SLK_IS_IOS8_AND_HIGHER && (endFrame.size.width == baseViewConverted.size.height || endFrame.size.height == baseViewConverted.size.width)) {
+    if(!SLK_IS_IOS8_AND_HIGHER &&
+       (endFrame.size.width == bounds.size.height || endFrame.size.height == bounds.size.width)) {
         endFrameConverted = SLKRectInvert(endFrame);
     } else {
         endFrameConverted = endFrame;
@@ -449,7 +447,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     // Sets the minimum height of the keyboard
     if (self.isMovingKeyboard) {
-        keyboardHeight = baseViewConverted.size.height;
+        keyboardHeight = bounds.size.height;
         keyboardHeight -= endFrameConverted.origin.y;
     }
     else {
@@ -467,14 +465,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         keyboardHeight = 0.0;
     }
     
-    CGRect bounds = [UIScreen mainScreen].bounds;
     NSLog(@"%@", notification.name);
-    NSLog(@"bounds %@", NSStringFromCGRect(bounds));
     NSLog(@"endFrame %@", NSStringFromCGRect(endFrame));
     NSLog(@"endFrameConverted %@", NSStringFromCGRect(endFrameConverted));
-    NSLog(@"baseView frame %@", NSStringFromCGRect(baseView.frame));
-    NSLog(@"baseView bounds %@", NSStringFromCGRect(baseView.bounds));
-    NSLog(@"baseViewConverted %@", NSStringFromCGRect(baseViewConverted));
+    NSLog(@"fixed bounds %@", NSStringFromCGRect(bounds));
+    NSLog(@"mybounds %@", NSStringFromCGRect(bounds));
     NSLog(@"keyboardHeight %f", keyboardHeight);
     
     return keyboardHeight;
@@ -516,19 +511,17 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (CGFloat)appropriateBottomMarginToWindow
 {
 
-    // grab the base view for conversions as we don't want window coordinates in < iOS 8
-    UIView *baseView = ((UIWindow *)self.view.window).rootViewController.view;
-
-    // It's a little weird to convert a view's frame to it's own coordinate space, but it fixes the coordiante system rotation issue
-    CGRect baseViewConverted = [baseView convertRect:baseView.frame fromView:nil];
+    // Convert the main screen bounds into the correct coordinate space, but ignore origin
+    CGRect bounds = [self.view convertRect:[UIScreen mainScreen].bounds fromView:nil];
+    bounds = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
     
     CGRect viewRect = self.view.frame;
     
-    CGFloat bottomWindow = CGRectGetMaxY(baseViewConverted);
+    CGFloat bottomWindow = CGRectGetMaxY(bounds);
     CGFloat bottomView = CGRectGetMaxY(viewRect);
     
     // Need the statusBarFrame in the correct coordinate space as well
-    CGFloat statusBarHeight = [baseView convertRect:[UIApplication sharedApplication].statusBarFrame fromView:nil].size.height;
+    CGFloat statusBarHeight = [self.view convertRect:[UIApplication sharedApplication].statusBarFrame fromView:nil].size.height;
     
     // the status bar should be part of our equation here
     bottomView += statusBarHeight;
@@ -548,7 +541,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         }
     }
     
-//    NSLog(@"baseViewConverted %@", NSStringFromCGRect(baseViewConverted));
 //    NSLog(@"viewRect %@", NSStringFromCGRect(viewRect));
 //    
 //    NSLog(@"bottomWindow %f", bottomWindow);
@@ -1035,40 +1027,28 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         // iOS 8 fixes the whole coordinate system issue for us, but iOS 7 doesn't rotate the app window coordinate space
         UIView *baseView = ((UIWindow *)self.view.window).rootViewController.view;
 
-        // It's a little weird to convert a view's frame to it's own coordinate space, but it fixes the coordiante system rotation issue
-        CGRect baseViewConverted = [baseView convertRect:baseView.frame fromView:nil];
-//        CGRect windowCoordinates = ((UIWindow *)self.view.window).bounds;
-        
+        // Convert the main screen bounds into the correct coordinate space but ignore the origin
+        CGRect bounds = [self.view convertRect:[UIScreen mainScreen].bounds fromView:nil];
+        bounds = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
+
         // we want these rects in the correct coordinate space as well
         CGRect convertBegin = [baseView convertRect:beginRect fromView:nil];
         CGRect convertEnd = [baseView convertRect:endRect fromView:nil];
         
-//        NSLog(@"%@", notification.name);
-//        NSLog(@"begin Rect %@", NSStringFromCGRect(beginRect));
-//        NSLog(@"end Rect %@", NSStringFromCGRect(endRect));
-//        NSLog(@"convertBegin %@", NSStringFromCGRect(convertBegin));
-//        NSLog(@"convertEnd %@", NSStringFromCGRect(convertEnd));
-//        NSLog(@"windowCoordinates %@", NSStringFromCGRect(windowCoordinates));
-//        NSLog(@"baseView %@", NSStringFromCGRect(baseView.frame));
-//        NSLog(@"baseView converted %@", NSStringFromCGRect(baseViewConverted));
-        
         if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-            if (convertEnd.origin.y + inputAccessoryHeight >= baseViewConverted.size.height) {
-//                NSLog(@"External");
+            if (convertEnd.origin.y + inputAccessoryHeight >= bounds.size.height) {
                 return YES;
             }
         }
         else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
             // the additional logic check here (== to width) accounts for a glitch (iOS 8 only?) where the window has rotated it's coordinates
             // but the beginRect doesn't yet reflect that. It should never cause a false positive
-            if (convertBegin.origin.y + inputAccessoryHeight >= baseViewConverted.size.height ||
-                convertBegin.origin.y + inputAccessoryHeight == baseViewConverted.size.width) {
-//                NSLog(@"External");
+            if (convertBegin.origin.y + inputAccessoryHeight >= bounds.size.height ||
+                convertBegin.origin.y + inputAccessoryHeight == bounds.size.width) {
                 return YES;
             }
         }
     }
-//    NSLog(@"Not External");
     return NO;
 }
 
