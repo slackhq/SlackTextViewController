@@ -10,15 +10,18 @@
 		35A4C7C11DE3FD17F022DC0C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
 		49FEFA70DA01AB47666A8D63 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
 		4A8EFBBFAC0F49199AAABF46 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
-		4F3031751A7E930F00BD944D /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */; };
+		4F3256191AA77386008C1DD9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3256161AA77386008C1DD9 /* AppDelegate.m */; };
+		4F32561A1AA77386008C1DD9 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F3256171AA77386008C1DD9 /* Info.plist */; };
+		4F32561B1AA77386008C1DD9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3256181AA77386008C1DD9 /* main.m */; };
+		4F32561C1AA77427008C1DD9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF6C19F011D0007A3D4A /* AppDelegate.m */; };
+		4F32561D1AA77430008C1DD9 /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */; };
+		4F32561E1AA77431008C1DD9 /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */; };
 		4F3EDB4D199ED00F004C15D6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB4C199ED00F004C15D6 /* Foundation.framework */; };
 		4F3EDB4F199ED00F004C15D6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB4E199ED00F004C15D6 /* CoreGraphics.framework */; };
 		4F3EDB51199ED00F004C15D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB50199ED00F004C15D6 /* UIKit.framework */; };
 		4F3EDB59199ED00F004C15D6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB58199ED00F004C15D6 /* main.m */; };
 		4F3EDB5D199ED00F004C15D6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EDB5C199ED00F004C15D6 /* AppDelegate.m */; };
-		4F7C6BA51A6E208E006E3FAB /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */; };
 		4F86BF6A19F011D0007A3D4A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF6919F011D0007A3D4A /* main.m */; };
-		4F86BF6D19F011D0007A3D4A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF6C19F011D0007A3D4A /* AppDelegate.m */; };
 		4F86BF7319F011D0007A3D4A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F86BF7119F011D0007A3D4A /* Main.storyboard */; };
 		4F86BF7819F011D0007A3D4A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F86BF7619F011D0007A3D4A /* LaunchScreen.xib */; };
 		4F86BF9319F01234007A3D4A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F86BF8E19F01234007A3D4A /* Images.xcassets */; };
@@ -35,11 +38,8 @@
 		4F8ADA771A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
 		4F8ADA781A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
 		4F8ADA791A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
-		71BE10071A72F3130083EE32 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 71BE10061A72F3130083EE32 /* main.m */; };
-		71BE100A1A72F3130083EE32 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 71BE10091A72F3130083EE32 /* AppDelegate.m */; };
 		71BE10281A72F3E50083EE32 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF9219F01234007A3D4A /* MessageViewController.m */; };
 		71BE10291A72F3E50083EE32 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF9019F01234007A3D4A /* MessageTableViewCell.m */; };
-		71BE102A1A72F3E50083EE32 /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */; };
 		71BE102B1A72F3E50083EE32 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
 		71BE102C1A72F4180083EE32 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB4E199ED00F004C15D6 /* CoreGraphics.framework */; };
 		71BE102D1A72F41E0083EE32 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3EDB50199ED00F004C15D6 /* UIKit.framework */; };
@@ -54,6 +54,10 @@
 		4F1AD51F19E727750027043E /* ___FILEBASENAME___.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "___FILEBASENAME___.m"; sourceTree = "<group>"; };
 		4F1AD52119E727750027043E /* ___FILEBASENAME___.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "___FILEBASENAME___.h"; sourceTree = "<group>"; };
 		4F1AD52219E727750027043E /* ___FILEBASENAME___.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "___FILEBASENAME___.m"; sourceTree = "<group>"; };
+		4F3256151AA77386008C1DD9 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		4F3256161AA77386008C1DD9 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		4F3256171AA77386008C1DD9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4F3256181AA77386008C1DD9 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4F3EDB49199ED00F004C15D6 /* Messenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Messenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F3EDB4C199ED00F004C15D6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4F3EDB4E199ED00F004C15D6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -86,11 +90,7 @@
 		4F8ADA751A68C37400023752 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		4F8ADA761A68C37400023752 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		622BF1F6C9CF013275EF6275 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		71BE10021A72F3130083EE32 /* Messenger-Programatic-iPad-Sheet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Messenger-Programatic-iPad-Sheet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		71BE10051A72F3130083EE32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		71BE10061A72F3130083EE32 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		71BE10081A72F3130083EE32 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		71BE10091A72F3130083EE32 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		71BE10021A72F3130083EE32 /* Messenger-iPad-Sheet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Messenger-iPad-Sheet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C905E5DB18A83F74BD092CDD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		DDFA9095EABC480682E6396C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -166,6 +166,17 @@
 			path = "../../File Templates/SlackTextView Controller.xctemplate/UITableView";
 			sourceTree = "<group>";
 		};
+		4F3256141AA77386008C1DD9 /* Messenger-iPad-Sheet */ = {
+			isa = PBXGroup;
+			children = (
+				4F3256151AA77386008C1DD9 /* AppDelegate.h */,
+				4F3256161AA77386008C1DD9 /* AppDelegate.m */,
+				4F3256171AA77386008C1DD9 /* Info.plist */,
+				4F3256181AA77386008C1DD9 /* main.m */,
+			);
+			path = "Messenger-iPad-Sheet";
+			sourceTree = "<group>";
+		};
 		4F3EDB40199ED00F004C15D6 = {
 			isa = PBXGroup;
 			children = (
@@ -183,7 +194,7 @@
 				4F3EDB49199ED00F004C15D6 /* Messenger.app */,
 				4F86BF6519F011D0007A3D4A /* Messenger-Storyboard.app */,
 				4F86BFC319F050AF007A3D4A /* Messenger-Swift.app */,
-				71BE10021A72F3130083EE32 /* Messenger-Programatic-iPad-Sheet.app */,
+				71BE10021A72F3130083EE32 /* Messenger-iPad-Sheet.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -246,8 +257,8 @@
 			children = (
 				4F86BF8D19F01234007A3D4A /* Shared */,
 				4F3EDB52199ED00F004C15D6 /* Programatic Example */,
-				71BE10031A72F3130083EE32 /* Messenger iPad Sheet Example */,
 				4F86BF6619F011D0007A3D4A /* Storyboard Example */,
+				4F3256141AA77386008C1DD9 /* Messenger-iPad-Sheet */,
 				4F86BFC419F050AF007A3D4A /* Swift Example */,
 			);
 			name = Examples;
@@ -299,26 +310,6 @@
 				C905E5DB18A83F74BD092CDD /* Pods.release.xcconfig */,
 			);
 			name = Pods;
-			sourceTree = "<group>";
-		};
-		71BE10031A72F3130083EE32 /* Messenger iPad Sheet Example */ = {
-			isa = PBXGroup;
-			children = (
-				71BE10081A72F3130083EE32 /* AppDelegate.h */,
-				71BE10091A72F3130083EE32 /* AppDelegate.m */,
-				71BE10041A72F3130083EE32 /* Supporting Files */,
-			);
-			name = "Messenger iPad Sheet Example";
-			path = "Messenger-Programatic-iPad-Sheet";
-			sourceTree = "<group>";
-		};
-		71BE10041A72F3130083EE32 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				71BE10051A72F3130083EE32 /* Info.plist */,
-				71BE10061A72F3130083EE32 /* main.m */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -381,9 +372,9 @@
 			productReference = 4F86BFC319F050AF007A3D4A /* Messenger-Swift.app */;
 			productType = "com.apple.product-type.application";
 		};
-		71BE10011A72F3130083EE32 /* Messenger-Programatic-iPad-Sheet */ = {
+		71BE10011A72F3130083EE32 /* Messenger-iPad-Sheet */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 71BE10221A72F3130083EE32 /* Build configuration list for PBXNativeTarget "Messenger-Programatic-iPad-Sheet" */;
+			buildConfigurationList = 71BE10221A72F3130083EE32 /* Build configuration list for PBXNativeTarget "Messenger-iPad-Sheet" */;
 			buildPhases = (
 				8D98662D95A755657E54323F /* Check Pods Manifest.lock */,
 				71BE0FFE1A72F3130083EE32 /* Sources */,
@@ -395,9 +386,9 @@
 			);
 			dependencies = (
 			);
-			name = "Messenger-Programatic-iPad-Sheet";
+			name = "Messenger-iPad-Sheet";
 			productName = "Messenger-Programatic-iPad-Sheet";
-			productReference = 71BE10021A72F3130083EE32 /* Messenger-Programatic-iPad-Sheet.app */;
+			productReference = 71BE10021A72F3130083EE32 /* Messenger-iPad-Sheet.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -439,7 +430,7 @@
 				4F3EDB48199ED00F004C15D6 /* Messenger-Programatic */,
 				4F86BF6419F011D0007A3D4A /* Messenger-Storyboard */,
 				4F86BFC219F050AF007A3D4A /* Messenger-Swift */,
-				71BE10011A72F3130083EE32 /* Messenger-Programatic-iPad-Sheet */,
+				71BE10011A72F3130083EE32 /* Messenger-iPad-Sheet */,
 			);
 		};
 /* End PBXProject section */
@@ -477,6 +468,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F32561A1AA77386008C1DD9 /* Info.plist in Resources */,
 				71BE102F1A72F42F0083EE32 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -616,7 +608,7 @@
 				4F8ADA771A68C37400023752 /* Message.m in Sources */,
 				4F86BF9519F01234007A3D4A /* MessageTableViewCell.m in Sources */,
 				4F3EDB59199ED00F004C15D6 /* main.m in Sources */,
-				4F7C6BA51A6E208E006E3FAB /* MessageTextView.m in Sources */,
+				4F32561E1AA77431008C1DD9 /* MessageTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -628,9 +620,8 @@
 				4F86BF9819F01234007A3D4A /* MessageViewController.m in Sources */,
 				4F86BF9619F01234007A3D4A /* MessageTableViewCell.m in Sources */,
 				4F8ADA781A68C37400023752 /* Message.m in Sources */,
-				4F86BF6D19F011D0007A3D4A /* AppDelegate.m in Sources */,
 				4F86BF6A19F011D0007A3D4A /* main.m in Sources */,
-				4F3031751A7E930F00BD944D /* MessageTextView.m in Sources */,
+				4F32561C1AA77427008C1DD9 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -650,10 +641,10 @@
 			files = (
 				71BE10281A72F3E50083EE32 /* MessageViewController.m in Sources */,
 				71BE10291A72F3E50083EE32 /* MessageTableViewCell.m in Sources */,
-				71BE102A1A72F3E50083EE32 /* MessageTextView.m in Sources */,
 				71BE102B1A72F3E50083EE32 /* Message.m in Sources */,
-				71BE100A1A72F3130083EE32 /* AppDelegate.m in Sources */,
-				71BE10071A72F3130083EE32 /* main.m in Sources */,
+				4F32561B1AA77386008C1DD9 /* main.m in Sources */,
+				4F3256191AA77386008C1DD9 /* AppDelegate.m in Sources */,
+				4F32561D1AA77430008C1DD9 /* MessageTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -902,7 +893,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "Messenger-Programatic-iPad-Sheet/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Messenger-iPad-Sheet/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -919,7 +910,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = "Messenger-Programatic-iPad-Sheet/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Messenger-iPad-Sheet/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -967,7 +958,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		71BE10221A72F3130083EE32 /* Build configuration list for PBXNativeTarget "Messenger-Programatic-iPad-Sheet" */ = {
+		71BE10221A72F3130083EE32 /* Build configuration list for PBXNativeTarget "Messenger-iPad-Sheet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				71BE10231A72F3130083EE32 /* Debug */,
