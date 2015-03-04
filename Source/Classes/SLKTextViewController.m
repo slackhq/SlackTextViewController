@@ -445,33 +445,50 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return keyboardHeight;
     }
     
+    // Convert the main screen bounds into the correct coordinate space but ignore the origin
+    CGRect bounds = [self.view convertRect:[UIScreen mainScreen].bounds fromView:nil];
+    bounds = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
+    
+    // Need to correctly convert the endframe kicked out for iOS 7
+    CGRect endFrameConverted;
+    if(!SLK_IS_IOS8_AND_HIGHER &&
+       (endFrame.size.width == bounds.size.height || endFrame.size.height == bounds.size.width)) {
+        endFrameConverted = SLKRectInvert(endFrame);
+    } else {
+        endFrameConverted = endFrame;
+    }
+    
     // Sets the minimum height of the keyboard
     if (self.isMovingKeyboard) {
-        if (!SLK_IS_IOS8_AND_HIGHER && SLK_IS_LANDSCAPE) {
-            keyboardHeight = MIN(CGRectGetWidth([UIScreen mainScreen].bounds), CGRectGetHeight([UIScreen mainScreen].bounds));
-            keyboardHeight -= MAX(endFrame.origin.x, endFrame.origin.y);
-        }
-        else {
-            keyboardHeight = CGRectGetHeight([UIScreen mainScreen].bounds);
-            keyboardHeight -= endFrame.origin.y;
-        }
+        keyboardHeight = bounds.size.height;
+        keyboardHeight -= endFrameConverted.origin.y;
     }
     else {
         if ([notification.name isEqualToString:UIKeyboardWillShowNotification] || [notification.name isEqualToString:UIKeyboardDidShowNotification]) {
-            CGRect convertedRect = [self.view convertRect:endFrame toView:self.view.window];
-            keyboardHeight = CGRectGetHeight(convertedRect);
+            keyboardHeight = endFrameConverted.size.height;
         }
         else {
             keyboardHeight = 0.0;
         }
     }
+<<<<<<< HEAD
     
     keyboardHeight -= [self slk_appropriateBottomMarginToWindow];
+=======
+    keyboardHeight -= [self appropriateBottomMarginToWindow];
+>>>>>>> d512a58952404ef1b84f287c78356cb6543532c6
     keyboardHeight -= CGRectGetHeight(self.textView.inputAccessoryView.bounds);
     
     if (keyboardHeight < 0) {
         keyboardHeight = 0.0;
     }
+    
+    NSLog(@"%@", notification.name);
+    NSLog(@"endFrame %@", NSStringFromCGRect(endFrame));
+    NSLog(@"endFrameConverted %@", NSStringFromCGRect(endFrameConverted));
+    NSLog(@"fixed bounds %@", NSStringFromCGRect(bounds));
+    NSLog(@"mybounds %@", NSStringFromCGRect(bounds));
+    NSLog(@"keyboardHeight %f", keyboardHeight);
     
     return keyboardHeight;
 }
@@ -502,6 +519,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return height;
     }
     
+    if (SLK_IS_IPAD && self.modalPresentationStyle == UIModalPresentationFormSheet) {
+        return height;
+    }
+    
     if (self.isPresentedInPopover) {
         return height;
     }
@@ -512,20 +533,21 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (CGFloat)slk_appropriateBottomMarginToWindow
 {
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+
+    // Convert the main screen bounds into the correct coordinate space, but ignore origin
+    CGRect bounds = [self.view convertRect:[UIScreen mainScreen].bounds fromView:nil];
+    bounds = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
     
-    CGRect windowFrame = [window convertRect:window.frame fromView:self.view];
-    windowFrame.origin = CGPointZero;
+    CGRect viewRect = self.view.frame;
     
-    CGRect viewRect = [window convertRect:self.view.frame fromView:nil];
-    
-    CGFloat bottomWindow = CGRectGetMaxY(windowFrame);
+    CGFloat bottomWindow = CGRectGetMaxY(bounds);
     CGFloat bottomView = CGRectGetMaxY(viewRect);
     
-    // Retrieve the status bar's height when the in-call status bar is displayed
-    if (CGRectGetHeight([UIApplication sharedApplication].statusBarFrame) > 20.0) {
-        bottomView += CGRectGetHeight([UIApplication sharedApplication].statusBarFrame)/2.0;
-    }
+    // Need the statusBarFrame in the correct coordinate space as well
+    CGFloat statusBarHeight = [self.view convertRect:[UIApplication sharedApplication].statusBarFrame fromView:nil].size.height;
+    
+    // the status bar should be part of our equation here
+    bottomView += statusBarHeight;
     
     CGFloat margin = bottomWindow - bottomView;
     
@@ -534,9 +556,22 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         margin /= 2.0;
         
         if (SLK_IS_LANDSCAPE) {
-            margin += margin-CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
+            margin += margin;
+        } else if (SLK_IS_IOS8_AND_HIGHER) {
+            // For some reason in iOS 8 portrait only, we lose 10 pts somewhere
+            // haven't worked out why yet. Perhaps a bug?
+            margin += 10;
         }
     }
+    
+//    NSLog(@"viewRect %@", NSStringFromCGRect(viewRect));
+//    
+//    NSLog(@"bottomWindow %f", bottomWindow);
+//    NSLog(@"bottomView %f", bottomView);
+//    NSLog(@"statusBarHeight %f", statusBarHeight);
+//    NSLog(@"margin %f", margin);
+//    
+    
     
     // Do NOT consider a status bar height gap
     return (margin > 20) ? margin : 0.0;
@@ -992,26 +1027,45 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (BOOL)slk_detectExternalKeyboardInNotification:(NSNotification *)notification
 {
-    CGRect targetRect = CGRectZero;
-    
-    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-        targetRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    }
-    else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
-        targetRect = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    }
-    
-    CGRect keyboardFrame = [self.view convertRect:[self.view.window convertRect:targetRect fromWindow:nil] fromView:nil];
-
     if (!self.isMovingKeyboard) {
-        CGFloat maxKeyboardHeight = keyboardFrame.origin.y + keyboardFrame.size.height;
-        maxKeyboardHeight -= [self slk_appropriateBottomMarginToWindow];
+//        CGFloat maxKeyboardHeight = keyboardFrame.origin.y + keyboardFrame.size.height;
+//        maxKeyboardHeight -= [self slk_appropriateBottomMarginToWindow];
 
-        return (maxKeyboardHeight > CGRectGetHeight(self.view.bounds));
+        // based on http://stackoverflow.com/a/5760910/287403
+        // we can determine if the external keyboard is showing by adding the origin.y of the target finish rect
+        // (end when showing, begin when hiding) to the inputAccessoryHeight
+        // If it's greater(or equal) the window height, it's an external keyboard
+        CGFloat inputAccessoryHeight = self.textView.inputAccessoryView.frame.size.height;
+        CGRect beginRect = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+        CGRect endRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+        
+        // grab the base view for conversions as we don't want window coordinates in < iOS 8
+        // iOS 8 fixes the whole coordinate system issue for us, but iOS 7 doesn't rotate the app window coordinate space
+        UIView *baseView = ((UIWindow *)self.view.window).rootViewController.view;
+
+        // Convert the main screen bounds into the correct coordinate space but ignore the origin
+        CGRect bounds = [self.view convertRect:[UIScreen mainScreen].bounds fromView:nil];
+        bounds = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
+
+        // we want these rects in the correct coordinate space as well
+        CGRect convertBegin = [baseView convertRect:beginRect fromView:nil];
+        CGRect convertEnd = [baseView convertRect:endRect fromView:nil];
+        
+        if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+            if (convertEnd.origin.y + inputAccessoryHeight >= bounds.size.height) {
+                return YES;
+            }
+        }
+        else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
+            // the additional logic check here (== to width) accounts for a glitch (iOS 8 only?) where the window has rotated it's coordinates
+            // but the beginRect doesn't yet reflect that. It should never cause a false positive
+            if (convertBegin.origin.y + inputAccessoryHeight >= bounds.size.height ||
+                convertBegin.origin.y + inputAccessoryHeight == bounds.size.width) {
+                return YES;
+            }
+        }
     }
-    else {
-        return NO;
-    }
+    return NO;
 }
 
 - (void)slk_reloadInputAccessoryViewIfNeeded

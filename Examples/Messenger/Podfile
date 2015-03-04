@@ -1,7 +1,7 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
 workspace 'Messenger.xcworkspace'
-link_with 'Messenger-Programatic', 'Messenger-Storyboard', 'Messenger-Swift'
+link_with 'Messenger-Programatic', 'Messenger-Programatic-iPad-Sheet', 'Messenger-Storyboard', 'Messenger-Swift'
 platform :ios, '7.0'
 
 pod 'SlackTextViewController', :path => '../../SlackTextViewController.podspec'

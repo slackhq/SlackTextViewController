@@ -1,705 +1,1731 @@
-// !$*UTF8*$!
-{
-	archiveVersion = 1;
-	classes = {
-	};
-	objectVersion = 46;
-	objects = {
-
-/* Begin PBXBuildFile section */
-		0BDC6542829D33831A1FF842 /* Pods-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBE56ED93AD35F2DE910C72 /* Pods-dummy.m */; };
-		0F5C5817B857662E8B85058B /* SLKTextInputbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 11CC1E92C78040DC48961B70 /* SLKTextInputbar.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		0FDF98D131256883D77C9551 /* UIView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D6D645D36CB11DAD0636F2A3 /* UIView+SLKAdditions.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		19C1C20F0CD5CB715F3CEAAB /* Pods-LoremIpsum-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F756BBC7CC7B4CAB8CDE548 /* Pods-LoremIpsum-dummy.m */; };
-		2109E66631DAD43BAFD77E35 /* SLKTextViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 66845DDA0D8FD5F470BAABB6 /* SLKTextViewController.h */; };
-		2AB681088E31F8426B14FFB6 /* SLKTextView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E4814995C211BDA05324F12 /* SLKTextView+SLKAdditions.h */; };
-		31ABB56BDC1DF1F64ABEE710 /* SLKTypingIndicatorView.h in Headers */ = {isa = PBXBuildFile; fileRef = 710462CCA5CF5486E00807E3 /* SLKTypingIndicatorView.h */; };
-		48064C61A6B9E555F94E1776 /* SLKTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = FC2A4187B00EBF237C52C2B4 /* SLKTextView.h */; };
-		5E27480892CE78F6265B922B /* UIView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7254A2F2DAFFA0219293AB10 /* UIView+SLKAdditions.h */; };
-		61CF2491C66D5145B86F25E2 /* SLKTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = FC2A4187B00EBF237C52C2B4 /* SLKTextView.h */; };
-		694D724838CBB6BAEB579E8C /* SLKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = F60784BC37BAD079FFC26ED6 /* SLKTextView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		8F5BA9F9A9F63765DF7557C3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC63CBC9F24B7ED7A971F799 /* Foundation.framework */; };
-		A1474BD275A5738DE678B2CB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC63CBC9F24B7ED7A971F799 /* Foundation.framework */; };
-		B2D4D6316C72F373C34FFA68 /* SLKTypingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1809A1AA52E4893C5B4354 /* SLKTypingIndicatorView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		C67BF7584A83FBDE5ACD1853 /* SLKUIConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = E64BB6B4EA5BD7B64F79133A /* SLKUIConstants.h */; };
-		CBE8401BC93B584AE64C65F2 /* UIScrollView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E7F80DC69440D5A05CFCEF2 /* UIScrollView+SLKAdditions.h */; };
-		D5870E78EC10E1D0C8C869AF /* UIScrollView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = DD10209C67C0570F212053B3 /* UIScrollView+SLKAdditions.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		D7E78265F0E4DCA5C374CF0C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC63CBC9F24B7ED7A971F799 /* Foundation.framework */; };
-		DBC48345D698BAE8057A63B2 /* LoremIpsum.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CD79552695989A52A1C2892 /* LoremIpsum.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"; }; };
-		DCAFB5D62E86BF8200246470 /* SLKInputAccessoryView.h in Headers */ = {isa = PBXBuildFile; fileRef = B58DB8F386A9916306EC4643 /* SLKInputAccessoryView.h */; };
-		DEE45B4DE3191E2AA1CA7EFE /* SLKTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50BC455054782FF1987AFAB1 /* SLKTextViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		EEB88861AD990B42FC0CE6D4 /* SLKInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 980B5DF98090306599C5DE05 /* SLKInputAccessoryView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		F20F8FD7177EDBB9D9FD4CDF /* Pods-SlackTextViewController-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4422BA26BA857D19BA452E29 /* Pods-SlackTextViewController-dummy.m */; };
-		F578A97168102ABF95FE03C7 /* SLKTextView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F2BE6A93B68E961DD669E92D /* SLKTextView+SLKAdditions.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		FB27C6DC3423C7AEEAF8704C /* LoremIpsum.h in Headers */ = {isa = PBXBuildFile; fileRef = BB76D79F6CA293113845DAF6 /* LoremIpsum.h */; };
-		FE7148A3E4C464D9BAEECC96 /* SLKTextInputbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 2241EC1178C01BF106A1E2D5 /* SLKTextInputbar.h */; };
-/* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		D63781BFEE0915AA5E025EA0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9A3135DE2D2CD6D6A850581B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A9A0E28BA4A62D46C588A2DF;
-			remoteInfo = "Pods-SlackTextViewController";
-		};
-		ED025503CCC2E9261B8817E1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9A3135DE2D2CD6D6A850581B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6B360615C737918D24AD62A4;
-			remoteInfo = "Pods-LoremIpsum";
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXFileReference section */
-		11CC1E92C78040DC48961B70 /* SLKTextInputbar.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SLKTextInputbar.m; path = Source/Classes/SLKTextInputbar.m; sourceTree = "<group>"; };
-		154C508307ACBCCA6CC2093B /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		20AB5C04052D6324FE732D2E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		2241EC1178C01BF106A1E2D5 /* SLKTextInputbar.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SLKTextInputbar.h; path = Source/Classes/SLKTextInputbar.h; sourceTree = "<group>"; };
-		2805E1FC8EEC0008FC60EAE1 /* Pods-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-resources.sh"; sourceTree = "<group>"; };
-		2B5C5A5FD9AA8EE79A7829A3 /* Pods-SlackTextViewController-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SlackTextViewController-Private.xcconfig"; sourceTree = "<group>"; };
-		2D9B067324CE6EBCAEABC2E5 /* Pods-LoremIpsum.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-LoremIpsum.xcconfig"; sourceTree = "<group>"; };
-		395B449BC72DBA4537648920 /* Pods-LoremIpsum-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-LoremIpsum-prefix.pch"; sourceTree = "<group>"; };
-		4422BA26BA857D19BA452E29 /* Pods-SlackTextViewController-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SlackTextViewController-dummy.m"; sourceTree = "<group>"; };
-		449B929FAFF6C236E02628FD /* Pods-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-environment.h"; sourceTree = "<group>"; };
-		44A5E598AC6219F1A83A227D /* Pods-SlackTextViewController.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SlackTextViewController.xcconfig"; sourceTree = "<group>"; };
-		4765C00B65D6759163B78558 /* Pods-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-acknowledgements.plist"; sourceTree = "<group>"; };
-		4E4814995C211BDA05324F12 /* SLKTextView+SLKAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "SLKTextView+SLKAdditions.h"; path = "Source/Additions/SLKTextView+SLKAdditions.h"; sourceTree = "<group>"; };
-		4E7F80DC69440D5A05CFCEF2 /* UIScrollView+SLKAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIScrollView+SLKAdditions.h"; path = "Source/Additions/UIScrollView+SLKAdditions.h"; sourceTree = "<group>"; };
-		4FBE56ED93AD35F2DE910C72 /* Pods-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-dummy.m"; sourceTree = "<group>"; };
-		50BC455054782FF1987AFAB1 /* SLKTextViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SLKTextViewController.m; path = Source/Classes/SLKTextViewController.m; sourceTree = "<group>"; };
-		66845DDA0D8FD5F470BAABB6 /* SLKTextViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SLKTextViewController.h; path = Source/Classes/SLKTextViewController.h; sourceTree = "<group>"; };
-		6F756BBC7CC7B4CAB8CDE548 /* Pods-LoremIpsum-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-LoremIpsum-dummy.m"; sourceTree = "<group>"; };
-		710462CCA5CF5486E00807E3 /* SLKTypingIndicatorView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SLKTypingIndicatorView.h; path = Source/Classes/SLKTypingIndicatorView.h; sourceTree = "<group>"; };
-		7254A2F2DAFFA0219293AB10 /* UIView+SLKAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIView+SLKAdditions.h"; path = "Source/Additions/UIView+SLKAdditions.h"; sourceTree = "<group>"; };
-		7C80E2019D456711FE02D993 /* Pods-SlackTextViewController-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SlackTextViewController-prefix.pch"; sourceTree = "<group>"; };
-		7CD79552695989A52A1C2892 /* LoremIpsum.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LoremIpsum.m; path = LoremIpsum/LoremIpsum.m; sourceTree = "<group>"; };
-		83D051C816335A26D943A12B /* libPods-SlackTextViewController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SlackTextViewController.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		94747FBC48768D763F29C8AD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Pods.release.xcconfig; sourceTree = "<group>"; };
-		980B5DF98090306599C5DE05 /* SLKInputAccessoryView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SLKInputAccessoryView.m; path = Source/Classes/SLKInputAccessoryView.m; sourceTree = "<group>"; };
-		9935BDA8E5F880D06D240D13 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Pods.debug.xcconfig; sourceTree = "<group>"; };
-		AACBCCC30A401E04E2C2BC98 /* libPods-LoremIpsum.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LoremIpsum.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B58DB8F386A9916306EC4643 /* SLKInputAccessoryView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SLKInputAccessoryView.h; path = Source/Classes/SLKInputAccessoryView.h; sourceTree = "<group>"; };
-		BB76D79F6CA293113845DAF6 /* LoremIpsum.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LoremIpsum.h; path = LoremIpsum/LoremIpsum.h; sourceTree = "<group>"; };
-		BC63CBC9F24B7ED7A971F799 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		CD1809A1AA52E4893C5B4354 /* SLKTypingIndicatorView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SLKTypingIndicatorView.m; path = Source/Classes/SLKTypingIndicatorView.m; sourceTree = "<group>"; };
-		D24A3A93BF66BC097ECF3A5C /* Pods-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-acknowledgements.markdown"; sourceTree = "<group>"; };
-		D6D645D36CB11DAD0636F2A3 /* UIView+SLKAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIView+SLKAdditions.m"; path = "Source/Additions/UIView+SLKAdditions.m"; sourceTree = "<group>"; };
-		DD10209C67C0570F212053B3 /* UIScrollView+SLKAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIScrollView+SLKAdditions.m"; path = "Source/Additions/UIScrollView+SLKAdditions.m"; sourceTree = "<group>"; };
-		E64BB6B4EA5BD7B64F79133A /* SLKUIConstants.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SLKUIConstants.h; path = Source/Additions/SLKUIConstants.h; sourceTree = "<group>"; };
-		F2BE6A93B68E961DD669E92D /* SLKTextView+SLKAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "SLKTextView+SLKAdditions.m"; path = "Source/Additions/SLKTextView+SLKAdditions.m"; sourceTree = "<group>"; };
-		F60784BC37BAD079FFC26ED6 /* SLKTextView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SLKTextView.m; path = Source/Classes/SLKTextView.m; sourceTree = "<group>"; };
-		FAFCA6C4FDD64A8FB2B3C09E /* Pods-LoremIpsum-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-LoremIpsum-Private.xcconfig"; sourceTree = "<group>"; };
-		FC2A4187B00EBF237C52C2B4 /* SLKTextView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SLKTextView.h; path = Source/Classes/SLKTextView.h; sourceTree = "<group>"; };
-/* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		1B3714A457441D5FDD9D6953 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A1474BD275A5738DE678B2CB /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		82246D4F66F08F25A8E86B67 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8F5BA9F9A9F63765DF7557C3 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FB3505D42AC32FD04C056635 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D7E78265F0E4DCA5C374CF0C /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXGroup section */
-		082F78EA2896C980ED22F0A3 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				44A5E598AC6219F1A83A227D /* Pods-SlackTextViewController.xcconfig */,
-				2B5C5A5FD9AA8EE79A7829A3 /* Pods-SlackTextViewController-Private.xcconfig */,
-				4422BA26BA857D19BA452E29 /* Pods-SlackTextViewController-dummy.m */,
-				7C80E2019D456711FE02D993 /* Pods-SlackTextViewController-prefix.pch */,
-			);
-			name = "Support Files";
-			path = "Examples/Messenger/Pods/Target Support Files/Pods-SlackTextViewController";
-			sourceTree = "<group>";
-		};
-		204E78938A20A0666B7F8B9D /* Development Pods */ = {
-			isa = PBXGroup;
-			children = (
-				3FFEA7C0664617EEBA386E86 /* SlackTextViewController */,
-			);
-			name = "Development Pods";
-			sourceTree = "<group>";
-		};
-		28BA2E46264F56CD2AF1BFC9 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				BC63CBC9F24B7ED7A971F799 /* Foundation.framework */,
-			);
-			name = iOS;
-			sourceTree = "<group>";
-		};
-		3FFEA7C0664617EEBA386E86 /* SlackTextViewController */ = {
-			isa = PBXGroup;
-			children = (
-				B58DB8F386A9916306EC4643 /* SLKInputAccessoryView.h */,
-				980B5DF98090306599C5DE05 /* SLKInputAccessoryView.m */,
-				2241EC1178C01BF106A1E2D5 /* SLKTextInputbar.h */,
-				11CC1E92C78040DC48961B70 /* SLKTextInputbar.m */,
-				FC2A4187B00EBF237C52C2B4 /* SLKTextView.h */,
-				F60784BC37BAD079FFC26ED6 /* SLKTextView.m */,
-				66845DDA0D8FD5F470BAABB6 /* SLKTextViewController.h */,
-				50BC455054782FF1987AFAB1 /* SLKTextViewController.m */,
-				710462CCA5CF5486E00807E3 /* SLKTypingIndicatorView.h */,
-				CD1809A1AA52E4893C5B4354 /* SLKTypingIndicatorView.m */,
-				8706BCF786B1B9065EC9CB76 /* Additions */,
-				082F78EA2896C980ED22F0A3 /* Support Files */,
-			);
-			name = SlackTextViewController;
-			path = ../../..;
-			sourceTree = "<group>";
-		};
-		5051A5475B8E116E17150EE4 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				20AB5C04052D6324FE732D2E /* libPods.a */,
-				AACBCCC30A401E04E2C2BC98 /* libPods-LoremIpsum.a */,
-				83D051C816335A26D943A12B /* libPods-SlackTextViewController.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		8706BCF786B1B9065EC9CB76 /* Additions */ = {
-			isa = PBXGroup;
-			children = (
-				E64BB6B4EA5BD7B64F79133A /* SLKUIConstants.h */,
-				4E4814995C211BDA05324F12 /* SLKTextView+SLKAdditions.h */,
-				F2BE6A93B68E961DD669E92D /* SLKTextView+SLKAdditions.m */,
-				4E7F80DC69440D5A05CFCEF2 /* UIScrollView+SLKAdditions.h */,
-				DD10209C67C0570F212053B3 /* UIScrollView+SLKAdditions.m */,
-				7254A2F2DAFFA0219293AB10 /* UIView+SLKAdditions.h */,
-				D6D645D36CB11DAD0636F2A3 /* UIView+SLKAdditions.m */,
-			);
-			name = Additions;
-			sourceTree = "<group>";
-		};
-		AB5751B728B1A97B7E03D9E2 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				28BA2E46264F56CD2AF1BFC9 /* iOS */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		AB87C00F28A75A68F4A1F0DA = {
-			isa = PBXGroup;
-			children = (
-				154C508307ACBCCA6CC2093B /* Podfile */,
-				204E78938A20A0666B7F8B9D /* Development Pods */,
-				AB5751B728B1A97B7E03D9E2 /* Frameworks */,
-				B9E247D6DAD3A801A9030FC5 /* Pods */,
-				5051A5475B8E116E17150EE4 /* Products */,
-				ADFAB6D26DDB6D9CB3F25F33 /* Targets Support Files */,
-			);
-			sourceTree = "<group>";
-		};
-		ADFAB6D26DDB6D9CB3F25F33 /* Targets Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				CE2807884C3AB5E31168C179 /* Pods */,
-			);
-			name = "Targets Support Files";
-			sourceTree = "<group>";
-		};
-		B9E247D6DAD3A801A9030FC5 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				DA0BCE69699C21FAA1CA0F4E /* LoremIpsum */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		BE7F3F0080C874A4326E2145 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				2D9B067324CE6EBCAEABC2E5 /* Pods-LoremIpsum.xcconfig */,
-				FAFCA6C4FDD64A8FB2B3C09E /* Pods-LoremIpsum-Private.xcconfig */,
-				6F756BBC7CC7B4CAB8CDE548 /* Pods-LoremIpsum-dummy.m */,
-				395B449BC72DBA4537648920 /* Pods-LoremIpsum-prefix.pch */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/Pods-LoremIpsum";
-			sourceTree = "<group>";
-		};
-		CE2807884C3AB5E31168C179 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				D24A3A93BF66BC097ECF3A5C /* Pods-acknowledgements.markdown */,
-				4765C00B65D6759163B78558 /* Pods-acknowledgements.plist */,
-				4FBE56ED93AD35F2DE910C72 /* Pods-dummy.m */,
-				449B929FAFF6C236E02628FD /* Pods-environment.h */,
-				2805E1FC8EEC0008FC60EAE1 /* Pods-resources.sh */,
-				9935BDA8E5F880D06D240D13 /* Pods.debug.xcconfig */,
-				94747FBC48768D763F29C8AD /* Pods.release.xcconfig */,
-			);
-			name = Pods;
-			path = "Target Support Files/Pods";
-			sourceTree = "<group>";
-		};
-		DA0BCE69699C21FAA1CA0F4E /* LoremIpsum */ = {
-			isa = PBXGroup;
-			children = (
-				BB76D79F6CA293113845DAF6 /* LoremIpsum.h */,
-				7CD79552695989A52A1C2892 /* LoremIpsum.m */,
-				BE7F3F0080C874A4326E2145 /* Support Files */,
-			);
-			path = LoremIpsum;
-			sourceTree = "<group>";
-		};
-/* End PBXGroup section */
-
-/* Begin PBXHeadersBuildPhase section */
-		54034D98B05A53AB6A040063 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DCAFB5D62E86BF8200246470 /* SLKInputAccessoryView.h in Headers */,
-				FE7148A3E4C464D9BAEECC96 /* SLKTextInputbar.h in Headers */,
-				2AB681088E31F8426B14FFB6 /* SLKTextView+SLKAdditions.h in Headers */,
-				61CF2491C66D5145B86F25E2 /* SLKTextView.h in Headers */,
-				48064C61A6B9E555F94E1776 /* SLKTextView.h in Headers */,
-				2109E66631DAD43BAFD77E35 /* SLKTextViewController.h in Headers */,
-				31ABB56BDC1DF1F64ABEE710 /* SLKTypingIndicatorView.h in Headers */,
-				C67BF7584A83FBDE5ACD1853 /* SLKUIConstants.h in Headers */,
-				CBE8401BC93B584AE64C65F2 /* UIScrollView+SLKAdditions.h in Headers */,
-				5E27480892CE78F6265B922B /* UIView+SLKAdditions.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7D86F7F2F43589325E5B2D2E /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FB27C6DC3423C7AEEAF8704C /* LoremIpsum.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
-/* Begin PBXNativeTarget section */
-		523A723922DD72B690C0EF90 /* Pods */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DA15C9DA1B7BB55E2E40A4CB /* Build configuration list for PBXNativeTarget "Pods" */;
-			buildPhases = (
-				30DB14CC9C3586FA1A9D1FA8 /* Sources */,
-				FB3505D42AC32FD04C056635 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				B4E6BB4ACDDF336F8345FBFF /* PBXTargetDependency */,
-				1CAF24E1E78626639346F3EA /* PBXTargetDependency */,
-			);
-			name = Pods;
-			productName = Pods;
-			productReference = 20AB5C04052D6324FE732D2E /* libPods.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		6B360615C737918D24AD62A4 /* Pods-LoremIpsum */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FDD2389D550DEF9B304688D3 /* Build configuration list for PBXNativeTarget "Pods-LoremIpsum" */;
-			buildPhases = (
-				8BCC0B754B725FF552139E95 /* Sources */,
-				82246D4F66F08F25A8E86B67 /* Frameworks */,
-				7D86F7F2F43589325E5B2D2E /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Pods-LoremIpsum";
-			productName = "Pods-LoremIpsum";
-			productReference = AACBCCC30A401E04E2C2BC98 /* libPods-LoremIpsum.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		A9A0E28BA4A62D46C588A2DF /* Pods-SlackTextViewController */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FA76D38C87443E291438AE34 /* Build configuration list for PBXNativeTarget "Pods-SlackTextViewController" */;
-			buildPhases = (
-				710969A724926CD4D0A80377 /* Sources */,
-				1B3714A457441D5FDD9D6953 /* Frameworks */,
-				54034D98B05A53AB6A040063 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Pods-SlackTextViewController";
-			productName = "Pods-SlackTextViewController";
-			productReference = 83D051C816335A26D943A12B /* libPods-SlackTextViewController.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-/* End PBXNativeTarget section */
-
-/* Begin PBXProject section */
-		9A3135DE2D2CD6D6A850581B /* Project object */ = {
-			isa = PBXProject;
-			attributes = {
-				LastUpgradeCheck = 0510;
-			};
-			buildConfigurationList = 585C3B3E7E29BF4254297A10 /* Build configuration list for PBXProject "Pods" */;
-			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
-			hasScannedForEncodings = 0;
-			knownRegions = (
-				en,
-			);
-			mainGroup = AB87C00F28A75A68F4A1F0DA;
-			productRefGroup = 5051A5475B8E116E17150EE4 /* Products */;
-			projectDirPath = "";
-			projectRoot = "";
-			targets = (
-				523A723922DD72B690C0EF90 /* Pods */,
-				6B360615C737918D24AD62A4 /* Pods-LoremIpsum */,
-				A9A0E28BA4A62D46C588A2DF /* Pods-SlackTextViewController */,
-			);
-		};
-/* End PBXProject section */
-
-/* Begin PBXSourcesBuildPhase section */
-		30DB14CC9C3586FA1A9D1FA8 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0BDC6542829D33831A1FF842 /* Pods-dummy.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		710969A724926CD4D0A80377 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F20F8FD7177EDBB9D9FD4CDF /* Pods-SlackTextViewController-dummy.m in Sources */,
-				EEB88861AD990B42FC0CE6D4 /* SLKInputAccessoryView.m in Sources */,
-				0F5C5817B857662E8B85058B /* SLKTextInputbar.m in Sources */,
-				F578A97168102ABF95FE03C7 /* SLKTextView+SLKAdditions.m in Sources */,
-				694D724838CBB6BAEB579E8C /* SLKTextView.m in Sources */,
-				DEE45B4DE3191E2AA1CA7EFE /* SLKTextViewController.m in Sources */,
-				B2D4D6316C72F373C34FFA68 /* SLKTypingIndicatorView.m in Sources */,
-				D5870E78EC10E1D0C8C869AF /* UIScrollView+SLKAdditions.m in Sources */,
-				0FDF98D131256883D77C9551 /* UIView+SLKAdditions.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8BCC0B754B725FF552139E95 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DBC48345D698BAE8057A63B2 /* LoremIpsum.m in Sources */,
-				19C1C20F0CD5CB715F3CEAAB /* Pods-LoremIpsum-dummy.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		1CAF24E1E78626639346F3EA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A9A0E28BA4A62D46C588A2DF /* Pods-SlackTextViewController */;
-			targetProxy = D63781BFEE0915AA5E025EA0 /* PBXContainerItemProxy */;
-		};
-		B4E6BB4ACDDF336F8345FBFF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6B360615C737918D24AD62A4 /* Pods-LoremIpsum */;
-			targetProxy = ED025503CCC2E9261B8817E1 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin XCBuildConfiguration section */
-		0FA1C4DB30DFE1FEB3C65585 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES;
-				COPY_PHASE_STRIP = NO;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				STRIP_INSTALLED_PRODUCT = NO;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		30899180AC9C55BEC60E96CA /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 94747FBC48768D763F29C8AD /* Pods.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = /tmp/xcodeproj.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				OTHER_CFLAGS = (
-					"-DNS_BLOCK_ASSERTIONS=1",
-					"$(inherited)",
-				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"-DNS_BLOCK_ASSERTIONS=1",
-					"$(inherited)",
-				);
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		4A0798A8DE59B35772D1E7B9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = FAFCA6C4FDD64A8FB2B3C09E /* Pods-LoremIpsum-Private.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = /tmp/xcodeproj.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/Pods-LoremIpsum/Pods-LoremIpsum-prefix.pch";
-				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				OTHER_CFLAGS = (
-					"-DNS_BLOCK_ASSERTIONS=1",
-					"$(inherited)",
-				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"-DNS_BLOCK_ASSERTIONS=1",
-					"$(inherited)",
-				);
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		4B353F6E5CAB1D26E2C91BD1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES;
-				COPY_PHASE_STRIP = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				ONLY_ACTIVE_ARCH = YES;
-				STRIP_INSTALLED_PRODUCT = NO;
-			};
-			name = Debug;
-		};
-		82697D6F8E4756B629F538EE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = FAFCA6C4FDD64A8FB2B3C09E /* Pods-LoremIpsum-Private.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				DSTROOT = /tmp/xcodeproj.dst;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/Pods-LoremIpsum/Pods-LoremIpsum-prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		8DCBC9120C98831622864F74 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2B5C5A5FD9AA8EE79A7829A3 /* Pods-SlackTextViewController-Private.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				DSTROOT = /tmp/xcodeproj.dst;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/Pods-SlackTextViewController/Pods-SlackTextViewController-prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		9EDDB810FB42AA1068F9363E /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2B5C5A5FD9AA8EE79A7829A3 /* Pods-SlackTextViewController-Private.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = /tmp/xcodeproj.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/Pods-SlackTextViewController/Pods-SlackTextViewController-prefix.pch";
-				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				OTHER_CFLAGS = (
-					"-DNS_BLOCK_ASSERTIONS=1",
-					"$(inherited)",
-				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"-DNS_BLOCK_ASSERTIONS=1",
-					"$(inherited)",
-				);
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		C007AFC1186CA50440496449 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9935BDA8E5F880D06D240D13 /* Pods.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				DSTROOT = /tmp/xcodeproj.dst;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-/* End XCBuildConfiguration section */
-
-/* Begin XCConfigurationList section */
-		585C3B3E7E29BF4254297A10 /* Build configuration list for PBXProject "Pods" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4B353F6E5CAB1D26E2C91BD1 /* Debug */,
-				0FA1C4DB30DFE1FEB3C65585 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DA15C9DA1B7BB55E2E40A4CB /* Build configuration list for PBXNativeTarget "Pods" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C007AFC1186CA50440496449 /* Debug */,
-				30899180AC9C55BEC60E96CA /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FA76D38C87443E291438AE34 /* Build configuration list for PBXNativeTarget "Pods-SlackTextViewController" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8DCBC9120C98831622864F74 /* Debug */,
-				9EDDB810FB42AA1068F9363E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FDD2389D550DEF9B304688D3 /* Build configuration list for PBXNativeTarget "Pods-LoremIpsum" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				82697D6F8E4756B629F538EE /* Debug */,
-				4A0798A8DE59B35772D1E7B9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-/* End XCConfigurationList section */
-	};
-	rootObject = 9A3135DE2D2CD6D6A850581B /* Project object */;
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>archiveVersion</key>
+	<string>1</string>
+	<key>classes</key>
+	<dict/>
+	<key>objectVersion</key>
+	<string>46</string>
+	<key>objects</key>
+	<dict>
+		<key>019D895BC71A3C3D3F491142</key>
+		<dict>
+			<key>fileRef</key>
+			<string>C06C1128611D4A3C88669831</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>01B24C538DE2A7A91F3AD50C</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>59CE4E361E1CBDB6B0277B9F</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Pods</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>02BAF8CFC1E469ED4E48629C</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>79C7E5F5F36135ECB6F456C9</string>
+				<string>C2EF87A5160477084CF7037C</string>
+				<string>6025E0FE3B9909DEDD1AFDA0</string>
+				<string>01B24C538DE2A7A91F3AD50C</string>
+				<string>079F6AD07DF9865654F29FD9</string>
+				<string>528D310D26B88560114E1DAC</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>05C4FC6456E45AD45B9816B8</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>libPods.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>079F6AD07DF9865654F29FD9</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>05C4FC6456E45AD45B9816B8</string>
+				<string>4320E04ECCD72534C4D0BC4B</string>
+				<string>3871F68552D35E31337C91AE</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Products</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>0E9F692A8F7DFA9C0DBF6F9E</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>UIScrollView+SLKAdditions.h</string>
+			<key>path</key>
+			<string>Source/Additions/UIScrollView+SLKAdditions.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>11B569EF431502B752E4A0B9</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>Pods-SlackTextViewController-prefix.pch</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>1A966087B5BBA24114E49FAA</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>SLKTextView.h</string>
+			<key>path</key>
+			<string>Source/Classes/SLKTextView.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>1ADADA6BF5EB48CE5D62A035</key>
+		<dict>
+			<key>fileRef</key>
+			<string>A13EDCFD5F19923356BBB41D</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>1AEAD117749E46CBC9C68395</key>
+		<dict>
+			<key>fileRef</key>
+			<string>62F4FE65FFE494D5FE598036</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>1F02089D992223E5F92F0599</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>SLKInputAccessoryView.m</string>
+			<key>path</key>
+			<string>Source/Classes/SLKInputAccessoryView.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>1F3D4229EEA07999B7198C39</key>
+		<dict>
+			<key>fileRef</key>
+			<string>1A966087B5BBA24114E49FAA</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>20E6A1DE48EAB70BB2079376</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>8FD8142847A81006F3C1AADB</string>
+				<string>D0DA268D137F3D601C95F233</string>
+				<string>62F4FE65FFE494D5FE598036</string>
+				<string>93C798128ED78E7F45856DA7</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Support Files</string>
+			<key>path</key>
+			<string>../Target Support Files/Pods-LoremIpsum</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>240C20D4EC590AF430D8F149</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>path</key>
+			<string>Pods-SlackTextViewController-Private.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>2646208185A6B8156AF445FF</key>
+		<dict>
+			<key>fileRef</key>
+			<string>C06C1128611D4A3C88669831</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>276C96B75095947A09BEB849</key>
+		<dict>
+			<key>attributes</key>
+			<dict>
+				<key>LastUpgradeCheck</key>
+				<string>0510</string>
+			</dict>
+			<key>buildConfigurationList</key>
+			<string>F1C86B84031ED66350F8E936</string>
+			<key>compatibilityVersion</key>
+			<string>Xcode 3.2</string>
+			<key>developmentRegion</key>
+			<string>English</string>
+			<key>hasScannedForEncodings</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXProject</string>
+			<key>knownRegions</key>
+			<array>
+				<string>en</string>
+			</array>
+			<key>mainGroup</key>
+			<string>02BAF8CFC1E469ED4E48629C</string>
+			<key>productRefGroup</key>
+			<string>079F6AD07DF9865654F29FD9</string>
+			<key>projectDirPath</key>
+			<string></string>
+			<key>projectReferences</key>
+			<array/>
+			<key>projectRoot</key>
+			<string></string>
+			<key>targets</key>
+			<array>
+				<string>D885E9848F1A22920A7DAAD1</string>
+				<string>843CFC99F72F268CA5C10AE9</string>
+				<string>8D7930110BE60461C36948BC</string>
+			</array>
+		</dict>
+		<key>2839D9C2624B5183B55D6F51</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>3CBEAD5AB8EA8165D43BA53D</string>
+			</array>
+			<key>isa</key>
+			<string>PBXHeadersBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>29859030C96EA93695D405CB</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>SLKTextInputbar.h</string>
+			<key>path</key>
+			<string>Source/Classes/SLKTextInputbar.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>2A8BFAE2FB71AF59D52DDE91</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>1ADADA6BF5EB48CE5D62A035</string>
+				<string>D6F96004E7FC31A08B862353</string>
+				<string>C68C63862CE6E3F63C4F0703</string>
+				<string>53CAB422A6D5D8A892928541</string>
+				<string>1F3D4229EEA07999B7198C39</string>
+				<string>A4911CDD3D4006693BED8820</string>
+				<string>FB3BCDADB45E73F93EC4B954</string>
+				<string>779693E673325E211DB74CD5</string>
+				<string>D4BA721F02419F531EC4C5C0</string>
+				<string>DFA54393381F6C5711469E52</string>
+			</array>
+			<key>isa</key>
+			<string>PBXHeadersBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>2BF7495C5E1AC17CD20C0FB8</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>A1614D4DFC260F85FB1C181D</string>
+				<string>3BCF7D59F5D794E1F34376DE</string>
+				<string>C52F08B8264D5AEAFCF65F40</string>
+				<string>F63455BDB8A7808C06DDC771</string>
+				<string>7F90026DC4C0FFDCE9B08BF5</string>
+				<string>8AD903248BA0C94294CEFEE6</string>
+				<string>8F0D8862C183D54FA6EF73E3</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Pods</string>
+			<key>path</key>
+			<string>Target Support Files/Pods</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>308872D58E12696A80A17899</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>C06C1128611D4A3C88669831</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>iOS</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>3871F68552D35E31337C91AE</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>libPods-SlackTextViewController.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>3BCF7D59F5D794E1F34376DE</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.plist.xml</string>
+			<key>path</key>
+			<string>Pods-acknowledgements.plist</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>3C86A4B5EA5B06D1D481B41E</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>SLKTypingIndicatorView.m</string>
+			<key>path</key>
+			<string>Source/Classes/SLKTypingIndicatorView.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>3CBEAD5AB8EA8165D43BA53D</key>
+		<dict>
+			<key>fileRef</key>
+			<string>9BCAE84D3F454B6380F5FE63</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>3CE84E984624B11FC8BE69CA</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>UIView+SLKAdditions.h</string>
+			<key>path</key>
+			<string>Source/Additions/UIView+SLKAdditions.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>3F5672EF75902EFDDAB8F6C6</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>SLKTextViewController.m</string>
+			<key>path</key>
+			<string>Source/Classes/SLKTextViewController.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>3FAC3794212D202B65F92DAD</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>A81BCB31695126A3A0580842</string>
+			</array>
+			<key>isa</key>
+			<string>PBXFrameworksBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>4320E04ECCD72534C4D0BC4B</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>libPods-LoremIpsum.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>4663AF14910EC166CCD89053</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>DB81A7FD7919F82EB5E0E003</string>
+				<string>A210526A10A4F4CC146F1BE0</string>
+				<string>A154A49AC583591E97BBADE3</string>
+				<string>0E9F692A8F7DFA9C0DBF6F9E</string>
+				<string>F0C24F7606FE7031FC98F7D0</string>
+				<string>3CE84E984624B11FC8BE69CA</string>
+				<string>CE24E1464E390F71E046FB1C</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Additions</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>46C3C5CE7FAB7EA5C943BBAB</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>D0DA268D137F3D601C95F233</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<string>NO</string>
+				<key>COPY_PHASE_STRIP</key>
+				<string>YES</string>
+				<key>DSTROOT</key>
+				<string>/tmp/xcodeproj.dst</string>
+				<key>GCC_PRECOMPILE_PREFIX_HEADER</key>
+				<string>YES</string>
+				<key>GCC_PREFIX_HEADER</key>
+				<string>Target Support Files/Pods-LoremIpsum/Pods-LoremIpsum-prefix.pch</string>
+				<key>INSTALL_PATH</key>
+				<string>$(BUILT_PRODUCTS_DIR)</string>
+				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
+				<string>7.0</string>
+				<key>OTHER_CFLAGS</key>
+				<array>
+					<string>-DNS_BLOCK_ASSERTIONS=1</string>
+					<string>$(inherited)</string>
+				</array>
+				<key>OTHER_CPLUSPLUSFLAGS</key>
+				<array>
+					<string>-DNS_BLOCK_ASSERTIONS=1</string>
+					<string>$(inherited)</string>
+				</array>
+				<key>OTHER_LDFLAGS</key>
+				<string></string>
+				<key>OTHER_LIBTOOLFLAGS</key>
+				<string></string>
+				<key>PRODUCT_NAME</key>
+				<string>$(TARGET_NAME)</string>
+				<key>PUBLIC_HEADERS_FOLDER_PATH</key>
+				<string>$(TARGET_NAME)</string>
+				<key>SDKROOT</key>
+				<string>iphoneos</string>
+				<key>SKIP_INSTALL</key>
+				<string>YES</string>
+				<key>VALIDATE_PRODUCT</key>
+				<string>YES</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Release</string>
+		</dict>
+		<key>528D310D26B88560114E1DAC</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>2BF7495C5E1AC17CD20C0FB8</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Targets Support Files</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>529A98ECEB690CA0BAD1CF4F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>1F02089D992223E5F92F0599</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>53CAB422A6D5D8A892928541</key>
+		<dict>
+			<key>fileRef</key>
+			<string>1A966087B5BBA24114E49FAA</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>54130AD391E9DE495CAF725D</key>
+		<dict>
+			<key>buildConfigurations</key>
+			<array>
+				<string>FDF29BD485AD2209EC5D903C</string>
+				<string>46C3C5CE7FAB7EA5C943BBAB</string>
+			</array>
+			<key>defaultConfigurationIsVisible</key>
+			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Release</string>
+			<key>isa</key>
+			<string>XCConfigurationList</string>
+		</dict>
+		<key>584BBEA44FB560D5989BF367</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>905F2E7D381B04AA3B772467</string>
+				<string>529A98ECEB690CA0BAD1CF4F</string>
+				<string>DC4E521CE5645DCFF5B3FFC1</string>
+				<string>A0C9EE8D6B32DF054E9D2222</string>
+				<string>D935541F01463C6E10E2907C</string>
+				<string>B9306FB20541E28EDB0E2D40</string>
+				<string>D481C7135CC6512CFA617504</string>
+				<string>FE3559ACF403E0AA91A07230</string>
+				<string>FA5177DD231EDF597E009D45</string>
+			</array>
+			<key>isa</key>
+			<string>PBXSourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>596D3F36BD4441FE5CF7ED0F</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>SLKTextViewController.h</string>
+			<key>path</key>
+			<string>Source/Classes/SLKTextViewController.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>59CE4E361E1CBDB6B0277B9F</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>9BCAE84D3F454B6380F5FE63</string>
+				<string>C5D68630E604E90072449BEE</string>
+				<string>20E6A1DE48EAB70BB2079376</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>LoremIpsum</string>
+			<key>path</key>
+			<string>LoremIpsum</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>6025E0FE3B9909DEDD1AFDA0</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>308872D58E12696A80A17899</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Frameworks</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>62F4FE65FFE494D5FE598036</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>Pods-LoremIpsum-dummy.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>631037CE5361908FD5AC6357</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>SLKTextView.m</string>
+			<key>path</key>
+			<string>Source/Classes/SLKTextView.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>6B70B7301CB6E5F37ED5364A</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>AC36180512C9A6F04AF8101D</string>
+			</array>
+			<key>isa</key>
+			<string>PBXSourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>7474C537D7B77D6AA598B158</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>SLKTypingIndicatorView.h</string>
+			<key>path</key>
+			<string>Source/Classes/SLKTypingIndicatorView.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>772715D9AFE97BA363F960A4</key>
+		<dict>
+			<key>fileRef</key>
+			<string>C5D68630E604E90072449BEE</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>COMPILER_FLAGS</key>
+				<string>-DOS_OBJECT_USE_OBJC=0</string>
+			</dict>
+		</dict>
+		<key>779693E673325E211DB74CD5</key>
+		<dict>
+			<key>fileRef</key>
+			<string>A154A49AC583591E97BBADE3</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>79C7E5F5F36135ECB6F456C9</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text</string>
+			<key>name</key>
+			<string>Podfile</string>
+			<key>path</key>
+			<string>../Podfile</string>
+			<key>sourceTree</key>
+			<string>SOURCE_ROOT</string>
+			<key>xcLanguageSpecificationIdentifier</key>
+			<string>xcode.lang.ruby</string>
+		</dict>
+		<key>7B75FF4CD3D79ADD7FD3FFD5</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>240C20D4EC590AF430D8F149</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<string>NO</string>
+				<key>COPY_PHASE_STRIP</key>
+				<string>NO</string>
+				<key>DSTROOT</key>
+				<string>/tmp/xcodeproj.dst</string>
+				<key>GCC_DYNAMIC_NO_PIC</key>
+				<string>NO</string>
+				<key>GCC_OPTIMIZATION_LEVEL</key>
+				<string>0</string>
+				<key>GCC_PRECOMPILE_PREFIX_HEADER</key>
+				<string>YES</string>
+				<key>GCC_PREFIX_HEADER</key>
+				<string>Target Support Files/Pods-SlackTextViewController/Pods-SlackTextViewController-prefix.pch</string>
+				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
+				<array>
+					<string>DEBUG=1</string>
+					<string>$(inherited)</string>
+				</array>
+				<key>GCC_SYMBOLS_PRIVATE_EXTERN</key>
+				<string>NO</string>
+				<key>INSTALL_PATH</key>
+				<string>$(BUILT_PRODUCTS_DIR)</string>
+				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
+				<string>7.0</string>
+				<key>OTHER_LDFLAGS</key>
+				<string></string>
+				<key>OTHER_LIBTOOLFLAGS</key>
+				<string></string>
+				<key>PRODUCT_NAME</key>
+				<string>$(TARGET_NAME)</string>
+				<key>PUBLIC_HEADERS_FOLDER_PATH</key>
+				<string>$(TARGET_NAME)</string>
+				<key>SDKROOT</key>
+				<string>iphoneos</string>
+				<key>SKIP_INSTALL</key>
+				<string>YES</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Debug</string>
+		</dict>
+		<key>7F90026DC4C0FFDCE9B08BF5</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.script.sh</string>
+			<key>path</key>
+			<string>Pods-resources.sh</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>843CFC99F72F268CA5C10AE9</key>
+		<dict>
+			<key>buildConfigurationList</key>
+			<string>54130AD391E9DE495CAF725D</string>
+			<key>buildPhases</key>
+			<array>
+				<string>FBDE3DD9637B723B3962DC0C</string>
+				<string>CF33FEE03E8C486A1933F0AD</string>
+				<string>2839D9C2624B5183B55D6F51</string>
+			</array>
+			<key>buildRules</key>
+			<array/>
+			<key>dependencies</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXNativeTarget</string>
+			<key>name</key>
+			<string>Pods-LoremIpsum</string>
+			<key>productName</key>
+			<string>Pods-LoremIpsum</string>
+			<key>productReference</key>
+			<string>4320E04ECCD72534C4D0BC4B</string>
+			<key>productType</key>
+			<string>com.apple.product-type.library.static</string>
+		</dict>
+		<key>84A00C0CB83070A8B427D5D2</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXTargetDependency</string>
+			<key>name</key>
+			<string>Pods-SlackTextViewController</string>
+			<key>target</key>
+			<string>8D7930110BE60461C36948BC</string>
+			<key>targetProxy</key>
+			<string>CB8F06DC19FA170D1C851204</string>
+		</dict>
+		<key>8AD903248BA0C94294CEFEE6</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>path</key>
+			<string>Pods.debug.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>8D7930110BE60461C36948BC</key>
+		<dict>
+			<key>buildConfigurationList</key>
+			<string>ED17DEBB9C999B52242BB723</string>
+			<key>buildPhases</key>
+			<array>
+				<string>584BBEA44FB560D5989BF367</string>
+				<string>3FAC3794212D202B65F92DAD</string>
+				<string>2A8BFAE2FB71AF59D52DDE91</string>
+			</array>
+			<key>buildRules</key>
+			<array/>
+			<key>dependencies</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXNativeTarget</string>
+			<key>name</key>
+			<string>Pods-SlackTextViewController</string>
+			<key>productName</key>
+			<string>Pods-SlackTextViewController</string>
+			<key>productReference</key>
+			<string>3871F68552D35E31337C91AE</string>
+			<key>productType</key>
+			<string>com.apple.product-type.library.static</string>
+		</dict>
+		<key>8F0D8862C183D54FA6EF73E3</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>path</key>
+			<string>Pods.release.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>8FD8142847A81006F3C1AADB</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>path</key>
+			<string>Pods-LoremIpsum.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>905F2E7D381B04AA3B772467</key>
+		<dict>
+			<key>fileRef</key>
+			<string>C782D76CED493495B2A6A6BA</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>93C798128ED78E7F45856DA7</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>Pods-LoremIpsum-prefix.pch</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>977DFAB17AE9218E167A5A15</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>A13EDCFD5F19923356BBB41D</string>
+				<string>1F02089D992223E5F92F0599</string>
+				<string>29859030C96EA93695D405CB</string>
+				<string>D0036120BBE0AF19057FF521</string>
+				<string>1A966087B5BBA24114E49FAA</string>
+				<string>631037CE5361908FD5AC6357</string>
+				<string>596D3F36BD4441FE5CF7ED0F</string>
+				<string>3F5672EF75902EFDDAB8F6C6</string>
+				<string>7474C537D7B77D6AA598B158</string>
+				<string>3C86A4B5EA5B06D1D481B41E</string>
+				<string>4663AF14910EC166CCD89053</string>
+				<string>FBE64E3C46CCBD3CC872BD57</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>SlackTextViewController</string>
+			<key>path</key>
+			<string>../../..</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9BCAE84D3F454B6380F5FE63</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>LoremIpsum.h</string>
+			<key>path</key>
+			<string>LoremIpsum/LoremIpsum.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A0C9EE8D6B32DF054E9D2222</key>
+		<dict>
+			<key>fileRef</key>
+			<string>A210526A10A4F4CC146F1BE0</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>A0DEC40AE825B1488D2913BA</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>8AD903248BA0C94294CEFEE6</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<string>NO</string>
+				<key>COPY_PHASE_STRIP</key>
+				<string>NO</string>
+				<key>DSTROOT</key>
+				<string>/tmp/xcodeproj.dst</string>
+				<key>GCC_DYNAMIC_NO_PIC</key>
+				<string>NO</string>
+				<key>GCC_OPTIMIZATION_LEVEL</key>
+				<string>0</string>
+				<key>GCC_PRECOMPILE_PREFIX_HEADER</key>
+				<string>YES</string>
+				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
+				<array>
+					<string>DEBUG=1</string>
+					<string>$(inherited)</string>
+				</array>
+				<key>GCC_SYMBOLS_PRIVATE_EXTERN</key>
+				<string>NO</string>
+				<key>INSTALL_PATH</key>
+				<string>$(BUILT_PRODUCTS_DIR)</string>
+				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
+				<string>7.0</string>
+				<key>OTHER_LDFLAGS</key>
+				<string></string>
+				<key>OTHER_LIBTOOLFLAGS</key>
+				<string></string>
+				<key>PRODUCT_NAME</key>
+				<string>$(TARGET_NAME)</string>
+				<key>PUBLIC_HEADERS_FOLDER_PATH</key>
+				<string>$(TARGET_NAME)</string>
+				<key>SDKROOT</key>
+				<string>iphoneos</string>
+				<key>SKIP_INSTALL</key>
+				<string>YES</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Debug</string>
+		</dict>
+		<key>A13EDCFD5F19923356BBB41D</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>SLKInputAccessoryView.h</string>
+			<key>path</key>
+			<string>Source/Classes/SLKInputAccessoryView.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A154A49AC583591E97BBADE3</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>SLKUIConstants.h</string>
+			<key>path</key>
+			<string>Source/Additions/SLKUIConstants.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A1614D4DFC260F85FB1C181D</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text</string>
+			<key>path</key>
+			<string>Pods-acknowledgements.markdown</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A210526A10A4F4CC146F1BE0</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>SLKTextView+SLKAdditions.m</string>
+			<key>path</key>
+			<string>Source/Additions/SLKTextView+SLKAdditions.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A4911CDD3D4006693BED8820</key>
+		<dict>
+			<key>fileRef</key>
+			<string>596D3F36BD4441FE5CF7ED0F</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>A6DC59A73042059AA55F12B1</key>
+		<dict>
+			<key>buildConfigurations</key>
+			<array>
+				<string>A0DEC40AE825B1488D2913BA</string>
+				<string>E86BE4526F490575E576DEF6</string>
+			</array>
+			<key>defaultConfigurationIsVisible</key>
+			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Release</string>
+			<key>isa</key>
+			<string>XCConfigurationList</string>
+		</dict>
+		<key>A81BCB31695126A3A0580842</key>
+		<dict>
+			<key>fileRef</key>
+			<string>C06C1128611D4A3C88669831</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>ABE01743208FF313A0DF3CEC</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>240C20D4EC590AF430D8F149</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<string>NO</string>
+				<key>COPY_PHASE_STRIP</key>
+				<string>YES</string>
+				<key>DSTROOT</key>
+				<string>/tmp/xcodeproj.dst</string>
+				<key>GCC_PRECOMPILE_PREFIX_HEADER</key>
+				<string>YES</string>
+				<key>GCC_PREFIX_HEADER</key>
+				<string>Target Support Files/Pods-SlackTextViewController/Pods-SlackTextViewController-prefix.pch</string>
+				<key>INSTALL_PATH</key>
+				<string>$(BUILT_PRODUCTS_DIR)</string>
+				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
+				<string>7.0</string>
+				<key>OTHER_CFLAGS</key>
+				<array>
+					<string>-DNS_BLOCK_ASSERTIONS=1</string>
+					<string>$(inherited)</string>
+				</array>
+				<key>OTHER_CPLUSPLUSFLAGS</key>
+				<array>
+					<string>-DNS_BLOCK_ASSERTIONS=1</string>
+					<string>$(inherited)</string>
+				</array>
+				<key>OTHER_LDFLAGS</key>
+				<string></string>
+				<key>OTHER_LIBTOOLFLAGS</key>
+				<string></string>
+				<key>PRODUCT_NAME</key>
+				<string>$(TARGET_NAME)</string>
+				<key>PUBLIC_HEADERS_FOLDER_PATH</key>
+				<string>$(TARGET_NAME)</string>
+				<key>SDKROOT</key>
+				<string>iphoneos</string>
+				<key>SKIP_INSTALL</key>
+				<string>YES</string>
+				<key>VALIDATE_PRODUCT</key>
+				<string>YES</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Release</string>
+		</dict>
+		<key>AC36180512C9A6F04AF8101D</key>
+		<dict>
+			<key>fileRef</key>
+			<string>C52F08B8264D5AEAFCF65F40</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>B9306FB20541E28EDB0E2D40</key>
+		<dict>
+			<key>fileRef</key>
+			<string>3F5672EF75902EFDDAB8F6C6</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>C06C1128611D4A3C88669831</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>wrapper.framework</string>
+			<key>name</key>
+			<string>Foundation.framework</string>
+			<key>path</key>
+			<string>Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/Foundation.framework</string>
+			<key>sourceTree</key>
+			<string>DEVELOPER_DIR</string>
+		</dict>
+		<key>C2EF87A5160477084CF7037C</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>977DFAB17AE9218E167A5A15</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Development Pods</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>C52F08B8264D5AEAFCF65F40</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>Pods-dummy.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>C5D68630E604E90072449BEE</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>LoremIpsum.m</string>
+			<key>path</key>
+			<string>LoremIpsum/LoremIpsum.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>C68C63862CE6E3F63C4F0703</key>
+		<dict>
+			<key>fileRef</key>
+			<string>DB81A7FD7919F82EB5E0E003</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>C782D76CED493495B2A6A6BA</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>Pods-SlackTextViewController-dummy.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>C999B9A9843E297D8126E3E0</key>
+		<dict>
+			<key>buildSettings</key>
+			<dict>
+				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<string>NO</string>
+				<key>CLANG_CXX_LANGUAGE_STANDARD</key>
+				<string>gnu++0x</string>
+				<key>CLANG_CXX_LIBRARY</key>
+				<string>libc++</string>
+				<key>CLANG_ENABLE_MODULES</key>
+				<string>YES</string>
+				<key>CLANG_ENABLE_OBJC_ARC</key>
+				<string>YES</string>
+				<key>CLANG_WARN_BOOL_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_CONSTANT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_DIRECT_OBJC_ISA_USAGE</key>
+				<string>YES</string>
+				<key>CLANG_WARN_EMPTY_BODY</key>
+				<string>YES</string>
+				<key>CLANG_WARN_ENUM_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_INT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_OBJC_ROOT_CLASS</key>
+				<string>YES</string>
+				<key>COPY_PHASE_STRIP</key>
+				<string>YES</string>
+				<key>GCC_C_LANGUAGE_STANDARD</key>
+				<string>gnu99</string>
+				<key>GCC_DYNAMIC_NO_PIC</key>
+				<string>NO</string>
+				<key>GCC_OPTIMIZATION_LEVEL</key>
+				<string>0</string>
+				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
+				<array>
+					<string>DEBUG=1</string>
+					<string>$(inherited)</string>
+				</array>
+				<key>GCC_SYMBOLS_PRIVATE_EXTERN</key>
+				<string>NO</string>
+				<key>GCC_WARN_64_TO_32_BIT_CONVERSION</key>
+				<string>YES</string>
+				<key>GCC_WARN_ABOUT_RETURN_TYPE</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNDECLARED_SELECTOR</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNINITIALIZED_AUTOS</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNUSED_FUNCTION</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNUSED_VARIABLE</key>
+				<string>YES</string>
+				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
+				<string>7.0</string>
+				<key>ONLY_ACTIVE_ARCH</key>
+				<string>YES</string>
+				<key>STRIP_INSTALLED_PRODUCT</key>
+				<string>NO</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Debug</string>
+		</dict>
+		<key>CB8F06DC19FA170D1C851204</key>
+		<dict>
+			<key>containerPortal</key>
+			<string>276C96B75095947A09BEB849</string>
+			<key>isa</key>
+			<string>PBXContainerItemProxy</string>
+			<key>proxyType</key>
+			<string>1</string>
+			<key>remoteGlobalIDString</key>
+			<string>8D7930110BE60461C36948BC</string>
+			<key>remoteInfo</key>
+			<string>Pods-SlackTextViewController</string>
+		</dict>
+		<key>CE24E1464E390F71E046FB1C</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>UIView+SLKAdditions.m</string>
+			<key>path</key>
+			<string>Source/Additions/UIView+SLKAdditions.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>CF33FEE03E8C486A1933F0AD</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>2646208185A6B8156AF445FF</string>
+			</array>
+			<key>isa</key>
+			<string>PBXFrameworksBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>D0036120BBE0AF19057FF521</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>SLKTextInputbar.m</string>
+			<key>path</key>
+			<string>Source/Classes/SLKTextInputbar.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>D0DA268D137F3D601C95F233</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>path</key>
+			<string>Pods-LoremIpsum-Private.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>D22F304B20106AD81CF9C90C</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXTargetDependency</string>
+			<key>name</key>
+			<string>Pods-LoremIpsum</string>
+			<key>target</key>
+			<string>843CFC99F72F268CA5C10AE9</string>
+			<key>targetProxy</key>
+			<string>E25F349A02B23A2C9EDE6AB1</string>
+		</dict>
+		<key>D481C7135CC6512CFA617504</key>
+		<dict>
+			<key>fileRef</key>
+			<string>3C86A4B5EA5B06D1D481B41E</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>D4BA721F02419F531EC4C5C0</key>
+		<dict>
+			<key>fileRef</key>
+			<string>0E9F692A8F7DFA9C0DBF6F9E</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>D6F96004E7FC31A08B862353</key>
+		<dict>
+			<key>fileRef</key>
+			<string>29859030C96EA93695D405CB</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>D885E9848F1A22920A7DAAD1</key>
+		<dict>
+			<key>buildConfigurationList</key>
+			<string>A6DC59A73042059AA55F12B1</string>
+			<key>buildPhases</key>
+			<array>
+				<string>6B70B7301CB6E5F37ED5364A</string>
+				<string>DC1CC838C6096F6DE2C30AB8</string>
+			</array>
+			<key>buildRules</key>
+			<array/>
+			<key>dependencies</key>
+			<array>
+				<string>D22F304B20106AD81CF9C90C</string>
+				<string>84A00C0CB83070A8B427D5D2</string>
+			</array>
+			<key>isa</key>
+			<string>PBXNativeTarget</string>
+			<key>name</key>
+			<string>Pods</string>
+			<key>productName</key>
+			<string>Pods</string>
+			<key>productReference</key>
+			<string>05C4FC6456E45AD45B9816B8</string>
+			<key>productType</key>
+			<string>com.apple.product-type.library.static</string>
+		</dict>
+		<key>D935541F01463C6E10E2907C</key>
+		<dict>
+			<key>fileRef</key>
+			<string>631037CE5361908FD5AC6357</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>DB62936B413AA231670E4A7D</key>
+		<dict>
+			<key>buildSettings</key>
+			<dict>
+				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<string>NO</string>
+				<key>CLANG_CXX_LANGUAGE_STANDARD</key>
+				<string>gnu++0x</string>
+				<key>CLANG_CXX_LIBRARY</key>
+				<string>libc++</string>
+				<key>CLANG_ENABLE_MODULES</key>
+				<string>YES</string>
+				<key>CLANG_ENABLE_OBJC_ARC</key>
+				<string>YES</string>
+				<key>CLANG_WARN_BOOL_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_CONSTANT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_DIRECT_OBJC_ISA_USAGE</key>
+				<string>YES</string>
+				<key>CLANG_WARN_EMPTY_BODY</key>
+				<string>YES</string>
+				<key>CLANG_WARN_ENUM_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_INT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_OBJC_ROOT_CLASS</key>
+				<string>YES</string>
+				<key>COPY_PHASE_STRIP</key>
+				<string>NO</string>
+				<key>ENABLE_NS_ASSERTIONS</key>
+				<string>NO</string>
+				<key>GCC_C_LANGUAGE_STANDARD</key>
+				<string>gnu99</string>
+				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
+				<array>
+					<string>RELEASE=1</string>
+				</array>
+				<key>GCC_WARN_64_TO_32_BIT_CONVERSION</key>
+				<string>YES</string>
+				<key>GCC_WARN_ABOUT_RETURN_TYPE</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNDECLARED_SELECTOR</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNINITIALIZED_AUTOS</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNUSED_FUNCTION</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNUSED_VARIABLE</key>
+				<string>YES</string>
+				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
+				<string>7.0</string>
+				<key>STRIP_INSTALLED_PRODUCT</key>
+				<string>NO</string>
+				<key>VALIDATE_PRODUCT</key>
+				<string>YES</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Release</string>
+		</dict>
+		<key>DB81A7FD7919F82EB5E0E003</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>SLKTextView+SLKAdditions.h</string>
+			<key>path</key>
+			<string>Source/Additions/SLKTextView+SLKAdditions.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>DC1CC838C6096F6DE2C30AB8</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>019D895BC71A3C3D3F491142</string>
+			</array>
+			<key>isa</key>
+			<string>PBXFrameworksBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>DC22C25E8B0F6613C1C8E587</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>path</key>
+			<string>Pods-SlackTextViewController.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>DC4E521CE5645DCFF5B3FFC1</key>
+		<dict>
+			<key>fileRef</key>
+			<string>D0036120BBE0AF19057FF521</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>DFA54393381F6C5711469E52</key>
+		<dict>
+			<key>fileRef</key>
+			<string>3CE84E984624B11FC8BE69CA</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>E25F349A02B23A2C9EDE6AB1</key>
+		<dict>
+			<key>containerPortal</key>
+			<string>276C96B75095947A09BEB849</string>
+			<key>isa</key>
+			<string>PBXContainerItemProxy</string>
+			<key>proxyType</key>
+			<string>1</string>
+			<key>remoteGlobalIDString</key>
+			<string>843CFC99F72F268CA5C10AE9</string>
+			<key>remoteInfo</key>
+			<string>Pods-LoremIpsum</string>
+		</dict>
+		<key>E86BE4526F490575E576DEF6</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>8F0D8862C183D54FA6EF73E3</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<string>NO</string>
+				<key>COPY_PHASE_STRIP</key>
+				<string>YES</string>
+				<key>DSTROOT</key>
+				<string>/tmp/xcodeproj.dst</string>
+				<key>GCC_PRECOMPILE_PREFIX_HEADER</key>
+				<string>YES</string>
+				<key>INSTALL_PATH</key>
+				<string>$(BUILT_PRODUCTS_DIR)</string>
+				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
+				<string>7.0</string>
+				<key>OTHER_CFLAGS</key>
+				<array>
+					<string>-DNS_BLOCK_ASSERTIONS=1</string>
+					<string>$(inherited)</string>
+				</array>
+				<key>OTHER_CPLUSPLUSFLAGS</key>
+				<array>
+					<string>-DNS_BLOCK_ASSERTIONS=1</string>
+					<string>$(inherited)</string>
+				</array>
+				<key>OTHER_LDFLAGS</key>
+				<string></string>
+				<key>OTHER_LIBTOOLFLAGS</key>
+				<string></string>
+				<key>PRODUCT_NAME</key>
+				<string>$(TARGET_NAME)</string>
+				<key>PUBLIC_HEADERS_FOLDER_PATH</key>
+				<string>$(TARGET_NAME)</string>
+				<key>SDKROOT</key>
+				<string>iphoneos</string>
+				<key>SKIP_INSTALL</key>
+				<string>YES</string>
+				<key>VALIDATE_PRODUCT</key>
+				<string>YES</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Release</string>
+		</dict>
+		<key>ED17DEBB9C999B52242BB723</key>
+		<dict>
+			<key>buildConfigurations</key>
+			<array>
+				<string>7B75FF4CD3D79ADD7FD3FFD5</string>
+				<string>ABE01743208FF313A0DF3CEC</string>
+			</array>
+			<key>defaultConfigurationIsVisible</key>
+			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Release</string>
+			<key>isa</key>
+			<string>XCConfigurationList</string>
+		</dict>
+		<key>F0C24F7606FE7031FC98F7D0</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>UIScrollView+SLKAdditions.m</string>
+			<key>path</key>
+			<string>Source/Additions/UIScrollView+SLKAdditions.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>F1C86B84031ED66350F8E936</key>
+		<dict>
+			<key>buildConfigurations</key>
+			<array>
+				<string>C999B9A9843E297D8126E3E0</string>
+				<string>DB62936B413AA231670E4A7D</string>
+			</array>
+			<key>defaultConfigurationIsVisible</key>
+			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Release</string>
+			<key>isa</key>
+			<string>XCConfigurationList</string>
+		</dict>
+		<key>F63455BDB8A7808C06DDC771</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>Pods-environment.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>FA5177DD231EDF597E009D45</key>
+		<dict>
+			<key>fileRef</key>
+			<string>CE24E1464E390F71E046FB1C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>FB3BCDADB45E73F93EC4B954</key>
+		<dict>
+			<key>fileRef</key>
+			<string>7474C537D7B77D6AA598B158</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>FBDE3DD9637B723B3962DC0C</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>772715D9AFE97BA363F960A4</string>
+				<string>1AEAD117749E46CBC9C68395</string>
+			</array>
+			<key>isa</key>
+			<string>PBXSourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>FBE64E3C46CCBD3CC872BD57</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>DC22C25E8B0F6613C1C8E587</string>
+				<string>240C20D4EC590AF430D8F149</string>
+				<string>C782D76CED493495B2A6A6BA</string>
+				<string>11B569EF431502B752E4A0B9</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Support Files</string>
+			<key>path</key>
+			<string>Examples/Messenger/Pods/Target Support Files/Pods-SlackTextViewController</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>FDF29BD485AD2209EC5D903C</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>D0DA268D137F3D601C95F233</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<string>NO</string>
+				<key>COPY_PHASE_STRIP</key>
+				<string>NO</string>
+				<key>DSTROOT</key>
+				<string>/tmp/xcodeproj.dst</string>
+				<key>GCC_DYNAMIC_NO_PIC</key>
+				<string>NO</string>
+				<key>GCC_OPTIMIZATION_LEVEL</key>
+				<string>0</string>
+				<key>GCC_PRECOMPILE_PREFIX_HEADER</key>
+				<string>YES</string>
+				<key>GCC_PREFIX_HEADER</key>
+				<string>Target Support Files/Pods-LoremIpsum/Pods-LoremIpsum-prefix.pch</string>
+				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
+				<array>
+					<string>DEBUG=1</string>
+					<string>$(inherited)</string>
+				</array>
+				<key>GCC_SYMBOLS_PRIVATE_EXTERN</key>
+				<string>NO</string>
+				<key>INSTALL_PATH</key>
+				<string>$(BUILT_PRODUCTS_DIR)</string>
+				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
+				<string>7.0</string>
+				<key>OTHER_LDFLAGS</key>
+				<string></string>
+				<key>OTHER_LIBTOOLFLAGS</key>
+				<string></string>
+				<key>PRODUCT_NAME</key>
+				<string>$(TARGET_NAME)</string>
+				<key>PUBLIC_HEADERS_FOLDER_PATH</key>
+				<string>$(TARGET_NAME)</string>
+				<key>SDKROOT</key>
+				<string>iphoneos</string>
+				<key>SKIP_INSTALL</key>
+				<string>YES</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Debug</string>
+		</dict>
+		<key>FE3559ACF403E0AA91A07230</key>
+		<dict>
+			<key>fileRef</key>
+			<string>F0C24F7606FE7031FC98F7D0</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+	</dict>
+	<key>rootObject</key>
+	<string>276C96B75095947A09BEB849</string>
+</dict>
+</plist>
