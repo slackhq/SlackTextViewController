@@ -15,7 +15,7 @@
 
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *bodyLabel;
-@property (nonatomic, strong) UIImageView *tumbnailView;
+@property (nonatomic, strong) UIImageView *thumbnailView;
 @property (nonatomic, strong) UIImageView *attachmentView;
 
 @property (nonatomic, strong) NSIndexPath *indexPath;
