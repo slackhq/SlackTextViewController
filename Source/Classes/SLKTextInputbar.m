@@ -248,7 +248,7 @@
     }
 }
 
-- (BOOL)slk_limitExceeded
+- (BOOL)limitExceeded
 {
     NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
@@ -408,7 +408,7 @@
     }
     
     self.charCountLabel.text = counter;
-    self.charCountLabel.textColor = [self slk_limitExceeded] ?  [UIColor redColor] : [UIColor lightGrayColor];
+    self.charCountLabel.textColor = [self limitExceeded] ?  [UIColor redColor] : [UIColor lightGrayColor];
 }
 
 
