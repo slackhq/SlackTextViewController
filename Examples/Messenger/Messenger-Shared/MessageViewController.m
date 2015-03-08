@@ -416,10 +416,10 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         
         [LoremIpsum asyncPlaceholderImageWithSize:imgSize
                                        completion:^(UIImage *image) {
-                                           UIImage *tumbnail = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
-                                           cell.tumbnailView.image = tumbnail;
-                                           cell.tumbnailView.layer.shouldRasterize = YES;
-                                           cell.tumbnailView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+                                           UIImage *thumbnail = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
+                                           cell.thumbnailView.image = thumbnail;
+                                           cell.thumbnailView.layer.shouldRasterize = YES;
+                                           cell.thumbnailView.layer.rasterizationScale = [UIScreen mainScreen].scale;
                                        }];
     }
     

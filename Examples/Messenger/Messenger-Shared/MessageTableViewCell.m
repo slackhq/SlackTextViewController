@@ -24,12 +24,12 @@
 
 - (void)configureSubviews
 {
-    [self.contentView addSubview:self.tumbnailView];
+    [self.contentView addSubview:self.thumbnailView];
     [self.contentView addSubview:self.titleLabel];
     [self.contentView addSubview:self.bodyLabel];
     [self.contentView addSubview:self.attachmentView];
 
-    NSDictionary *views = @{@"tumbnailView": self.tumbnailView,
+    NSDictionary *views = @{@"thumbnailView": self.thumbnailView,
                             @"titleLabel": self.titleLabel,
                             @"bodyLabel": self.bodyLabel,
                             @"attachmentView": self.attachmentView,
@@ -41,11 +41,11 @@
                               @"attchSize": @80,
                               };
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leading-[tumbnailView(tumbSize)]-trailing-[titleLabel(>=0)]-trailing-|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leading-[tumbnailView(tumbSize)]-trailing-[bodyLabel(>=0)]-trailing-|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leading-[tumbnailView(tumbSize)]-trailing-[attachmentView]-trailing-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leading-[thumbnailView(tumbSize)]-trailing-[titleLabel(>=0)]-trailing-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leading-[thumbnailView(tumbSize)]-trailing-[bodyLabel(>=0)]-trailing-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leading-[thumbnailView(tumbSize)]-trailing-[attachmentView]-trailing-|" options:0 metrics:metrics views:views]];
 
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-trailing-[tumbnailView(tumbSize)]-(>=0)-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-trailing-[thumbnailView(tumbSize)]-(>=0)-|" options:0 metrics:metrics views:views]];
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[titleLabel]-leading-[bodyLabel(>=0)]-leading-[attachmentView(>=0,<=attchSize)]-trailing-|" options:0 metrics:metrics views:views]];
 }
 
@@ -92,18 +92,18 @@
     return _bodyLabel;
 }
 
-- (UIImageView *)tumbnailView
+- (UIImageView *)thumbnailView
 {
-    if (!_tumbnailView) {
-        _tumbnailView = [UIImageView new];
-        _tumbnailView.translatesAutoresizingMaskIntoConstraints = NO;
-        _tumbnailView.userInteractionEnabled = NO;
-        _tumbnailView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    if (!_thumbnailView) {
+        _thumbnailView = [UIImageView new];
+        _thumbnailView.translatesAutoresizingMaskIntoConstraints = NO;
+        _thumbnailView.userInteractionEnabled = NO;
+        _thumbnailView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
         
-        _tumbnailView.layer.cornerRadius = kAvatarSize/2.0;
-        _tumbnailView.layer.masksToBounds = YES;
+        _thumbnailView.layer.cornerRadius = kAvatarSize/2.0;
+        _thumbnailView.layer.masksToBounds = YES;
     }
-    return _tumbnailView;
+    return _thumbnailView;
 }
 
 - (UIImageView *)attachmentView
@@ -123,7 +123,7 @@
 
 - (BOOL)needsPlaceholder
 {
-    return self.tumbnailView.image ? NO : YES;
+    return self.thumbnailView.image ? NO : YES;
 }
 
 @end
