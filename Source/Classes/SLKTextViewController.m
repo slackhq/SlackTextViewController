@@ -530,12 +530,13 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     CGFloat bottomWindow = CGRectGetMaxY(bounds);
     CGFloat bottomView = CGRectGetMaxY(viewRect);
     
+    CGFloat statusBarHeight = CGRectGetHeight([self.view convertRect:[UIApplication sharedApplication].statusBarFrame fromView:nil]);
+    
     CGFloat bottomMargin = bottomWindow - bottomView;
     
     if (SLK_IS_IPAD && self.modalPresentationStyle == UIModalPresentationFormSheet) {
-
+        
         // Needs to convert the status bar's frame to the correct coordinate space
-        CGFloat statusBarHeight = CGRectGetHeight([self.view convertRect:[UIApplication sharedApplication].statusBarFrame fromView:nil]);
         bottomMargin -= statusBarHeight;
         
         bottomMargin /= 2.0;
@@ -544,14 +545,13 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
             bottomMargin += bottomMargin;
         }
         else if (SLK_IS_IOS8_AND_HIGHER) {
-            // For some reason in iOS 8 portrait only, we lose 10 pts somewhere
-            // haven't worked out why yet. Perhaps a bug?
-            bottomMargin += 10;
+            // For some reason in iOS 8 portrait only, we lose half the status bar height somewhere
+            bottomMargin += statusBarHeight/2.0;
         }
     }
-
-    // Do NOT consider a status bar height gap
-    return (bottomMargin > 20.0) ? bottomMargin : 0.0;
+    
+    // Do NOT consider the status bar's max height gap (40 pts while in-call mode)
+    return (bottomMargin > statusBarHeight) ? bottomMargin : 0.0;
 }
 
 - (NSString *)slk_appropriateKeyboardNotificationName:(NSNotification *)notification
