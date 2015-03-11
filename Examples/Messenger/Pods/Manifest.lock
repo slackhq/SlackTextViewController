@@ -1,28 +1,41 @@
 PODS:
-  - Expecta (0.4.0)
-  - Expecta+Snapshots (1.3.2):
-    - Expecta (~> 0.3)
-    - FBSnapshotTestCase (= 1.6)
-  - FBSnapshotTestCase (1.6)
+  - Expecta (0.3.0)
+  - Expecta+Snapshots (1.3.1):
+    - Expecta
+    - FBSnapshotTestCase
+  - FBSnapshotTestCase (1.4)
   - LoremIpsum (1.0.0)
   - SlackTextViewController (1.5):
     - SlackTextViewController/Additions (= 1.5)
   - SlackTextViewController/Additions (1.5)
+  - Specta (0.3.0.beta1)
 
 DEPENDENCIES:
-  - Expecta+Snapshots (~> 1.0)
+  - Expecta (= 0.3.0)
+  - Expecta+Snapshots (~> 1.2)
+  - FBSnapshotTestCase (= 1.4)
   - LoremIpsum (~> 1.0)
   - SlackTextViewController (from `../../SlackTextViewController.podspec`)
+  - Specta (from `https://github.com/specta/specta.git`, tag `v0.3.0.beta1`)
 
 EXTERNAL SOURCES:
   SlackTextViewController:
     :path: ../../SlackTextViewController.podspec
+  Specta:
+    :git: https://github.com/specta/specta.git
+    :tag: v0.3.0.beta1
+
+CHECKOUT OPTIONS:
+  Specta:
+    :git: https://github.com/specta/specta.git
+    :tag: v0.3.0.beta1
 
 SPEC CHECKSUMS:
-  Expecta: 392a6b5bfb9f4097e47dd8064d9b732079490332
-  Expecta+Snapshots: 40c5ec43b43da3bae957f14fed5dc9177d08ec8b
-  FBSnapshotTestCase: 9d5fe43b29ae3a0ed8fc829477971b281038f748
+  Expecta: 917bda2935b63ca7175741b8cf1b26796db6205f
+  Expecta+Snapshots: 4a0b46d3ba755bd43dffa7d53e4585fc6cbfe8cd
+  FBSnapshotTestCase: 892508495a69e8703bab36c9da7674ff740d41db
   LoremIpsum: 9029c55d36501b2ee0b05cc9ecda11d3a0479160
   SlackTextViewController: 845c047813ca52f7bc25f034bd145d6a15dd614c
+  Specta: 63e8ac8e07db6675c7096d37f77a266a1be4c02d
 
 COCOAPODS: 0.35.0

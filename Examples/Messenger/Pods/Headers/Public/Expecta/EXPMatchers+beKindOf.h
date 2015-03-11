@@ -1,1 +1,1 @@
-../../../Expecta/Expecta/Matchers/EXPMatchers+beKindOf.h
+../../../Expecta/src/matchers/EXPMatchers+beKindOf.h

@@ -1,1 +1,1 @@
-../../../Expecta/Expecta/NSObject+Expecta.h
+../../../Expecta/src/NSObject+Expecta.h

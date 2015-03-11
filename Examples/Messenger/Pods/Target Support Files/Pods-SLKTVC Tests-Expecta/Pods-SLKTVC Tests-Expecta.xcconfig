@@ -1,0 +1,1 @@
+PODS_SLKTVC_TESTS_EXPECTA_OTHER_LDFLAGS = -framework "Foundation"

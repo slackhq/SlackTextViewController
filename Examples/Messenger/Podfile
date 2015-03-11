@@ -7,4 +7,10 @@ platform :ios, '7.0'
 pod 'SlackTextViewController', :path => '../../SlackTextViewController.podspec'
 
 pod 'LoremIpsum', '~> 1.0'
-pod 'Expecta+Snapshots', '~> 1.0'
+
+target 'SLKTVC Tests', :exclusive => true do
+    pod 'FBSnapshotTestCase', '1.4'
+    pod 'Expecta+Snapshots', '~> 1.2'
+    pod 'Specta', :git => 'https://github.com/specta/specta.git', :tag => "v0.3.0.beta1"
+    pod 'Expecta', '0.3.0'
+end
