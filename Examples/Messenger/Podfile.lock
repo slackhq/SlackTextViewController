@@ -1,10 +1,16 @@
 PODS:
+  - Expecta (0.4.0)
+  - Expecta+Snapshots (1.3.2):
+    - Expecta (~> 0.3)
+    - FBSnapshotTestCase (= 1.6)
+  - FBSnapshotTestCase (1.6)
   - LoremIpsum (1.0.0)
-  - SlackTextViewController (1.4.1):
-    - SlackTextViewController/Additions (= 1.4.1)
-  - SlackTextViewController/Additions (1.4.1)
+  - SlackTextViewController (1.5):
+    - SlackTextViewController/Additions (= 1.5)
+  - SlackTextViewController/Additions (1.5)
 
 DEPENDENCIES:
+  - Expecta+Snapshots (~> 1.0)
   - LoremIpsum (~> 1.0)
   - SlackTextViewController (from `../../SlackTextViewController.podspec`)
 
@@ -13,7 +19,10 @@ EXTERNAL SOURCES:
     :path: ../../SlackTextViewController.podspec
 
 SPEC CHECKSUMS:
-  LoremIpsum: a4d378ecaffcb08c7e40cdba3fb935dc41b2272c
-  SlackTextViewController: a0a6976e5e484fadefa2e7dd429a27c0edb768ac
+  Expecta: 392a6b5bfb9f4097e47dd8064d9b732079490332
+  Expecta+Snapshots: 40c5ec43b43da3bae957f14fed5dc9177d08ec8b
+  FBSnapshotTestCase: 9d5fe43b29ae3a0ed8fc829477971b281038f748
+  LoremIpsum: 9029c55d36501b2ee0b05cc9ecda11d3a0479160
+  SlackTextViewController: 845c047813ca52f7bc25f034bd145d6a15dd614c
 
 COCOAPODS: 0.35.0
