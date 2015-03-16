@@ -24,6 +24,12 @@
 #define COCOAPODS_VERSION_MINOR_FBSnapshotTestCase 4
 #define COCOAPODS_VERSION_PATCH_FBSnapshotTestCase 0
 
+// OCMock
+#define COCOAPODS_POD_AVAILABLE_OCMock
+#define COCOAPODS_VERSION_MAJOR_OCMock 2
+#define COCOAPODS_VERSION_MINOR_OCMock 2
+#define COCOAPODS_VERSION_PATCH_OCMock 4
+
 // Specta
 #define COCOAPODS_POD_AVAILABLE_Specta
 // This library does not follow semantic-versioning,

@@ -39,8 +39,9 @@
 		4F8ADA791A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
 		4F9DFA7F1AD4EDB900841D98 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9DFA7D1AD4EDB100841D98 /* ViewController.m */; };
 		4FBE671B1AB0096600661C28 /* SLKTextViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBE671A1AB0096600661C28 /* SLKTextViewControllerTests.m */; };
+		4F9BBA551AB483E8004E1127 /* SLKTextViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9BBA541AB483E8004E1127 /* SLKTextViewControllerTests.m */; };
+		4F9BBA611AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9BBA601AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m */; };
 		4FBE671E1AB08E5600661C28 /* SLKTextViewControllerStub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBE671D1AB08E5600661C28 /* SLKTextViewControllerStub.m */; };
-		4FBE67221AB08F9F00661C28 /* SLKNavigationControllerStub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBE67211AB08F9F00661C28 /* SLKNavigationControllerStub.m */; };
 		71BE10281A72F3E50083EE32 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF9219F01234007A3D4A /* MessageViewController.m */; };
 		71BE10291A72F3E50083EE32 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF9019F01234007A3D4A /* MessageTableViewCell.m */; };
 		71BE102B1A72F3E50083EE32 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
@@ -106,13 +107,13 @@
 		4F8ADA761A68C37400023752 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		4F9DFA7C1AD4EDB100841D98 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		4F9DFA7D1AD4EDB100841D98 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		4F9BBA541AB483E8004E1127 /* SLKTextViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextViewControllerTests.m; sourceTree = "<group>"; };
+		4F9BBA5F1AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+FBSnapshotTestExtensions.h"; sourceTree = "<group>"; };
+		4F9BBA601AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+FBSnapshotTestExtensions.m"; sourceTree = "<group>"; };
 		4FBE670F1AB0094200661C28 /* SLKTVC Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SLKTVC Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FBE67121AB0094200661C28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4FBE671A1AB0096600661C28 /* SLKTextViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextViewControllerTests.m; sourceTree = "<group>"; };
 		4FBE671C1AB08E5600661C28 /* SLKTextViewControllerStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLKTextViewControllerStub.h; path = Stubs/SLKTextViewControllerStub.h; sourceTree = "<group>"; };
 		4FBE671D1AB08E5600661C28 /* SLKTextViewControllerStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLKTextViewControllerStub.m; path = Stubs/SLKTextViewControllerStub.m; sourceTree = "<group>"; };
-		4FBE67201AB08F9F00661C28 /* SLKNavigationControllerStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLKNavigationControllerStub.h; path = Stubs/SLKNavigationControllerStub.h; sourceTree = "<group>"; };
-		4FBE67211AB08F9F00661C28 /* SLKNavigationControllerStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLKNavigationControllerStub.m; path = Stubs/SLKNavigationControllerStub.m; sourceTree = "<group>"; };
 		622BF1F6C9CF013275EF6275 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		6CA1AF2A9EFDCB40E89F297F /* Pods-SLKTVC Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SLKTVC Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SLKTVC Tests/Pods-SLKTVC Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		71BE10021A72F3130083EE32 /* Messenger-iPad-Sheet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Messenger-iPad-Sheet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -343,11 +344,29 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		4F9BBA521AB483DC004E1127 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				4F9BBA5F1AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.h */,
+				4F9BBA601AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		4F9BBA531AB483E8004E1127 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				4F9BBA541AB483E8004E1127 /* SLKTextViewControllerTests.m */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 		4FBE67101AB0094200661C28 /* SLKTVC Tests */ = {
 			isa = PBXGroup;
 			children = (
-				4FBE671A1AB0096600661C28 /* SLKTextViewControllerTests.m */,
+				4F9BBA521AB483DC004E1127 /* Extensions */,
 				4FBE671F1AB08E5A00661C28 /* Stubs */,
+				4F9BBA531AB483E8004E1127 /* Tests */,
 				4FBE67111AB0094200661C28 /* Supporting Files */,
 			);
 			path = "SLKTVC Tests";
@@ -366,8 +385,6 @@
 			children = (
 				4FBE671C1AB08E5600661C28 /* SLKTextViewControllerStub.h */,
 				4FBE671D1AB08E5600661C28 /* SLKTextViewControllerStub.m */,
-				4FBE67201AB08F9F00661C28 /* SLKNavigationControllerStub.h */,
-				4FBE67211AB08F9F00661C28 /* SLKNavigationControllerStub.m */,
 			);
 			name = Stubs;
 			sourceTree = "<group>";
@@ -772,9 +789,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F9BBA551AB483E8004E1127 /* SLKTextViewControllerTests.m in Sources */,
 				4FBE671E1AB08E5600661C28 /* SLKTextViewControllerStub.m in Sources */,
-				4FBE67221AB08F9F00661C28 /* SLKNavigationControllerStub.m in Sources */,
-				4FBE671B1AB0096600661C28 /* SLKTextViewControllerTests.m in Sources */,
+				4F9BBA611AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

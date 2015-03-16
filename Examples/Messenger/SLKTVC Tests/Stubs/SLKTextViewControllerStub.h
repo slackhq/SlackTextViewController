@@ -8,6 +8,12 @@
 
 #import "SLKTextViewController.h"
 
+typedef NS_ENUM(NSUInteger, SLKStubType) {
+    SLKStubTypeDefault
+};
+
 @interface SLKTextViewControllerStub : SLKTextViewController
+
++ (instancetype)stubWithType:(SLKStubType)type;
 
 @end
