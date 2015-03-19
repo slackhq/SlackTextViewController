@@ -101,7 +101,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.textInputbar.autoHideRightButton = YES;
     self.textInputbar.maxCharCount = 256;
     self.textInputbar.counterStyle = SLKCounterStyleSplit;
-    
+    self.textInputbar.counterPosition = SLKCounterPositionTop;
+
     self.typingIndicatorView.canResignByTouch = YES;
     
     [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];

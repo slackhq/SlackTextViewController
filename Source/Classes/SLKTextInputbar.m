@@ -30,7 +30,7 @@
 @property (nonatomic, strong) NSLayoutConstraint *rightButtonWC;
 @property (nonatomic, strong) NSLayoutConstraint *rightMarginWC;
 @property (nonatomic, strong) NSLayoutConstraint *editorContentViewHC;
-@property (nonatomic, strong) NSArray *charCountLabelPinConstraints;
+@property (nonatomic, strong) NSArray *charCountLabelVCs;
 
 @property (nonatomic, strong) UILabel *charCountLabel;
 
@@ -69,8 +69,8 @@
 
 - (void)slk_commonInit
 {
-    self.charCountLabelDefaultColor = [UIColor lightGrayColor];
-    self.charCountLabelLimitExceededColor = [UIColor redColor];
+    self.charCountLabelNormalColor = [UIColor lightGrayColor];
+    self.charCountLabelWarningColor = [UIColor redColor];
     
     self.autoHideRightButton = YES;
     self.editorContentViewHeight = 38.0;
@@ -85,7 +85,7 @@
     [self slk_setupViewConstraints];
     [self slk_updateConstraintConstants];
     
-    self.counterLayoutStyle = SLKCounterLayoutStylePinnedToTop;
+    self.counterPosition = SLKCounterPositionTop;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
@@ -418,7 +418,7 @@
     }
     
     self.charCountLabel.text = counter;
-    self.charCountLabel.textColor = [self limitExceeded] ? self.charCountLabelLimitExceededColor : self.charCountLabelDefaultColor;
+    self.charCountLabel.textColor = [self limitExceeded] ? self.charCountLabelWarningColor : self.charCountLabelNormalColor;
 }
 
 
@@ -542,34 +542,35 @@
     self.rightMarginWC = [self slk_constraintsForAttribute:NSLayoutAttributeTrailing][0];
 }
 
-- (void)setCounterLayoutStyle:(SLKCounterLayoutStyle)counterLayoutStyle
+- (void)setCounterPosition:(SLKCounterPosition)counterPosition
 {
-    _counterLayoutStyle = counterLayoutStyle;
+    if (self.counterPosition == counterPosition && self.charCountLabelVCs) {
+        return;
+    }
     
-    NSDictionary *views = @{
-                            @"rightButton": self.rightButton,
+    [self removeConstraints:self.charCountLabelVCs];
+    
+    _charCountLabelVCs = nil;
+    _counterPosition = counterPosition;
+    
+    NSDictionary *views = @{@"rightButton": self.rightButton,
                             @"charCountLabel": self.charCountLabel
                             };
     
-    NSDictionary *metrics = @{@"top" : @(self.contentInset.top)};
+    NSDictionary *metrics = @{@"top" : @(self.contentInset.top),
+                              @"bottom" : @(-self.contentInset.bottom/2.0)};
     
-    NSArray *charCountLabelPinConstraints;
+    NSArray *charCountLabelVCs;
     
-    if (counterLayoutStyle == SLKCounterLayoutStylePinnedToRightButton)
-    {
-        charCountLabelPinConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[charCountLabel]-(-3)-[rightButton]" options:0 metrics:metrics views:views];
+    if (counterPosition == SLKCounterPositionBottom) {
+        charCountLabelVCs = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[charCountLabel]-(bottom)-[rightButton]" options:0 metrics:metrics views:views];
     }
-    else
-    {
-        charCountLabelPinConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(<=top)-[charCountLabel]-(>=0)-|" options:0 metrics:metrics views:views];
+    else {
+        charCountLabelVCs = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(<=top)-[charCountLabel]-(>=0)-|" options:0 metrics:metrics views:views];
     }
     
-    if (self.charCountLabelPinConstraints)
-    {
-        [self removeConstraints:self.charCountLabelPinConstraints];
-    }
-    self.charCountLabelPinConstraints = charCountLabelPinConstraints;
-    [self addConstraints:self.charCountLabelPinConstraints];
+    self.charCountLabelVCs = charCountLabelVCs;
+    [self addConstraints:self.charCountLabelVCs];
 }
 
 - (void)slk_updateConstraintConstants
@@ -586,8 +587,7 @@
         self.rightButtonWC.constant = zero;
         self.rightMarginWC.constant = zero;
     }
-    else
-    {
+    else {
         self.editorContentViewHC.constant = zero;
 
         CGSize leftButtonSize = [self.leftButton imageForState:self.leftButton.state].size;

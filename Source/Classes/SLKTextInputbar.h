@@ -26,9 +26,9 @@ typedef NS_ENUM(NSUInteger, SLKCounterStyle) {
     SLKCounterStyleCountdownReversed
 };
 
-typedef NS_ENUM(NSUInteger, SLKCounterLayoutStyle) {
-    SLKCounterLayoutStylePinnedToTop, // Pins the char counter to the top of the input bar.
-    SLKCounterLayoutStylePinnedToRightButton // Pins the char counter to the top of the right button.
+typedef NS_ENUM(NSUInteger, SLKCounterPosition) {
+    SLKCounterPositionTop,
+    SLKCounterPositionBottom
 };
 
 /** @name A custom tool bar encapsulating messaging controls. */
@@ -119,7 +119,7 @@ typedef NS_ENUM(NSUInteger, SLKCounterLayoutStyle) {
 /// @name Text Counting
 ///------------------------------------------------
 
-/** The label used to display the char count. */
+/** The label used to display the character counts. */
 @property (nonatomic, readonly) UILabel *charCountLabel;
 
 /** The maximum character count allowed. If larger than 0, a character count label will be displayed on top of the right button. Default is 0, which means limitless.*/
@@ -128,16 +128,16 @@ typedef NS_ENUM(NSUInteger, SLKCounterLayoutStyle) {
 /** The character counter formatting. Ignored if maxCharCount is 0. Default is None. */
 @property (nonatomic, assign) SLKCounterStyle counterStyle;
 
-/** The character counter layout style. Ignored if maxCharCount is 0. Default is SLKCounterLayoutStylePinnedToTop. */
-@property (nonatomic, assign) SLKCounterLayoutStyle counterLayoutStyle;
+/** The character counter layout style. Ignored if maxCharCount is 0. Default is SLKCounterPositionTop. */
+@property (nonatomic, assign) SLKCounterPosition counterPosition;
 
 /** YES if the maxmimum character count has been exceeded. */
 @property (nonatomic, readonly) BOOL limitExceeded;
 
-/** Color used for char count label. Default is [UIColor lightGrayColor] */
-@property (nonatomic, strong, readwrite) UIColor *charCountLabelDefaultColor;
+/** The normal color used for character counter label. Default is lightGrayColor. */
+@property (nonatomic, strong, readwrite) UIColor *charCountLabelNormalColor;
 
-/** Color used for char count label when it has exceeded the limit. Default is [UIColor redColor] */
-@property (nonatomic, strong, readwrite) UIColor *charCountLabelLimitExceededColor;
+/** The color used for character counter label when it has exceeded the limit. Default is redColor. */
+@property (nonatomic, strong, readwrite) UIColor *charCountLabelWarningColor;
 
 @end
