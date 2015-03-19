@@ -30,6 +30,7 @@
 @property (nonatomic, strong) NSLayoutConstraint *rightButtonWC;
 @property (nonatomic, strong) NSLayoutConstraint *rightMarginWC;
 @property (nonatomic, strong) NSLayoutConstraint *editorContentViewHC;
+@property (nonatomic, strong) NSArray *charCountLabelPinConstraints;
 
 @property (nonatomic, strong) UILabel *charCountLabel;
 
@@ -68,6 +69,9 @@
 
 - (void)slk_commonInit
 {
+    self.charCountLabelDefaultColor = [UIColor lightGrayColor];
+    self.charCountLabelLimitExceededColor = [UIColor redColor];
+    
     self.autoHideRightButton = YES;
     self.editorContentViewHeight = 38.0;
     self.contentInset = UIEdgeInsetsMake(5.0, 8.0, 5.0, 8.0);
@@ -80,6 +84,8 @@
 
     [self slk_setupViewConstraints];
     [self slk_updateConstraintConstants];
+    
+    self.counterLayoutStyle = SLKCounterLayoutStylePinnedToTop;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
@@ -406,9 +412,13 @@
     if (self.counterStyle == SLKCounterStyleCountdown) {
         counter = [NSString stringWithFormat:@"%ld", (long)(text.length - self.maxCharCount)];
     }
+    if (self.counterStyle == SLKCounterStyleCountdownReversed)
+    {
+        counter = [NSString stringWithFormat:@"%ld", (long)(self.maxCharCount - text.length)];
+    }
     
     self.charCountLabel.text = counter;
-    self.charCountLabel.textColor = [self limitExceeded] ?  [UIColor redColor] : [UIColor lightGrayColor];
+    self.charCountLabel.textColor = [self limitExceeded] ? self.charCountLabelLimitExceededColor : self.charCountLabelDefaultColor;
 }
 
 
@@ -511,13 +521,12 @@
                               @"rightVerMargin" : @(rightVerMargin),
                               @"minTextViewHeight" : @(self.textView.intrinsicContentSize.height),
                               };
-
+    
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(left)-[leftButton(0)]-(<=left)-[textView]-(right)-[rightButton(0)]-(right)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[leftButton(0)]-(0@750)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=rightVerMargin)-[rightButton]-(<=rightVerMargin)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(<=top)-[charCountLabel]-(>=0)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(left@250)-[charCountLabel(<=50@1000)]-(right@750)-|" options:0 metrics:metrics views:views]];
-
+    
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[contentView(0)]-(<=top)-[textView(minTextViewHeight@250)]-(bottom)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView]|" options:0 metrics:metrics views:views]];
     
@@ -531,6 +540,36 @@
 
     self.rightButtonWC = [self slk_constraintForAttribute:NSLayoutAttributeWidth firstItem:self.rightButton secondItem:nil];
     self.rightMarginWC = [self slk_constraintsForAttribute:NSLayoutAttributeTrailing][0];
+}
+
+- (void)setCounterLayoutStyle:(SLKCounterLayoutStyle)counterLayoutStyle
+{
+    _counterLayoutStyle = counterLayoutStyle;
+    
+    NSDictionary *views = @{
+                            @"rightButton": self.rightButton,
+                            @"charCountLabel": self.charCountLabel
+                            };
+    
+    NSDictionary *metrics = @{@"top" : @(self.contentInset.top)};
+    
+    NSArray *charCountLabelPinConstraints;
+    
+    if (counterLayoutStyle == SLKCounterLayoutStylePinnedToRightButton)
+    {
+        charCountLabelPinConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[charCountLabel]-(-3)-[rightButton]" options:0 metrics:metrics views:views];
+    }
+    else
+    {
+        charCountLabelPinConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(<=top)-[charCountLabel]-(>=0)-|" options:0 metrics:metrics views:views];
+    }
+    
+    if (self.charCountLabelPinConstraints)
+    {
+        [self removeConstraints:self.charCountLabelPinConstraints];
+    }
+    self.charCountLabelPinConstraints = charCountLabelPinConstraints;
+    [self addConstraints:self.charCountLabelPinConstraints];
 }
 
 - (void)slk_updateConstraintConstants
