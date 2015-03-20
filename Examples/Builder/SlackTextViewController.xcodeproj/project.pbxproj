@@ -26,7 +26,19 @@
 		4F8B71631ABC9189006594B9 /* SLKTypingIndicatorView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F8B71521ABC9189006594B9 /* SLKTypingIndicatorView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F8B71641ABC9189006594B9 /* SLKTypingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8B71531ABC9189006594B9 /* SLKTypingIndicatorView.m */; };
 		4F8B71661ABC9404006594B9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F8B71651ABC9404006594B9 /* UIKit.framework */; };
+		4F8B71711ABC94A2006594B9 /* SlackTextViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8B71701ABC94A2006594B9 /* SlackTextViewControllerTests.m */; };
+		4F8B71721ABC94A2006594B9 /* SlackTextViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48C64A031ABA215600021C91 /* SlackTextViewController.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4F8B71731ABC94A2006594B9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 48C649FA1ABA215600021C91 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 48C64A021ABA215600021C91;
+			remoteInfo = SlackTextViewController;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		48C64A031ABA215600021C91 /* SlackTextViewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SlackTextViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,6 +62,9 @@
 		4F8B71521ABC9189006594B9 /* SLKTypingIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTypingIndicatorView.h; sourceTree = "<group>"; };
 		4F8B71531ABC9189006594B9 /* SLKTypingIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTypingIndicatorView.m; sourceTree = "<group>"; };
 		4F8B71651ABC9404006594B9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		4F8B716C1ABC94A2006594B9 /* SlackTextViewControllerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SlackTextViewControllerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F8B716F1ABC94A2006594B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4F8B71701ABC94A2006594B9 /* SlackTextViewControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SlackTextViewControllerTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +76,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4F8B71691ABC94A2006594B9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F8B71721ABC94A2006594B9 /* SlackTextViewController.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -68,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				48C64A051ABA215600021C91 /* SlackTextViewController */,
+				4F8B716D1ABC94A2006594B9 /* SlackTextViewControllerTests */,
 				4F8B71671ABC9416006594B9 /* Frameworks */,
 				48C64A041ABA215600021C91 /* Products */,
 			);
@@ -77,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				48C64A031ABA215600021C91 /* SlackTextViewController.framework */,
+				4F8B716C1ABC94A2006594B9 /* SlackTextViewControllerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -148,6 +173,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4F8B716D1ABC94A2006594B9 /* SlackTextViewControllerTests */ = {
+			isa = PBXGroup;
+			children = (
+				4F8B71701ABC94A2006594B9 /* SlackTextViewControllerTests.m */,
+				4F8B716E1ABC94A2006594B9 /* Supporting Files */,
+			);
+			path = SlackTextViewControllerTests;
+			sourceTree = "<group>";
+		};
+		4F8B716E1ABC94A2006594B9 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4F8B716F1ABC94A2006594B9 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -189,6 +231,24 @@
 			productReference = 48C64A031ABA215600021C91 /* SlackTextViewController.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		4F8B716B1ABC94A2006594B9 /* SlackTextViewControllerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F8B71751ABC94A2006594B9 /* Build configuration list for PBXNativeTarget "SlackTextViewControllerTests" */;
+			buildPhases = (
+				4F8B71681ABC94A2006594B9 /* Sources */,
+				4F8B71691ABC94A2006594B9 /* Frameworks */,
+				4F8B716A1ABC94A2006594B9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4F8B71741ABC94A2006594B9 /* PBXTargetDependency */,
+			);
+			name = SlackTextViewControllerTests;
+			productName = SlackTextViewControllerTests;
+			productReference = 4F8B716C1ABC94A2006594B9 /* SlackTextViewControllerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -200,6 +260,9 @@
 				TargetAttributes = {
 					48C64A021ABA215600021C91 = {
 						CreatedOnToolsVersion = 6.3;
+					};
+					4F8B716B1ABC94A2006594B9 = {
+						CreatedOnToolsVersion = 6.2;
 					};
 				};
 			};
@@ -216,12 +279,20 @@
 			projectRoot = "";
 			targets = (
 				48C64A021ABA215600021C91 /* SlackTextViewController */,
+				4F8B716B1ABC94A2006594B9 /* SlackTextViewControllerTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		48C64A011ABA215600021C91 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F8B716A1ABC94A2006594B9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -246,7 +317,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4F8B71681ABC94A2006594B9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F8B71711ABC94A2006594B9 /* SlackTextViewControllerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4F8B71741ABC94A2006594B9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 48C64A021ABA215600021C91 /* SlackTextViewController */;
+			targetProxy = 4F8B71731ABC94A2006594B9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		48C64A171ABA215600021C91 /* Debug */ = {
@@ -367,6 +454,38 @@
 			};
 			name = Release;
 		};
+		4F8B71761ABC94A2006594B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = SlackTextViewControllerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4F8B71771ABC94A2006594B9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = SlackTextViewControllerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -387,6 +506,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		4F8B71751ABC94A2006594B9 /* Build configuration list for PBXNativeTarget "SlackTextViewControllerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F8B71761ABC94A2006594B9 /* Debug */,
+				4F8B71771ABC94A2006594B9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
