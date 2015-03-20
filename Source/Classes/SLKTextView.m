@@ -161,6 +161,11 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
     return _maxNumberOfLines;
 }
 
+- (BOOL)isTypingSuggestionEnabled
+{
+    return (self.autocorrectionType == UITextAutocorrectionTypeNo) ? NO : YES;
+}
+
 // Returns only a supported pasted item
 - (id)slk_pastedItem
 {
@@ -356,8 +361,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     if (self.isTypingSuggestionEnabled == enabled) {
         return;
     }
-    
-    _typingSuggestionEnabled = enabled;
     
     self.autocorrectionType = enabled ? UITextAutocorrectionTypeDefault : UITextAutocorrectionTypeNo;
     self.spellCheckingType = enabled ? UITextSpellCheckingTypeDefault : UITextSpellCheckingTypeNo;

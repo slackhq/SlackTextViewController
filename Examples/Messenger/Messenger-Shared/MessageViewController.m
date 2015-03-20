@@ -329,13 +329,18 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     self.searchResult = nil;
     
-    if ([prefix isEqualToString:@"@"] && word.length > 0) {
-        array = [self.users filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self !=[c] %@", word, word]];
+    if ([prefix isEqualToString:@"@"]) {
+        if (word.length > 0) {
+            array = [self.users filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
+        }
+        else {
+            array = self.users;
+        }
     }
     else if ([prefix isEqualToString:@"#"] && word.length > 0) {
         array = [self.channels filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
     }
-    else if ([prefix isEqualToString:@":"] && word.length > 0) {
+    else if ([prefix isEqualToString:@":"] && word.length > 1) {
         array = [self.emojis filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
     }
     
@@ -519,7 +524,10 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         
         NSMutableString *item = [self.searchResult[indexPath.row] mutableCopy];
         
-        if ([self.foundPrefix isEqualToString:@"@"] || [self.foundPrefix isEqualToString:@":"]) {
+        if ([self.foundPrefix isEqualToString:@"@"] && self.foundPrefixRange.location == 0) {
+            [item appendString:@":"];
+        }
+        else if ([self.foundPrefix isEqualToString:@":"]) {
             [item appendString:@":"];
         }
         
