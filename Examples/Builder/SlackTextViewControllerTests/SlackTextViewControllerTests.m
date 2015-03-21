@@ -10,7 +10,10 @@
 #import <XCTest/XCTest.h>
 #import <SlackTextViewController/SLKTextViewController.h>
 
-@interface SLKTextViewControllerTest : SLKTextViewController ()
+@interface SLKTextViewControllerTest : SLKTextViewController
+@end
+
+@implementation SLKTextViewControllerTest
 @end
 
 @interface SlackTextViewControllerTests : XCTestCase
@@ -26,9 +29,25 @@
     [super tearDown];
 }
 
-- (void)testImportLibrary {
-    SLKTextViewControllerTest *controller = [SLKTextViewControllerTest new];
-    XCTAssertNotNil(controller);
+- (void)testSubclassing {
+    XCTAssertThrows([SLKTextViewController new]);
+}
+
+- (void)testTableViewVersion {
+    SLKTextViewControllerTest *controller = [[SLKTextViewControllerTest alloc] initWithTableViewStyle:UITableViewStylePlain];
+    XCTAssertNotNil(controller.tableView, @"Cannot create SLKTextViewController instance");
+}
+
+- (void)testCollectionViewVersion {
+    UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
+    SLKTextViewControllerTest *controller = [[SLKTextViewControllerTest alloc] initWithCollectionViewLayout:layout];
+    XCTAssertNotNil(controller.collectionView, @"Cannot create SLKTextViewController instance");
+}
+
+- (void)testScrollViewVersion {
+    UIScrollView *scrollView = [UIScrollView new];
+    SLKTextViewControllerTest *controller = [[SLKTextViewControllerTest alloc] initWithScrollView:scrollView];
+    XCTAssertNotNil(controller.scrollView, @"Cannot create SLKTextViewController instance");
 }
 
 @end

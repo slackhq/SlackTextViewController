@@ -514,6 +514,7 @@
 				4F8B71771ABC94A2006594B9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
