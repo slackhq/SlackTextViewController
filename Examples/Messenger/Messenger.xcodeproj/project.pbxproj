@@ -166,7 +166,7 @@
 			path = "../../File Templates/SlackTextView Controller.xctemplate/UITableView";
 			sourceTree = "<group>";
 		};
-		4F3256141AA77386008C1DD9 /* Messenger-iPad-Sheet */ = {
+		4F3256141AA77386008C1DD9 /* iPad Sheet Example */ = {
 			isa = PBXGroup;
 			children = (
 				4F3256151AA77386008C1DD9 /* AppDelegate.h */,
@@ -174,6 +174,7 @@
 				4F3256171AA77386008C1DD9 /* Info.plist */,
 				4F3256181AA77386008C1DD9 /* main.m */,
 			);
+			name = "iPad Sheet Example";
 			path = "Messenger-iPad-Sheet";
 			sourceTree = "<group>";
 		};
@@ -258,7 +259,7 @@
 				4F86BF8D19F01234007A3D4A /* Shared */,
 				4F3EDB52199ED00F004C15D6 /* Programatic Example */,
 				4F86BF6619F011D0007A3D4A /* Storyboard Example */,
-				4F3256141AA77386008C1DD9 /* Messenger-iPad-Sheet */,
+				4F3256141AA77386008C1DD9 /* iPad Sheet Example */,
 				4F86BFC419F050AF007A3D4A /* Swift Example */,
 			);
 			name = Examples;
