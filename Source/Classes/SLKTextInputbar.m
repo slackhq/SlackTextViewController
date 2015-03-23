@@ -85,6 +85,7 @@
     [self slk_setupViewConstraints];
     [self slk_updateConstraintConstants];
     
+    self.counterStyle = SLKCounterStyleNone;
     self.counterPosition = SLKCounterPositionTop;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
@@ -358,6 +359,39 @@
     _editorContentView.hidden = !editing;
 }
 
+- (void)setCounterPosition:(SLKCounterPosition)counterPosition
+{
+    if (self.counterPosition == counterPosition && self.charCountLabelVCs) {
+        return;
+    }
+    
+    // Clears the previous constraints
+    if (_charCountLabelVCs.count > 0) {
+        [self removeConstraints:_charCountLabelVCs];
+        _charCountLabelVCs = nil;
+    }
+    
+    _counterPosition = counterPosition;
+    
+    NSDictionary *views = @{@"rightButton": self.rightButton,
+                            @"charCountLabel": self.charCountLabel
+                            };
+    
+    NSDictionary *metrics = @{@"top" : @(self.contentInset.top),
+                              @"bottom" : @(-self.contentInset.bottom/2.0)
+                              };
+    
+    // Constraints are different depending of the counter's position type
+    if (counterPosition == SLKCounterPositionBottom) {
+        _charCountLabelVCs = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[charCountLabel]-(bottom)-[rightButton]" options:0 metrics:metrics views:views];
+    }
+    else {
+        _charCountLabelVCs = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(<=top)-[charCountLabel]-(>=0)-|" options:0 metrics:metrics views:views];
+    }
+    
+    [self addConstraints:self.charCountLabelVCs];
+}
+
 
 #pragma mark - Text Editing
 
@@ -540,37 +574,6 @@
 
     self.rightButtonWC = [self slk_constraintForAttribute:NSLayoutAttributeWidth firstItem:self.rightButton secondItem:nil];
     self.rightMarginWC = [self slk_constraintsForAttribute:NSLayoutAttributeTrailing][0];
-}
-
-- (void)setCounterPosition:(SLKCounterPosition)counterPosition
-{
-    if (self.counterPosition == counterPosition && self.charCountLabelVCs) {
-        return;
-    }
-    
-    [self removeConstraints:self.charCountLabelVCs];
-    
-    _charCountLabelVCs = nil;
-    _counterPosition = counterPosition;
-    
-    NSDictionary *views = @{@"rightButton": self.rightButton,
-                            @"charCountLabel": self.charCountLabel
-                            };
-    
-    NSDictionary *metrics = @{@"top" : @(self.contentInset.top),
-                              @"bottom" : @(-self.contentInset.bottom/2.0)};
-    
-    NSArray *charCountLabelVCs;
-    
-    if (counterPosition == SLKCounterPositionBottom) {
-        charCountLabelVCs = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[charCountLabel]-(bottom)-[rightButton]" options:0 metrics:metrics views:views];
-    }
-    else {
-        charCountLabelVCs = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(<=top)-[charCountLabel]-(>=0)-|" options:0 metrics:metrics views:views];
-    }
-    
-    self.charCountLabelVCs = charCountLabelVCs;
-    [self addConstraints:self.charCountLabelVCs];
 }
 
 - (void)slk_updateConstraintConstants
