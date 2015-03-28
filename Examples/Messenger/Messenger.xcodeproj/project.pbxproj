@@ -10,6 +10,7 @@
 		35A4C7C11DE3FD17F022DC0C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
 		49FEFA70DA01AB47666A8D63 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
 		4A8EFBBFAC0F49199AAABF46 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
+		4F1A898A1AC623A400988C48 /* SLKTextViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1A89891AC623A400988C48 /* SLKTextViewControllerTests.m */; };
 		4F3256191AA77386008C1DD9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3256161AA77386008C1DD9 /* AppDelegate.m */; };
 		4F32561B1AA77386008C1DD9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3256181AA77386008C1DD9 /* main.m */; };
 		4F32561C1AA77427008C1DD9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF6C19F011D0007A3D4A /* AppDelegate.m */; };
@@ -66,6 +67,7 @@
 
 /* Begin PBXFileReference section */
 		275184D5567C78600C1EF80A /* Pods-SLKTVC Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SLKTVC Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SLKTVC Tests/Pods-SLKTVC Tests.release.xcconfig"; sourceTree = "<group>"; };
+		4F1A89891AC623A400988C48 /* SLKTextViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLKTextViewControllerTests.m; path = "SLKTVC Tests/SLKTextViewControllerTests.m"; sourceTree = SOURCE_ROOT; };
 		4F1AD51E19E727750027043E /* ___FILEBASENAME___.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "___FILEBASENAME___.h"; sourceTree = "<group>"; };
 		4F1AD51F19E727750027043E /* ___FILEBASENAME___.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "___FILEBASENAME___.m"; sourceTree = "<group>"; };
 		4F1AD52119E727750027043E /* ___FILEBASENAME___.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "___FILEBASENAME___.h"; sourceTree = "<group>"; };
@@ -356,7 +358,7 @@
 		4F9BBA531AB483E8004E1127 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				4F9BBA541AB483E8004E1127 /* SLKTextViewControllerTests.m */,
+				4F1A89891AC623A400988C48 /* SLKTextViewControllerTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -789,9 +791,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F9BBA551AB483E8004E1127 /* SLKTextViewControllerTests.m in Sources */,
 				4FBE671E1AB08E5600661C28 /* SLKTextViewControllerStub.m in Sources */,
 				4F9BBA611AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m in Sources */,
+				4F1A898A1AC623A400988C48 /* SLKTextViewControllerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

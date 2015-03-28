@@ -38,32 +38,32 @@ describe(@"Screenshots", ^{
         expect(nvc.view).toNot.beNil();
     });
     
-    describe(@"displays the text input", ^{
+    itTestsOrRecordsSnapshotsAsync(@"displays the text input at the bottom", ^{
         
-        it(@"at the bottom", ^{
-            
-            expect(tvc.textView.isFirstResponder).will.beFalsy();
-            expect(window).will.haveValidSnapshotNamed(@"slktvc.keyboard.down");
-        });
+        expect(tvc.textView.isFirstResponder).will.beFalsy();
         
-        it(@"on top of the keyboard, empty", ^{
-            
-            [tvc presentKeyboard:NO];
-            
-            expect(tvc.textView.isFirstResponder).will.beTruthy();
-            expect(window).will.haveValidSnapshotNamed(@"slktvc.keyboard.up");
-        });
+        return window;
+    });
+    
+    itTestsOrRecordsSnapshotsAsync(@"displays the text input on top of the keyboard", ^{
         
-        it(@"with 2 lines of text", ^{
-            
-            tvc.textView.text = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
-            
-            [tvc presentKeyboard:NO];
-            
-            expect(tvc.textView.isFirstResponder).will.beTruthy();
-            expect(tvc.textView.numberOfLines).to.equal(@2);
-            expect(window).will.haveValidSnapshotNamed(@"slktvc.keyboard.up.2.lines");
-        });
+        [tvc presentKeyboard:NO];
+        
+        expect(tvc.textView.isFirstResponder).will.beTruthy();
+        
+        return window;
+    });
+    
+    itTestsOrRecordsSnapshotsAsync(@"displays the text input on top of the keyboard with 2 lines of text", ^{
+        
+        tvc.textView.text = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+        
+        [tvc presentKeyboard:NO];
+        
+        expect(tvc.textView.isFirstResponder).will.beTruthy();
+        expect(tvc.textView.numberOfLines).to.equal(@2);
+        
+        return window;
     });
 });
 
