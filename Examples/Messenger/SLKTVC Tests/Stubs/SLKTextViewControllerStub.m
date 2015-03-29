@@ -10,26 +10,4 @@
 
 @implementation SLKTextViewControllerStub
 
-+ (instancetype)stubWithType:(SLKStubType)type
-{
-    SLKTextViewControllerStub *stub = [[SLKTextViewControllerStub alloc] init];
-    [stub configureStubWithType:type];
-    return stub;
-}
-
-- (void)configureStubWithType:(SLKStubType)type
-{
-    if (type == SLKStubTypeDefault) {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        
-        self.textView.placeholder = @"Placeholder";
-        self.textView.backgroundColor = [UIColor whiteColor];
-        
-        self.textInputbar.autoHideRightButton = NO;
-        
-        [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
-        [self.leftButton setTintColor:[UIColor grayColor]];
-    }
-}
-
 @end

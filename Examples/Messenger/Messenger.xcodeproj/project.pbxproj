@@ -42,6 +42,10 @@
 		4FBE671B1AB0096600661C28 /* SLKTextViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBE671A1AB0096600661C28 /* SLKTextViewControllerTests.m */; };
 		4F9BBA551AB483E8004E1127 /* SLKTextViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9BBA541AB483E8004E1127 /* SLKTextViewControllerTests.m */; };
 		4F9BBA611AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9BBA601AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m */; };
+		4FAB25211AC7462A00B70766 /* SLKTextInputbarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1A898B1AC73FF500988C48 /* SLKTextInputbarTests.m */; };
+		4FAB25241AC7811800B70766 /* SLKTextViewStub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAB25231AC7811800B70766 /* SLKTextViewStub.m */; };
+		4FAB25281AC786C800B70766 /* SLKTextInputbarStub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAB25271AC786C800B70766 /* SLKTextInputbarStub.m */; };
+		4FAB252C1AC78E2100B70766 /* NSString+LoremIpsum.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAB252B1AC78E2100B70766 /* NSString+LoremIpsum.m */; };
 		4FBE671E1AB08E5600661C28 /* SLKTextViewControllerStub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBE671D1AB08E5600661C28 /* SLKTextViewControllerStub.m */; };
 		71BE10281A72F3E50083EE32 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF9219F01234007A3D4A /* MessageViewController.m */; };
 		71BE10291A72F3E50083EE32 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF9019F01234007A3D4A /* MessageTableViewCell.m */; };
@@ -68,6 +72,7 @@
 /* Begin PBXFileReference section */
 		275184D5567C78600C1EF80A /* Pods-SLKTVC Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SLKTVC Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SLKTVC Tests/Pods-SLKTVC Tests.release.xcconfig"; sourceTree = "<group>"; };
 		4F1A89891AC623A400988C48 /* SLKTextViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLKTextViewControllerTests.m; path = "SLKTVC Tests/SLKTextViewControllerTests.m"; sourceTree = SOURCE_ROOT; };
+		4F1A898B1AC73FF500988C48 /* SLKTextInputbarTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLKTextInputbarTests.m; path = "SLKTVC Tests/SLKTextInputbarTests.m"; sourceTree = SOURCE_ROOT; };
 		4F1AD51E19E727750027043E /* ___FILEBASENAME___.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "___FILEBASENAME___.h"; sourceTree = "<group>"; };
 		4F1AD51F19E727750027043E /* ___FILEBASENAME___.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "___FILEBASENAME___.m"; sourceTree = "<group>"; };
 		4F1AD52119E727750027043E /* ___FILEBASENAME___.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "___FILEBASENAME___.h"; sourceTree = "<group>"; };
@@ -112,6 +117,13 @@
 		4F9BBA541AB483E8004E1127 /* SLKTextViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextViewControllerTests.m; sourceTree = "<group>"; };
 		4F9BBA5F1AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+FBSnapshotTestExtensions.h"; sourceTree = "<group>"; };
 		4F9BBA601AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+FBSnapshotTestExtensions.m"; sourceTree = "<group>"; };
+		4FAB25221AC7811800B70766 /* SLKTextViewStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLKTextViewStub.h; path = Stubs/SLKTextViewStub.h; sourceTree = "<group>"; };
+		4FAB25231AC7811800B70766 /* SLKTextViewStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLKTextViewStub.m; path = Stubs/SLKTextViewStub.m; sourceTree = "<group>"; };
+		4FAB25261AC786C800B70766 /* SLKTextInputbarStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLKTextInputbarStub.h; path = Stubs/SLKTextInputbarStub.h; sourceTree = "<group>"; };
+		4FAB25271AC786C800B70766 /* SLKTextInputbarStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLKTextInputbarStub.m; path = Stubs/SLKTextInputbarStub.m; sourceTree = "<group>"; };
+		4FAB25291AC7892500B70766 /* SLKStubEnums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SLKStubEnums.h; path = Stubs/SLKStubEnums.h; sourceTree = "<group>"; };
+		4FAB252A1AC78E2100B70766 /* NSString+LoremIpsum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+LoremIpsum.h"; sourceTree = "<group>"; };
+		4FAB252B1AC78E2100B70766 /* NSString+LoremIpsum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+LoremIpsum.m"; sourceTree = "<group>"; };
 		4FBE670F1AB0094200661C28 /* SLKTVC Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SLKTVC Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FBE67121AB0094200661C28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FBE671C1AB08E5600661C28 /* SLKTextViewControllerStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLKTextViewControllerStub.h; path = Stubs/SLKTextViewControllerStub.h; sourceTree = "<group>"; };
@@ -351,6 +363,8 @@
 			children = (
 				4F9BBA5F1AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.h */,
 				4F9BBA601AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m */,
+				4FAB252A1AC78E2100B70766 /* NSString+LoremIpsum.h */,
+				4FAB252B1AC78E2100B70766 /* NSString+LoremIpsum.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -359,6 +373,7 @@
 			isa = PBXGroup;
 			children = (
 				4F1A89891AC623A400988C48 /* SLKTextViewControllerTests.m */,
+				4F1A898B1AC73FF500988C48 /* SLKTextInputbarTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -387,6 +402,11 @@
 			children = (
 				4FBE671C1AB08E5600661C28 /* SLKTextViewControllerStub.h */,
 				4FBE671D1AB08E5600661C28 /* SLKTextViewControllerStub.m */,
+				4FAB25261AC786C800B70766 /* SLKTextInputbarStub.h */,
+				4FAB25271AC786C800B70766 /* SLKTextInputbarStub.m */,
+				4FAB25221AC7811800B70766 /* SLKTextViewStub.h */,
+				4FAB25231AC7811800B70766 /* SLKTextViewStub.m */,
+				4FAB25291AC7892500B70766 /* SLKStubEnums.h */,
 			);
 			name = Stubs;
 			sourceTree = "<group>";
@@ -791,8 +811,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FAB25241AC7811800B70766 /* SLKTextViewStub.m in Sources */,
+				4FAB25211AC7462A00B70766 /* SLKTextInputbarTests.m in Sources */,
 				4FBE671E1AB08E5600661C28 /* SLKTextViewControllerStub.m in Sources */,
+				4FAB252C1AC78E2100B70766 /* NSString+LoremIpsum.m in Sources */,
 				4F9BBA611AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m in Sources */,
+				4FAB25281AC786C800B70766 /* SLKTextInputbarStub.m in Sources */,
 				4F1A898A1AC623A400988C48 /* SLKTextViewControllerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
