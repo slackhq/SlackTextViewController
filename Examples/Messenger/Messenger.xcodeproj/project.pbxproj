@@ -38,6 +38,7 @@
 		4F8ADA771A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
 		4F8ADA781A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
 		4F8ADA791A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
+		4F9DFA7F1AD4EDB900841D98 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9DFA7D1AD4EDB100841D98 /* ViewController.m */; };
 		71BE10281A72F3E50083EE32 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF9219F01234007A3D4A /* MessageViewController.m */; };
 		71BE10291A72F3E50083EE32 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF9019F01234007A3D4A /* MessageTableViewCell.m */; };
 		71BE102B1A72F3E50083EE32 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
@@ -89,6 +90,8 @@
 		4F86BFE719F05519007A3D4A /* Bridge-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridge-Header.h"; sourceTree = "<group>"; };
 		4F8ADA751A68C37400023752 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		4F8ADA761A68C37400023752 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
+		4F9DFA7C1AD4EDB100841D98 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		4F9DFA7D1AD4EDB100841D98 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		622BF1F6C9CF013275EF6275 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		71BE10021A72F3130083EE32 /* Messenger-iPad-Sheet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Messenger-iPad-Sheet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C905E5DB18A83F74BD092CDD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -236,6 +239,8 @@
 			children = (
 				4F86BF6B19F011D0007A3D4A /* AppDelegate.h */,
 				4F86BF6C19F011D0007A3D4A /* AppDelegate.m */,
+				4F9DFA7C1AD4EDB100841D98 /* ViewController.h */,
+				4F9DFA7D1AD4EDB100841D98 /* ViewController.m */,
 				4F86BF7119F011D0007A3D4A /* Main.storyboard */,
 				4F86BF7619F011D0007A3D4A /* LaunchScreen.xib */,
 				4F86BF6719F011D0007A3D4A /* Supporting Files */,
@@ -617,6 +622,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F9DFA7F1AD4EDB900841D98 /* ViewController.m in Sources */,
 				71BE10301A76C4890083EE32 /* MessageTextView.m in Sources */,
 				4F86BF9819F01234007A3D4A /* MessageViewController.m in Sources */,
 				4F86BF9619F01234007A3D4A /* MessageTableViewCell.m in Sources */,
