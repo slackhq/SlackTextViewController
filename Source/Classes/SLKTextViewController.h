@@ -27,10 +27,10 @@
  UIKeyboard notification replacement, posting reliably only when showing/hiding the keyboard (not when resizing keyboard, or with inputAccessoryView reloads, etc).
  Only triggered when using SLKTextViewController's text view.
  */
-extern NSString *const SLKKeyboardWillShowNotification;
-extern NSString *const SLKKeyboardDidShowNotification;
-extern NSString *const SLKKeyboardWillHideNotification;
-extern NSString *const SLKKeyboardDidHideNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardWillShowNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardDidShowNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardWillHideNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardDidHideNotification;
 
 typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
     SLKKeyboardStatusDidHide,

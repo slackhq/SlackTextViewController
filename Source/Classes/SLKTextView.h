@@ -16,14 +16,14 @@
 
 #import <UIKit/UIKit.h>
 
-extern NSString * const SLKTextViewTextWillChangeNotification;
-extern NSString * const SLKTextViewContentSizeDidChangeNotification;
-extern NSString * const SLKTextViewDidPasteItemNotification;
-extern NSString * const SLKTextViewDidShakeNotification;
+UIKIT_EXTERN NSString * const SLKTextViewTextWillChangeNotification;
+UIKIT_EXTERN NSString * const SLKTextViewContentSizeDidChangeNotification;
+UIKIT_EXTERN NSString * const SLKTextViewDidPasteItemNotification;
+UIKIT_EXTERN NSString * const SLKTextViewDidShakeNotification;
 
-extern NSString * const SLKTextViewPastedItemContentType;
-extern NSString * const SLKTextViewPastedItemMediaType;
-extern NSString * const SLKTextViewPastedItemData;
+UIKIT_EXTERN NSString * const SLKTextViewPastedItemContentType;
+UIKIT_EXTERN NSString * const SLKTextViewPastedItemMediaType;
+UIKIT_EXTERN NSString * const SLKTextViewPastedItemData;
 
 typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
     SLKPastableMediaTypeNone        = 0,

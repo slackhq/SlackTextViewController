@@ -16,7 +16,7 @@
 
 #import <UIKit/UIKit.h>
 
-extern NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
+UIKIT_EXTERN NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
 
 @interface SLKInputAccessoryView : UIView
 

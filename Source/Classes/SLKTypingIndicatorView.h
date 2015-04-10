@@ -16,8 +16,8 @@
 
 #import <UIKit/UIKit.h>
 
-extern NSString * const SLKTypingIndicatorViewWillShowNotification;
-extern NSString * const SLKTypingIndicatorViewWillHideNotification;
+UIKIT_EXTERN NSString * const SLKTypingIndicatorViewWillShowNotification;
+UIKIT_EXTERN NSString * const SLKTypingIndicatorViewWillHideNotification;
 
 /** @name A custom view to display an indicator of users typing. */
 @interface SLKTypingIndicatorView : UIView
