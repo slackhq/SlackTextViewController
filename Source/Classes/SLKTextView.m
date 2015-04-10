@@ -49,9 +49,9 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
 
 #pragma mark - Initialization
 
-- (instancetype)init
+- (instancetype)initWithFrame:(CGRect)frame textContainer:(NSTextContainer *)textContainer
 {
-    if (self = [super init]) {
+    if (self = [super initWithFrame:frame textContainer:textContainer]) {
         [self slk_commonInit];
     }
     return self;
