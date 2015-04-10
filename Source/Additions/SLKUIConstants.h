@@ -26,12 +26,8 @@
 #define SLK_INPUT_ACCESSORY_DEBUG           DEBUG && 0  // Renders a translucent red area representing the keyboard accessory view
 #define SLK_KEYBOARD_NOTIFICATION_DEBUG     DEBUG && 0  // Logs every keyboard notification being sent
 
-#ifndef SLK_DESIGNATED_INITIALIZER
 #if __has_attribute(objc_designated_initializer)
 #define SLK_DESIGNATED_INITIALIZER __attribute__((objc_designated_initializer))
-#else
-#define SLK_DESIGNATED_INITIALIZER
-#endif
 #endif
 
 static NSString *SLKTextViewControllerDomain = @"com.slack.TextViewController";
