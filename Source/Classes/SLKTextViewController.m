@@ -325,19 +325,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     return _typingIndicatorView;
 }
 
-- (BOOL)isEditing
-{
-    if (_tableView.isEditing) {
-        return YES;
-    }
-    
-    if (self.textInputbar.isEditing) {
-        return YES;
-    }
-    
-    return NO;
-}
-
 - (BOOL)isExternalKeyboardDetected
 {
     return _externalKeyboardDetected;
@@ -427,7 +414,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         height = minimumHeight;
     }
     
-    if (self.isEditing) {
+    if (self.textInputbar.isEditing) {
         height += self.textInputbar.editorContentViewHeight;
     }
     
@@ -748,7 +735,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
             [self.view slk_animateLayoutIfNeededWithBounce:bounces
                                                    options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
                                                 animations:^{
-                                                    if (self.isEditing) {
+                                                    if (self.textInputbar.isEditing) {
                                                         [self.textView slk_scrollToCaretPositonAnimated:NO];
                                                     }
                                                 }];
@@ -824,7 +811,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)didCommitTextEditing:(id)sender
 {
-    if (!self.isEditing) {
+    if (!self.textInputbar.isEditing) {
         return;
     }
     
@@ -834,7 +821,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)didCancelTextEditing:(id)sender
 {
-    if (!self.isEditing) {
+    if (!self.textInputbar.isEditing) {
         return;
     }
     
@@ -848,7 +835,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (BOOL)canShowTypeIndicator
 {
     // Don't show if the text is being edited or auto-completed.
-    if (self.isEditing || self.isAutoCompleting) {
+    if (self.textInputbar.isEditing || self.isAutoCompleting) {
         return NO;
     }
     
@@ -1098,7 +1085,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)didPressReturnKey:(id)sender
 {
-    if (self.isEditing) {
+    if (self.textInputbar.isEditing) {
         [self didCommitTextEditing:sender];
         return;
     }
@@ -1111,7 +1098,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     if (self.isAutoCompleting) {
         [self cancelAutoCompletion];
     }
-    else if (self.isEditing) {
+    else if (self.textInputbar.isEditing) {
         [self didCancelTextEditing:sender];
     }
     
@@ -1846,7 +1833,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.textInputbarHC.constant = [self slk_minimumInputbarHeight];
     self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
 
-    if (self.isEditing) {
+    if (self.textInputbar.isEditing) {
         self.textInputbarHC.constant += self.textInputbar.editorContentViewHeight;
     }
 }
