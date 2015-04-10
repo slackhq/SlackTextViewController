@@ -34,7 +34,7 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 - Bouncy Animations
 
 ### Compatibility
-- Swift: (a sample project is available in a different branch for now) (https://github.com/slackhq/SlackTextViewController/tree/swift-example)
+- Swift: [A sample project is available in a different branch] (https://github.com/slackhq/SlackTextViewController/tree/swift-example)
 - iOS 7 & 8
 - iPhone & iPad
 - [Storyboard](https://github.com/slackhq/SlackTextViewController#storyboard)
