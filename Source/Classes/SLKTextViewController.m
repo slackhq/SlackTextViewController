@@ -424,7 +424,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (CGFloat)slk_appropriateKeyboardHeight:(NSNotification *)notification
 {
     CGFloat keyboardHeight = 0.0;
-
+    
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
     self.externalKeyboardDetected = [self slk_detectExternalKeyboardInNotification:notification];
@@ -441,8 +441,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     // Need to correctly convert the endframe kicked out for iOS 7
     CGRect endFrameConverted;
     
-    if(!SLK_IS_IOS8_AND_HIGHER &&
-       (endFrame.size.width == bounds.size.height || endFrame.size.height == bounds.size.width)) {
+    if (endFrame.size.width == bounds.size.height || endFrame.size.height == bounds.size.width) {
         endFrameConverted = SLKRectInvert(endFrame);
     }
     else {
@@ -466,7 +465,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     keyboardHeight -= [self slk_appropriateBottomMarginToWindow];
     keyboardHeight -= CGRectGetHeight(self.textView.inputAccessoryView.bounds);
     
-    if (keyboardHeight < 0) {
+    if (keyboardHeight < 0 || endFrameConverted.origin.y < 0) {
         keyboardHeight = 0.0;
     }
     
