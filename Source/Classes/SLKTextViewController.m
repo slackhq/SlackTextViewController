@@ -1522,10 +1522,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
-    // Reload the tableview before showing it
-    if (show) {
-        [self.autoCompletionView reloadData];
-    }
+    // Reloads the tableview before showing/hiding
+    [self.autoCompletionView reloadData];
     
     self.autoCompleting = show;
     
