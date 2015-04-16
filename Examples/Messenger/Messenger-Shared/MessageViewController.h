@@ -10,4 +10,6 @@
 
 @interface MessageViewController : SLKTextViewController
 
++ (instancetype)stub;
+
 @end

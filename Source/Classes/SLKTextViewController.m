@@ -1457,6 +1457,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return [self cancelAutoCompletion];
     }
     
+    NSLog(@"foundPrefix : %@", self.foundPrefix);
+    
+    
     [self slk_showAutoCompletionView:[self canShowAutoCompletion]];
 }
 

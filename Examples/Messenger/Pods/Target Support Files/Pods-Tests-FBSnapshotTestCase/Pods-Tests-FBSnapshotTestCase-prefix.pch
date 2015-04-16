@@ -1,0 +1,6 @@
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#endif
+
+#import "Pods-Tests-environment.h"
+#define FB_REFERENCE_IMAGE_DIR = "$(SOURCE_ROOT)/$(PROJECT_NAME)Tests/ReferenceImages"
