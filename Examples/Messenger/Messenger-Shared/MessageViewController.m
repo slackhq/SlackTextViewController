@@ -511,24 +511,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     }
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if ([tableView isEqual:self.autoCompletionView]) {
-        UIView *topView = [UIView new];
-        topView.backgroundColor = self.autoCompletionView.separatorColor;
-        return topView;
-    }
-    return nil;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    if ([tableView isEqual:self.autoCompletionView]) {
-        return 0.5;
-    }
-    return 0.0;
-}
-
 
 #pragma mark - UITableViewDelegate Methods
 
