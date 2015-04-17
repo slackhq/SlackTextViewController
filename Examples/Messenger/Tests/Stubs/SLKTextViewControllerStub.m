@@ -7,6 +7,7 @@
 //
 
 #import "SLKTextViewControllerStub.h"
+#import "NSString+LoremIpsum.h"
 
 @interface SLKTextViewControllerStub ()
 @property (nonatomic, strong) NSArray *usernames;
@@ -56,9 +57,6 @@
     }
     
     self.searchResult = [[NSArray alloc] initWithArray:array];
-    
-    NSLog(@"%s",__FUNCTION__);
-    NSLog(@"searchResult : %@", self.searchResult);
     
     return self.searchResult.count > 0;
 }
