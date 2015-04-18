@@ -9,6 +9,7 @@
 @interface XCTestCase (xct_allSubclasses)
 
 - (NSArray *)allSubclasses;
+- (void)_dequeueFailures;
 
 @end
 
@@ -18,6 +19,10 @@
   Method allSubclasses = class_getClassMethod(self, @selector(allSubclasses));
   Method allSubclasses_swizzle = class_getClassMethod(self , @selector(spt_allSubclasses_swizzle));
   method_exchangeImplementations(allSubclasses, allSubclasses_swizzle);
+
+  Method dequeueFailures = class_getInstanceMethod(self, @selector(_dequeueFailures));
+  Method dequeueFailures_swizzle = class_getInstanceMethod(self, @selector(spt_dequeueFailures));
+  method_exchangeImplementations(dequeueFailures, dequeueFailures_swizzle);
 }
 
 + (NSArray *)spt_allSubclasses_swizzle {
@@ -30,6 +35,18 @@
     }
   }
   return spt_shuffle(filtered);
+}
+
+- (void)spt_dequeueFailures {
+  void(^dequeueFailures)() = ^() {
+    [self spt_dequeueFailures];
+  };
+
+  if ([NSThread isMainThread]) {
+    dequeueFailures();
+  } else {
+    dispatch_sync(dispatch_get_main_queue(), dequeueFailures);
+  }
 }
 
 - (void)spt_handleException:(NSException *)exception {

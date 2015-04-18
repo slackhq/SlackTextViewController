@@ -10,7 +10,7 @@ pod 'LoremIpsum', '~> 1.0'
 target 'Tests', :exclusive => true do
     pod 'FBSnapshotTestCase', '1.4'
     pod 'Expecta+Snapshots', '~> 1.2'
-    pod 'Specta', :git => 'https://github.com/specta/specta.git', :tag => "v0.3.0.beta1"
+    pod 'Specta', '~> 0.5'
     pod 'Expecta', '0.3.0'
     #pod 'OCMock', '2.2.4' #pod 'OCMock', '~> 3.1'
 end

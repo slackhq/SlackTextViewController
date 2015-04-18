@@ -3,8 +3,8 @@
 extern NSString * const spt_kCurrentTestSuiteKey;
 extern NSString * const spt_kCurrentSpecKey;
 
-#define SPTCurrentTestSuite [[NSThread currentThread] threadDictionary][spt_kCurrentTestSuiteKey]
-#define SPTCurrentSpec  [[NSThread currentThread] threadDictionary][spt_kCurrentSpecKey]
+#define SPTCurrentTestSuite [[NSThread mainThread] threadDictionary][spt_kCurrentTestSuiteKey]
+#define SPTCurrentSpec  [[NSThread mainThread] threadDictionary][spt_kCurrentSpecKey]
 #define SPTCurrentGroup     [SPTCurrentTestSuite currentGroup]
 #define SPTGroupStack       [SPTCurrentTestSuite groupStack]
 

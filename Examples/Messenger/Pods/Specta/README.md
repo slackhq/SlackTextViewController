@@ -2,47 +2,58 @@
 
 A light-weight TDD / BDD framework for Objective-C.
 
-## WHAT'S NEW IN 0.3.0 beta 1
-
-* Xcode 6 / iOS 8 support.
-* Option to shuffle tests. (Set environment variable `SPECTA_SHUFFLE` with value `1` to enable this feature.)
-
-## BREAKING CHANGES IN 0.3.0 beta 1
-
-* `^AsyncBlock` is replaced by `waitUntil`. See example for usage.
+### Status
+[![Build Status](https://travis-ci.org/specta/specta.png)](https://travis-ci.org/specta/specta)
 
 ## FEATURES
 
-* Support for both Objective-C.
-* RSpec-like BDD DSL
+* An Objective-C RSpec-like BDD DSL
 * Quick and easy set up
 * Built on top of XCTest
 * Excellent Xcode integration
 
 ## SCREENSHOT
 
-![Specta Screenshot](http://github.com/petejkim/stuff/raw/master/images/specta-screenshot.png)
+![Specta Screenshot](https://raw.githubusercontent.com/specta/specta/master/misc/specta_screenshot.jpg)
 
 ## SETUP
 
-Use [CocoaPods](http://github.com/CocoaPods/CocoaPods)
+Use [CocoaPods](http://github.com/CocoaPods/CocoaPods), [Carthage](https://github.com/carthage/carthage) or [Set up manually](#setting-up-manually)
 
-```ruby
-target :MyApp do
-  # your app dependencies
-end
+### CocoaPods
 
-target :MyAppTests do
-  pod 'Specta',      '~> 0.3.0.beta1'
-  # pod 'Expecta',     '~> 0.3.1'   # expecta matchers
-  # pod 'OCMock',      '~> 2.2.1'   # OCMock
-  # pod 'OCHamcrest',  '~> 3.0.0'   # hamcrest matchers
-  # pod 'OCMockito',   '~> 1.0.0'   # OCMock
-  # pod 'LRMocky',     '~> 0.9.1'   # LRMocky
-end
-```
+1. Add Specta to your project's `Podfile`:
 
-or:
+	```ruby
+	target :MyApp do
+	  # your app dependencies
+	end
+
+	target :MyAppTests do
+	  pod 'Specta', '~> 0.5'
+	  # pod 'Expecta',     '~> 0.3'   # expecta matchers
+	  # pod 'OCMock',      '~> 2.2'   # OCMock
+	  # pod 'OCHamcrest',  '~> 3.0'   # hamcrest matchers
+	  # pod 'OCMockito',   '~> 1.0'   # OCMock
+	  # pod 'LRMocky',     '~> 0.9'   # LRMocky
+	end
+	```
+
+2. Run `pod update` or `pod install` in your project directory.
+
+### Carthage
+
+1. Add Specta to your project's `Cartfile.private`
+
+    ```
+    github "specta/specta" ~> 0.5
+    ```
+
+2. Run `carthage update` in your project directory
+3. Drag the appropriate `Specta.framework` for your platform (located in Carthage/Build/) into your application’s Xcode project, and add it to your test target(s).
+4. If you are building for iOS, a new `Run Script Phase` must be added to copy the framework. The instructions can be found on [Carthage's getting started instructions](https://github.com/carthage/carthage#getting-started)
+
+### SETTING UP MANUALLY
 
 1. Clone from Github.
 2. Run `rake` in project root to build.
@@ -52,27 +63,23 @@ or:
    For **iOS projects**, copy and add `Specta.framework` in `Products/ios` folder to the test target in your Xcode project.
    You can alternatively use `libSpecta.a`, if you prefer to add it as a static library for your project. (iOS 7 and below require this)
 6. Add `-ObjC` and `-all_load` to the "Other Linker Flags" build setting for the test target in your Xcode project.
-7. Add the following to your test code.
-
-```objective-c
-#import <Specta/Specta.h> // #import "Specta.h" if you're using cocoapods or libSpecta.a
-```
-
-Standard XCTest matchers such as `XCTAssertEqualObjects` and `XCTAssertNil` work, but you probably want to add a nicer matcher framework - [Expecta](http://github.com/specta/expecta/) to your setup. Or if you really prefer, [OCHamcrest](https://github.com/jonreid/OCHamcrest) works fine too. Also, add a mocking framework: [OCMock](http://ocmock.org/).
 
 ## EXAMPLE
 
 ```objective-c
-#import <Specta/Specta.h> // #import "Specta.h" if you're using cocoapods or libSpecta.a
+#import <Specta/Specta.h> // #import "Specta.h" if you're using libSpecta.a
 
 SharedExamplesBegin(MySharedExamples)
 // Global shared examples are shared across all spec files.
 
-sharedExamplesFor(@"a shared behavior", ^(NSDictionary *data) {
-  it(@"should do some stuff", ^{
-    id obj = data[@"key"];
-    // ...
-  });
+sharedExamplesFor(@"foo", ^(NSDictionary *data) {
+    __block id bar = nil;
+    beforeEach(^{
+        bar = data[@"bar"];
+    });
+    it(@"should not be nil", ^{
+        XCTAssertNotNil(bar);
+    });
 });
 
 SharedExamplesEnd
@@ -150,9 +157,11 @@ SpecEnd
 * Set an environment variable `SPECTA_NO_SHUFFLE` with value `1` to disable test shuffling.
 * Set an environment variable `SPECTA_SEED` to specify the random seed for test shuffling.
 
+Standard XCTest matchers such as `XCTAssertEqualObjects` and `XCTAssertNil` work, but you probably want to add a nicer matcher framework - [Expecta](http://github.com/specta/expecta/) to your setup. Or if you really prefer, [OCHamcrest](https://github.com/jonreid/OCHamcrest) works fine too. Also, add a mocking framework: [OCMock](http://ocmock.org/).
+
 ## RUNNING TESTS IN COMMAND LINE
 
-* Use Facebook's [xctool](https://github.com/facebook/xctool/).
+* Run `rake test` in the cloned folder.
 
 ## CONTRIBUTION GUIDELINES
 
@@ -162,4 +171,4 @@ SpecEnd
 
 ## LICENSE
 
-Copyright (c) 2012-2014 [Specta Team](https://github.com/specta?tab=members). This software is licensed under the [MIT License](http://github.com/specta/specta/raw/master/LICENSE).
+Copyright (c) 2012-2015 [Specta Team](https://github.com/specta?tab=members). This software is licensed under the [MIT License](http://github.com/specta/specta/raw/master/LICENSE).

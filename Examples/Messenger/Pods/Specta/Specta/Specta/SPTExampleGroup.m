@@ -4,6 +4,7 @@
 #import "SPTSpec.h"
 #import "SpectaUtility.h"
 #import "XCTest+Private.h"
+#import "SPTGlobalBeforeAfterEach.h"
 #import <libkern/OSAtomic.h>
 #import <objc/runtime.h>
 
@@ -18,7 +19,7 @@ static NSArray *ClassesWithClassMethod(SEL classMethodSelector) {
     for(int classIndex = 0; classIndex < numberOfClasses; classIndex++) {
       Class aClass = classes[classIndex];
 
-      if (strcmp("UIAccessibilitySafeCategory__NSObject", class_getName(aClass))) {
+      if (class_conformsToProtocol(aClass, @protocol(SPTGlobalBeforeAfterEach))) {
         Method globalMethod = class_getClassMethod(aClass, classMethodSelector);
         if (globalMethod) {
           [classesWithClassMethod addObject:aClass];
@@ -31,13 +32,6 @@ static NSArray *ClassesWithClassMethod(SEL classMethodSelector) {
 
   return classesWithClassMethod;
 }
-
-@interface NSObject (SpectaGlobalBeforeAfterEach)
-
-+ (void)beforeEach;
-+ (void)afterEach;
-
-@end
 
 static void runExampleBlock(void (^block)(), NSString *name) {
   if (!SPTIsBlock(block)) {
@@ -52,7 +46,7 @@ typedef NS_ENUM(NSInteger, SPTExampleGroupOrder) {
   SPTExampleGroupOrderInnermostFirst
 };
 
-@interface SPTExampleGroup ()
+@interface SPTExampleGroup () <SPTGlobalBeforeAfterEach>
 
 - (void)incrementExampleCount;
 - (void)incrementPendingExampleCount;
@@ -260,7 +254,7 @@ typedef NS_ENUM(NSInteger, SPTExampleGroupOrder) {
 
 - (void)runAfterAllHooks:(NSString *)compiledName {
   for (SPTExampleGroup *group in [self exampleGroupStackInOrder:SPTExampleGroupOrderInnermostFirst]) {
-    if (group.ranExampleCount + group.pendingExampleCount == group.exampleCount) {
+    if (group.ranExampleCount == group.exampleCount) {
       for (id afterAllBlock in group.afterAllArray) {
         runExampleBlock(afterAllBlock, [NSString stringWithFormat:@"%@ - after all block", compiledName]);
       }
@@ -308,7 +302,9 @@ typedef NS_ENUM(NSInteger, SPTExampleGroupOrder) {
       // Otherwise, run the example and all before and after hooks.
       SPTSpecBlock compiledBlock = example.pending ? ^(SPTSpec *spec){
         @synchronized(self.root) {
+          [self resetRanExampleCountIfNeeded];
           [self runBeforeAllHooks:compiledName];
+          [self incrementRanExampleCount];
           [self runAfterAllHooks:compiledName];
         }
       } : ^(SPTSpec *spec) {
