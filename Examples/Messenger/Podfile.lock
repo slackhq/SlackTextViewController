@@ -20,14 +20,14 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   SlackTextViewController:
-    :path: ../../SlackTextViewController.podspec
+    :path: "../../SlackTextViewController.podspec"
 
 SPEC CHECKSUMS:
   Expecta: 917bda2935b63ca7175741b8cf1b26796db6205f
   Expecta+Snapshots: 4a0b46d3ba755bd43dffa7d53e4585fc6cbfe8cd
   FBSnapshotTestCase: 892508495a69e8703bab36c9da7674ff740d41db
   LoremIpsum: 9029c55d36501b2ee0b05cc9ecda11d3a0479160
-  SlackTextViewController: 845c047813ca52f7bc25f034bd145d6a15dd614c
+  SlackTextViewController: 4a1797ac2f3616dbd37435fc62da655e61399cdd
   Specta: eb90708ed77569bbda089f8ead10bb99b8e9489e
 
-COCOAPODS: 0.35.0
+COCOAPODS: 0.36.4
