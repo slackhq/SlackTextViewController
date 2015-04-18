@@ -1,4 +1,17 @@
-language: objective-c
-cache: bundler
-before_install: bundle install
-script: bundle exec pod lib coverage
+language:
+  - objective-c
+
+cache:
+  - bundler
+
+before_install:
+  - bundle install
+
+script:
+  - bundle exec pod lib coverage
+
+notifications:
+  slack: slktvc:g7fiaXRUFmuMS6t3l1p7bUir
+
+after_success:
+  - bundle exec slather
