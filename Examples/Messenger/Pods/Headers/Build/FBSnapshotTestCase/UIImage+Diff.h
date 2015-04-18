@@ -1,0 +1,1 @@
+../../../FBSnapshotTestCase/UIImage+Diff.h

@@ -1,9 +1,15 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
 workspace 'Messenger.xcworkspace'
-link_with 'Messenger-Programatic', 'Messenger-Programatic-iPad-Sheet', 'Messenger-Storyboard', 'Messenger-Swift'
 platform :ios, '7.0'
 
 pod 'SlackTextViewController', :path => '../../SlackTextViewController.podspec'
 
 pod 'LoremIpsum', '~> 1.0'
+
+target 'Tests', :exclusive => true do
+    pod 'FBSnapshotTestCase', '1.4'
+    pod 'Expecta+Snapshots', '~> 1.2'
+    pod 'Specta', '~> 0.5'
+    pod 'Expecta', '0.3.0'
+end

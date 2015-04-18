@@ -11,7 +11,6 @@
 		49FEFA70DA01AB47666A8D63 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
 		4A8EFBBFAC0F49199AAABF46 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
 		4F3256191AA77386008C1DD9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3256161AA77386008C1DD9 /* AppDelegate.m */; };
-		4F32561A1AA77386008C1DD9 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F3256171AA77386008C1DD9 /* Info.plist */; };
 		4F32561B1AA77386008C1DD9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3256181AA77386008C1DD9 /* main.m */; };
 		4F32561C1AA77427008C1DD9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF6C19F011D0007A3D4A /* AppDelegate.m */; };
 		4F32561D1AA77430008C1DD9 /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */; };
@@ -38,7 +37,15 @@
 		4F8ADA771A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
 		4F8ADA781A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
 		4F8ADA791A68C37400023752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
+		4F9349AF1AE1806E0005042E /* SLKTextViewControllerStub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBE671D1AB08E5600661C28 /* SLKTextViewControllerStub.m */; };
+		4F9BBA611AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9BBA601AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m */; };
 		4F9DFA7F1AD4EDB900841D98 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9DFA7D1AD4EDB100841D98 /* ViewController.m */; };
+		4FAB25241AC7811800B70766 /* SLKTextViewStub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAB25231AC7811800B70766 /* SLKTextViewStub.m */; };
+		4FAB25281AC786C800B70766 /* SLKTextInputbarStub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAB25271AC786C800B70766 /* SLKTextInputbarStub.m */; };
+		4FAB252C1AC78E2100B70766 /* NSString+LoremIpsum.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAB252B1AC78E2100B70766 /* NSString+LoremIpsum.m */; };
+		4FBE671E1AB08E5600661C28 /* SLKTextViewControllerStub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBE671D1AB08E5600661C28 /* SLKTextViewControllerStub.m */; };
+		4FDACDDA1AE02A0B00303F23 /* SLKTextInputbarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDACDD81AE02A0B00303F23 /* SLKTextInputbarTests.m */; };
+		4FDACDDB1AE02A0B00303F23 /* SLKTextViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDACDD91AE02A0B00303F23 /* SLKTextViewControllerTests.m */; };
 		71BE10281A72F3E50083EE32 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF9219F01234007A3D4A /* MessageViewController.m */; };
 		71BE10291A72F3E50083EE32 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F86BF9019F01234007A3D4A /* MessageTableViewCell.m */; };
 		71BE102B1A72F3E50083EE32 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8ADA761A68C37400023752 /* Message.m */; };
@@ -48,9 +55,22 @@
 		71BE102F1A72F42F0083EE32 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F86BF8E19F01234007A3D4A /* Images.xcassets */; };
 		71BE10301A76C4890083EE32 /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */; };
 		8C6D809F3C95C912F87F0D17 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
+		A46BBD104CFF2EC7E3443BFB /* libPods-Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA45477DD68F2909374B51A4 /* libPods-Tests.a */; };
+		C81E271EDBBC5BF506E6C076 /* libPods-Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E76FE7634642D0C745F673A5 /* libPods-Tests.a */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		4FBE67151AB0094200661C28 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F3EDB41199ED00F004C15D6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F3EDB48199ED00F004C15D6;
+			remoteInfo = "Messenger-Programatic";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		275184D5567C78600C1EF80A /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 		4F1AD51E19E727750027043E /* ___FILEBASENAME___.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "___FILEBASENAME___.h"; sourceTree = "<group>"; };
 		4F1AD51F19E727750027043E /* ___FILEBASENAME___.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "___FILEBASENAME___.m"; sourceTree = "<group>"; };
 		4F1AD52119E727750027043E /* ___FILEBASENAME___.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "___FILEBASENAME___.h"; sourceTree = "<group>"; };
@@ -90,12 +110,30 @@
 		4F86BFE719F05519007A3D4A /* Bridge-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridge-Header.h"; sourceTree = "<group>"; };
 		4F8ADA751A68C37400023752 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		4F8ADA761A68C37400023752 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
+		4F9BBA5F1AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+FBSnapshotTestExtensions.h"; sourceTree = "<group>"; };
+		4F9BBA601AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+FBSnapshotTestExtensions.m"; sourceTree = "<group>"; };
 		4F9DFA7C1AD4EDB100841D98 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		4F9DFA7D1AD4EDB100841D98 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		4FAB25221AC7811800B70766 /* SLKTextViewStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLKTextViewStub.h; path = Stubs/SLKTextViewStub.h; sourceTree = "<group>"; };
+		4FAB25231AC7811800B70766 /* SLKTextViewStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLKTextViewStub.m; path = Stubs/SLKTextViewStub.m; sourceTree = "<group>"; };
+		4FAB25261AC786C800B70766 /* SLKTextInputbarStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLKTextInputbarStub.h; path = Stubs/SLKTextInputbarStub.h; sourceTree = "<group>"; };
+		4FAB25271AC786C800B70766 /* SLKTextInputbarStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLKTextInputbarStub.m; path = Stubs/SLKTextInputbarStub.m; sourceTree = "<group>"; };
+		4FAB25291AC7892500B70766 /* SLKStubEnums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SLKStubEnums.h; path = Stubs/SLKStubEnums.h; sourceTree = "<group>"; };
+		4FAB252A1AC78E2100B70766 /* NSString+LoremIpsum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+LoremIpsum.h"; sourceTree = "<group>"; };
+		4FAB252B1AC78E2100B70766 /* NSString+LoremIpsum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+LoremIpsum.m"; sourceTree = "<group>"; };
+		4FBE670F1AB0094200661C28 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FBE67121AB0094200661C28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4FBE671C1AB08E5600661C28 /* SLKTextViewControllerStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLKTextViewControllerStub.h; path = Stubs/SLKTextViewControllerStub.h; sourceTree = "<group>"; };
+		4FBE671D1AB08E5600661C28 /* SLKTextViewControllerStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLKTextViewControllerStub.m; path = Stubs/SLKTextViewControllerStub.m; sourceTree = "<group>"; };
+		4FDACDD81AE02A0B00303F23 /* SLKTextInputbarTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextInputbarTests.m; sourceTree = "<group>"; };
+		4FDACDD91AE02A0B00303F23 /* SLKTextViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextViewControllerTests.m; sourceTree = "<group>"; };
 		622BF1F6C9CF013275EF6275 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		6CA1AF2A9EFDCB40E89F297F /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		71BE10021A72F3130083EE32 /* Messenger-iPad-Sheet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Messenger-iPad-Sheet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA45477DD68F2909374B51A4 /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C905E5DB18A83F74BD092CDD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		DDFA9095EABC480682E6396C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E76FE7634642D0C745F673A5 /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +161,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				35A4C7C11DE3FD17F022DC0C /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FBE670C1AB0094200661C28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A46BBD104CFF2EC7E3443BFB /* libPods-Tests.a in Frameworks */,
+				C81E271EDBBC5BF506E6C076 /* libPods-Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,6 +233,7 @@
 			children = (
 				4F86BF8B19F011E9007A3D4A /* Examples */,
 				4F1AD51C19E727640027043E /* Templates */,
+				4FBE67101AB0094200661C28 /* Tests */,
 				4F3EDB4B199ED00F004C15D6 /* Frameworks */,
 				4F3EDB4A199ED00F004C15D6 /* Products */,
 				68B0EE14916D384C7E703B9B /* Pods */,
@@ -199,6 +247,7 @@
 				4F86BF6519F011D0007A3D4A /* Messenger-Storyboard.app */,
 				4F86BFC319F050AF007A3D4A /* Messenger-Swift.app */,
 				71BE10021A72F3130083EE32 /* Messenger-iPad-Sheet.app */,
+				4FBE670F1AB0094200661C28 /* Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -210,6 +259,8 @@
 				4F3EDB4E199ED00F004C15D6 /* CoreGraphics.framework */,
 				4F3EDB50199ED00F004C15D6 /* UIKit.framework */,
 				DDFA9095EABC480682E6396C /* libPods.a */,
+				BA45477DD68F2909374B51A4 /* libPods-Tests.a */,
+				E76FE7634642D0C745F673A5 /* libPods-Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -309,11 +360,58 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		4F9BBA521AB483DC004E1127 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				4F9BBA5F1AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.h */,
+				4F9BBA601AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m */,
+				4FAB252A1AC78E2100B70766 /* NSString+LoremIpsum.h */,
+				4FAB252B1AC78E2100B70766 /* NSString+LoremIpsum.m */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		4FBE67101AB0094200661C28 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				4FDACDD81AE02A0B00303F23 /* SLKTextInputbarTests.m */,
+				4FDACDD91AE02A0B00303F23 /* SLKTextViewControllerTests.m */,
+				4F9BBA521AB483DC004E1127 /* Extensions */,
+				4FBE671F1AB08E5A00661C28 /* Stubs */,
+				4FBE67111AB0094200661C28 /* Supporting Files */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		4FBE67111AB0094200661C28 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4FBE67121AB0094200661C28 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4FBE671F1AB08E5A00661C28 /* Stubs */ = {
+			isa = PBXGroup;
+			children = (
+				4FBE671C1AB08E5600661C28 /* SLKTextViewControllerStub.h */,
+				4FBE671D1AB08E5600661C28 /* SLKTextViewControllerStub.m */,
+				4FAB25261AC786C800B70766 /* SLKTextInputbarStub.h */,
+				4FAB25271AC786C800B70766 /* SLKTextInputbarStub.m */,
+				4FAB25221AC7811800B70766 /* SLKTextViewStub.h */,
+				4FAB25231AC7811800B70766 /* SLKTextViewStub.m */,
+				4FAB25291AC7892500B70766 /* SLKStubEnums.h */,
+			);
+			name = Stubs;
+			sourceTree = "<group>";
+		};
 		68B0EE14916D384C7E703B9B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
 				622BF1F6C9CF013275EF6275 /* Pods.debug.xcconfig */,
 				C905E5DB18A83F74BD092CDD /* Pods.release.xcconfig */,
+				6CA1AF2A9EFDCB40E89F297F /* Pods-Tests.debug.xcconfig */,
+				275184D5567C78600C1EF80A /* Pods-Tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -378,6 +476,26 @@
 			productReference = 4F86BFC319F050AF007A3D4A /* Messenger-Swift.app */;
 			productType = "com.apple.product-type.application";
 		};
+		4FBE670E1AB0094200661C28 /* Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4FBE67171AB0094200661C28 /* Build configuration list for PBXNativeTarget "Tests" */;
+			buildPhases = (
+				7FEF3921C3078E00C39C7A09 /* Check Pods Manifest.lock */,
+				4FBE670B1AB0094200661C28 /* Sources */,
+				4FBE670C1AB0094200661C28 /* Frameworks */,
+				4FBE670D1AB0094200661C28 /* Resources */,
+				DD2F2E2887866DF88180458D /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4FBE67161AB0094200661C28 /* PBXTargetDependency */,
+			);
+			name = Tests;
+			productName = Tests;
+			productReference = 4FBE670F1AB0094200661C28 /* Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		71BE10011A72F3130083EE32 /* Messenger-iPad-Sheet */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 71BE10221A72F3130083EE32 /* Build configuration list for PBXNativeTarget "Messenger-iPad-Sheet" */;
@@ -403,7 +521,7 @@
 		4F3EDB41199ED00F004C15D6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0620;
 				ORGANIZATIONNAME = "Slack Technologies, Inc.";
 				TargetAttributes = {
 					4F3EDB48199ED00F004C15D6 = {
@@ -414,6 +532,10 @@
 					};
 					4F86BFC219F050AF007A3D4A = {
 						CreatedOnToolsVersion = 6.0.1;
+					};
+					4FBE670E1AB0094200661C28 = {
+						CreatedOnToolsVersion = 6.2;
+						TestTargetID = 4F3EDB48199ED00F004C15D6;
 					};
 					71BE10011A72F3130083EE32 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -437,6 +559,7 @@
 				4F86BF6419F011D0007A3D4A /* Messenger-Storyboard */,
 				4F86BFC219F050AF007A3D4A /* Messenger-Swift */,
 				71BE10011A72F3130083EE32 /* Messenger-iPad-Sheet */,
+				4FBE670E1AB0094200661C28 /* Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -470,11 +593,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4FBE670D1AB0094200661C28 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		71BE10001A72F3130083EE32 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F32561A1AA77386008C1DD9 /* Info.plist in Resources */,
 				71BE102F1A72F42F0083EE32 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -513,6 +642,21 @@
 			showEnvVarsInLog = 0;
 		};
 		5EA63F26E6C2C54F5E2EC192 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		7FEF3921C3078E00C39C7A09 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -587,6 +731,21 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		DD2F2E2887866DF88180458D /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Tests/Pods-Tests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		EC6E1A5473DEB830A89350DB /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -609,6 +768,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F9349AF1AE1806E0005042E /* SLKTextViewControllerStub.m in Sources */,
 				4F86BF9719F01234007A3D4A /* MessageViewController.m in Sources */,
 				4F3EDB5D199ED00F004C15D6 /* AppDelegate.m in Sources */,
 				4F8ADA771A68C37400023752 /* Message.m in Sources */,
@@ -642,6 +802,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4FBE670B1AB0094200661C28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FDACDDA1AE02A0B00303F23 /* SLKTextInputbarTests.m in Sources */,
+				4FAB25241AC7811800B70766 /* SLKTextViewStub.m in Sources */,
+				4FBE671E1AB08E5600661C28 /* SLKTextViewControllerStub.m in Sources */,
+				4FAB252C1AC78E2100B70766 /* NSString+LoremIpsum.m in Sources */,
+				4F9BBA611AB48B36004E1127 /* EXPMatchers+FBSnapshotTestExtensions.m in Sources */,
+				4FAB25281AC786C800B70766 /* SLKTextInputbarStub.m in Sources */,
+				4FDACDDB1AE02A0B00303F23 /* SLKTextViewControllerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		71BE0FFE1A72F3130083EE32 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -656,6 +830,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4FBE67161AB0094200661C28 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4F3EDB48199ED00F004C15D6 /* Messenger-Programatic */;
+			targetProxy = 4FBE67151AB0094200661C28 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4F86BF7119F011D0007A3D4A /* Main.storyboard */ = {
@@ -888,6 +1070,51 @@
 			};
 			name = Release;
 		};
+		4FBE67181AB0094200661C28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6CA1AF2A9EFDCB40E89F297F /* Pods-Tests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Messenger.app/Messenger";
+			};
+			name = Debug;
+		};
+		4FBE67191AB0094200661C28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 275184D5567C78600C1EF80A /* Pods-Tests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Messenger.app/Messenger";
+			};
+			name = Release;
+		};
 		71BE10231A72F3130083EE32 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 622BF1F6C9CF013275EF6275 /* Pods.debug.xcconfig */;
@@ -961,6 +1188,15 @@
 			buildConfigurations = (
 				4F86BFDF19F050AF007A3D4A /* Debug */,
 				4F86BFE019F050AF007A3D4A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4FBE67171AB0094200661C28 /* Build configuration list for PBXNativeTarget "Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FBE67181AB0094200661C28 /* Debug */,
+				4FBE67191AB0094200661C28 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

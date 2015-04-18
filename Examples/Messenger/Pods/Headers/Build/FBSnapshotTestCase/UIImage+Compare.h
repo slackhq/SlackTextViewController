@@ -1,0 +1,1 @@
+../../../FBSnapshotTestCase/UIImage+Compare.h

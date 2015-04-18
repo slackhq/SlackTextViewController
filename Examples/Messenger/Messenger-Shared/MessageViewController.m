@@ -26,6 +26,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 @property (nonatomic, strong) NSArray *searchResult;
 
+@property (nonatomic, getter=isStub) BOOL stub;
+
 @end
 
 @implementation MessageViewController
@@ -62,20 +64,30 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     [super viewDidLoad];
     
-    NSMutableArray *array = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < 100; i++) {
-        NSInteger words = (arc4random() % 40)+1;
+    if (!self.isStub) {
+        NSMutableArray *array = [[NSMutableArray alloc] init];
         
-        Message *message = [Message new];
-        message.username = [LoremIpsum name];
-        message.text = [LoremIpsum wordsWithNumber:words];
-        [array addObject:message];
+        for (int i = 0; i < 100; i++) {
+            NSInteger words = (arc4random() % 40)+1;
+            
+            Message *message = [Message new];
+            message.username = [LoremIpsum name];
+            message.text = [LoremIpsum wordsWithNumber:words];
+            [array addObject:message];
+        }
+        
+        NSArray *reversed = [[array reverseObjectEnumerator] allObjects];
+        
+        self.messages = [[NSMutableArray alloc] initWithArray:reversed];
+        
+        UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"] style:UIBarButtonItemStylePlain target:self action:@selector(editRandomMessage:)];
+        
+        UIBarButtonItem *typeItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_typing"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateUserTyping:)];
+        UIBarButtonItem *appendItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_append"] style:UIBarButtonItemStylePlain target:self action:@selector(fillWithText:)];
+        
+        self.navigationItem.rightBarButtonItems = @[editItem, appendItem, typeItem];
     }
     
-    NSArray *reversed = [[array reverseObjectEnumerator] allObjects];
-    
-    self.messages = [[NSMutableArray alloc] initWithArray:reversed];
     self.users = @[@"Allen", @"Anna", @"Alicia", @"Arnold", @"Armando", @"Antonio", @"Brad", @"Catalaya", @"Christoph", @"Emerson", @"Eric", @"Everyone", @"Steve"];
     self.channels = @[@"General", @"Random", @"iOS", @"Bugs", @"Sports", @"Android", @"UI", @"SSB"];
     self.emojis = @[@"m", @"man", @"machine", @"block-a", @"block-b", @"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
@@ -112,13 +124,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"] style:UIBarButtonItemStylePlain target:self action:@selector(editRandomMessage:)];
-    
-    UIBarButtonItem *typeItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_typing"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateUserTyping:)];
-    UIBarButtonItem *appendItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_append"] style:UIBarButtonItemStylePlain target:self action:@selector(fillWithText:)];
-    
-    self.navigationItem.rightBarButtonItems = @[editItem, appendItem, typeItem];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -495,24 +500,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     else {
         return kMinimumHeight;
     }
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if ([tableView isEqual:self.autoCompletionView]) {
-        UIView *topView = [UIView new];
-        topView.backgroundColor = self.autoCompletionView.separatorColor;
-        return topView;
-    }
-    return nil;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    if ([tableView isEqual:self.autoCompletionView]) {
-        return 0.5;
-    }
-    return 0.0;
 }
 
 

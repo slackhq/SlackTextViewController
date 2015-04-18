@@ -32,6 +32,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 // The shared scrollView pointer, either a tableView or collectionView
 @property (nonatomic, weak) UIScrollView *scrollViewProxy;
 
+// A hairline displayed on top of the auto-completion view, to better separate the content from the control.
+@property (nonatomic, strong) UIView *autoCompletionHairline;
+
 // Auto-Layout height constraints used for updating their constants
 @property (nonatomic, strong) NSLayoutConstraint *scrollViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *textInputbarHC;
@@ -287,6 +290,14 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         _autoCompletionView.scrollsToTop = NO;
         _autoCompletionView.dataSource = self;
         _autoCompletionView.delegate = self;
+        
+        CGRect rect = CGRectZero;
+        rect.size = CGSizeMake(CGRectGetWidth(self.view.frame), 0.5);
+        
+        _autoCompletionHairline = [[UIView alloc] initWithFrame:rect];
+        _autoCompletionHairline.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        _autoCompletionHairline.backgroundColor = self.autoCompletionView.separatorColor;
+        [_autoCompletionView addSubview:_autoCompletionHairline];
     }
     return _autoCompletionView;
 }
@@ -771,16 +782,12 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (void)didPressRightButton:(id)sender
 {
     if (self.shouldClearTextAtRightButtonPress) {
-        [self.textView setText:nil];
+        // Clears the text and the undo manager
+        [self.textView slk_clearText:YES];
     }
     
     // Clears cache
     [self clearCachedText];
-    
-    // Clears the undo manager
-    if (self.textView.undoManagerEnabled) {
-        [self.textView.undoManager removeAllActions];
-    }
 }
 
 - (void)editText:(NSString *)text
@@ -816,7 +823,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     [self.textInputbar endTextEdition];
-    [self.textView setText:nil];
+    
+    // Clears the text and but not the undo manager
+    [self.textView slk_clearText:NO];
 }
 
 - (void)didCancelTextEditing:(id)sender
@@ -826,7 +835,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     [self.textInputbar endTextEdition];
-    [self.textView setText:nil];
+    
+    // Clears the text and but not the undo manager
+    [self.textView slk_clearText:NO];
     
     // Restores any previous cached text before entering in editing mode
     [self slk_reloadTextView];
@@ -1422,10 +1433,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         }
     }
     
-    // Forward to the main queue, to be sure it goes into the next run loop
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self slk_handleProcessedWord:word range:range];
-    });
+    [self slk_handleProcessedWord:word range:range];
 }
 
 - (void)slk_handleProcessedWord:(NSString *)word range:(NSRange)range
@@ -1764,9 +1772,16 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (!self.isMovingKeyboard) {
-        _scrollViewOffsetBeforeDragging = scrollView.contentOffset;
-        _keyboardHeightBeforeDragging = self.keyboardHC.constant;
+    if ([scrollView isEqual:self.autoCompletionView]) {
+        CGRect frame = self.autoCompletionHairline.frame;
+        frame.origin.y = scrollView.contentOffset.y;
+        self.autoCompletionHairline.frame = frame;
+    }
+    else {
+        if (!self.isMovingKeyboard) {
+            _scrollViewOffsetBeforeDragging = scrollView.contentOffset;
+            _keyboardHeightBeforeDragging = self.keyboardHC.constant;
+        }
     }
 }
 
@@ -1800,8 +1815,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex != [alertView cancelButtonIndex] ) {
-        [self.textView setText:nil];
+    if (self.shakeToClearEnabled && buttonIndex != [alertView cancelButtonIndex] ) {
+        
+        // Clears the text and but not the undo manager
+        [self.textView slk_clearText:NO];
     }
 }
 
