@@ -1,0 +1,4 @@
+language: objective-c
+cache: bundler
+before_install: bundle install
+script: bundle exec pod lib coverage
