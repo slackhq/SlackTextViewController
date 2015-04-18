@@ -20,6 +20,13 @@
 @interface SLKTextView (SLKAdditions)
 
 /**
+ Clears the text.
+ 
+ @param clearUndo YES if clearing the text should also clear the undo manager (if enabled).
+ */
+- (void)slk_clearText:(BOOL)clearUndo;
+
+/**
  Scrolls to the very end of the content size, animated.
  
  @param animated YES if the scrolling should be animated.

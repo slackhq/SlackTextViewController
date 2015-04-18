@@ -782,16 +782,12 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (void)didPressRightButton:(id)sender
 {
     if (self.shouldClearTextAtRightButtonPress) {
-        [self.textView setText:nil];
+        // Clears the text and the undo manager
+        [self.textView slk_clearText:YES];
     }
     
     // Clears cache
     [self clearCachedText];
-    
-    // Clears the undo manager
-    if (self.textView.undoManagerEnabled) {
-        [self.textView.undoManager removeAllActions];
-    }
 }
 
 - (void)editText:(NSString *)text
@@ -827,7 +823,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     [self.textInputbar endTextEdition];
-    [self.textView setText:nil];
+    
+    // Clears the text and but not the undo manager
+    [self.textView slk_clearText:NO];
 }
 
 - (void)didCancelTextEditing:(id)sender
@@ -837,7 +835,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     [self.textInputbar endTextEdition];
-    [self.textView setText:nil];
+    
+    // Clears the text and but not the undo manager
+    [self.textView slk_clearText:NO];
     
     // Restores any previous cached text before entering in editing mode
     [self slk_reloadTextView];
@@ -1818,8 +1818,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex != [alertView cancelButtonIndex] ) {
-        [self.textView setText:nil];
+    if (self.shakeToClearEnabled && buttonIndex != [alertView cancelButtonIndex] ) {
+        
+        // Clears the text and but not the undo manager
+        [self.textView slk_clearText:NO];
     }
 }
 

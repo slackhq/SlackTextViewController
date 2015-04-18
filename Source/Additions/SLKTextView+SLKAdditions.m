@@ -18,6 +18,15 @@
 
 @implementation SLKTextView (SLKAdditions)
 
+- (void)slk_clearText:(BOOL)clearUndo
+{
+    [super setText:nil];
+    
+    if (self.undoManagerEnabled && clearUndo) {
+        [self.undoManager removeAllActions];
+    }
+}
+
 - (void)slk_scrollToCaretPositonAnimated:(BOOL)animated
 {
     if (animated) {
