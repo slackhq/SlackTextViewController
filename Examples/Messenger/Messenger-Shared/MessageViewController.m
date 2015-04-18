@@ -32,15 +32,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 @implementation MessageViewController
 
-+ (instancetype)stub
-{
-    MessageViewController *controller = [[MessageViewController alloc] initWithTableViewStyle:UITableViewStylePlain];
-    if (controller) {
-        controller.stub = YES;
-    }
-    return controller;
-}
-
 - (id)init
 {
     self = [super initWithTableViewStyle:UITableViewStylePlain];
