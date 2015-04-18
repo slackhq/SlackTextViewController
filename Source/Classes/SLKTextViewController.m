@@ -1433,10 +1433,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         }
     }
     
-    // Forward to the main queue, to be sure it goes into the next run loop
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self slk_handleProcessedWord:word range:range];
-    });
+    [self slk_handleProcessedWord:word range:range];
 }
 
 - (void)slk_handleProcessedWord:(NSString *)word range:(NSRange)range

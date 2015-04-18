@@ -152,9 +152,9 @@ describe(@"Autocompletion Tests", ^{
         
         [tvc.textView slk_insertTextAtCaretRange:@"an"];
         
-        NSLog(@"tvc.foundWord : %@", tvc.foundWord);
-        
+        // Auto-completion mode should be enabled
         expect(tvc.foundPrefix).to.equal(@"@");
+        expect(tvc.foundWord).to.equal(@"an");
         expect(tvc.autoCompleting).to.beTruthy;
         
         return window;
@@ -164,6 +164,7 @@ describe(@"Autocompletion Tests", ^{
         
         [tvc acceptAutoCompletionWithString:@"Anna" keepPrefix:YES];
         
+        // Auto-completion mode should now be disabled
         expect(tvc.foundPrefix).to.beNil;
         expect(tvc.foundWord).to.beNil;
         expect(tvc.autoCompleting).to.beFalsy;
