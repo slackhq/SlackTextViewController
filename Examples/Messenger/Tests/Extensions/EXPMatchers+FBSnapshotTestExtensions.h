@@ -11,10 +11,10 @@
 #import <Expecta/Expecta.h>
 #import <Expecta+Snapshots/EXPMatchers+FBSnapshotTest.h>
 
-#define RECORD_ONLY YES
+#define RECORD_ONLY NO
 
 #if !defined(itShould)
-    #ifdef RECORD_ONLY
+    #if RECORD_ONLY
         #define itShould(name, ...)                 _itTestsOrRecords(self, __LINE__, __FILE__, YES, YES, name, (__VA_ARGS__))
     #else
         #define itShould(name, ...)                 _itTests(self, __LINE__, __FILE__, YES, name, (__VA_ARGS__))

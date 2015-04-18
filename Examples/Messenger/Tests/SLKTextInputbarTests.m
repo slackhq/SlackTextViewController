@@ -29,7 +29,7 @@ describe(@"SLKTextInputbar Screenshots", ^{
         expect(inputbar).toNot.beNil();
     });
     
-    itTestsOrRecordsSnapshotsAsync(@"displays an empty input bar", ^{
+    itShould(@"display an empty input bar", ^{
         
         inputbar.autoHideRightButton = NO;
         
@@ -38,7 +38,7 @@ describe(@"SLKTextInputbar Screenshots", ^{
         return inputbar;
     });
     
-    itTestsOrRecordsSnapshotsAsync(@"displays a default input bar", ^{
+    itShould(@"display a default input bar", ^{
         
         expect(inputbar.autoHideRightButton).to.beTruthy();
         

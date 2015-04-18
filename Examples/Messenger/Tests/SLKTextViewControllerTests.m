@@ -74,14 +74,14 @@ describe(@"Initialization Tests", ^{
 
 describe(@"Growing Text View Tests", ^{
     
-    itShould(@"displays the text input at the bottom", ^{
+    itShould(@"display the text input at the bottom", ^{
         
         expect(tvc.textView.isFirstResponder).will.beFalsy();
         
         return window;
     });
     
-    itShould(@"displays the text input on top of the keyboard", ^{
+    itShould(@"display the text input on top of the keyboard", ^{
         
         [tvc presentKeyboard:NO];
         
@@ -90,7 +90,7 @@ describe(@"Growing Text View Tests", ^{
         return window;
     });
     
-    itShould(@"displays the text input with 2 lines of text", ^{
+    itShould(@"display the text input with 2 lines of text", ^{
         
         tvc.textView.text = [NSString sentence];
         
@@ -99,7 +99,7 @@ describe(@"Growing Text View Tests", ^{
         return window;
     });
     
-    itShould(@"displays the text input with multiple lines of text", ^{
+    itShould(@"display the text input with multiple lines of text", ^{
         
         tvc.textView.text = [NSString sentencesWithNumber:5];
         
@@ -108,7 +108,7 @@ describe(@"Growing Text View Tests", ^{
         return window;
     });
     
-    itShould(@"displays the text input with multiple lines of text", ^{
+    itShould(@"display the text input with multiple lines of text", ^{
         
         tvc.textView.text = [NSString sentencesWithNumber:5];
         
@@ -117,7 +117,7 @@ describe(@"Growing Text View Tests", ^{
         return window;
     });
     
-    itShould(@"empties the text input after hitting right button", ^{
+    itShould(@"empty the text input after hitting right button", ^{
         
         // Simulates pressing the right button
         [tvc didPressRightButton:tvc.rightButton];
@@ -131,29 +131,46 @@ describe(@"Growing Text View Tests", ^{
 
 #pragma mark - Autocompletion Tests
 
-describe(@"Growing Text View Tests", ^{
+describe(@"Autocompletion Tests", ^{
     
-    itShould(@"displays the autocompletion view", ^{
-        
+    beforeEach(^{
         [tvc.textView becomeFirstResponder];
-        
+        [tvc.textView slk_clearText:YES];
         [tvc.textView slk_insertTextAtCaretRange:@"hello @"];
+    });
+    
+    itShould(@"display the autocompletion view", ^{
         
+        expect(tvc.foundPrefix).to.equal(@"@");
+        expect(tvc.foundWord).to.beNil;
         expect(tvc.autoCompleting).to.beTruthy;
         
         return window;
     });
     
-    itShould(@"filters results in autocompletion view", ^{
+    itShould(@"filter results in autocompletion view", ^{
         
         [tvc.textView slk_insertTextAtCaretRange:@"an"];
         
+        NSLog(@"tvc.foundWord : %@", tvc.foundWord);
+        
+        expect(tvc.foundPrefix).to.equal(@"@");
         expect(tvc.autoCompleting).to.beTruthy;
+        
+        return window;
+    });
+    
+    itShould(@"insert the first autocompletion item to the text input with prefix", ^{
+        
+        [tvc acceptAutoCompletionWithString:@"Anna" keepPrefix:YES];
+        
+        expect(tvc.foundPrefix).to.beNil;
+        expect(tvc.foundWord).to.beNil;
+        expect(tvc.autoCompleting).to.beFalsy;
         
         return window;
     });
 });
-
 
 
 SpecEnd

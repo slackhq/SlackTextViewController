@@ -87,6 +87,8 @@ NSString *_imagePathForTestSpec(NSString *test, NSString *spec) {
 
 void _itTestsOrRecords(id self, int lineNumber, const char *fileName, BOOL asynch, BOOL record, NSString *spec, id (^block)()) {
 
+    NSLog(@"%s",__FUNCTION__);
+    
     void (^snapshot)(id, NSString *) = ^void (id sut, NSString *suffix) {
         
         EXPExpect *expectation = _EXP_expect(self, lineNumber, fileName, ^id{ return EXPObjectify((sut)); });
@@ -115,6 +117,8 @@ void _itTestsOrRecords(id self, int lineNumber, const char *fileName, BOOL async
 
 void _itTests(id self, int lineNumber, const char *fileName, BOOL asynch, NSString *spec, id (^block)()) {
     
+    NSLog(@"%s",__FUNCTION__);
+    
     if (!_fileManager) {
         _fileManager = [[NSFileManager alloc] init];
     }
@@ -124,7 +128,11 @@ void _itTests(id self, int lineNumber, const char *fileName, BOOL asynch, NSStri
     NSString *specName = [spec stringByAppendingString:suffix];
     NSString *imagePath = _imagePathForTestSpec([NSString stringWithUTF8String:fileName], specName);
     
+    NSLog(@"imagePath : %@", imagePath);
+    
     BOOL record = ![_fileManager fileExistsAtPath:imagePath];
     
-    _itTestsOrRecords(self, lineNumber, fileName, asynch, record, specName, block);
+    NSLog(@"record : %@", record ? @"YES" : @"NO");
+    
+    _itTestsOrRecords(self, lineNumber, fileName, asynch, record, spec, block);
 }
