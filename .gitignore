@@ -16,3 +16,7 @@ DerivedData
 .idea/
 *.hmap
 .gutter.json
+
+Tests/Pods
+Tests/Podfile.lock
+Tests/SlackTextViewControllerTests.xcodeproj/xcshareddata/xcschemes/
