@@ -519,7 +519,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     CGFloat bottomWindow = CGRectGetMaxY(bounds);
     CGFloat bottomView = CGRectGetMaxY(viewRect);
     
-    CGFloat statusBarHeight = CGRectGetHeight([self.view convertRect:[UIApplication sharedApplication].statusBarFrame fromView:nil]);
+    CGRect statusBarRect = [self.view convertRect:[UIApplication sharedApplication].statusBarFrame fromView:nil];
+    CGFloat statusBarHeight = MIN(statusBarRect.size.height, statusBarRect.size.width);
     
     CGFloat bottomMargin = bottomWindow - bottomView;
     
