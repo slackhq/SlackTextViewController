@@ -1,0 +1,8 @@
+[
+  "-workspace", "Tests/SlackTextViewControllerTests.xcworkspace",
+  "-scheme", "Tests",
+  "-sdk", "iphonesimulator",
+  "-configuration", "Debug",
+  "-destination", "name=iPhone 4s,OS=8.1",
+  "-destination", "name=iPhone 5s,OS=8.2",
+]

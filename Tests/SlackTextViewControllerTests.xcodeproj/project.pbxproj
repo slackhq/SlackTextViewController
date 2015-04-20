@@ -17,12 +17,9 @@
 		4F13F2A11AE3142900B55A5C /* SLKTextViewStub.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F13F29A1AE3142900B55A5C /* SLKTextViewStub.m */; };
 		4F13F2CF1AE319C400B55A5C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F13F2CB1AE319C400B55A5C /* AppDelegate.m */; };
 		4F13F2D01AE319C400B55A5C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F13F2CB1AE319C400B55A5C /* AppDelegate.m */; };
-		4F13F2D11AE319C400B55A5C /* Application-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F13F2CC1AE319C400B55A5C /* Application-Info.plist */; };
-		4F13F2D21AE319C400B55A5C /* Application-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F13F2CC1AE319C400B55A5C /* Application-Info.plist */; };
-		4F13F2D31AE319C400B55A5C /* Tests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F13F2CD1AE319C400B55A5C /* Tests-Info.plist */; };
-		4F13F2D41AE319C400B55A5C /* Tests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F13F2CD1AE319C400B55A5C /* Tests-Info.plist */; };
 		4F13F2D51AE319C400B55A5C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F13F2CE1AE319C400B55A5C /* main.m */; };
 		4F13F2D61AE319C400B55A5C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F13F2CE1AE319C400B55A5C /* main.m */; };
+		9C1CDEF58F483EBE397D107D /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65733EC04345BFA3E7348982 /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C1CDEF58F483EBE397D107D /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,9 +188,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4F13F2C51AE3190A00B55A5C /* Build configuration list for PBXNativeTarget "Application" */;
 			buildPhases = (
+				D3AB3C6B6E94B6A1517DF892 /* Check Pods Manifest.lock */,
 				4F13F2A31AE3190A00B55A5C /* Sources */,
 				4F13F2A41AE3190A00B55A5C /* Frameworks */,
 				4F13F2A51AE3190A00B55A5C /* Resources */,
+				44F512F6A87C1D6038D47458 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -227,7 +227,6 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 			);
 			mainGroup = 4F13F23C1AE3120D00B55A5C;
 			productRefGroup = 4F13F2461AE3120E00B55A5C /* Products */;
@@ -245,8 +244,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F13F2D31AE319C400B55A5C /* Tests-Info.plist in Resources */,
-				4F13F2D11AE319C400B55A5C /* Application-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,8 +251,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F13F2D41AE319C400B55A5C /* Tests-Info.plist in Resources */,
-				4F13F2D21AE319C400B55A5C /* Application-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,6 +272,21 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		44F512F6A87C1D6038D47458 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		662EDD20C449521568BCA9EB /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -290,6 +300,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D3AB3C6B6E94B6A1517DF892 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -443,6 +468,7 @@
 		};
 		4F13F2C11AE3190A00B55A5C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FA34B70E3558A164D91762C3 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -450,20 +476,23 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Supporting Files/Application-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		4F13F2C21AE3190A00B55A5C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8F55D33256EB9B7897C4492B /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Supporting Files/Application-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -495,6 +524,7 @@
 				4F13F2C21AE3190A00B55A5C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
