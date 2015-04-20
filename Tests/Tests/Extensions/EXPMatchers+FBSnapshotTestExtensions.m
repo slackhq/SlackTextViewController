@@ -55,8 +55,8 @@ NSString *_deviceSuffix() {
     
     [strings addObject:[NSString stringWithFormat:@"ios%@", [UIDevice currentDevice].systemVersion]];
     
-    NSMutableString *suffix = [[strings componentsJoinedByString:@" "] mutableCopy];
-    [suffix insertString:@" " atIndex:0];
+    NSMutableString *suffix = [[strings componentsJoinedByString:@"_"] mutableCopy];
+    [suffix insertString:@"_" atIndex:0];
     
     return suffix;
 }
@@ -79,9 +79,8 @@ NSString *_imagePathForTestSpec(NSString *test, NSString *spec) {
     [pathComponents addObject:@"ReferenceImages"];
     
     NSString *path = [pathComponents componentsJoinedByString:@"/"];
-    NSString *specName = [_specName(spec) stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     
-    return [NSString stringWithFormat:@"%@/%@/%@%@.png", path, folderName, specName, _densitySuffix()];
+    return [NSString stringWithFormat:@"%@/%@/%@%@.png", path, folderName, _specName(spec), _densitySuffix()];
 }
 
 void _itTestsOrRecords(id self, int lineNumber, const char *fileName, BOOL asynch, BOOL record, NSString *spec, id (^block)()) {
@@ -100,11 +99,9 @@ void _itTestsOrRecords(id self, int lineNumber, const char *fileName, BOOL async
         }
     };
     
-    NSString *specName = _specName(spec);
-    
-    it(specName, ^{
+    it(spec, ^{
         id sut = block();
-        snapshot(sut, [specName stringByReplacingOccurrencesOfString:@" " withString:@"_"]);
+        snapshot(sut, _specName(spec));
     });
 }
 
