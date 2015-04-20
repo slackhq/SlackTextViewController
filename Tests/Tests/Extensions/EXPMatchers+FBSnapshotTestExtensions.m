@@ -13,21 +13,14 @@
 
 static NSFileManager *_fileManager = nil;
 
-NSString *_osSuffix() {
-    
-    if (SLK_IS_IOS8_AND_HIGHER) {
-        return @"_ios8";
-    }
-    else {
-        return @"_ios7";
-    }
-}
-
 NSString *_densitySuffix() {
-    if ([UIScreen mainScreen].scale > 2.0) {
+    
+    CGFloat scale = [UIScreen mainScreen].scale;
+    
+    if (scale > 2.0) {
         return @"@3x";
     }
-    else if ([UIScreen mainScreen].scale == 2.0) {
+    else if (scale == 2.0) {
         return @"@2x";
     }
     return @"";
@@ -60,15 +53,20 @@ NSString *_deviceSuffix() {
         [strings addObject:@"portrait"];
     }
     
-    NSMutableString *suffix = [[strings componentsJoinedByString:@"_"] mutableCopy];
-    [suffix insertString:@"_" atIndex:0];
-    [suffix appendString:_osSuffix()];
+    [strings addObject:[NSString stringWithFormat:@"ios%@", [UIDevice currentDevice].systemVersion]];
+    
+    NSMutableString *suffix = [[strings componentsJoinedByString:@" "] mutableCopy];
+    [suffix insertString:@" " atIndex:0];
     
     return suffix;
 }
 
 NSString *_specName(NSString *name) {
-    return [[name stringByReplacingOccurrencesOfString:@" " withString:@"_"] lowercaseString];
+    
+    NSMutableString *specName = [NSMutableString stringWithString:name];
+    [specName appendString:_deviceSuffix()];
+    
+    return [specName lowercaseString];
 }
 
 NSString *_imagePathForTestSpec(NSString *test, NSString *spec) {
@@ -81,17 +79,16 @@ NSString *_imagePathForTestSpec(NSString *test, NSString *spec) {
     [pathComponents addObject:@"ReferenceImages"];
     
     NSString *path = [pathComponents componentsJoinedByString:@"/"];
-
-    return [NSString stringWithFormat:@"%@/%@/%@%@.png", path, folderName, _specName(spec), _densitySuffix()];
+    NSString *specName = [_specName(spec) stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    
+    return [NSString stringWithFormat:@"%@/%@/%@%@.png", path, folderName, specName, _densitySuffix()];
 }
 
 void _itTestsOrRecords(id self, int lineNumber, const char *fileName, BOOL asynch, BOOL record, NSString *spec, id (^block)()) {
 
-    void (^snapshot)(id, NSString *) = ^void (id sut, NSString *suffix) {
+    void (^snapshot)(id, NSString *) = ^void(id sut, NSString *specName) {
         
         EXPExpect *expectation = _EXP_expect(self, lineNumber, fileName, ^id{ return EXPObjectify((sut)); });
-        
-        NSString *specName = [_specName(spec) stringByAppendingString:suffix];
         
         if (record) {
             if (asynch) expectation.will.recordSnapshotNamed(specName);
@@ -103,14 +100,12 @@ void _itTestsOrRecords(id self, int lineNumber, const char *fileName, BOOL async
         }
     };
     
-    NSString *suffix = _deviceSuffix();
+    NSString *specName = _specName(spec);
     
-    if (suffix.length > 0) {
-        it([spec stringByAppendingString:suffix], ^{
-            id sut = block();
-            snapshot(sut, suffix);
-        });
-    }
+    it(specName, ^{
+        id sut = block();
+        snapshot(sut, [specName stringByReplacingOccurrencesOfString:@" " withString:@"_"]);
+    });
 }
 
 void _itTests(id self, int lineNumber, const char *fileName, BOOL asynch, NSString *spec, id (^block)()) {
@@ -119,10 +114,7 @@ void _itTests(id self, int lineNumber, const char *fileName, BOOL asynch, NSStri
         _fileManager = [[NSFileManager alloc] init];
     }
 
-    NSString *suffix = _deviceSuffix();
-    
-    NSString *specName = [spec stringByAppendingString:suffix];
-    NSString *imagePath = _imagePathForTestSpec([NSString stringWithUTF8String:fileName], specName);
+    NSString *imagePath = _imagePathForTestSpec([NSString stringWithUTF8String:fileName], spec);
     
     BOOL record = ![_fileManager fileExistsAtPath:imagePath];
     
