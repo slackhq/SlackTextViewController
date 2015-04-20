@@ -437,6 +437,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /** UITextViewDelegate */
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text NS_REQUIRES_SUPER;
+- (void)textViewDidChange:(UITextView *)textView NS_REQUIRES_SUPER;
 - (void)textViewDidChangeSelection:(SLKTextView *)textView NS_REQUIRES_SUPER;
 
 /** UIScrollViewDelegate */

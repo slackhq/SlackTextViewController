@@ -63,6 +63,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 // The setter of isExternalKeyboardDetected, for private use.
 @property (nonatomic, getter = isRotating) BOOL rotating;
 
+// Used to detect if caret selection/movement did occur (third-party keyboards don't forward events properly sometimes)
+@property (nonatomic) BOOL selectionDidChange;
+
 // The subclass of SLKTextView class to use
 @property (nonatomic, strong) Class textViewClass;
 
@@ -1710,6 +1713,18 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
 }
 
+- (void)textViewDidChange:(UITextView *)textView
+{
+    // Process the text only when the caret selection/movement didn't change earlier
+    // This fixes an issue with third-party keyboards not forwarding events properly sometimes.
+    if (!self.selectionDidChange) {
+        [self slk_processTextForAutoCompletion];
+    }
+    
+    // Resets the state
+    self.selectionDidChange = NO;
+}
+
 - (void)textViewDidChangeSelection:(SLKTextView *)textView
 {
     // The text view must be first responder
@@ -1718,9 +1733,12 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     // Skips if the loupe is visible or if there is a real text selection
-    if (textView.isLoupeVisible || self.textView.selectedRange.length > 0) {
+    if (textView.isLoupeVisible || textView.selectedRange.length > 0) {
         return;
     }
+    
+    // This helps avoiding text to be processed for a second time in -textViewDidChange:
+    self.selectionDidChange = YES;
     
     // Process the text at every caret movement
     [self slk_processTextForAutoCompletion];
