@@ -1,7 +1,0 @@
-#include "Pods-Tests-Expecta+Snapshots.xcconfig"
-FRAMEWORK_SEARCH_PATHS = ${PODS_TESTS_EXPECTA_SNAPSHOTS_FRAMEWORK_SEARCH_PATHS}
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/Expecta+Snapshots" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/Expecta" "${PODS_ROOT}/Headers/Public/Expecta+Snapshots" "${PODS_ROOT}/Headers/Public/FBSnapshotTestCase" "${PODS_ROOT}/Headers/Public/LoremIpsum" "${PODS_ROOT}/Headers/Public/SlackTextViewController" "${PODS_ROOT}/Headers/Public/SlackTextViewController/Additions" "${PODS_ROOT}/Headers/Public/SlackTextViewController/Classes" "${PODS_ROOT}/Headers/Public/Specta"
-OTHER_LDFLAGS = ${PODS_TESTS_EXPECTA_SNAPSHOTS_OTHER_LDFLAGS} -ObjC
-PODS_ROOT = ${SRCROOT}
-SKIP_INSTALL = YES
