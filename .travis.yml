@@ -7,16 +7,8 @@ cache:
 before_install:
   - bundle install
 
-env:
-  matrix:
-    - TEST_SDK=iphonesimulator7.0 SIMULATOR=iphone
-	- TEST_SDK=iphonesimulator8.1 SIMULATOR=iphone
-
 script:
-  - xctool test -test-sdk $TEST_SDK -simulator $SIMULATOR
-
-#script:
-  #- bundle exec pod lib coverage
+  - xctool test
 
 notifications:
   slack: slktvc:g7fiaXRUFmuMS6t3l1p7bUir
