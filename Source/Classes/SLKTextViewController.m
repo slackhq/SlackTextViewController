@@ -167,21 +167,16 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 #pragma mark - View lifecycle
 
-- (void)loadView
+- (void)viewDidLoad
 {
-    [super loadView];
-        
+    [super viewDidLoad];
+
     [self.view addSubview:self.scrollViewProxy];
     [self.view addSubview:self.autoCompletionView];
     [self.view addSubview:self.typingIndicatorView];
     [self.view addSubview:self.textInputbar];
-    
-    [self slk_setupViewConstraints];
-}
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
+    [self slk_setupViewConstraints];
 }
 
 - (void)viewWillAppear:(BOOL)animated
