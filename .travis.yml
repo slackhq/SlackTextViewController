@@ -6,6 +6,7 @@ cache:
 
 before_install:
   - bundle install
+  - cd Tests && pod install && cd $TRAVIS_BUILD_DIR
 
 script:
   - xctool test
