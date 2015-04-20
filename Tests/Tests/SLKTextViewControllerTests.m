@@ -108,15 +108,6 @@ describe(@"Growing Text View Tests", ^{
         return window;
     });
     
-    itShould(@"display the text input with multiple lines of text", ^{
-        
-        tvc.textView.text = [NSString sentencesWithNumber:5];
-        
-        expect(tvc.textView.numberOfLines).will.beGreaterThan(@10);
-        
-        return window;
-    });
-    
     itShould(@"empty the text input after hitting right button", ^{
         
         // Simulates pressing the right button

@@ -5,12 +5,18 @@ cache:
   - bundler
 
 before_install:
-  - gem install cocoapods --no-rdoc --no-ri --no-document --quiet
-  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
-  - cd Tests && pod install && cd $TRAVIS_BUILD_DIR
+  - bundle install
+
+env:
+  matrix:
+    - TEST_SDK=iphonesimulator7.0 SIMULATOR=iphone
+	- TEST_SDK=iphonesimulator8.1 SIMULATOR=iphone
 
 script:
-  - bundle exec pod lib coverage
+  - xctool test -test-sdk $TEST_SDK -simulator $SIMULATOR
+
+#script:
+  #- bundle exec pod lib coverage
 
 notifications:
   slack: slktvc:g7fiaXRUFmuMS6t3l1p7bUir
