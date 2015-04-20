@@ -160,6 +160,8 @@ describe(@"Autocompletion Tests", ^{
         expect(tvc.foundWord).to.beNil;
         expect(tvc.autoCompleting).to.beFalsy;
         
+        expect(tvc.textView.text).to.equal(@"hello @Anna");
+        
         return window;
     });
 });
