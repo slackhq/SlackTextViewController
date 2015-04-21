@@ -125,7 +125,8 @@ describe(@"Growing Text View Tests", ^{
 describe(@"Autocompletion Tests", ^{
     
     beforeEach(^{
-        [tvc.textView becomeFirstResponder];
+        [tvc presentKeyboard:NO];
+        
         [tvc.textView slk_clearText:YES];
         [tvc.textView slk_insertTextAtCaretRange:@"hello @"];
     });

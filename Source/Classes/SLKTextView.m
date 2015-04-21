@@ -18,14 +18,15 @@
 #import "SLKTextView+SLKAdditions.h"
 #import "SLKUIConstants.h"
 
-NSString * const SLKTextViewTextWillChangeNotification =        @"SLKTextViewTextWillChangeNotification";
-NSString * const SLKTextViewContentSizeDidChangeNotification =  @"SLKTextViewContentSizeDidChangeNotification";
-NSString * const SLKTextViewDidPasteItemNotification =          @"SLKTextViewDidPasteItemNotification";
-NSString * const SLKTextViewDidShakeNotification =              @"SLKTextViewDidShakeNotification";
+NSString * const SLKTextViewTextWillChangeNotification =            @"SLKTextViewTextWillChangeNotification";
+NSString * const SLKTextViewContentSizeDidChangeNotification =      @"SLKTextViewContentSizeDidChangeNotification";
+NSString * const SLKTextViewSelectedRangeDidChangeNotification =    @"SLKTextViewSelectedRangeDidChangeNotification";
+NSString * const SLKTextViewDidPasteItemNotification =              @"SLKTextViewDidPasteItemNotification";
+NSString * const SLKTextViewDidShakeNotification =                  @"SLKTextViewDidShakeNotification";
 
-NSString * const SLKTextViewPastedItemContentType =             @"SLKTextViewPastedItemContentType";
-NSString * const SLKTextViewPastedItemMediaType =               @"SLKTextViewPastedItemMediaType";
-NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPastedItemData";
+NSString * const SLKTextViewPastedItemContentType =                 @"SLKTextViewPastedItemContentType";
+NSString * const SLKTextViewPastedItemMediaType =                   @"SLKTextViewPastedItemMediaType";
+NSString * const SLKTextViewPastedItemData =                        @"SLKTextViewPastedItemData";
 
 @interface SLKTextView ()
 
@@ -371,6 +372,18 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 #pragma mark - UITextView Overrides
 
+- (void)setSelectedRange:(NSRange)selectedRange
+{
+    [super setSelectedRange:selectedRange];
+}
+
+- (void)setSelectedTextRange:(UITextRange *)selectedTextRange
+{
+    [super setSelectedTextRange:selectedTextRange];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewSelectedRangeDidChangeNotification object:self userInfo:nil];
+}
+
 - (void)setText:(NSString *)text
 {
     // Registers for undo management
@@ -486,8 +499,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 {
     id pastedItem = [self slk_pastedItem];
     
-    if ([pastedItem isKindOfClass:[NSDictionary class]])
-    {
+    if ([pastedItem isKindOfClass:[NSDictionary class]]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewDidPasteItemNotification object:nil userInfo:pastedItem];
     }
     else if ([pastedItem isKindOfClass:[NSString class]]) {

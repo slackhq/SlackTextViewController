@@ -542,9 +542,5 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     return [super textView:textView shouldChangeTextInRange:range replacementText:text];
 }
 
-- (void)textViewDidChangeSelection:(SLKTextView *)textView
-{
-    [super textViewDidChangeSelection:textView];
-}
 
 @end

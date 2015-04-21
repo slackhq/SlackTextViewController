@@ -63,9 +63,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 // The setter of isExternalKeyboardDetected, for private use.
 @property (nonatomic, getter = isRotating) BOOL rotating;
 
-// Used to detect if caret selection/movement did occur (third-party keyboards don't forward events properly sometimes)
-@property (nonatomic) BOOL selectionDidChange;
-
 // The subclass of SLKTextView class to use
 @property (nonatomic, strong) Class textViewClass;
 
@@ -766,6 +763,22 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [self slk_enableTypingSuggestionIfNeeded];
 }
 
+- (void)textSelectionDidChange
+{
+    // The text view must be first responder
+    if (![self.textView isFirstResponder]) {
+        return;
+    }
+    
+    // Skips if the loupe is visible or if there is a real text selection
+    if (self.textView.isLoupeVisible || self.textView.selectedRange.length > 0) {
+        return;
+    }
+    
+    // Process the text at every caret movement
+    [self slk_processTextForAutoCompletion];
+}
+
 - (BOOL)canPressRightButton
 {
     NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -1308,6 +1321,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     // Animated only if the view already appeared.
     [self textDidUpdate:self.isViewVisible];
+    
+    // Process the text at text change
+    [self slk_processTextForAutoCompletion];
 }
 
 - (void)slk_didChangeTextViewContentSize:(NSNotification *)notification
@@ -1319,6 +1335,16 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     // Animated only if the view already appeared.
     [self textDidUpdate:self.isViewVisible];
+}
+
+- (void)slk_didChangeTextViewSelectedRange:(NSNotification *)notification
+{
+    // Skips this it's not the expected textView.
+    if (![notification.object isEqual:self.textView]) {
+        return;
+    }
+    
+    [self textSelectionDidChange];
 }
 
 - (void)slk_didChangeTextViewPasteboard:(NSNotification *)notification
@@ -1414,7 +1440,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     NSString *text = self.textView.text;
     
-    // Skip, when o text to process
+    // Skip, when there is no text to process
     if (text.length == 0) {
         return [self cancelAutoCompletion];
     }
@@ -1474,7 +1500,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 - (void)cancelAutoCompletion
 {
     [self slk_invalidateAutoCompletion];
-    
     [self slk_hideAutoCompletionViewIfNeeded];
 }
 
@@ -1715,33 +1740,12 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    // Process the text only when the caret selection/movement didn't change earlier
-    // This fixes an issue with third-party keyboards not forwarding events properly sometimes.
-    if (!self.selectionDidChange) {
-        [self slk_processTextForAutoCompletion];
-    }
-    
-    // Resets the state
-    self.selectionDidChange = NO;
+    // Keep to avoid unnecessary crashes. Was meant to be overriden in subclass while calling super.
 }
 
 - (void)textViewDidChangeSelection:(SLKTextView *)textView
 {
-    // The text view must be first responder
-    if (![self.textView isFirstResponder]) {
-        return;
-    }
-    
-    // Skips if the loupe is visible or if there is a real text selection
-    if (textView.isLoupeVisible || textView.selectedRange.length > 0) {
-        return;
-    }
-    
-    // This helps avoiding text to be processed for a second time in -textViewDidChange:
-    self.selectionDidChange = YES;
-    
-    // Process the text at every caret movement
-    [self slk_processTextForAutoCompletion];
+    // Keep to avoid unnecessary crashes. Was meant to be overriden in subclass while calling super.
 }
 
 
@@ -1919,6 +1923,9 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willChangeTextViewText:) name:SLKTextViewTextWillChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewSelectedRange:) name:SLKTextViewSelectedRangeDidChangeNotification object:nil];
+
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewPasteboard:) name:SLKTextViewDidPasteItemNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didShakeTextView:) name:SLKTextViewDidShakeNotification object:nil];
 
@@ -1955,6 +1962,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewTextWillChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewContentSizeDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewSelectedRangeDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewDidPasteItemNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewDidShakeNotification object:nil];
 
