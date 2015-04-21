@@ -18,6 +18,7 @@
 
 UIKIT_EXTERN NSString * const SLKTextViewTextWillChangeNotification;
 UIKIT_EXTERN NSString * const SLKTextViewContentSizeDidChangeNotification;
+UIKIT_EXTERN NSString * const SLKTextViewSelectedRangeDidChangeNotification;
 UIKIT_EXTERN NSString * const SLKTextViewDidPasteItemNotification;
 UIKIT_EXTERN NSString * const SLKTextViewDidShakeNotification;
 

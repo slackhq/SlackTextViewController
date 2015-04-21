@@ -15,10 +15,5 @@ Pod::Spec.new do |s|
   s.requires_arc 		= true
 
   s.header_mappings_dir = 'Source'
-  s.source_files 		= 'Classes', 'Source/Classes/*.{h,m}'
-
-  s.subspec 'Additions' do |add|
-    add.source_files     =  'Source/Additions/*.{h,m}',
-                            'Source/Classes/SLKTextView.h'
-  end
+  s.source_files 		= 'Source/**/*.{h,m}'
 end

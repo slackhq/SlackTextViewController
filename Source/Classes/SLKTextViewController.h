@@ -201,17 +201,25 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Notifies the view controller that the text will update.
- You can override this method to perform additional tasks associated with presenting the view. You MUST call super at some point in your implementation.
+ You can override this method to perform additional tasks associated with text changes. You MUST call super at some point in your implementation.
  */
 - (void)textWillUpdate NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller that the text did update.
- You can override this method to perform additional tasks associated with presenting the view. You MUST call super at some point in your implementation.
+ You can override this method to perform additional tasks associated with text changes. You MUST call super at some point in your implementation.
  
  @param If YES, the text input bar will be resized using an animation.
  */
 - (void)textDidUpdate:(BOOL)animated NS_REQUIRES_SUPER;
+
+/**
+ Notifies the view controller that the text selection did change.
+ Use this method a replacement of UITextViewDelegate's -textViewDidChangeSelection: which is not reliable enough when using third-party keyboards (they don't forward events properly sometimes).
+ 
+ You can override this method to perform additional tasks associated with text changes. You MUST call super at some point in your implementation.
+ */
+- (void)textSelectionDidChange NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller when the left button's action has been triggered, manually.
@@ -437,7 +445,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /** UITextViewDelegate */
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text NS_REQUIRES_SUPER;
-- (void)textViewDidChangeSelection:(SLKTextView *)textView NS_REQUIRES_SUPER;
 
 /** UIScrollViewDelegate */
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView NS_REQUIRES_SUPER;

@@ -1,6 +1,6 @@
 #include "Pods-LoremIpsum.xcconfig"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/LoremIpsum" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/Expecta" "${PODS_ROOT}/Headers/Public/Expecta+Snapshots" "${PODS_ROOT}/Headers/Public/FBSnapshotTestCase" "${PODS_ROOT}/Headers/Public/LoremIpsum" "${PODS_ROOT}/Headers/Public/SlackTextViewController" "${PODS_ROOT}/Headers/Public/SlackTextViewController/Additions" "${PODS_ROOT}/Headers/Public/SlackTextViewController/Classes" "${PODS_ROOT}/Headers/Public/Specta"
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/LoremIpsum" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/LoremIpsum" "${PODS_ROOT}/Headers/Public/SlackTextViewController" "${PODS_ROOT}/Headers/Public/SlackTextViewController/Additions" "${PODS_ROOT}/Headers/Public/SlackTextViewController/Classes"
 OTHER_LDFLAGS = -ObjC
 PODS_ROOT = ${SRCROOT}
 SKIP_INSTALL = YES

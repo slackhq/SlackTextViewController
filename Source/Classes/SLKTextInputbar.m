@@ -472,6 +472,8 @@
         if (self.textView.delegate && [self.textView.delegate respondsToSelector:@selector(textViewDidChangeSelection:)]) {
             [self.textView.delegate textViewDidChangeSelection:self.textView];
         }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewSelectedRangeDidChangeNotification object:self.textView userInfo:nil];
     }
 }
 
