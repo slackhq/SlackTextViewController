@@ -881,7 +881,15 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (CGFloat)maximumHeightForAutoCompletionView
 {
-    return 140.0;
+    CGFloat maxiumumHeight = 140.0;
+    CGFloat scrollViewHeight = self.scrollViewHC.constant;
+    scrollViewHeight -= [self slk_topBarsHeight];
+
+    if (scrollViewHeight < maxiumumHeight) {
+        maxiumumHeight = scrollViewHeight;
+    }
+    
+    return maxiumumHeight;
 }
 
 - (void)didPasteMediaContent:(NSDictionary *)userInfo
@@ -1569,8 +1577,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
     
     // If the auto-completion view height is bigger than the maximum height allows, it is reduce to that size. Default 140 pts.
-    if (viewHeight > [self maximumHeightForAutoCompletionView]) {
-        viewHeight = [self maximumHeightForAutoCompletionView];
+    CGFloat maximumHeight = [self maximumHeightForAutoCompletionView];
+    
+    if (viewHeight > maximumHeight) {
+        viewHeight = maximumHeight;
     }
     
     CGFloat tableHeight = self.scrollViewHC.constant + self.autoCompletionViewHC.constant;
