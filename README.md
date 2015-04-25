@@ -48,10 +48,20 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 
 ## Installation
 
-Available in [Cocoa Pods](http://cocoapods.org/?q=SlackTextViewController)
+###### With [Cocoa Pods](http://cocoapods.org):
 ```ruby
 pod 'SlackTextViewController'
 ```
+
+###### With [Carthage](https://github.com/Carthage/Carthage):
+```
+github "slackhq/SlackTextViewController"
+```
+
+###### Manually:
+There are two ways to do this:
+- Copy and drag the `Source/` folder to your project.
+- or compile the project located in `Builder/SlackTextViewController.xcodeproj` to create a `SlackTextViewController.framework` package. You could also [link the library into your project](https://developer.apple.com/library/ios/recipes/xcode_help-project_editor/Articles/AddingaLibrarytoaTarget.html#//apple_ref/doc/uid/TP40010155-CH17-SW1).
 
 ##How to use
 
