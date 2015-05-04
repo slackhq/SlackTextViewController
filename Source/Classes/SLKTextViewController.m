@@ -1230,7 +1230,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     // After showing keyboard, check if the current cursor position could diplay autocompletion
     if ([self.textView isFirstResponder] && status == SLKKeyboardStatusDidShow && !self.isAutoCompleting) {
-        [self slk_processTextForAutoCompletion];
+        
+        // Wait till the end of the current run loop
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self slk_processTextForAutoCompletion];
+        });
     }
     
     // Updates and notifies about the keyboard status update
