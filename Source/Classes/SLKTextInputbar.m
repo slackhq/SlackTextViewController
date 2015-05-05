@@ -242,17 +242,66 @@
     return _charCountLabel;
 }
 
-- (NSUInteger)slk_defaultNumberOfLines
+- (BOOL)isViewVisible
 {
-    if (SLK_IS_IPAD) {
-        return 8;
+    SEL selector = NSSelectorFromString(@"isViewVisible");
+    
+    if ([self.controller respondsToSelector:selector]) {
+        
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        BOOL visible = (BOOL)[self.controller performSelector:selector];
+#pragma clang diagnostic pop
+        
+        return visible;
     }
-    if (SLK_IS_IPHONE4) {
-        return 4;
+    return NO;
+}
+
+- (CGFloat)minimumInputbarHeight
+{
+    return self.intrinsicContentSize.height;
+}
+
+- (CGFloat)appropriateHeight
+{
+    CGFloat height = 0.0;
+    CGFloat minimumHeight = [self minimumInputbarHeight];
+    
+    if (self.textView.numberOfLines == 1) {
+        height = minimumHeight;
+    }
+    else if (self.textView.numberOfLines < self.textView.maxNumberOfLines) {
+        height = [self slk_inputBarHeightForLines:self.textView.numberOfLines];
     }
     else {
-        return 6;
+        height = [self slk_inputBarHeightForLines:self.textView.maxNumberOfLines];
     }
+    
+    if (height < minimumHeight) {
+        height = minimumHeight;
+    }
+    
+    if (self.isEditing) {
+        height += self.editorContentViewHeight;
+    }
+    
+    return roundf(height);
+}
+
+- (CGFloat)slk_deltaInputbarHeight
+{
+    return self.textView.intrinsicContentSize.height-self.textView.font.lineHeight;
+}
+
+- (CGFloat)slk_inputBarHeightForLines:(NSUInteger)numberOfLines
+{
+    CGFloat height = [self slk_deltaInputbarHeight];
+    
+    height += roundf(self.textView.font.lineHeight*numberOfLines);
+    height += self.contentInset.top+self.contentInset.bottom;
+    
+    return height;
 }
 
 - (BOOL)limitExceeded
@@ -285,24 +334,20 @@
             return 0.0;
         }
     }
-    
     return self.contentInset.right;
 }
 
-- (BOOL)isViewVisible
+- (NSUInteger)slk_defaultNumberOfLines
 {
-    SEL selector = NSSelectorFromString(@"isViewVisible");
-    
-    if ([self.controller respondsToSelector:selector]) {
-        
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        BOOL visible = (BOOL)[self.controller performSelector:selector];
-#pragma clang diagnostic pop
-        
-        return visible;
+    if (SLK_IS_IPAD) {
+        return 8;
     }
-    return NO;
+    if (SLK_IS_IPHONE4) {
+        return 4;
+    }
+    else {
+        return 6;
+    }
 }
 
 
