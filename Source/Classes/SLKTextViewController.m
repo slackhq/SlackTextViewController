@@ -291,7 +291,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         
         _autoCompletionHairline = [[UIView alloc] initWithFrame:rect];
         _autoCompletionHairline.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        _autoCompletionHairline.backgroundColor = self.autoCompletionView.separatorColor;
+        _autoCompletionHairline.backgroundColor = _autoCompletionView.separatorColor;
         [_autoCompletionView addSubview:_autoCompletionHairline];
     }
     return _autoCompletionView;
