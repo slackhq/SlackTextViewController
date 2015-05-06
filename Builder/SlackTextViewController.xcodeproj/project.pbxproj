@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		48C64A351ABA222C00021C91 /* SlackTextViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 48C64A211ABA222C00021C91 /* SlackTextViewController.h */; };
+		48C64A351ABA222C00021C91 /* SlackTextViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 48C64A211ABA222C00021C91 /* SlackTextViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F8B71541ABC9189006594B9 /* SLKTextView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F8B71421ABC9189006594B9 /* SLKTextView+SLKAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F8B71551ABC9189006594B9 /* SLKTextView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8B71431ABC9189006594B9 /* SLKTextView+SLKAdditions.m */; };
-		4F8B71561ABC9189006594B9 /* SLKUIConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F8B71441ABC9189006594B9 /* SLKUIConstants.h */; };
+		4F8B71561ABC9189006594B9 /* SLKUIConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F8B71441ABC9189006594B9 /* SLKUIConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F8B71571ABC9189006594B9 /* UIScrollView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F8B71451ABC9189006594B9 /* UIScrollView+SLKAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F8B71581ABC9189006594B9 /* UIScrollView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8B71461ABC9189006594B9 /* UIScrollView+SLKAdditions.m */; };
 		4F8B71591ABC9189006594B9 /* UIView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F8B71471ABC9189006594B9 /* UIView+SLKAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
