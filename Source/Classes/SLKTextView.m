@@ -68,7 +68,6 @@ NSString * const SLKTextViewPastedItemData =                        @"SLKTextVie
 
 - (void)slk_commonInit
 {
-    self.placeholderColor = [UIColor lightGrayColor];
     self.pastableMediaTypes = SLKPastableMediaTypeNone;
     self.undoManagerEnabled = YES;
     
@@ -130,7 +129,7 @@ NSString * const SLKTextViewPastedItemData =                        @"SLKTextVie
         _placeholderLabel.numberOfLines = 1;
         _placeholderLabel.font = self.font;
         _placeholderLabel.backgroundColor = [UIColor clearColor];
-        _placeholderLabel.textColor = self.placeholderColor;
+        _placeholderLabel.textColor = [UIColor lightGrayColor];
         _placeholderLabel.hidden = YES;
         
         [self addSubview:_placeholderLabel];

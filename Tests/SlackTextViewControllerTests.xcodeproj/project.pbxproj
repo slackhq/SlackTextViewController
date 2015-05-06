@@ -19,6 +19,8 @@
 		4F13F2D01AE319C400B55A5C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F13F2CB1AE319C400B55A5C /* AppDelegate.m */; };
 		4F13F2D51AE319C400B55A5C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F13F2CE1AE319C400B55A5C /* main.m */; };
 		4F13F2D61AE319C400B55A5C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F13F2CE1AE319C400B55A5C /* main.m */; };
+		4F34849B1AFA89670047FF6F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F34849A1AFA89670047FF6F /* Default-568h@2x.png */; };
+		4F34849C1AFA896C0047FF6F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F34849A1AFA89670047FF6F /* Default-568h@2x.png */; };
 		9C1CDEF58F483EBE397D107D /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65733EC04345BFA3E7348982 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +54,7 @@
 		4F13F2CC1AE319C400B55A5C /* Application-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Application-Info.plist"; sourceTree = "<group>"; };
 		4F13F2CD1AE319C400B55A5C /* Tests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		4F13F2CE1AE319C400B55A5C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4F34849A1AFA89670047FF6F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		65733EC04345BFA3E7348982 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F55D33256EB9B7897C4492B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		FA34B70E3558A164D91762C3 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -137,6 +140,7 @@
 			children = (
 				4F13F2CA1AE319C400B55A5C /* AppDelegate.h */,
 				4F13F2CB1AE319C400B55A5C /* AppDelegate.m */,
+				4F34849A1AFA89670047FF6F /* Default-568h@2x.png */,
 				4F13F2CC1AE319C400B55A5C /* Application-Info.plist */,
 				4F13F2CD1AE319C400B55A5C /* Tests-Info.plist */,
 				4F13F2CE1AE319C400B55A5C /* main.m */,
@@ -244,6 +248,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F34849C1AFA896C0047FF6F /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,6 +256,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F34849B1AFA89670047FF6F /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,6 +477,7 @@
 			baseConfigurationReference = FA34B70E3558A164D91762C3 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -488,6 +495,7 @@
 			baseConfigurationReference = 8F55D33256EB9B7897C4492B /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Supporting Files/Application-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

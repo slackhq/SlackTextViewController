@@ -291,7 +291,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         
         _autoCompletionHairline = [[UIView alloc] initWithFrame:rect];
         _autoCompletionHairline.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        _autoCompletionHairline.backgroundColor = self.autoCompletionView.separatorColor;
+        _autoCompletionHairline.backgroundColor = _autoCompletionView.separatorColor;
         [_autoCompletionView addSubview:_autoCompletionHairline];
     }
     return _autoCompletionView;
@@ -379,52 +379,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return self.navigationController.modalPresentationStyle;
     }
     return [super modalPresentationStyle];
-}
-
-- (CGFloat)slk_deltaInputbarHeight
-{
-    return self.textView.intrinsicContentSize.height-self.textView.font.lineHeight;
-}
-
-- (CGFloat)slk_minimumInputbarHeight
-{
-    return self.textInputbar.intrinsicContentSize.height;
-}
-
-- (CGFloat)slk_inputBarHeightForLines:(NSUInteger)numberOfLines
-{
-    CGFloat height = [self slk_deltaInputbarHeight];
-    
-    height += roundf(self.textView.font.lineHeight*numberOfLines);
-    height += self.textInputbar.contentInset.top+self.textInputbar.contentInset.bottom;
-    
-    return height;
-}
-
-- (CGFloat)slk_appropriateInputbarHeight
-{
-    CGFloat height = 0.0;
-    CGFloat minimumHeight = [self slk_minimumInputbarHeight];
-    
-    if (self.textView.numberOfLines == 1) {
-        height = minimumHeight;
-    }
-    else if (self.textView.numberOfLines < self.textView.maxNumberOfLines) {
-        height = [self slk_inputBarHeightForLines:self.textView.numberOfLines];
-    }
-    else {
-        height = [self slk_inputBarHeightForLines:self.textView.maxNumberOfLines];
-    }
-    
-    if (height < minimumHeight) {
-        height = minimumHeight;
-    }
-    
-    if (self.textInputbar.isEditing) {
-        height += self.textInputbar.editorContentViewHeight;
-    }
-    
-    return roundf(height);
 }
 
 - (CGFloat)slk_appropriateKeyboardHeight:(NSNotification *)notification
@@ -724,10 +678,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)textDidUpdate:(BOOL)animated
 {
+    CGFloat inputbarHeight = self.textInputbar.appropriateHeight;
+    
     self.textInputbar.rightButton.enabled = [self canPressRightButton];
     self.textInputbar.editortRightButton.enabled = [self canPressRightButton];
-    
-    CGFloat inputbarHeight = [self slk_appropriateInputbarHeight];
     
     if (inputbarHeight != self.textInputbarHC.constant)
     {
@@ -1876,7 +1830,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.textInputbarHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.textInputbar secondItem:nil];
     self.keyboardHC = [self.view slk_constraintForAttribute:NSLayoutAttributeBottom firstItem:self.view secondItem:self.textInputbar];
     
-    self.textInputbarHC.constant = [self slk_minimumInputbarHeight];
+    self.textInputbarHC.constant = self.textInputbar.minimumInputbarHeight;
     self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
 
     if (self.textInputbar.isEditing) {

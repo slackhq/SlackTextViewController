@@ -54,24 +54,18 @@ NSString *SLKKeyboardHandlingKeyPath()
 
 - (void)slk_addSuperviewObserver:(UIView *)superview
 {
-    if (_observedSuperview || !superview) {
-        return;
+    if (!_observedSuperview && superview) {
+        _observedSuperview = superview;
+        [superview addObserver:self forKeyPath:SLKKeyboardHandlingKeyPath() options:0 context:NULL];
     }
-    
-    _observedSuperview = superview;
-    
-    [superview addObserver:self forKeyPath:SLKKeyboardHandlingKeyPath() options:0 context:NULL];
 }
 
 - (void)slk_removeSuperviewObserver
 {
-    if (!_observedSuperview) {
-        return;
+    if (_observedSuperview) {
+        [self.observedSuperview removeObserver:self forKeyPath:SLKKeyboardHandlingKeyPath()];
+        _observedSuperview = nil;
     }
-    
-    [self.observedSuperview removeObserver:self forKeyPath:SLKKeyboardHandlingKeyPath()];
-    
-    _observedSuperview = nil;
 }
 
 

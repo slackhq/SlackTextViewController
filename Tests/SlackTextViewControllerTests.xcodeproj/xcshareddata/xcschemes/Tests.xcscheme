@@ -76,6 +76,15 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "4F13F2821AE3140200B55A5C"
+            BuildableName = "Tests.xctest"
+            BlueprintName = "Tests"
+            ReferencedContainer = "container:SlackTextViewControllerTests.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
