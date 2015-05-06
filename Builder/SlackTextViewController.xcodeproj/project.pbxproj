@@ -131,7 +131,7 @@
 				4F8B71491ABC9189006594B9 /* Classes */,
 			);
 			name = Source;
-			path = ../../Source;
+			path = ../Source;
 			sourceTree = SOURCE_ROOT;
 		};
 		4F8B71411ABC9189006594B9 /* Additions */ = {
