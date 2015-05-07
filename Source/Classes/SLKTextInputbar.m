@@ -538,11 +538,8 @@
 
 - (void)slk_setupViewConstraints
 {
-    UIImage *leftButtonImg = [self.leftButton imageForState:UIControlStateNormal];
-    
     [self.rightButton sizeToFit];
     
-    CGFloat leftVerMargin = (self.intrinsicContentSize.height - leftButtonImg.size.height) / 2.0;
     CGFloat rightVerMargin = (self.intrinsicContentSize.height - CGRectGetHeight(self.rightButton.frame)) / 2.0;
 
     NSDictionary *views = @{@"textView": self.textView,
@@ -556,7 +553,6 @@
                               @"bottom" : @(self.contentInset.bottom),
                               @"left" : @(self.contentInset.left),
                               @"right" : @(self.contentInset.right),
-                              @"leftVerMargin" : @(leftVerMargin),
                               @"rightVerMargin" : @(rightVerMargin),
                               @"minTextViewHeight" : @(self.textView.intrinsicContentSize.height),
                               };
