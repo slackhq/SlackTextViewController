@@ -26,8 +26,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 @property (nonatomic, strong) NSArray *searchResult;
 
-@property (nonatomic, getter=isStub) BOOL stub;
-
 @end
 
 @implementation MessageViewController
@@ -64,29 +62,27 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     [super viewDidLoad];
     
-    if (!self.isStub) {
-        NSMutableArray *array = [[NSMutableArray alloc] init];
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < 100; i++) {
+        NSInteger words = (arc4random() % 40)+1;
         
-        for (int i = 0; i < 100; i++) {
-            NSInteger words = (arc4random() % 40)+1;
-            
-            Message *message = [Message new];
-            message.username = [LoremIpsum name];
-            message.text = [LoremIpsum wordsWithNumber:words];
-            [array addObject:message];
-        }
-        
-        NSArray *reversed = [[array reverseObjectEnumerator] allObjects];
-        
-        self.messages = [[NSMutableArray alloc] initWithArray:reversed];
-        
-        UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"] style:UIBarButtonItemStylePlain target:self action:@selector(editRandomMessage:)];
-        
-        UIBarButtonItem *typeItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_typing"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateUserTyping:)];
-        UIBarButtonItem *appendItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_append"] style:UIBarButtonItemStylePlain target:self action:@selector(fillWithText:)];
-        
-        self.navigationItem.rightBarButtonItems = @[editItem, appendItem, typeItem];
+        Message *message = [Message new];
+        message.username = [LoremIpsum name];
+        message.text = [LoremIpsum wordsWithNumber:words];
+        [array addObject:message];
     }
+    
+    NSArray *reversed = [[array reverseObjectEnumerator] allObjects];
+    
+    self.messages = [[NSMutableArray alloc] initWithArray:reversed];
+    
+    UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"] style:UIBarButtonItemStylePlain target:self action:@selector(editRandomMessage:)];
+    
+    UIBarButtonItem *typeItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_typing"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateUserTyping:)];
+    UIBarButtonItem *appendItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_append"] style:UIBarButtonItemStylePlain target:self action:@selector(fillWithText:)];
+    
+    self.navigationItem.rightBarButtonItems = @[editItem, appendItem, typeItem];
     
     self.users = @[@"Allen", @"Anna", @"Alicia", @"Arnold", @"Armando", @"Antonio", @"Brad", @"Catalaya", @"Christoph", @"Emerson", @"Eric", @"Everyone", @"Steve"];
     self.channels = @[@"General", @"Random", @"iOS", @"Bugs", @"Sports", @"Android", @"UI", @"SSB"];
