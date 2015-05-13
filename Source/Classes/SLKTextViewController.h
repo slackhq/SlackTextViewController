@@ -83,7 +83,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, assign) BOOL shouldClearTextAtRightButtonPress;
 
 /** YES if the text input bar should still move up/down when other text inputs interacts with the keyboard. Default is NO. */
-@property (nonatomic, assign) BOOL shouldForceTextInputbarAdjustment;
+@property (nonatomic, assign) BOOL shouldForceTextInputbarAdjustment DEPRECATED_MSG_ATTRIBUTE("Use -forceTextInputbarAdjustmentForResponder:");
 
 /** YES if the scrollView should scroll to bottom when the keyboard is shown. Default is NO.*/
 @property (nonatomic, assign) BOOL shouldScrollToBottomAfterKeyboardShows;
@@ -184,6 +184,15 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param animated YES if the keyboard should be dismissed using an animation.
  */
 - (void)dismissKeyboard:(BOOL)animated;
+
+/**
+ Verifies if the text input bar should still move up/down even if it is not first responder. Default is NO.
+ You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
+
+ @param responder The current first responder object.
+ @return YES so the text input bar still move up/down.
+ */
+- (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *)responder;
 
 /**
  Notifies the view controller that the keyboard changed status.
