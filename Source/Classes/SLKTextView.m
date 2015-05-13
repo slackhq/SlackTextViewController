@@ -362,15 +362,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
         return;
     }
     
-    // Toggling autocorrect on Japanese keyboards breaks autocompletion.
-    // If you try typing "@" on a Japanese keyboard toggling the autocomplete causes iOS
-    // to set the textView's text to an empty string.
-    // My thought is that this is caused by the same mechanism that forces autocorrection
-    // to be committed when refreshing the first responder.
-    if ([self.textInputMode.primaryLanguage isEqualToString:@"ja-JP"]) {
-        return;
-    }
-    
     self.autocorrectionType = enabled ? UITextAutocorrectionTypeDefault : UITextAutocorrectionTypeNo;
     self.spellCheckingType = enabled ? UITextSpellCheckingTypeDefault : UITextSpellCheckingTypeNo;
     

@@ -955,6 +955,12 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     BOOL enable = !self.isAutoCompleting;
     
+    // Toggling autocorrect on Japanese keyboards breaks autocompletion by replacing the autocompletion prefix by an empty string.
+    // So for now, let's not disable autocorrection for Japanese.
+    if ([self.textView.textInputMode.primaryLanguage isEqualToString:@"ja-JP"]) {
+        return;
+    }
+    
     // During text autocompletion, the iOS 8 QuickType bar is hidden and auto-correction and spell checking are disabled.
     [self.textView setTypingSuggestionEnabled:enable];
 }
