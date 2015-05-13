@@ -16,6 +16,7 @@
 
 #import "SLKTextViewController.h"
 #import "SLKInputAccessoryView.h"
+#import "UIResponder+SLKAdditions.h"
 #import "SLKUIConstants.h"
 
 NSString * const SLKKeyboardWillShowNotification =  @"SLKKeyboardWillShowNotification";
@@ -160,7 +161,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     self.shakeToClearEnabled = NO;
     self.keyboardPanningEnabled = YES;
     self.shouldClearTextAtRightButtonPress = YES;
-    self.shouldForceTextInputbarAdjustment = NO;
     self.shouldScrollToBottomAfterKeyboardShows = NO;
 }
 
@@ -666,6 +666,14 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     }
 }
 
+- (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *)responder
+{
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    return self.shouldForceTextInputbarAdjustment;
+#pragma GCC diagnostic pop
+}
+
 - (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status
 {
     // No implementation here. Meant to be overriden in subclass.
@@ -1124,9 +1132,11 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
+    NSLog(@"slk_currentFirstResponder : %@", [UIResponder slk_currentFirstResponder]);
+    
     // Skips this it's not the expected textView and shouldn't force adjustment of the text input bar.
     // This will also dismiss the text input bar if it's visible, and exit auto-completion mode if enabled.
-    if (![self.textView isFirstResponder] && !self.shouldForceTextInputbarAdjustment) {
+    if (![self.textView isFirstResponder] && ![self forceTextInputbarAdjustmentForResponder:[UIResponder slk_currentFirstResponder]]) {
         return [self slk_dismissTextInputbarIfNeeded];
     }
     

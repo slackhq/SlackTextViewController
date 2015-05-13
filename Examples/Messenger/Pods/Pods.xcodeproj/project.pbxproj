@@ -16,6 +16,8 @@
 		45894C813089C7EE1E686DFB /* LoremIpsum.m in Sources */ = {isa = PBXBuildFile; fileRef = D7036C998DF6F879CC79815A /* LoremIpsum.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		460B0FD37A1A3F7259170A1A /* SLKInputAccessoryView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E9F9F5498085D29F51E9D4F /* SLKInputAccessoryView.h */; };
 		4DFB9075F8FAEAC3E2D89A25 /* UIView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AB786DD44CA9C54A3FC5C319 /* UIView+SLKAdditions.m */; };
+		4FDA2AF01B03C8260012E3F7 /* UIResponder+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FDA2AEE1B03C8260012E3F7 /* UIResponder+SLKAdditions.h */; };
+		4FDA2AF11B03C8260012E3F7 /* UIResponder+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDA2AEF1B03C8260012E3F7 /* UIResponder+SLKAdditions.m */; };
 		5216B54C42F962346BFC2CC4 /* SLKTextInputbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 04B9964628905B7B553F5724 /* SLKTextInputbar.h */; };
 		53A10801F8A09CD57CE5F5A5 /* SLKTextView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C22B3FB1D25FAA121643AAA /* SLKTextView+SLKAdditions.h */; };
 		5693E427191ADCA1CA937711 /* LoremIpsum.h in Headers */ = {isa = PBXBuildFile; fileRef = F221FD7283BC8DA280AD4447 /* LoremIpsum.h */; };
@@ -62,6 +64,8 @@
 		2CEDF778543903ABD4650055 /* Pods-LoremIpsum.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-LoremIpsum.xcconfig"; sourceTree = "<group>"; };
 		4878EA0B8D128B8C2135AA7E /* Pods-SlackTextViewController-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SlackTextViewController-Private.xcconfig"; sourceTree = "<group>"; };
 		4E9F9F5498085D29F51E9D4F /* SLKInputAccessoryView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SLKInputAccessoryView.h; sourceTree = "<group>"; };
+		4FDA2AEE1B03C8260012E3F7 /* UIResponder+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+SLKAdditions.h"; sourceTree = "<group>"; };
+		4FDA2AEF1B03C8260012E3F7 /* UIResponder+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+SLKAdditions.m"; sourceTree = "<group>"; };
 		561603C164365469CA536B09 /* SLKTextViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SLKTextViewController.h; sourceTree = "<group>"; };
 		5C22B3FB1D25FAA121643AAA /* SLKTextView+SLKAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SLKTextView+SLKAdditions.h"; sourceTree = "<group>"; };
 		60D7B8E6D415B1644B8FE188 /* Pods-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-resources.sh"; sourceTree = "<group>"; };
@@ -136,13 +140,15 @@
 		37F3BF4B9AAA1AEE53C100DC /* Additions */ = {
 			isa = PBXGroup;
 			children = (
+				BB66376A37BF63C9038C8E22 /* SLKUIConstants.h */,
 				5C22B3FB1D25FAA121643AAA /* SLKTextView+SLKAdditions.h */,
 				A7E0698019534BA3F6FD23DA /* SLKTextView+SLKAdditions.m */,
-				BB66376A37BF63C9038C8E22 /* SLKUIConstants.h */,
 				760DE1BE7FDEAC0E0F0B1AC0 /* UIScrollView+SLKAdditions.h */,
 				E0D955BC077706336BF114D9 /* UIScrollView+SLKAdditions.m */,
 				1ECA1DADE6EE7E24553261EE /* UIView+SLKAdditions.h */,
 				AB786DD44CA9C54A3FC5C319 /* UIView+SLKAdditions.m */,
+				4FDA2AEE1B03C8260012E3F7 /* UIResponder+SLKAdditions.h */,
+				4FDA2AEF1B03C8260012E3F7 /* UIResponder+SLKAdditions.m */,
 			);
 			path = Additions;
 			sourceTree = "<group>";
@@ -290,6 +296,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				460B0FD37A1A3F7259170A1A /* SLKInputAccessoryView.h in Headers */,
+				4FDA2AF01B03C8260012E3F7 /* UIResponder+SLKAdditions.h in Headers */,
 				5216B54C42F962346BFC2CC4 /* SLKTextInputbar.h in Headers */,
 				53A10801F8A09CD57CE5F5A5 /* SLKTextView+SLKAdditions.h in Headers */,
 				80FAFA85B32543BCCAEEBA25 /* SLKTextView.h in Headers */,
@@ -411,6 +418,7 @@
 				3AD1400443993B9EA85F749E /* SLKTextView+SLKAdditions.m in Sources */,
 				9762424E15F34A720562C7D1 /* SLKTextView.m in Sources */,
 				CD2D71FB322D87D19A793955 /* SLKTextViewController.m in Sources */,
+				4FDA2AF11B03C8260012E3F7 /* UIResponder+SLKAdditions.m in Sources */,
 				67C3129995C2E17CA5D59F7A /* SLKTypingIndicatorView.m in Sources */,
 				30D6E05165D72A0B4ADBF4E6 /* UIScrollView+SLKAdditions.m in Sources */,
 				4DFB9075F8FAEAC3E2D89A25 /* UIView+SLKAdditions.m in Sources */,

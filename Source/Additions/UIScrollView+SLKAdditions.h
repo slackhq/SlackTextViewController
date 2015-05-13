@@ -28,12 +28,14 @@
 
 /**
  Sets the content offset to the top.
+ 
  @param animated YES to animate the transition at a constant velocity to the new offset, NO to make the transition immediate.
  */
 - (void)slk_scrollToTopAnimated:(BOOL)animated;
 
 /**
  Sets the content offset to the bottom.
+ 
  @param animated YES to animate the transition at a constant velocity to the new offset, NO to make the transition immediate.
  */
 - (void)slk_scrollToBottomAnimated:(BOOL)animated;
