@@ -1132,8 +1132,6 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
         return;
     }
     
-    NSLog(@"slk_currentFirstResponder : %@", [UIResponder slk_currentFirstResponder]);
-    
     // Skips this it's not the expected textView and shouldn't force adjustment of the text input bar.
     // This will also dismiss the text input bar if it's visible, and exit auto-completion mode if enabled.
     if (![self.textView isFirstResponder] && ![self forceTextInputbarAdjustmentForResponder:[UIResponder slk_currentFirstResponder]]) {
