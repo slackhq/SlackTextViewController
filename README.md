@@ -219,11 +219,11 @@ Use the `editing` property to know if the editing mode is on.
 
 Optionally, you can enable a simple typing indicator, which will be displayed right above the text input. It shows the name of the people that are typing, and if more than 2, it will display "Several are typing" message.
 
-To enable the typing indicator, just call `[self.typeIndicatorView insertUsername:@"John"];` and the view will automatically be animated on top of the text input. After a default interval of 6 seconds, if the same name hasn't been assigned once more, the view will be dismissed with animation.
+To enable the typing indicator, just call `[self.typingIndicatorView insertUsername:@"John"];` and the view will automatically be animated on top of the text input. After a default interval of 6 seconds, if the same name hasn't been assigned once more, the view will be dismissed with animation.
 
-You can remove names from the list by calling `[self.typeIndicatorView removeUsername:@"John"];`
+You can remove names from the list by calling `[self.typingIndicatorView removeUsername:@"John"];`
 
-You can also dismiss it by calling `[self.typeIndicatorView dismissIndicator];`
+You can also dismiss it by calling `[self.typingIndicatorView dismissIndicator];`
 
 ###Panning Gesture
 
