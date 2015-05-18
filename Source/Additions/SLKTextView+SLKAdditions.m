@@ -161,8 +161,10 @@
         return;
     }
     
-    [[self.undoManager prepareWithInvocationTarget:self] setText:self.text];
-    [self.undoManager setActionName:description];
+	SLKTextView *prepareInvocation = [self.undoManager prepareWithInvocationTarget:self];
+	[prepareInvocation setText:self.text];
+	[self.undoManager setActionName:description];
+	
 }
 
 @end
