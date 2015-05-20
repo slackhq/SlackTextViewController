@@ -59,7 +59,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 @property (nonatomic) BOOL newWordInserted;
 
 // YES if the view controller did appear and everything is finished configurating. This allows blocking some layout animations among other things.
-@property (nonatomic) BOOL isViewVisible;
+@property (nonatomic, getter=isViewVisible) BOOL viewVisible;
 
 // The setter of isExternalKeyboardDetected, for private use.
 @property (nonatomic, getter = isRotating) BOOL rotating;
@@ -201,7 +201,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     
     [self.scrollViewProxy flashScrollIndicators];
     
-    self.isViewVisible = YES;
+    self.viewVisible = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -211,7 +211,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     // Stops the keyboard from being dismissed during the navigation controller's "swipe-to-pop"
     self.textView.didNotResignFirstResponder = self.isMovingFromParentViewController;
     
-    self.isViewVisible = NO;
+    self.viewVisible = NO;
     
     // Caches the text before it's too late!
     [self slk_cacheTextView];
@@ -1297,8 +1297,10 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     // Animated only if the view already appeared.
     [self textDidUpdate:self.isViewVisible];
     
-    // Process the text at text change
-    [self slk_processTextForAutoCompletion];
+    // Process the text at every change, when the view is visible
+    if (self.isViewVisible) {
+        [self slk_processTextForAutoCompletion];
+    }
 }
 
 - (void)slk_didChangeTextViewContentSize:(NSNotification *)notification
@@ -1720,7 +1722,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     // Keep to avoid unnecessary crashes. Was meant to be overriden in subclass while calling super.
 }
 
-- (void)textViewDidChangeSelection:(SLKTextView *)textView
+- (void)textViewDidChangeSelection:(UITextView *)textView
 {
     // Keep to avoid unnecessary crashes. Was meant to be overriden in subclass while calling super.
 }
