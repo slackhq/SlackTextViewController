@@ -110,9 +110,13 @@ NSString * const SLKTextViewPastedItemData =                        @"SLKTextVie
     [super layoutSubviews];
     
     self.placeholderLabel.hidden = [self slk_shouldHidePlaceholder];
+    
     if (!self.placeholderLabel.hidden) {
-        self.placeholderLabel.frame = [self slk_placeholderRectThatFits:self.bounds];
-        [self sendSubviewToBack:self.placeholderLabel];
+        
+        [UIView performWithoutAnimation:^{
+            self.placeholderLabel.frame = [self slk_placeholderRectThatFits:self.bounds];
+            [self sendSubviewToBack:self.placeholderLabel];
+        }];
     }
 }
 
