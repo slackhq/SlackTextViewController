@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		48C64A351ABA222C00021C91 /* SlackTextViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 48C64A211ABA222C00021C91 /* SlackTextViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F2252CC1B0CFC6800902E58 /* UIResponder+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F2252CA1B0CFC6800902E58 /* UIResponder+SLKAdditions.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4F2252CD1B0CFC6800902E58 /* UIResponder+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2252CB1B0CFC6800902E58 /* UIResponder+SLKAdditions.m */; };
 		4F8B71541ABC9189006594B9 /* SLKTextView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F8B71421ABC9189006594B9 /* SLKTextView+SLKAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F8B71551ABC9189006594B9 /* SLKTextView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8B71431ABC9189006594B9 /* SLKTextView+SLKAdditions.m */; };
 		4F8B71561ABC9189006594B9 /* SLKUIConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F8B71441ABC9189006594B9 /* SLKUIConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -44,6 +46,8 @@
 		48C64A031ABA215600021C91 /* SlackTextViewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SlackTextViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		48C64A1F1ABA221E00021C91 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = SlackTextViewController/Info.plist; sourceTree = SOURCE_ROOT; };
 		48C64A211ABA222C00021C91 /* SlackTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlackTextViewController.h; path = SlackTextViewController/SlackTextViewController.h; sourceTree = SOURCE_ROOT; };
+		4F2252CA1B0CFC6800902E58 /* UIResponder+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+SLKAdditions.h"; sourceTree = "<group>"; };
+		4F2252CB1B0CFC6800902E58 /* UIResponder+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+SLKAdditions.m"; sourceTree = "<group>"; };
 		4F8B71421ABC9189006594B9 /* SLKTextView+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SLKTextView+SLKAdditions.h"; sourceTree = "<group>"; };
 		4F8B71431ABC9189006594B9 /* SLKTextView+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SLKTextView+SLKAdditions.m"; sourceTree = "<group>"; };
 		4F8B71441ABC9189006594B9 /* SLKUIConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKUIConstants.h; sourceTree = "<group>"; };
@@ -144,6 +148,8 @@
 				4F8B71461ABC9189006594B9 /* UIScrollView+SLKAdditions.m */,
 				4F8B71471ABC9189006594B9 /* UIView+SLKAdditions.h */,
 				4F8B71481ABC9189006594B9 /* UIView+SLKAdditions.m */,
+				4F2252CA1B0CFC6800902E58 /* UIResponder+SLKAdditions.h */,
+				4F2252CB1B0CFC6800902E58 /* UIResponder+SLKAdditions.m */,
 			);
 			path = Additions;
 			sourceTree = "<group>";
@@ -203,6 +209,7 @@
 				4F8B71591ABC9189006594B9 /* UIView+SLKAdditions.h in Headers */,
 				4F8B71541ABC9189006594B9 /* SLKTextView+SLKAdditions.h in Headers */,
 				4F8B715F1ABC9189006594B9 /* SLKTextView.h in Headers */,
+				4F2252CC1B0CFC6800902E58 /* UIResponder+SLKAdditions.h in Headers */,
 				48C64A351ABA222C00021C91 /* SlackTextViewController.h in Headers */,
 				4F8B71611ABC9189006594B9 /* SLKTextViewController.h in Headers */,
 				4F8B715D1ABC9189006594B9 /* SLKTextInputbar.h in Headers */,
@@ -313,6 +320,7 @@
 				4F8B71601ABC9189006594B9 /* SLKTextView.m in Sources */,
 				4F8B71551ABC9189006594B9 /* SLKTextView+SLKAdditions.m in Sources */,
 				4F8B715C1ABC9189006594B9 /* SLKInputAccessoryView.m in Sources */,
+				4F2252CD1B0CFC6800902E58 /* UIResponder+SLKAdditions.m in Sources */,
 				4F8B715E1ABC9189006594B9 /* SLKTextInputbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
