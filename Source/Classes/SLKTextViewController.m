@@ -24,6 +24,8 @@ NSString * const SLKKeyboardDidShowNotification =   @"SLKKeyboardDidShowNotifica
 NSString * const SLKKeyboardWillHideNotification =  @"SLKKeyboardWillHideNotification";
 NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotification";
 
+NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKTextViewController' string
+
 @interface SLKTextViewController ()
 {
     CGPoint _scrollViewOffsetBeforeDragging;
@@ -866,6 +868,7 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
     [alert addButtonWithTitle:NSLocalizedString(@"Undo", nil)];
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     [alert setCancelButtonIndex:1];
+    [alert setTag:SLKAlertViewClearTextTag];
     [alert setDelegate:self];
     [alert show];
 }
@@ -1816,9 +1819,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (self.shakeToClearEnabled && buttonIndex != [alertView cancelButtonIndex] ) {
-        
-        // Clears the text and but not the undo manager
+    if (alertView.tag == SLKAlertViewClearTextTag && self.shakeToClearEnabled && buttonIndex != [alertView cancelButtonIndex] ) {
+        // Clears the text but doesn't clear the undo manager
         [self.textView slk_clearText:NO];
     }
 }
