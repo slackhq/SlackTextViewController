@@ -1044,7 +1044,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
         }
     }
     // Reload only if the input views if the frame doesn't match the text input bar's.
-    else if (CGRectGetHeight(self.textView.inputAccessoryView.frame) != CGRectGetHeight(self.textInputbar.bounds)) {
+    else if (self.textView.inputAccessoryView && CGRectGetHeight(self.textView.inputAccessoryView.frame) != CGRectGetHeight(self.textInputbar.bounds)) {
         self.textView.inputAccessoryView = [self emptyInputAccessoryView];
         [self.textView refreshInputViews];
     }
