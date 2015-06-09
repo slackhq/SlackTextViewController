@@ -385,53 +385,13 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 
 - (CGFloat)slk_appropriateKeyboardHeight:(NSNotification *)notification
 {
-    CGFloat keyboardHeight = 0.0;
-    
-    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    
     self.externalKeyboardDetected = [self slk_detectExternalKeyboardInNotification:notification];
-    
-    // Always return 0 if an external keyboard has been detected
     if (self.externalKeyboardDetected) {
-        return keyboardHeight;
+        return 0.0;
     }
     
-    // Convert the main screen bounds into the correct coordinate space but ignore the origin
-    CGRect bounds = [self.view convertRect:[UIScreen mainScreen].bounds fromView:nil];
-    bounds = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
-    
-    // Need to correctly convert the endframe kicked out for iOS 7
-    CGRect endFrameConverted;
-    
-    if (endFrame.size.width == bounds.size.height || endFrame.size.height == bounds.size.width) {
-        endFrameConverted = SLKRectInvert(endFrame);
-    }
-    else {
-        endFrameConverted = endFrame;
-    }
-    
-    // Sets the minimum height of the keyboard
-    if (self.isMovingKeyboard) {
-        keyboardHeight = bounds.size.height;
-        keyboardHeight -= endFrameConverted.origin.y;
-    }
-    else {
-        if ([notification.name isEqualToString:UIKeyboardWillShowNotification] || [notification.name isEqualToString:UIKeyboardDidShowNotification]) {
-            keyboardHeight = endFrameConverted.size.height;
-        }
-        else {
-            keyboardHeight = 0.0;
-        }
-    }
-    
-    keyboardHeight -= [self slk_appropriateBottomMarginToWindow];
-    keyboardHeight -= CGRectGetHeight(self.textView.inputAccessoryView.bounds);
-    
-    if (keyboardHeight < 0 || endFrameConverted.origin.y < 0) {
-        keyboardHeight = 0.0;
-    }
-    
-    return keyboardHeight;
+    CGRect endFrame = [self.view convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] fromView:nil];
+    return MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(endFrame) - CGRectGetHeight(self.textView.inputAccessoryView.bounds));
 }
 
 - (CGFloat)slk_appropriateScrollViewHeight
@@ -468,42 +428,6 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     
     height += CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
     return height;
-}
-
-- (CGFloat)slk_appropriateBottomMarginToWindow
-{
-    // Converts the main screen bounds into the correct coordinate space, but ignore origin
-    CGRect bounds = [self.view convertRect:[UIScreen mainScreen].bounds fromView:nil];
-    bounds = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
-    
-    CGRect viewRect = self.view.frame;
-    
-    CGFloat bottomWindow = CGRectGetMaxY(bounds);
-    CGFloat bottomView = CGRectGetMaxY(viewRect);
-    
-    CGRect statusBarRect = [self.view convertRect:[UIApplication sharedApplication].statusBarFrame fromView:nil];
-    CGFloat statusBarHeight = MIN(statusBarRect.size.height, statusBarRect.size.width);
-    
-    CGFloat bottomMargin = bottomWindow - bottomView;
-    
-    if (SLK_IS_IPAD && self.modalPresentationStyle == UIModalPresentationFormSheet) {
-        
-        // Needs to convert the status bar's frame to the correct coordinate space
-        bottomMargin -= statusBarHeight;
-        
-        bottomMargin /= 2.0;
-        
-        if (SLK_IS_LANDSCAPE) {
-            bottomMargin += bottomMargin;
-        }
-        else if (SLK_IS_IOS8_AND_HIGHER) {
-            // For some reason in iOS 8 portrait only, we lose half the status bar height somewhere
-            bottomMargin += statusBarHeight/2.0;
-        }
-    }
-    
-    // Do NOT consider the status bar's max height gap (40 pts while in-call mode)
-    return (bottomMargin > statusBarHeight) ? bottomMargin : 0.0;
 }
 
 - (NSString *)slk_appropriateKeyboardNotificationName:(NSNotification *)notification
@@ -1044,7 +968,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
         }
     }
     // Reload only if the input views if the frame doesn't match the text input bar's.
-    else if (self.textView.inputAccessoryView && CGRectGetHeight(self.textView.inputAccessoryView.frame) != CGRectGetHeight(self.textInputbar.bounds)) {
+    else if (CGRectGetHeight(self.textView.inputAccessoryView.frame) != CGRectGetHeight(self.textInputbar.bounds)) {
         self.textView.inputAccessoryView = [self emptyInputAccessoryView];
         [self.textView refreshInputViews];
     }
@@ -1217,7 +1141,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     // Updates the dismiss mode and input accessory view, if needed.
     [self slk_reloadInputAccessoryViewIfNeeded];
 
-    // Very important to invalidate this flag after the keyboard is dismissed or presented
+    // Very important to invalidate this flag after the keyboard is dismissed or presented, to start with a clean state next time.
     self.movingKeyboard = NO;
 }
 
