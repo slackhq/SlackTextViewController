@@ -49,9 +49,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 @property (nonatomic, strong) NSLayoutConstraint *autoCompletionViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *keyboardHC;
 
-// The keyboard commands available for external keyboards
-@property (nonatomic, strong) NSArray *keyboardCommands;
-
 // YES if the user is moving the keyboard with a gesture
 @property (nonatomic, assign, getter = isMovingKeyboard) BOOL movingKeyboard;
 
@@ -1249,10 +1246,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 {
     if (self.textInputbar.isEditing) {
         [self didCommitTextEditing:sender];
-        return;
     }
-    
-    [self slk_performRightAction];
+    else {
+        [self slk_performRightAction];
+    }
 }
 
 - (void)didPressEscapeKey:(id)sender
@@ -1992,22 +1989,67 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (NSArray *)keyCommands
 {
-    if (_keyboardCommands) {
-        return _keyboardCommands;
+    NSMutableArray *keyboardCommands = [NSMutableArray new];
+    
+    [keyboardCommands addObject:[self returnKeyCommand]];
+    [keyboardCommands addObject:[self escKeyCommand]];
+    [keyboardCommands addObject:[self arrowKeyCommand:UIKeyInputUpArrow]];
+    [keyboardCommands addObject:[self arrowKeyCommand:UIKeyInputDownArrow]];
+
+    return keyboardCommands;
+}
+
+- (UIKeyCommand *)returnKeyCommand
+{
+    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:0 action:@selector(didPressReturnKey:)];
+    
+    // Only available since iOS9
+    if ([UIKeyCommand respondsToSelector:@selector(keyCommandWithInput:modifierFlags:action:discoverabilityTitle:)] ) {
+        if (self.textInputbar.isEditing) {
+            command.discoverabilityTitle = [self.textInputbar.editortRightButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Commit Editing", nil);
+        }
+        else {
+            command.discoverabilityTitle = [self.rightButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Send", nil);
+        }
     }
     
-    _keyboardCommands = @[
-          // Pressing Return key
-          [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:0 action:@selector(didPressReturnKey:)],
-          // Pressing Esc key
-          [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(didPressEscapeKey:)],
-          
-          // Arrow keys
-          [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(didPressArrowKey:)],
-          [UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(didPressArrowKey:)],
-          ];
+    return command;
+}
+
+- (UIKeyCommand *)escKeyCommand
+{
+    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(didPressEscapeKey:)];
     
-    return _keyboardCommands;
+    // Only available since iOS9
+    if ([UIKeyCommand respondsToSelector:@selector(keyCommandWithInput:modifierFlags:action:discoverabilityTitle:)] ) {
+        if (self.isAutoCompleting) {
+            command.discoverabilityTitle = NSLocalizedString(@"Exit Auto-Completion", nil);
+        }
+        else if (self.textInputbar.isEditing) {
+            command.discoverabilityTitle = [self.textInputbar.editortLeftButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Exit Editing", nil);
+        }
+        else if (!self.isExternalKeyboardDetected && self.keyboardHC.constant != 0) {
+            command.discoverabilityTitle = NSLocalizedString(@"Hide Keyboard", nil);
+        }
+    }
+    
+    return command;
+}
+
+- (UIKeyCommand *)arrowKeyCommand:(NSString *)inputUpArrow
+{
+    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:inputUpArrow modifierFlags:0 action:@selector(didPressArrowKey:)];
+    
+    if ([UIKeyCommand respondsToSelector:@selector(keyCommandWithInput:modifierFlags:action:discoverabilityTitle:)] && self.textView.numberOfLines > 1) {
+        if ([inputUpArrow isEqualToString:UIKeyInputUpArrow]) {
+            command.discoverabilityTitle = NSLocalizedString(@"Move Up", nil);
+        }
+        if ([inputUpArrow isEqualToString:UIKeyInputDownArrow]) {
+            command.discoverabilityTitle = NSLocalizedString(@"Move Down", nil);
+        }
+    }
+    
+    return command;
 }
 
 
@@ -2092,7 +2134,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     });
 }
 
-- (NSUInteger)supportedInterfaceOrientations
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskAll;
 }
@@ -2135,8 +2177,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     _typingIndicatorViewClass = nil;
     
     _registeredPrefixes = nil;
-    _keyboardCommands = nil;
-    
     _singleTapGesture.delegate = nil;
     _singleTapGesture = nil;
     _verticalPanGesture.delegate = nil;
