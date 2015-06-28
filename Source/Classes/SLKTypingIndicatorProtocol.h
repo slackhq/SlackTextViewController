@@ -16,6 +16,10 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ Generic protocol needed when customizing your own typing indicator view.
+ Since SLKTextViewController depends of 'isVisible' internally, you will MUST adopt this property in your own typing indicator view implementation.
+ */
 @protocol SLKTypingIndicatorProtocol <NSObject>
 @required
 

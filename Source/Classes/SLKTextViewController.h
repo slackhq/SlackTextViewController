@@ -59,7 +59,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** The bottom toolbar containing a text view and buttons. */
 @property (nonatomic, readonly) SLKTextInputbar *textInputbar;
 
-/** The typing indicator used to display user names horizontally. */
+/** The default typing indicator used to display user names horizontally. */
 @property (nonatomic, readonly) SLKTypingIndicatorView *typingIndicatorView;
 
 /**
