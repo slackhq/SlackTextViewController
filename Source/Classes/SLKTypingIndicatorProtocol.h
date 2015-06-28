@@ -14,16 +14,28 @@
 //   limitations under the License.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-/** @name UIResponder additional features used for SlackTextViewController. */
-@interface UIResponder (SLKAdditions)
+@protocol SLKTypingIndicatorProtocol <NSObject>
+@required
+
+/** Returns YES if the indicator is visible. */
+@property (nonatomic, getter = isVisible) BOOL visible;
 
 /**
- Returns the current first responder object.
+ Updates the 'visible' state.
+ To enable the typing indicator, you MUST override this method and implement key-value observer compliance manually,
+ using the -willChangeValueForKey: and -didChangeValueForKey: methods.
  
- @return A UIResponder instance.
+ @return YES if the autocompletion view should be shown.
  */
-+ (instancetype)slk_currentFirstResponder;
+- (void)setVisible:(BOOL)visible;
+
+@optional
+
+/**
+ Dismisses the indicator view.
+ */
+- (void)dismissIndicator;
 
 @end

@@ -22,11 +22,16 @@
 
 - (void)slk_animateLayoutIfNeededWithBounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations
 {
-    NSTimeInterval duration = bounce ? 0.5 : 0.2;
-    [self slk_animateLayoutIfNeededWithDuration:duration bounce:bounce options:options animations:animations];
+    [self slk_animateLayoutIfNeededWithBounce:bounce options:options animations:animations completion:NULL];
 }
 
-- (void)slk_animateLayoutIfNeededWithDuration:(NSTimeInterval)duration bounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations
+- (void)slk_animateLayoutIfNeededWithBounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
+{
+    NSTimeInterval duration = bounce ? 0.5 : 0.2;
+    [self slk_animateLayoutIfNeededWithDuration:duration bounce:bounce options:options animations:animations completion:completion];
+}
+
+- (void)slk_animateLayoutIfNeededWithDuration:(NSTimeInterval)duration bounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
     if (bounce) {
         [UIView animateWithDuration:duration
@@ -41,7 +46,7 @@
                                  animations();
                              }
                          }
-                         completion:NULL];
+                         completion:completion];
     }
     else {
         [UIView animateWithDuration:duration
@@ -49,12 +54,12 @@
                             options:options
                          animations:^{
                              [self layoutIfNeeded];
-                             
+
                              if (animations) {
                                  animations();
                              }
                          }
-                         completion:NULL];
+                         completion:completion];
     }
 }
 

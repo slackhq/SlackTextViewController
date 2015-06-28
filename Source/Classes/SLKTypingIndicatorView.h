@@ -15,24 +15,16 @@
 //
 
 #import <UIKit/UIKit.h>
-
-UIKIT_EXTERN NSString * const SLKTypingIndicatorViewWillShowNotification;
-UIKIT_EXTERN NSString * const SLKTypingIndicatorViewWillHideNotification;
+#import "SLKTypingIndicatorProtocol.h"
 
 /** @name A custom view to display an indicator of users typing. */
-@interface SLKTypingIndicatorView : UIView
+@interface SLKTypingIndicatorView : UIView <SLKTypingIndicatorProtocol>
 
 /** The amount of time a name should keep visible. If is zero, the indicator will not remove nor disappear automatically. Default is 6.0 seconds*/
 @property (nonatomic, readwrite) NSTimeInterval interval;
 
-/** If YES, the user can dismiss the indicator by tapping on it. Default is YES. */
+/** If YES, the user can dismiss the indicator by tapping on it. Default is NO. */
 @property (nonatomic, readwrite) BOOL canResignByTouch;
-
-/** Returns YES if the indicator is visible. */
-@property (nonatomic, readwrite, getter = isVisible) BOOL visible;
-
-/** The appropriate height of the view. */
-@property (nonatomic, readonly) CGFloat height;
 
 /** The color of the text. Default is grayColor. */
 @property (nonatomic, strong) UIColor *textColor;
@@ -69,10 +61,5 @@ UIKIT_EXTERN NSString * const SLKTypingIndicatorViewWillHideNotification;
  @param username The user name string.
  */
 - (void)removeUsername:(NSString *)username;
-
-/**
- Dismisses the indicator view.
- */
-- (void)dismissIndicator;
 
 @end
