@@ -76,7 +76,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 @synthesize tableView = _tableView;
 @synthesize collectionView = _collectionView;
 @synthesize scrollView = _scrollView;
-@synthesize typingIndicatorCustomView = _typingIndicatorCustomView;
+@synthesize typingIndicatorProxyView = _typingIndicatorProxyView;
 @synthesize textInputbar = _textInputbar;
 @synthesize autoCompletionView = _autoCompletionView;
 @synthesize autoCompleting = _autoCompleting;
@@ -322,24 +322,24 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     return _textInputbar;
 }
 
-- (UIView <SLKTypingIndicatorProtocol> *)typingIndicatorCustomView
+- (UIView <SLKTypingIndicatorProtocol> *)typingIndicatorProxyView
 {
-    if (!_typingIndicatorCustomView)
+    if (!_typingIndicatorProxyView)
     {
         Class class = self.typingIndicatorViewClass ? : [SLKTypingIndicatorView class];
         
-        _typingIndicatorCustomView = [[class alloc] init];
-        _typingIndicatorCustomView.translatesAutoresizingMaskIntoConstraints = NO;
-        _typingIndicatorCustomView.hidden = YES;
+        _typingIndicatorProxyView = [[class alloc] init];
+        _typingIndicatorProxyView.translatesAutoresizingMaskIntoConstraints = NO;
+        _typingIndicatorProxyView.hidden = YES;
         
-        [_typingIndicatorCustomView addObserver:self forKeyPath:NSStringFromSelector(@selector(isVisible)) options:NSKeyValueObservingOptionNew context:nil];
+        [_typingIndicatorProxyView addObserver:self forKeyPath:NSStringFromSelector(@selector(isVisible)) options:NSKeyValueObservingOptionNew context:nil];
     }
-    return _typingIndicatorCustomView;
+    return _typingIndicatorProxyView;
 }
 
 - (SLKTypingIndicatorView *)typingIndicatorView
 {
-    return (SLKTypingIndicatorView *)self.typingIndicatorCustomView;
+    return (SLKTypingIndicatorView *)self.typingIndicatorProxyView;
 }
 
 - (BOOL)isExternalKeyboardDetected
@@ -1967,8 +1967,8 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     _textInputbar = nil;
     _textViewClass = nil;
     
-    [_typingIndicatorCustomView removeObserver:self forKeyPath:NSStringFromSelector(@selector(isVisible))];
-    _typingIndicatorCustomView = nil;
+    [_typingIndicatorProxyView removeObserver:self forKeyPath:NSStringFromSelector(@selector(isVisible))];
+    _typingIndicatorProxyView = nil;
     _typingIndicatorViewClass = nil;
     
     _registeredPrefixes = nil;

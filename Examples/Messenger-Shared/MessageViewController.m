@@ -162,7 +162,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     if ([self canShowTypingIndicator]) {
         
 #if DEBUG_CUSTOM_TYPING_INDICATOR
-        __block TypingIndicatorView *view = (TypingIndicatorView *)self.typingIndicatorCustomView;
+        __block TypingIndicatorView *view = (TypingIndicatorView *)self.typingIndicatorProxyView;
         
         CGFloat scale = [UIScreen mainScreen].scale;
         CGSize imgSize = CGSizeMake(kTypingIndicatorViewAvatarHeight*scale, kTypingIndicatorViewAvatarHeight*scale);

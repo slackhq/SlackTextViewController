@@ -62,8 +62,12 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** The typing indicator used to display user names horizontally. */
 @property (nonatomic, readonly) SLKTypingIndicatorView *typingIndicatorView;
 
-/** The custom typing indicator view. Will be a kind of SLKTypingIndicatorView by default. Override by calling -registerClassForTypingIndicatorView: during init */
-@property (nonatomic, readonly) UIView <SLKTypingIndicatorProtocol> *typingIndicatorCustomView;
+/**
+ The custom typing indicator view. Default is kind of SLKTypingIndicatorView.
+ To customize the typing indicator view, you will need to call -registerClassForTypingIndicatorView: nside of any initialization method.
+ To interact with it directly, you will need to cast the return value of -typingIndicatorProxyView to the appropriate type.
+ */
+@property (nonatomic, readonly) UIView <SLKTypingIndicatorProtocol> *typingIndicatorProxyView;
 
 /** A single tap gesture used to dismiss the keyboard. */
 @property (nonatomic, readonly) UIGestureRecognizer *singleTapGesture;
