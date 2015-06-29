@@ -18,7 +18,8 @@
 
 /**
  Generic protocol needed when customizing your own typing indicator view.
- Since SLKTextViewController depends of 'isVisible' internally, you will MUST adopt this property in your own typing indicator view implementation.
+ SLKTextViewController depends of the 'isVisible' property internally, to detect with KVO its changes and update the typing indicator view's constraints automatically.
+ Because of this, you MUST conform to this protocol and implement the required methods.
  */
 @protocol SLKTypingIndicatorProtocol <NSObject>
 @required
@@ -31,7 +32,7 @@
  To enable the typing indicator, you MUST override this method and implement key-value observer compliance manually,
  using the -willChangeValueForKey: and -didChangeValueForKey: methods.
  
- @return YES if the autocompletion view should be shown.
+ @return YES if the indicator view is visible.
  */
 - (void)setVisible:(BOOL)visible;
 
