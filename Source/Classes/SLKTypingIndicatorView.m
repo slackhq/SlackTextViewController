@@ -77,11 +77,6 @@
 
 #pragma mark - SLKTypingIndicatorProtocol
 
-- (CGSize)intrinsicContentSize
-{
-    return CGSizeMake(UIViewNoIntrinsicMetric, [self height]);
-}
-
 - (void)setVisible:(BOOL)visible
 {
     // Skip when updating the same value, specially to avoid inovking KVO unnecessary
@@ -163,6 +158,11 @@
     }
     
     return attributedString;
+}
+
+- (CGSize)intrinsicContentSize
+{
+    return CGSizeMake(UIViewNoIntrinsicMetric, [self height]);
 }
 
 - (CGFloat)height

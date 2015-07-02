@@ -47,11 +47,6 @@
 
 #pragma mark - SLKTypingIndicatorProtocol
 
-- (CGSize)intrinsicContentSize
-{
-    return CGSizeMake(UIViewNoIntrinsicMetric, [self height]);
-}
-
 - (void)dismissIndicator
 {
     if (self.isVisible) {
@@ -118,6 +113,11 @@
         _backgroundGradient.shouldRasterize = YES;
     }
     return _backgroundGradient;
+}
+
+- (CGSize)intrinsicContentSize
+{
+    return CGSizeMake(UIViewNoIntrinsicMetric, [self height]);
 }
 
 - (CGFloat)height

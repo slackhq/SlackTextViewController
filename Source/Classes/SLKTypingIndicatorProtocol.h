@@ -27,13 +27,6 @@
  */
 @property (nonatomic, getter = isVisible) BOOL visible;
 
-/**
- Returns the natural size for the receiving view, considering only properties of the view itself.
- SLKTextViewController uses Auto-Layout internally, so this API is the most appropriate way to update the view dimensions dynamically.
- You can return UIViewNoIntrinsicMetric for any intrinsic size of a given dimension.
- */
-- (CGSize)intrinsicContentSize;
-
 @optional
 
 /**
