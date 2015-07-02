@@ -21,7 +21,6 @@
 
 /**
  Returns the current first responder object.
- @discussion This is an experimental API. Use it at your own risk.
  
  @return A UIResponder instance.
  */

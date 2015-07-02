@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-#define kAvatarSize 30.0
-#define kMinimumHeight 50.0
+static CGFloat kMessageTableViewCellMinimumHeight = 50.0;
+static CGFloat kMessageTableViewCellAvatarHeight = 30.0;
 
 @interface MessageTableViewCell : UITableViewCell
 

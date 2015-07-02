@@ -66,8 +66,9 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 // The setter of isExternalKeyboardDetected, for private use.
 @property (nonatomic, getter = isRotating) BOOL rotating;
 
-// The subclass of SLKTextView class to use
+// Optional classes to be used instead of the default ones.
 @property (nonatomic, strong) Class textViewClass;
+@property (nonatomic, strong) Class typingIndicatorViewClass;
 
 @end
 
@@ -75,7 +76,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 @synthesize tableView = _tableView;
 @synthesize collectionView = _collectionView;
 @synthesize scrollView = _scrollView;
-@synthesize typingIndicatorView = _typingIndicatorView;
+@synthesize typingIndicatorProxyView = _typingIndicatorProxyView;
 @synthesize textInputbar = _textInputbar;
 @synthesize autoCompletionView = _autoCompletionView;
 @synthesize autoCompleting = _autoCompleting;
@@ -175,7 +176,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 
     [self.view addSubview:self.scrollViewProxy];
     [self.view addSubview:self.autoCompletionView];
-    [self.view addSubview:self.typingIndicatorView];
+    [self.view addSubview:self.typingIndicatorProxyView];
     [self.view addSubview:self.textInputbar];
 
     [self slk_setupViewConstraints];
@@ -255,10 +256,10 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:style];
         _tableView.translatesAutoresizingMaskIntoConstraints = NO;
-        _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.scrollsToTop = YES;
         _tableView.dataSource = self;
         _tableView.delegate = self;
+        _tableView.clipsToBounds = NO;
     }
     return _tableView;
 }
@@ -269,7 +270,6 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     {
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         _collectionView.translatesAutoresizingMaskIntoConstraints = NO;
-        _collectionView.backgroundColor = [UIColor whiteColor];
         _collectionView.scrollsToTop = YES;
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
@@ -322,15 +322,27 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     return _textInputbar;
 }
 
+- (UIView <SLKTypingIndicatorProtocol> *)typingIndicatorProxyView
+{
+    if (!_typingIndicatorProxyView)
+    {
+        Class class = self.typingIndicatorViewClass ? : [SLKTypingIndicatorView class];
+        
+        _typingIndicatorProxyView = [[class alloc] init];
+        _typingIndicatorProxyView.translatesAutoresizingMaskIntoConstraints = NO;
+        _typingIndicatorProxyView.hidden = YES;
+        
+        [_typingIndicatorProxyView addObserver:self forKeyPath:@"visible" options:NSKeyValueObservingOptionNew context:nil];
+    }
+    return _typingIndicatorProxyView;
+}
+
 - (SLKTypingIndicatorView *)typingIndicatorView
 {
-    if (!_typingIndicatorView)
-    {
-        _typingIndicatorView = [SLKTypingIndicatorView new];
-        _typingIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
-        _typingIndicatorView.canResignByTouch = NO;
+    if ([_typingIndicatorProxyView isKindOfClass:[SLKTypingIndicatorView class]]) {
+        return (SLKTypingIndicatorView *)self.typingIndicatorProxyView;
     }
-    return _typingIndicatorView;
+    return nil;
 }
 
 - (BOOL)isExternalKeyboardDetected
@@ -744,6 +756,11 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 
 - (BOOL)canShowTypeIndicator
 {
+    return [self canShowTypingIndicator];
+}
+
+- (BOOL)canShowTypingIndicator
+{
     // Don't show if the text is being edited or auto-completed.
     if (self.textInputbar.isEditing || self.isAutoCompleting) {
         return NO;
@@ -1042,6 +1059,16 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 
 #pragma mark - Notification Events
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([object conformsToProtocol:@protocol(SLKTypingIndicatorProtocol)] && [keyPath isEqualToString:@"visible"]) {
+        [self slk_willShowOrHideTypeIndicatorView:object];
+    }
+    else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
 - (void)slk_willShowOrHideKeyboard:(NSNotification *)notification
 {
     // Skips if the view isn't visible.
@@ -1096,7 +1123,8 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
                                              options:(curve<<16)|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
                                           animations:^{
                                               [self slk_scrollToBottomIfNeeded];
-                                          }];
+                                          }
+                                          completion:NULL];
 }
 
 - (void)slk_didShowOrHideKeyboard:(NSNotification *)notification
@@ -1277,26 +1305,31 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     }
 }
 
-- (void)slk_willShowOrHideTypeIndicatorView:(NSNotification *)notification
+- (void)slk_willShowOrHideTypeIndicatorView:(UIView <SLKTypingIndicatorProtocol> *)typingIndicatorView
 {
-    SLKTypingIndicatorView *indicatorView = (SLKTypingIndicatorView *)notification.object;
-    
-    // Skips if it's not the expected typing indicator view.
-    if (![indicatorView isEqual:self.typingIndicatorView]) {
-        return;
-    }
-    
     // Skips if the typing indicator should not show. Ignores the checking if it's trying to hide.
-    if (![self canShowTypeIndicator] && !self.typingIndicatorView.isVisible) {
+    if (![self canShowTypingIndicator] && ![typingIndicatorView isVisible]) {
         return;
     }
     
-    self.typingIndicatorViewHC.constant = indicatorView.isVisible ?  0.0 : indicatorView.intrinsicContentSize.height;
-    self.scrollViewHC.constant -= self.typingIndicatorViewHC.constant;
+    CGFloat systemLayoutSizeHeight = [typingIndicatorView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    CGFloat height = typingIndicatorView.isVisible ? systemLayoutSizeHeight : 0.0;
+    
+    self.typingIndicatorViewHC.constant = height;
+    self.scrollViewHC.constant -= height;
+    
+    if (typingIndicatorView.isVisible) {
+        typingIndicatorView.hidden = NO;
+    }
     
     [self.view slk_animateLayoutIfNeededWithBounce:self.bounces
-                                           options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
-                                        animations:NULL];
+                                           options:UIViewAnimationOptionCurveEaseInOut
+                                        animations:NULL
+                                        completion:^(BOOL finished) {
+                                            if (!typingIndicatorView.isVisible) {
+                                                typingIndicatorView.hidden = YES;
+                                            }
+                                        }];
 }
 
 - (void)slk_willTerminateApplication:(NSNotification *)notification
@@ -1603,14 +1636,24 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 
 #pragma mark - Customization
 
-- (void)registerClassForTextView:(Class)textViewClass
+- (void)registerClassForTextView:(Class)aClass
 {
-    if (textViewClass == nil) {
+    if (aClass == nil) {
         return;
     }
     
-    NSAssert([textViewClass isSubclassOfClass:[SLKTextView class]], @"The registered class is invalid, it must be a subclass of SLKTextView.");
-    self.textViewClass = textViewClass;
+    NSAssert([aClass isSubclassOfClass:[SLKTextView class]], @"The registered class is invalid, it must be a subclass of SLKTextView.");
+    self.textViewClass = aClass;
+}
+
+- (void)registerClassForTypingIndicatorView:(Class)aClass
+{
+    if (aClass == nil) {
+        return;
+    }
+
+    NSAssert([aClass isSubclassOfClass:[UIView class]], @"The registered class is invalid, it must be a subclass for UIView.");
+    self.typingIndicatorViewClass = aClass;
 }
 
 
@@ -1756,7 +1799,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 {
     NSDictionary *views = @{@"scrollView": self.scrollViewProxy,
                             @"autoCompletionView": self.autoCompletionView,
-                            @"typingIndicatorView": self.typingIndicatorView,
+                            @"typingIndicatorView": self.typingIndicatorProxyView,
                             @"textInputbar": self.textInputbar,
                             };
     
@@ -1768,7 +1811,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     
     self.scrollViewHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.scrollViewProxy secondItem:nil];
     self.autoCompletionViewHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.autoCompletionView secondItem:nil];
-    self.typingIndicatorViewHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.typingIndicatorView secondItem:nil];
+    self.typingIndicatorViewHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.typingIndicatorProxyView secondItem:nil];
     self.textInputbarHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.textInputbar secondItem:nil];
     self.keyboardHC = [self.view slk_constraintForAttribute:NSLayoutAttributeBottom firstItem:self.view secondItem:self.textInputbar];
     
@@ -1829,15 +1872,10 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewSelectedRange:) name:SLKTextViewSelectedRangeDidChangeNotification object:nil];
-
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewPasteboard:) name:SLKTextViewDidPasteItemNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didShakeTextView:) name:SLKTextViewDidShakeNotification object:nil];
 
-    // TypeIndicator notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willShowOrHideTypeIndicatorView:) name:SLKTypingIndicatorViewWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willShowOrHideTypeIndicatorView:) name:SLKTypingIndicatorViewWillHideNotification object:nil];
-    
     // Application notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willTerminateApplication:) name:UIApplicationWillTerminateNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willTerminateApplication:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
@@ -1870,10 +1908,6 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewSelectedRangeDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewDidPasteItemNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewDidShakeNotification object:nil];
-
-    // TypeIndicator notifications
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTypingIndicatorViewWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTypingIndicatorViewWillHideNotification object:nil];
     
     // Application notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
@@ -1934,7 +1968,11 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     
     _textInputbar.textView.delegate = nil;
     _textInputbar = nil;
-    _typingIndicatorView = nil;
+    _textViewClass = nil;
+    
+    [_typingIndicatorProxyView removeObserver:self forKeyPath:@"visible"];
+    _typingIndicatorProxyView = nil;
+    _typingIndicatorViewClass = nil;
     
     _registeredPrefixes = nil;
     _keyboardCommands = nil;

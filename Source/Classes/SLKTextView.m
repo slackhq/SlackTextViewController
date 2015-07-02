@@ -422,14 +422,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 }
 
 
-#pragma mark - UITextInputTraits Overrides
-
-- (void)insertText:(NSString *)text
-{
-    [super insertText:text];
-}
-
-
 #pragma mark - UIResponder Overrides
 
 - (BOOL)canBecomeFirstResponder

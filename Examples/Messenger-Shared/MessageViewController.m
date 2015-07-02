@@ -9,9 +9,12 @@
 #import "MessageViewController.h"
 #import "MessageTableViewCell.h"
 #import "MessageTextView.h"
+#import "TypingIndicatorView.h"
 #import "Message.h"
 
 #import <LoremIpsum/LoremIpsum.h>
+
+#define DEBUG_CUSTOM_TYPING_INDICATOR 0
 
 static NSString *MessengerCellIdentifier = @"MessengerCell";
 static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
@@ -34,8 +37,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     self = [super initWithTableViewStyle:UITableViewStylePlain];
     if (self) {
-        // Register a subclass of SLKTextView, if you need any special appearance and/or behavior customisation.
-        [self registerClassForTextView:[MessageTextView class]];
+        [self commonInit];
     }
     return self;
 }
@@ -44,8 +46,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        // Register a subclass of SLKTextView, if you need any special appearance and/or behavior customisation.
-        [self registerClassForTextView:[MessageTextView class]];
+        [self commonInit];
     }
     return self;
 }
@@ -53,6 +54,17 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 + (UITableViewStyle)tableViewStyleForCoder:(NSCoder *)decoder
 {
     return UITableViewStylePlain;
+}
+
+- (void)commonInit
+{
+    // Register a SLKTextView subclass, if you need any special appearance and/or behavior customisation.
+    [self registerClassForTextView:[MessageTextView class]];
+    
+#if DEBUG_CUSTOM_TYPING_INDICATOR
+    // Register a UIView subclass, conforming to SLKTypingIndicatorProtocol, to use a custom typing indicator view.
+    [self registerClassForTypingIndicatorView:[TypingIndicatorView class]];
+#endif
 }
 
 
@@ -111,7 +123,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.textInputbar.counterStyle = SLKCounterStyleSplit;
     self.textInputbar.counterPosition = SLKCounterPositionTop;
 
+#if !DEBUG_CUSTOM_TYPING_INDICATOR
     self.typingIndicatorView.canResignByTouch = YES;
+#endif
     
     [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
     [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":"]];
@@ -145,8 +159,23 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (void)simulateUserTyping:(id)sender
 {
-    if (!self.isEditing && !self.isAutoCompleting) {
+    if ([self canShowTypingIndicator]) {
+        
+#if DEBUG_CUSTOM_TYPING_INDICATOR
+        __block TypingIndicatorView *view = (TypingIndicatorView *)self.typingIndicatorProxyView;
+        
+        CGFloat scale = [UIScreen mainScreen].scale;
+        CGSize imgSize = CGSizeMake(kTypingIndicatorViewAvatarHeight*scale, kTypingIndicatorViewAvatarHeight*scale);
+        
+        // This will cause the typing indicator to show after a delay ¯\_(ツ)_/¯
+        [LoremIpsum asyncPlaceholderImageWithSize:imgSize
+                                       completion:^(UIImage *image) {
+                                           UIImage *thumbnail = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
+                                           [view presentIndicatorWithName:[LoremIpsum name] image:thumbnail];
+                                       }];
+#else
         [self.typingIndicatorView insertUsername:[LoremIpsum name]];
+#endif
     }
 }
 
@@ -322,6 +351,15 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     return [super canPressRightButton];
 }
 
+- (BOOL)canShowTypingIndicator
+{
+#if DEBUG_CUSTOM_TYPING_INDICATOR
+    return YES;
+#else
+    return [super canShowTypingIndicator];
+#endif
+}
+
 - (BOOL)canShowAutoCompletion
 {
     NSArray *array = nil;
@@ -414,12 +452,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     if (cell.needsPlaceholder)
     {
         CGFloat scale = [UIScreen mainScreen].scale;
-        
-        if ([[UIScreen mainScreen] respondsToSelector:@selector(nativeScale)]) {
-            scale = [UIScreen mainScreen].nativeScale;
-        }
-        
-        CGSize imgSize = CGSizeMake(kAvatarSize*scale, kAvatarSize*scale);
+        CGSize imgSize = CGSizeMake(kMessageTableViewCellAvatarHeight*scale, kMessageTableViewCellAvatarHeight*scale);
         
         [LoremIpsum asyncPlaceholderImageWithSize:imgSize
                                        completion:^(UIImage *image) {
@@ -470,7 +503,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:16.0],
                                      NSParagraphStyleAttributeName: paragraphStyle};
         
-        CGFloat width = CGRectGetWidth(tableView.frame)-kAvatarSize;
+        CGFloat width = CGRectGetWidth(tableView.frame)-kMessageTableViewCellAvatarHeight;
         width -= 25.0;
         
         CGRect titleBounds = [message.username boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
@@ -487,14 +520,14 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
             height += 80.0 + 10.0;
         }
         
-        if (height < kMinimumHeight) {
-            height = kMinimumHeight;
+        if (height < kMessageTableViewCellMinimumHeight) {
+            height = kMessageTableViewCellMinimumHeight;
         }
         
         return height;
     }
     else {
-        return kMinimumHeight;
+        return kMessageTableViewCellMinimumHeight;
     }
 }
 

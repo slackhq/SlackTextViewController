@@ -35,18 +35,19 @@
                             @"attachmentView": self.attachmentView,
                             };
     
-    NSDictionary *metrics = @{@"tumbSize": @(kAvatarSize),
-                              @"trailing": @10,
-                              @"leading": @5,
+    NSDictionary *metrics = @{@"tumbSize": @(kMessageTableViewCellAvatarHeight),
+                              @"padding": @15,
+                              @"right": @10,
+                              @"left": @5,
                               @"attchSize": @80,
                               };
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leading-[thumbnailView(tumbSize)]-trailing-[titleLabel(>=0)]-trailing-|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leading-[thumbnailView(tumbSize)]-trailing-[bodyLabel(>=0)]-trailing-|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leading-[thumbnailView(tumbSize)]-trailing-[attachmentView]-trailing-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-left-[thumbnailView(tumbSize)]-right-[titleLabel(>=0)]-right-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-left-[thumbnailView(tumbSize)]-right-[bodyLabel(>=0)]-right-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-left-[thumbnailView(tumbSize)]-right-[attachmentView]-right-|" options:0 metrics:metrics views:views]];
 
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-trailing-[thumbnailView(tumbSize)]-(>=0)-|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[titleLabel]-leading-[bodyLabel(>=0)]-leading-[attachmentView(>=0,<=attchSize)]-trailing-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-right-[thumbnailView(tumbSize)]-(>=0)-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-padding-[titleLabel]-left-[bodyLabel(>=0)]-left-[attachmentView(>=0,<=attchSize)]-right-|" options:0 metrics:metrics views:views]];
 }
 
 - (void)prepareForReuse
@@ -100,7 +101,7 @@
         _thumbnailView.userInteractionEnabled = NO;
         _thumbnailView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
         
-        _thumbnailView.layer.cornerRadius = kAvatarSize/2.0;
+        _thumbnailView.layer.cornerRadius = kMessageTableViewCellAvatarHeight/2.0;
         _thumbnailView.layer.masksToBounds = YES;
     }
     return _thumbnailView;
@@ -115,7 +116,7 @@
         _attachmentView.backgroundColor = [UIColor clearColor];
         _attachmentView.contentMode = UIViewContentModeCenter;
         
-        _attachmentView.layer.cornerRadius = kAvatarSize/4.0;
+        _attachmentView.layer.cornerRadius = kMessageTableViewCellAvatarHeight/4.0;
         _attachmentView.layer.masksToBounds = YES;
     }
     return _attachmentView;
