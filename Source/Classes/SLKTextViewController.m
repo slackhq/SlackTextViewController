@@ -176,7 +176,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 
     [self.view addSubview:self.scrollViewProxy];
     [self.view addSubview:self.autoCompletionView];
-    [self.view addSubview:self.typingIndicatorView];
+    [self.view addSubview:self.typingIndicatorProxyView];
     [self.view addSubview:self.textInputbar];
 
     [self slk_setupViewConstraints];
@@ -339,7 +339,10 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 
 - (SLKTypingIndicatorView *)typingIndicatorView
 {
-    return (SLKTypingIndicatorView *)self.typingIndicatorProxyView;
+    if ([_typingIndicatorProxyView isKindOfClass:[SLKTypingIndicatorView class]]) {
+        return (SLKTypingIndicatorView *)self.typingIndicatorProxyView;
+    }
+    return nil;
 }
 
 - (BOOL)isExternalKeyboardDetected
@@ -1796,7 +1799,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 {
     NSDictionary *views = @{@"scrollView": self.scrollViewProxy,
                             @"autoCompletionView": self.autoCompletionView,
-                            @"typingIndicatorView": self.typingIndicatorView,
+                            @"typingIndicatorView": self.typingIndicatorProxyView,
                             @"textInputbar": self.textInputbar,
                             };
     
@@ -1808,7 +1811,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     
     self.scrollViewHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.scrollViewProxy secondItem:nil];
     self.autoCompletionViewHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.autoCompletionView secondItem:nil];
-    self.typingIndicatorViewHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.typingIndicatorView secondItem:nil];
+    self.typingIndicatorViewHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.typingIndicatorProxyView secondItem:nil];
     self.textInputbarHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.textInputbar secondItem:nil];
     self.keyboardHC = [self.view slk_constraintForAttribute:NSLayoutAttributeBottom firstItem:self.view secondItem:self.textInputbar];
     
