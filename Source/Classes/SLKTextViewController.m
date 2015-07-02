@@ -1312,7 +1312,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
         return;
     }
     
-    CGFloat systemLayoutSizeHeight = [typingIndicatorView systemLayoutSizeFittingSize:CGSizeZero].height;
+    CGFloat systemLayoutSizeHeight = [typingIndicatorView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
     CGFloat height = typingIndicatorView.isVisible ? systemLayoutSizeHeight : 0.0;
     
     self.typingIndicatorViewHC.constant = height;
