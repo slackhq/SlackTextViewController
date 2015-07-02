@@ -77,6 +77,11 @@
 
 #pragma mark - SLKTypingIndicatorProtocol
 
+- (CGSize)intrinsicContentSize
+{
+    return CGSizeMake(UIViewNoIntrinsicMetric, [self height]);
+}
+
 - (void)setVisible:(BOOL)visible
 {
     // Skip when updating the same value, specially to avoid inovking KVO unnecessary
@@ -97,21 +102,15 @@
     [self didChangeValueForKey:NSStringFromSelector(@selector(isVisible))];
 }
 
+- (void)dismissIndicator
+{
+    if (self.isVisible) {
+        self.visible = NO;
+    }
+}
+
 
 #pragma mark - Getters
-
-- (CGSize)intrinsicContentSize
-{
-    return CGSizeMake(UIViewNoIntrinsicMetric, [self height]);
-}
-
-- (CGFloat)height
-{
-    CGFloat height = self.textFont.lineHeight;
-    height += self.contentInset.top;
-    height += self.contentInset.bottom;
-    return height;
-}
 
 - (UILabel *)textLabel
 {
@@ -164,6 +163,14 @@
     }
     
     return attributedString;
+}
+
+- (CGFloat)height
+{
+    CGFloat height = self.textFont.lineHeight;
+    height += self.contentInset.top;
+    height += self.contentInset.bottom;
+    return height;
 }
 
 
@@ -244,13 +251,6 @@
         self.textLabel.attributedText = [self attributedString];
     }
     else {
-        self.visible = NO;
-    }
-}
-
-- (void)dismissIndicator
-{
-    if (self.isVisible) {
         self.visible = NO;
     }
 }

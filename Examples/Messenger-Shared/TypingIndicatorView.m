@@ -47,6 +47,11 @@
 
 #pragma mark - SLKTypingIndicatorProtocol
 
+- (CGSize)intrinsicContentSize
+{
+    return CGSizeMake(UIViewNoIntrinsicMetric, [self height]);
+}
+
 - (void)dismissIndicator
 {
     if (self.isVisible) {
@@ -56,11 +61,6 @@
 
 
 #pragma mark - UIView
-
-- (CGSize)intrinsicContentSize
-{
-    return CGSizeMake(UIViewNoIntrinsicMetric, [self height]);
-}
 
 - (void)layoutSubviews
 {
