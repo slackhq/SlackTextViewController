@@ -36,31 +36,22 @@
                             @"titleLabel": self.titleLabel
                             };
     
-    NSDictionary *metrics = @{@"tumbSize": @(kTypingIndicatorViewAvatarHeight),
-                              @"tumbSizeHalf": @(-kTypingIndicatorViewAvatarHeight/2.0),
+    NSDictionary *metrics = @{@"invertedThumbSize": @(-kTypingIndicatorViewAvatarHeight/2.0),
                               };
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[thumbnailView]-10-[titleLabel]-(>=0)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[thumbnailView]-(tumbSizeHalf)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[thumbnailView]-(invertedThumbSize)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[titleLabel]-(3@750)-|" options:0 metrics:metrics views:views]];
 }
 
 
 #pragma mark - SLKTypingIndicatorProtocol
 
-- (void)setVisible:(BOOL)visible
+- (void)dismissIndicator
 {
-    if (visible == self.isVisible) {
-        return;
+    if (self.isVisible) {
+        self.visible = NO;
     }
-    
-    // Required implementation for key-value observer compliance
-    [self willChangeValueForKey:NSStringFromSelector(@selector(isVisible))];
-    
-    _visible = visible;
-    
-    // Required implementation for key-value observer compliance
-    [self didChangeValueForKey:NSStringFromSelector(@selector(isVisible))];
 }
 
 
@@ -154,13 +145,6 @@
     self.thumbnailView.image = image;
 
     self.visible = YES;
-}
-
-- (void)dismissIndicator
-{
-    if (self.isVisible) {
-        self.visible = NO;
-    }
 }
 
 

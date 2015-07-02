@@ -332,7 +332,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
         _typingIndicatorProxyView.translatesAutoresizingMaskIntoConstraints = NO;
         _typingIndicatorProxyView.hidden = YES;
         
-        [_typingIndicatorProxyView addObserver:self forKeyPath:NSStringFromSelector(@selector(isVisible)) options:NSKeyValueObservingOptionNew context:nil];
+        [_typingIndicatorProxyView addObserver:self forKeyPath:@"visible" options:NSKeyValueObservingOptionNew context:nil];
     }
     return _typingIndicatorProxyView;
 }
@@ -1061,7 +1061,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([object conformsToProtocol:@protocol(SLKTypingIndicatorProtocol)] && [keyPath isEqualToString:NSStringFromSelector(@selector(isVisible))]) {
+    if ([object conformsToProtocol:@protocol(SLKTypingIndicatorProtocol)] && [keyPath isEqualToString:@"visible"]) {
         [self slk_willShowOrHideTypeIndicatorView:object];
     }
     else {
@@ -1970,7 +1970,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     _textInputbar = nil;
     _textViewClass = nil;
     
-    [_typingIndicatorProxyView removeObserver:self forKeyPath:NSStringFromSelector(@selector(isVisible))];
+    [_typingIndicatorProxyView removeObserver:self forKeyPath:@"visible"];
     _typingIndicatorProxyView = nil;
     _typingIndicatorViewClass = nil;
     
