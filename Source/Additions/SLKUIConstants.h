@@ -22,6 +22,7 @@
 #define SLK_IS_IPHONE6           (SLK_IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 667.0)
 #define SLK_IS_IPHONE6PLUS       (SLK_IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 736.0 || [[UIScreen mainScreen] bounds].size.width == 736.0) // Both orientations
 #define SLK_IS_IOS8_AND_HIGHER   ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
+#define SLK_IS_IOS9_AND_HIGHER   ([[UIDevice currentDevice].systemVersion floatValue] >= 9.0)
 
 #define SLK_KEYBOARD_NOTIFICATION_DEBUG     DEBUG && 0  // Logs every keyboard notification being sent
 
