@@ -125,8 +125,7 @@
 
 - (SLKTextView *)textView
 {
-    if (!_textView)
-    {
+    if (!_textView) {
         Class class = self.textViewClass ? : [SLKTextView class];
         
         _textView = [[class alloc] init];
@@ -169,8 +168,7 @@
 
 - (UIButton *)leftButton
 {
-    if (!_leftButton)
-    {
+    if (!_leftButton) {
         _leftButton = [UIButton buttonWithType:UIButtonTypeSystem];
         _leftButton.translatesAutoresizingMaskIntoConstraints = NO;
         _leftButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
@@ -180,54 +178,36 @@
 
 - (UIButton *)rightButton
 {
-    if (!_rightButton)
-    {
+    if (!_rightButton) {
         _rightButton = [UIButton buttonWithType:UIButtonTypeSystem];
         _rightButton.translatesAutoresizingMaskIntoConstraints = NO;
         _rightButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
         _rightButton.enabled = NO;
         
-        [_rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
+        NSString *title = NSLocalizedString(@"Send", nil);
+        
+        [_rightButton setTitle:title forState:UIControlStateNormal];
+        [_rightButton setAccessibilityLabel:title];
     }
     return _rightButton;
 }
 
 - (UIView *)editorContentView
 {
-    if (!_editorContentView)
-    {
+    if (!_editorContentView) {
         _editorContentView = [UIView new];
         _editorContentView.translatesAutoresizingMaskIntoConstraints = NO;
         _editorContentView.backgroundColor = self.backgroundColor;
         _editorContentView.clipsToBounds = YES;
         _editorContentView.hidden = YES;
         
-        _editorTitle = [UILabel new];
-        _editorTitle.translatesAutoresizingMaskIntoConstraints = NO;
-        _editorTitle.text = NSLocalizedString(@"Editing Message", nil);
-        _editorTitle.textAlignment = NSTextAlignmentCenter;
-        _editorTitle.backgroundColor = [UIColor clearColor];
-        _editorTitle.font = [UIFont boldSystemFontOfSize:15.0];
         [_editorContentView addSubview:self.editorTitle];
-        
-        _editortLeftButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        _editortLeftButton.translatesAutoresizingMaskIntoConstraints = NO;
-        _editortLeftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        _editortLeftButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
-        [_editortLeftButton setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
-        [_editorContentView addSubview:self.editortLeftButton];
-        
-        _editortRightButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        _editortRightButton.translatesAutoresizingMaskIntoConstraints = NO;
-        _editortRightButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        _editortRightButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
-        _editortRightButton.enabled = NO;
-        [_editortRightButton setTitle:NSLocalizedString(@"Save", nil) forState:UIControlStateNormal];
-        [_editorContentView addSubview:self.editortRightButton];
+        [_editorContentView addSubview:self.editorLeftButton];
+        [_editorContentView addSubview:self.editorRightButton];
         
         NSDictionary *views = @{@"label": self.editorTitle,
-                                @"leftButton": self.editortLeftButton,
-                                @"rightButton": self.editortRightButton,
+                                @"leftButton": self.editorLeftButton,
+                                @"rightButton": self.editorRightButton,
                                 };
         
         NSDictionary *metrics = @{@"left" : @(self.contentInset.left),
@@ -242,10 +222,71 @@
     return _editorContentView;
 }
 
+- (UILabel *)editorTitle
+{
+    if (!_editorTitle) {
+        _editorTitle = [UILabel new];
+        _editorTitle.translatesAutoresizingMaskIntoConstraints = NO;
+        _editorTitle.textAlignment = NSTextAlignmentCenter;
+        _editorTitle.backgroundColor = [UIColor clearColor];
+        _editorTitle.font = [UIFont boldSystemFontOfSize:15.0];
+        
+        NSString *title = NSLocalizedString(@"Editing Message", nil);
+        
+        _editorTitle.text = title;
+        _editorTitle.accessibilityLabel = title;
+    }
+    return _editorTitle;
+}
+
+- (UIButton *)editorLeftButton
+{
+    if (!_editorLeftButton) {
+        _editorLeftButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        _editorLeftButton.translatesAutoresizingMaskIntoConstraints = NO;
+        _editorLeftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _editorLeftButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
+        
+        NSString *title = NSLocalizedString(@"Cancel", nil);
+        
+        [_editorLeftButton setTitle:title forState:UIControlStateNormal];
+        [_editorLeftButton setAccessibilityLabel:title];
+    }
+    return _editorLeftButton;
+}
+
+- (UIButton *)editortLeftButton
+{
+    // TODO: Deprecate in further versions
+    return self.editorLeftButton;
+}
+
+- (UIButton *)editorRightButton
+{
+    if (!_editorRightButton) {
+        _editorRightButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        _editorRightButton.translatesAutoresizingMaskIntoConstraints = NO;
+        _editorRightButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        _editorRightButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
+        _editorRightButton.enabled = NO;
+        
+        NSString *title = NSLocalizedString(@"Save", nil);
+        
+        [_editorRightButton setTitle:title forState:UIControlStateNormal];
+        [_editorRightButton setAccessibilityLabel:title];
+    }
+    return _editorRightButton;
+}
+
+- (UIButton *)editortRightButton
+{
+    // TODO: Deprecate in further versions
+    return self.editorRightButton;
+}
+
 - (UILabel *)charCountLabel
 {
-    if (!_charCountLabel)
-    {
+    if (!_charCountLabel) {
         _charCountLabel = [UILabel new];
         _charCountLabel.translatesAutoresizingMaskIntoConstraints = NO;
         _charCountLabel.backgroundColor = [UIColor clearColor];
@@ -717,8 +758,8 @@
     
     _editorContentView = nil;
     _editorTitle = nil;
-    _editortLeftButton = nil;
-    _editortRightButton = nil;
+    _editorLeftButton = nil;
+    _editorRightButton = nil;
     
     _leftButtonWC = nil;
     _leftButtonHC = nil;

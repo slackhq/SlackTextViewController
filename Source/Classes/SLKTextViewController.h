@@ -268,7 +268,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  
  @return YES if the typing indicator view should be presented.
  */
-- (BOOL)canShowTypeIndicator DEPRECATED_MSG_ATTRIBUTE("Use -canShowTypingIndicator");
+- (BOOL)canShowTypeIndicator DEPRECATED_MSG_ATTRIBUTE("Renamed to -canShowTypingIndicator");
 - (BOOL)canShowTypingIndicator;
 
 /**
