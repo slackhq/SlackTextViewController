@@ -128,7 +128,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 #endif
     
     [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
-    [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":"]];
+    [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":", @"+:"]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -379,7 +379,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     else if ([prefix isEqualToString:@"#"] && word.length > 0) {
         array = [self.channels filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
     }
-    else if ([prefix isEqualToString:@":"] && word.length > 1) {
+    else if (([prefix isEqualToString:@":"] || [prefix isEqualToString:@"+:"]) && word.length > 1) {
         array = [self.emojis filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
     }
     
@@ -480,7 +480,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     if ([self.foundPrefix isEqualToString:@"#"]) {
         item = [NSString stringWithFormat:@"# %@", item];
     }
-    else if ([self.foundPrefix isEqualToString:@":"]) {
+    else if (([self.foundPrefix isEqualToString:@":"] || [self.foundPrefix isEqualToString:@"+:"])) {
         item = [NSString stringWithFormat:@":%@:", item];
     }
     
@@ -543,7 +543,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         if ([self.foundPrefix isEqualToString:@"@"] && self.foundPrefixRange.location == 0) {
             [item appendString:@":"];
         }
-        else if ([self.foundPrefix isEqualToString:@":"]) {
+        else if (([self.foundPrefix isEqualToString:@":"] || [self.foundPrefix isEqualToString:@"+:"])) {
             [item appendString:@":"];
         }
         

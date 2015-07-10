@@ -1388,14 +1388,15 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     [self slk_invalidateAutoCompletion];
     
     if (word.length > 0) {
-        NSString *prefix = [word substringWithRange:NSMakeRange(0, 1)];
         
-        if ([self.registeredPrefixes containsObject:prefix]) {
-            // Captures the detected symbol prefix
-            _foundPrefix = prefix;
-            
-            // Used later for replacing the detected range with a new string alias returned in -acceptAutoCompletionWithString:
-            _foundPrefixRange = NSMakeRange(range.location, prefix.length);
+        for (NSString *prefix in self.registeredPrefixes) {
+            if ([word hasPrefix:prefix]) {
+                // Captures the detected symbol prefix
+                _foundPrefix = prefix;
+                
+                // Used later for replacing the detected range with a new string alias returned in -acceptAutoCompletionWithString:
+                _foundPrefixRange = NSMakeRange(range.location, prefix.length);
+            }
         }
     }
     
