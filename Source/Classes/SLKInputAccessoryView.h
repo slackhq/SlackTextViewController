@@ -16,8 +16,9 @@
 
 #import <UIKit/UIKit.h>
 
-UIKIT_EXTERN NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
-
 @interface SLKInputAccessoryView : UIView
-
+/*
+ * Used to save the reference of the keyboard or the Keyboard container..
+ */
+@property (nonatomic, weak, readonly) UIView *keyboard;
 @end
