@@ -17,84 +17,15 @@
 #import "SLKInputAccessoryView.h"
 #import "SLKUIConstants.h"
 
-NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification = @"SLKInputAccessoryViewKeyboardFrameDidChangeNotification";
-
-@interface SLKInputAccessoryView ()
-@property (nonatomic, weak) UIView *observedSuperview;
-@end
-
 @implementation SLKInputAccessoryView
-
-#pragma mark - Getters
-
-NSString *SLKKeyboardHandlingKeyPath()
-{
-    // Listening for the superview's frame doesn't work on iOS8 and above, so we use its center
-    if (SLK_IS_IOS8_AND_HIGHER) {
-        return NSStringFromSelector(@selector(center));
-    }
-    else {
-        return NSStringFromSelector(@selector(frame));
-    }
-}
-
 
 #pragma mark - Super Overrides
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
-    [self slk_removeSuperviewObserver];
-    [self slk_addSuperviewObserver:newSuperview];
-    
-    [super willMoveToSuperview:newSuperview];
-}
-
-
-#pragma mark - Superview handling
-
-- (void)slk_addSuperviewObserver:(UIView *)superview
-{
-    if (!_observedSuperview && superview) {
-        _observedSuperview = superview;
-        [superview addObserver:self forKeyPath:SLKKeyboardHandlingKeyPath() options:0 context:NULL];
+    if (newSuperview) {
+        _keyboardViewProxy = newSuperview;
     }
-}
-
-- (void)slk_removeSuperviewObserver
-{
-    if (_observedSuperview) {
-        [self.observedSuperview removeObserver:self forKeyPath:SLKKeyboardHandlingKeyPath()];
-        _observedSuperview = nil;
-    }
-}
-
-
-#pragma mark - Events
-
-- (void)slk_didChangeKeyboardFrame:(CGRect)frame
-{
-    NSDictionary *userInfo = @{UIKeyboardFrameEndUserInfoKey:[NSValue valueWithCGRect:frame]};
-    [[NSNotificationCenter defaultCenter] postNotificationName:SLKInputAccessoryViewKeyboardFrameDidChangeNotification object:nil userInfo:userInfo];
-}
-
-
-#pragma mark - KVO Listener
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if ([object isEqual:self.superview] && [keyPath isEqualToString:SLKKeyboardHandlingKeyPath()]) {
-        [self slk_didChangeKeyboardFrame:self.superview.frame];
-    }
-    else {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-}
-
-#pragma mark - Lifeterm
-
-- (void)dealloc
-{
-    [self slk_removeSuperviewObserver];
 }
 
 @end
