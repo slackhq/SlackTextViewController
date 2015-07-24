@@ -84,6 +84,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 @synthesize autoCompleting = _autoCompleting;
 @synthesize scrollViewProxy = _scrollViewProxy;
 @synthesize presentedInPopover = _presentedInPopover;
+@synthesize inputAccessoryView = _inputAccessoryView;
 
 #pragma mark - Initializer
 
@@ -339,6 +340,22 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     return _typingIndicatorProxyView;
 }
 
+- (SLKInputAccessoryView *)inputAccessoryView
+{
+    if (!_inputAccessoryView)
+    {
+        _inputAccessoryView = [[SLKInputAccessoryView alloc] initWithFrame:self.textInputbar.bounds];
+        _inputAccessoryView.backgroundColor = [UIColor clearColor];
+        _inputAccessoryView.userInteractionEnabled = NO;
+        
+#if SLK_INPUT_ACCESSORY_DEBUG
+        _inputAccessoryView.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
+#endif
+    }
+    
+    return _inputAccessoryView;
+}
+
 - (SLKTypingIndicatorView *)typingIndicatorView
 {
     if ([_typingIndicatorProxyView isKindOfClass:[SLKTypingIndicatorView class]]) {
@@ -372,24 +389,6 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     return self.textInputbar.rightButton;
 }
 
-- (SLKInputAccessoryView *)emptyInputAccessoryView
-{
-    if (self.inputAccessoryView == nil)
-    {
-        SLKInputAccessoryView *view = [[SLKInputAccessoryView alloc] initWithFrame:self.textInputbar.bounds];
-        view.backgroundColor = [UIColor clearColor];
-        view.userInteractionEnabled = NO;
-        
-#if SLK_INPUT_ACCESSORY_DEBUG
-        view.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
-#endif
-        
-        self.inputAccessoryView = view;
-    }
-    
-    return self.inputAccessoryView;
-}
-
 - (UIModalPresentationStyle)modalPresentationStyle
 {
     if (self.navigationController) {
@@ -406,7 +405,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     }
     
     CGRect endFrame = [self.view convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] fromView:nil];
-    return MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(endFrame) - CGRectGetHeight(self.textView.inputAccessoryView.bounds));
+    return MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(endFrame) - CGRectGetHeight(self.inputAccessoryView.bounds));
 }
 
 - (CGFloat)slk_appropriateScrollViewHeight
@@ -813,8 +812,10 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 
 - (void)slk_didPanScrollView:(UIPanGestureRecognizer *)gesture
 {
-    //if the panning is not enable, then let's skip it..
-    if (!self.keyboardPanningEnabled) return;
+    // Skips if the panning is not enabled
+    if (!self.keyboardPanningEnabled) {
+        return;
+    }
     
     // Skips this if it's not the expected textView.
     // Checking the keyboard height constant helps to disable the view constraints update on iPad when the keyboard is undocked.
@@ -833,25 +834,25 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
         return;
     }
     
-    static CGPoint startPoint   = (CGPoint){0,0};
-    static BOOL dragging        = NO;
-    static CGRect originalFrame = (CGRect){{0,0},{0,0}};
-    
+    static CGPoint startPoint;
+    static CGRect originalFrame;
+    static BOOL dragging = NO;
+
     CGPoint point = [gesture locationInView:self.view];
 
     if (gesture.state == UIGestureRecognizerStateBegan)
     {
         startPoint = CGPointZero;
-        dragging   = NO;
+        dragging = NO;
     }
     else if (gesture.state == UIGestureRecognizerStateChanged)
     {
         if (CGRectContainsPoint(self.textInputbar.frame, point) || dragging)
         {
             if (CGPointEqualToPoint(startPoint, CGPointZero)) {
-                startPoint    = point;
-                dragging      = YES;
-                originalFrame = self.inputAccessoryView.keyboard.frame;
+                startPoint = point;
+                dragging = YES;
+                originalFrame = self.inputAccessoryView.keyboardViewProxy.frame;
             }
             
             self.movingKeyboard = YES;
@@ -860,11 +861,11 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
             
             CGRect keyboardFrame = originalFrame;
             
-            keyboardFrame.origin.y+= MAX(transition.y,0);
+            keyboardFrame.origin.y += MAX(transition.y,0);
             
-            self.inputAccessoryView.keyboard.frame = keyboardFrame;
+            self.inputAccessoryView.keyboardViewProxy.frame = keyboardFrame;
             
-            CGFloat constant = MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(keyboardFrame) - CGRectGetHeight(self.textView.inputAccessoryView.bounds));
+            CGFloat constant = MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(keyboardFrame) - CGRectGetHeight(self.inputAccessoryView.bounds));
 
             self.keyboardHC.constant = constant;
             self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
@@ -875,14 +876,12 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
             // Overrides the scrollView's contentOffset to allow following the same position when dragging the keyboard
             CGPoint offset = _scrollViewOffsetBeforeDragging;
             
-            if (self.isInverted)
-            {
+            if (self.isInverted) {
                 if (!self.scrollViewProxy.isDecelerating && self.scrollViewProxy.isTracking) {
                     self.scrollViewProxy.contentOffset = _scrollViewOffsetBeforeDragging;
                 }
             }
-            else
-            {
+            else {
                 CGFloat keyboardHeightDelta = _keyboardHeightBeforeDragging-self.keyboardHC.constant;
                 offset.y -= keyboardHeightDelta;
                 
@@ -891,9 +890,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
         }
         
     }
-    else if (gesture.state == UIGestureRecognizerStateCancelled ||
-             gesture.state == UIGestureRecognizerStateEnded ||
-             gesture.state == UIGestureRecognizerStateFailed )
+    else if (gesture.state == UIGestureRecognizerStateCancelled || gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateFailed)
     {
         if (dragging)
         {
@@ -902,33 +899,38 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
             if (transition.y < 0) transition.y = 0;
             
             startPoint = CGPointZero;
-            dragging   = NO;
+            dragging = NO;
             CGRect keyboardFrame = originalFrame;
             
-            //the velocity can be changed to hide or show the keyboard based on the gesture
-            CGFloat minVelocity = 20.0f;
-            BOOL hide = [gesture velocityInView:self.view].y > minVelocity || transition.y > keyboardFrame.size.height/2.0f;
+            // The velocity can be changed to hide or show the keyboard based on the gesture
+            CGFloat minVelocity = 20.0;
+            BOOL hide = [gesture velocityInView:self.view].y > minVelocity || transition.y > keyboardFrame.size.height/2.0;
             
-            if (hide)  keyboardFrame.origin.y = [UIScreen mainScreen].bounds.size.height;
+            if (hide) keyboardFrame.origin.y = CGRectGetHeight([UIScreen mainScreen].bounds);
             
-            CGFloat constant = MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(keyboardFrame) - CGRectGetHeight(self.textView.inputAccessoryView.bounds));
+            CGFloat appropriateKeyboardHeight = MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(keyboardFrame) - CGRectGetHeight(self.inputAccessoryView.bounds));
+            CGFloat currentKeyboardHeight = self.keyboardHC.constant;
             
-            self.keyboardHC.constant = constant;
+            self.keyboardHC.constant = appropriateKeyboardHeight;
             self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
             
-            [UIView animateWithDuration:0.15 animations:^{
-                [self.view layoutIfNeeded];
-                self.inputAccessoryView.keyboard.frame = keyboardFrame;
-            } completion:^(BOOL finished) {
-                if (hide)
-                {
-                    [UIView performWithoutAnimation:^{
-                        [self.textView resignFirstResponder];
-                    }];
-                }
-            }];
-        }
+            // calculates the appropriate keyboard animation duration based on its current position.
+            // 0.25 is the native speed of the keyboard presentation
+            NSTimeInterval duration = (currentKeyboardHeight * 0.25) / CGRectGetHeight(originalFrame);
 
+            [UIView animateWithDuration:duration
+                                  delay:0.0
+                                options:UIViewAnimationOptionCurveEaseInOut
+                             animations:^{
+                                 [self.view layoutIfNeeded];
+                                 self.inputAccessoryView.keyboardViewProxy.frame = keyboardFrame;
+                             }
+                             completion:^(BOOL finished) {
+                                 if (hide) {
+                                     [self dismissKeyboard:NO];
+                                 }
+                             }];
+        }
     }
 }
 
@@ -970,7 +972,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
         endFrame = SLKRectInvert(endFrame);
     }
     
-    CGFloat keyboardHeight = CGRectGetHeight(endFrame)-CGRectGetHeight(self.textView.inputAccessoryView.bounds);
+    CGFloat keyboardHeight = CGRectGetHeight(endFrame)-CGRectGetHeight(self.inputAccessoryView.bounds);
     
     beginFrame.size.height = keyboardHeight;
     endFrame.size.height = keyboardHeight;
@@ -1055,7 +1057,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
         // Based on http://stackoverflow.com/a/5760910/287403
         // We can determine if the external keyboard is showing by adding the origin.y of the target finish rect (end when showing, begin when hiding) to the inputAccessoryHeight.
         // If it's greater(or equal) the window height, it's an external keyboard.
-        CGFloat inputAccessoryHeight = self.textView.inputAccessoryView.frame.size.height;
+        CGFloat inputAccessoryHeight = self.inputAccessoryView.frame.size.height;
         CGRect beginRect = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
         CGRect endRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
         
@@ -1094,14 +1096,14 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     if (!self.isKeyboardPanningEnabled || ![self.textView isFirstResponder]) {
         
         // Disables the input accessory when not first responder so when showing the keyboard back, there is no delay in the animation.
-        if (self.textView.inputAccessoryView) {
+        if (self.inputAccessoryView) {
             self.textView.inputAccessoryView = nil;
             [self.textView refreshInputViews];
         }
     }
     // Reload only if the input views if the frame doesn't match the text input bar's.
-    else if (CGRectGetHeight(self.textView.inputAccessoryView.frame) != CGRectGetHeight(self.textInputbar.bounds)) {
-        self.textView.inputAccessoryView = [self emptyInputAccessoryView];
+    else if (CGRectGetHeight(self.inputAccessoryView.frame) != CGRectGetHeight(self.textInputbar.bounds)) {
+        self.textView.inputAccessoryView = self.inputAccessoryView;
         [self.textView refreshInputViews];
     }
 }

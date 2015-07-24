@@ -17,8 +17,8 @@
 #import <UIKit/UIKit.h>
 
 @interface SLKInputAccessoryView : UIView
-/*
- * Used to save the reference of the keyboard or the Keyboard container..
- */
-@property (nonatomic, weak, readonly) UIView *keyboard;
+
+/* The system keyboard view used as reference. */
+@property (nonatomic, weak, readonly) UIView *keyboardViewProxy;
+
 @end

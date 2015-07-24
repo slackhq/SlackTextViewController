@@ -23,9 +23,8 @@
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
-    if (newSuperview != nil)
-    {
-        _keyboard = newSuperview;
+    if (newSuperview) {
+        _keyboardViewProxy = newSuperview;
     }
 }
 
