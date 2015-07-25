@@ -404,6 +404,10 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
         return 0.0;
     }
     
+    if ([self ignoreTextInputbarAdjustment]) {
+        return 0.0;
+    }
+    
     CGRect endFrame = [self.view convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] fromView:nil];
     return MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(endFrame) - CGRectGetHeight(self.inputAccessoryView.bounds));
 }
@@ -603,6 +607,11 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     return self.shouldForceTextInputbarAdjustment;
 #pragma GCC diagnostic pop
+}
+
+- (BOOL)ignoreTextInputbarAdjustment
+{
+    return NO;
 }
 
 - (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status

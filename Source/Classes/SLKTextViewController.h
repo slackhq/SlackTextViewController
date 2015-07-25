@@ -203,6 +203,13 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *)responder;
 
 /**
+ Verifies if the text input bar should still move up/down when it is first responder. Default is NO.
+ This is very useful when presenting the view controller in a custom modal presentation, when there keyboard events are being handled externally to reframe the presented view.
+ You don't need call super since this method doesn't do anything.
+ */
+- (BOOL)ignoreTextInputbarAdjustment;
+
+/**
  Notifies the view controller that the keyboard changed status.
  You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
  
