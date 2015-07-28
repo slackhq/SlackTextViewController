@@ -80,7 +80,7 @@
 - (void)setVisible:(BOOL)visible
 {
     // Skip when updating the same value, specially to avoid inovking KVO unnecessary
-    if (visible == self.isVisible) {
+    if (self.isVisible == visible) {
         return;
     }
     
