@@ -216,6 +216,11 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 #pragma mark - Overriden Methods
 
+- (BOOL)ignoreTextInputbarAdjustment
+{
+    return NO;
+}
+
 - (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status
 {
     // Notifies the view controller that the keyboard changed status.

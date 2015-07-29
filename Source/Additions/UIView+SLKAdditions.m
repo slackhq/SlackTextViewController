@@ -54,7 +54,7 @@
                             options:options
                          animations:^{
                              [self layoutIfNeeded];
-
+                             
                              if (animations) {
                                  animations();
                              }

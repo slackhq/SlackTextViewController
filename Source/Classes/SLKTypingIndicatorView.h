@@ -57,7 +57,7 @@
 /**
  Removes a user name, if existent on the list.
  Once there are no more items on the list, the indicator will automatically try to hide (by setting it self to visible = NO).
-
+ 
  @param username The user name string.
  */
 - (void)removeUsername:(NSString *)username;
