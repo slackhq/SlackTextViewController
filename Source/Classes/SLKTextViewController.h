@@ -132,7 +132,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /**
  Initializes a collection view controller and configures the collection view with the provided layout.
  If you use the standard -init method, a table view with plain style will be created.
-
+ 
  @param layout The layout object to associate with the collection view. The layout controls how the collection view presents its cells and supplementary views.
  @return An initialized SLKTextViewController object or nil if the object could not be created.
  */
@@ -140,7 +140,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Initializes a text view controller to manage an arbitraty scroll view. The caller is responsible for configuration of the scroll view, including wiring the delegate.
-
+ 
  @param a UISCrollView to be used as the main content area.
  @return An initialized SLKTextViewController object or nil if the object could not be created.
  */
@@ -196,7 +196,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /**
  Verifies if the text input bar should still move up/down even if it is not first responder. Default is NO.
  You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
-
+ 
  @param responder The current first responder object.
  @return YES so the text input bar still move up/down.
  */
@@ -269,7 +269,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  */
 - (BOOL)canPressRightButton;
 
-/** 
+/**
  Notifies the view controller when the user has pasted a supported media content (images and/or videos).
  You can override this method to perform additional tasks associated with image/video pasting. You don't need to call super since this method doesn't do anything.
  Only supported pastable medias configured in SLKTextView will be forwarded (take a look at SLKPastableMediaType).
@@ -323,7 +323,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /**
  Re-uses the text layout for edition, displaying an accessory view on top of the text input bar with options (cancel & save).
  You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
-
+ 
  @param text The string text to edit.
  */
 - (void)editText:(NSString *)text NS_REQUIRES_SUPER;
@@ -387,7 +387,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /**
  Returns a custom height for the autocompletion view. Default is 0.0.
  You can override this method to return a custom height.
-
+ 
  @return The autocompletion view's height.
  */
 - (CGFloat)heightForAutoCompletionView;
@@ -395,7 +395,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /**
  Returns the maximum height for the autocompletion view. Default is 140 pts.
  You can override this method to return a custom max height.
-
+ 
  @return The autocompletion view's max height.
  */
 - (CGFloat)maximumHeightForAutoCompletionView;
@@ -405,7 +405,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  */
 - (void)cancelAutoCompletion;
 
-/** 
+/**
  Accepts the autocompletion, replacing the detected word with a new string, keeping the prefix.
  This method is an abstraction of -acceptAutoCompletionWithString:keepPrefix:
  
@@ -466,7 +466,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  Registers a class for customizing the behavior and appearance of the typing indicator view.
  You need to call this method inside of any initialization method.
  Make sure to conform to SLKTypingIndicatorProtocol and implement the required methods.
-
+ 
  @param aClass A UIView subclass conforming to the SLKTypingIndicatorProtocol.
  */
 - (void)registerClassForTypingIndicatorView:(Class)aClass;

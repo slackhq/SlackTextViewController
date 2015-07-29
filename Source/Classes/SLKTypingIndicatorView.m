@@ -92,7 +92,7 @@
     if (!visible) {
         [self slk_invalidateTimers];
     }
-
+    
     // Required implementation for key-value observer compliance
     [self didChangeValueForKey:NSStringFromSelector(@selector(isVisible))];
 }
@@ -244,7 +244,7 @@
     if (!username || ![self.usernames containsObject:username]) {
         return;
     }
-
+    
     [self.usernames removeObject:username];
     
     if (self.usernames.count > 0) {
@@ -306,7 +306,7 @@
 - (void)slk_setupConstraints
 {
     NSDictionary *views = @{@"textLabel": self.textLabel};
-
+    
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[textLabel]|" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(0)-[textLabel]-(0@750)-|" options:0 metrics:nil views:views]];
     

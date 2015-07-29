@@ -125,12 +125,12 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 - (instancetype)initWithScrollView:(UIScrollView *)scrollView
 {
     NSAssert([self class] != [SLKTextViewController class], @"Oops! You must subclass SLKTextViewController.");
-
+    
     if (self = [super initWithNibName:nil bundle:nil])
     {
         _scrollView = scrollView;
         _scrollView.translatesAutoresizingMaskIntoConstraints = NO; // Makes sure the scrollView plays nice with auto-layout
-
+        
         self.scrollViewProxy = _scrollView;
         [self slk_commonInit];
     }
@@ -176,12 +176,12 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     [self.view addSubview:self.scrollViewProxy];
     [self.view addSubview:self.autoCompletionView];
     [self.view addSubview:self.typingIndicatorProxyView];
     [self.view addSubview:self.textInputbar];
-
+    
     [self slk_setupViewConstraints];
 }
 
@@ -397,7 +397,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     return [super modalPresentationStyle];
 }
 
-- (CGFloat)slk_appropriateKeyboardHeight:(NSNotification *)notification
+- (CGFloat)slk_appropriateKeyboardHeightFromNotification:(NSNotification *)notification
 {
     self.externalKeyboardDetected = [self slk_detectExternalKeyboardInNotification:notification];
     if (self.externalKeyboardDetected) {
@@ -408,13 +408,24 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
         return 0.0;
     }
     
-    CGRect endFrame = [self.view convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] fromView:nil];
-    return MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(endFrame) - CGRectGetHeight(self.inputAccessoryView.bounds));
+    CGRect rect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    return [self slk_appropriateKeyboardHeightFromRect:rect];
+}
+
+- (CGFloat)slk_appropriateKeyboardHeightFromRect:(CGRect)rect
+{
+    CGRect keyboardRect = [self.view convertRect:rect fromView:nil];
+    
+    CGFloat viewHeight = CGRectGetHeight(self.view.bounds);
+    CGFloat keyboardMinY = CGRectGetMinY(keyboardRect);
+    CGFloat inputAccessoryViewHeight = CGRectGetHeight(self.inputAccessoryView.bounds);
+    
+    return MAX(0.0, viewHeight - (keyboardMinY + inputAccessoryViewHeight));
 }
 
 - (CGFloat)slk_appropriateScrollViewHeight
 {
-    CGFloat height = self.view.bounds.size.height;
+    CGFloat height = CGRectGetHeight(self.view.bounds);
     
     height -= self.keyboardHC.constant;
     height -= self.textInputbarHC.constant;
@@ -470,7 +481,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 - (SLKKeyboardStatus)slk_keyboardStatusForNotification:(NSNotification *)notification
 {
     NSString *name = notification.name;
-
+    
     if ([name isEqualToString:UIKeyboardWillShowNotification]) {
         return SLKKeyboardStatusWillShow;
     }
@@ -535,7 +546,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     }
     
     _inverted = inverted;
-
+    
     self.scrollViewProxy.transform = inverted ? CGAffineTransformMake(1, 0, 0, -1, 0, 0) : CGAffineTransformIdentity;
     self.automaticallyAdjustsScrollViewInsets = inverted ? NO : YES;
 }
@@ -791,7 +802,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     CGFloat maxiumumHeight = 140.0;
     CGFloat scrollViewHeight = self.scrollViewHC.constant;
     scrollViewHeight -= [self slk_topBarsHeight];
-
+    
     if (scrollViewHeight < maxiumumHeight) {
         maxiumumHeight = scrollViewHeight;
     }
@@ -846,9 +857,9 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     static CGPoint startPoint;
     static CGRect originalFrame;
     static BOOL dragging = NO;
-
+    
     CGPoint point = [gesture locationInView:self.view];
-
+    
     if (gesture.state == UIGestureRecognizerStateBegan)
     {
         startPoint = CGPointZero;
@@ -865,7 +876,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
             }
             
             self.movingKeyboard = YES;
-
+            
             CGPoint transition = CGPointMake(point.x - startPoint.x, point.y - startPoint.y);
             
             CGRect keyboardFrame = originalFrame;
@@ -874,9 +885,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
             
             self.inputAccessoryView.keyboardViewProxy.frame = keyboardFrame;
             
-            CGFloat constant = MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(keyboardFrame) - CGRectGetHeight(self.inputAccessoryView.bounds));
-
-            self.keyboardHC.constant = constant;
+            self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromRect:keyboardFrame];
             self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
             
             // layoutIfNeeded must be called before any further scrollView internal adjustments (content offset and size)
@@ -897,7 +906,6 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
                 self.scrollViewProxy.contentOffset = offset;
             }
         }
-        
     }
     else if (gesture.state == UIGestureRecognizerStateCancelled || gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateFailed)
     {
@@ -917,17 +925,10 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
             
             if (hide) keyboardFrame.origin.y = CGRectGetHeight([UIScreen mainScreen].bounds);
             
-            CGFloat appropriateKeyboardHeight = MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(keyboardFrame) - CGRectGetHeight(self.inputAccessoryView.bounds));
-            CGFloat currentKeyboardHeight = self.keyboardHC.constant;
-            
-            self.keyboardHC.constant = appropriateKeyboardHeight;
+            self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromRect:keyboardFrame]; //  MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(keyboardFrame) - CGRectGetHeight(self.inputAccessoryView.bounds));
             self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
             
-            // calculates the appropriate keyboard animation duration based on its current position.
-            // 0.25 is the native speed of the keyboard presentation
-            NSTimeInterval duration = (currentKeyboardHeight * 0.25) / CGRectGetHeight(originalFrame);
-
-            [UIView animateWithDuration:duration
+            [UIView animateWithDuration:0.25
                                   delay:0.0
                                 options:UIViewAnimationOptionCurveEaseInOut
                              animations:^{
@@ -1014,7 +1015,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     if (!self.shouldScrollToBottomAfterKeyboardShows || self.keyboardStatus != SLKKeyboardStatusWillShow) {
         return NO;
     }
-
+    
     if (self.isInverted) {
         [self.scrollViewProxy slk_scrollToTopAnimated:YES];
     }
@@ -1073,11 +1074,11 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
         // Grab the base view for conversions as we don't want window coordinates in < iOS 8
         // iOS 8 fixes the whole coordinate system issue for us, but iOS 7 doesn't rotate the app window coordinate space.
         UIView *baseView = ((UIWindow *)self.view.window).rootViewController.view;
-
+        
         // Convert the main screen bounds into the correct coordinate space but ignore the origin.
         CGRect bounds = [self.view convertRect:[UIScreen mainScreen].bounds fromView:nil];
         bounds = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
-
+        
         // We want these rects in the correct coordinate space as well.
         CGRect convertBegin = [baseView convertRect:beginRect fromView:nil];
         CGRect convertEnd = [baseView convertRect:endRect fromView:nil];
@@ -1191,12 +1192,12 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     if (!self.view.window) {
         return;
     }
-
+    
     // Skips if it is presented inside of a popover.
     if (self.isPresentedInPopover) {
         return;
     }
-
+    
     // Skips if textview did refresh only.
     if (self.textView.didNotResignFirstResponder) {
         return;
@@ -1212,7 +1213,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
     SLKKeyboardStatus status = [self slk_keyboardStatusForNotification:notification];
-
+    
     // Programatically stops scrolling before updating the view constraints (to avoid scrolling glitch).
     if (status == SLKKeyboardStatusWillShow) {
         [self.scrollViewProxy slk_stopScrolling];
@@ -1224,7 +1225,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     }
     
     // Updates the height constraints' constants
-    self.keyboardHC.constant = [self slk_appropriateKeyboardHeight:notification];
+    self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromNotification:notification];
     self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
     
     // Updates and notifies about the keyboard status update
@@ -1261,7 +1262,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     }
     
     SLKKeyboardStatus status = [self slk_keyboardStatusForNotification:notification];
-
+    
     // Skips if it's the current status
     if (self.keyboardStatus == status) {
         return;
@@ -1284,7 +1285,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     
     // Updates the dismiss mode and input accessory view, if needed.
     [self slk_reloadInputAccessoryViewIfNeeded];
-
+    
     // Very important to invalidate this flag after the keyboard is dismissed or presented, to start with a clean state next time.
     self.movingKeyboard = NO;
 }
@@ -1607,9 +1608,9 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     
     self.autoCompletionViewHC.constant = viewHeight;
     
-	[self.view slk_animateLayoutIfNeededWithBounce:self.bounces
-										   options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
-										animations:NULL];
+    [self.view slk_animateLayoutIfNeededWithBounce:self.bounces
+                                           options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
+                                        animations:NULL];
 }
 
 
@@ -1639,7 +1640,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     if (self.textView.text.length > 0 || !self.slk_isCachingEnabled) {
         return;
     }
-
+    
     self.textView.text = [self slk_cachedText];
 }
 
@@ -1697,7 +1698,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     
     NSString *cachedText = [self slk_cachedText];
     NSString *key = [self slk_keyForPersistency];
-
+    
     // Caches text only if its a valid string and not already cached
     if (text.length > 0 && ![text isEqualToString:cachedText]) {
         [[NSUserDefaults standardUserDefaults] setObject:text forKey:key];
@@ -1732,7 +1733,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     if (aClass == nil) {
         return;
     }
-
+    
     NSAssert([aClass isSubclassOfClass:[UIView class]], @"The registered class is invalid, it must be a subclass for UIView.");
     self.typingIndicatorViewClass = aClass;
 }
@@ -1884,7 +1885,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
                             @"textInputbar": self.textInputbar,
                             };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView(0@750)][autoCompletionView(0@750)][typingIndicatorView(0)]-0@999-[textInputbar(>=0)]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView(0@750)][autoCompletionView(0@750)][typingIndicatorView(0)]-0@999-[textInputbar(>=0)]-0-|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[autoCompletionView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[typingIndicatorView]|" options:0 metrics:nil views:views]];
@@ -1898,7 +1899,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     
     self.textInputbarHC.constant = self.textInputbar.minimumInputbarHeight;
     self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
-
+    
     if (self.textInputbar.isEditing) {
         self.textInputbarHC.constant += self.textInputbar.editorContentViewHeight;
     }
@@ -1944,7 +1945,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didPostSLKKeyboardNotification:) name:SLKKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didPostSLKKeyboardNotification:) name:SLKKeyboardDidHideNotification object:nil];
 #endif
-
+    
     // TextView notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willChangeTextViewText:) name:SLKTextViewTextWillChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
@@ -1953,7 +1954,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewPasteboard:) name:SLKTextViewDidPasteItemNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didShakeTextView:) name:SLKTextViewDidShakeNotification object:nil];
-
+    
     // Application notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willTerminateApplication:) name:UIApplicationWillTerminateNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willTerminateApplication:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
@@ -2034,7 +2035,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     _collectionView.delegate = nil;
     _collectionView.dataSource = nil;
     _collectionView = nil;
-
+    
     _scrollView = nil;
     
     _autoCompletionView.delegate = nil;
@@ -2051,7 +2052,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     
     _registeredPrefixes = nil;
     _keyboardCommands = nil;
-
+    
     _singleTapGesture.delegate = nil;
     _singleTapGesture = nil;
     _verticalPanGesture.delegate = nil;
