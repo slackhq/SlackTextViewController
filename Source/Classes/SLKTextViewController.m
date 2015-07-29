@@ -397,7 +397,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     return [super modalPresentationStyle];
 }
 
-- (CGFloat)slk_appropriateKeyboardHeight:(NSNotification *)notification
+- (CGFloat)slk_appropriateKeyboardHeightFromNotification:(NSNotification *)notification
 {
     self.externalKeyboardDetected = [self slk_detectExternalKeyboardInNotification:notification];
     if (self.externalKeyboardDetected) {
@@ -408,13 +408,24 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
         return 0.0;
     }
     
-    CGRect endFrame = [self.view convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] fromView:nil];
-    return MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(endFrame) - CGRectGetHeight(self.inputAccessoryView.bounds));
+    CGRect rect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    return [self slk_appropriateKeyboardHeightFromRect:rect];
+}
+
+- (CGFloat)slk_appropriateKeyboardHeightFromRect:(CGRect)rect
+{
+    CGRect keyboardRect = [self.view convertRect:rect fromView:nil];
+    
+    CGFloat viewHeight = CGRectGetHeight(self.view.bounds);
+    CGFloat keyboardMinY = CGRectGetMinY(keyboardRect);
+    CGFloat inputAccessoryViewHeight = CGRectGetHeight(self.inputAccessoryView.bounds);
+    
+    return MAX(0.0, viewHeight - (keyboardMinY + inputAccessoryViewHeight));
 }
 
 - (CGFloat)slk_appropriateScrollViewHeight
 {
-    CGFloat height = self.view.bounds.size.height;
+    CGFloat height = CGRectGetHeight(self.view.bounds);
     
     height -= self.keyboardHC.constant;
     height -= self.textInputbarHC.constant;
@@ -874,9 +885,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
             
             self.inputAccessoryView.keyboardViewProxy.frame = keyboardFrame;
             
-            CGFloat constant = MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(keyboardFrame) - CGRectGetHeight(self.inputAccessoryView.bounds));
-            
-            self.keyboardHC.constant = constant;
+            self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromRect:keyboardFrame];
             self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
             
             // layoutIfNeeded must be called before any further scrollView internal adjustments (content offset and size)
@@ -897,7 +906,6 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
                 self.scrollViewProxy.contentOffset = offset;
             }
         }
-        
     }
     else if (gesture.state == UIGestureRecognizerStateCancelled || gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateFailed)
     {
@@ -917,17 +925,10 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
             
             if (hide) keyboardFrame.origin.y = CGRectGetHeight([UIScreen mainScreen].bounds);
             
-            CGFloat appropriateKeyboardHeight = MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(keyboardFrame) - CGRectGetHeight(self.inputAccessoryView.bounds));
-            CGFloat currentKeyboardHeight = self.keyboardHC.constant;
-            
-            self.keyboardHC.constant = appropriateKeyboardHeight;
+            self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromRect:keyboardFrame]; //  MAX(0.0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(keyboardFrame) - CGRectGetHeight(self.inputAccessoryView.bounds));
             self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
             
-            // calculates the appropriate keyboard animation duration based on its current position.
-            // 0.25 is the native speed of the keyboard presentation
-            NSTimeInterval duration = (currentKeyboardHeight * 0.25) / CGRectGetHeight(originalFrame);
-            
-            [UIView animateWithDuration:duration
+            [UIView animateWithDuration:0.25
                                   delay:0.0
                                 options:UIViewAnimationOptionCurveEaseInOut
                              animations:^{
@@ -1224,7 +1225,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
     }
     
     // Updates the height constraints' constants
-    self.keyboardHC.constant = [self slk_appropriateKeyboardHeight:notification];
+    self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromNotification:notification];
     self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
     
     // Updates and notifies about the keyboard status update
@@ -1884,7 +1885,7 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
                             @"textInputbar": self.textInputbar,
                             };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView(0@750)][autoCompletionView(0@750)][typingIndicatorView(0)]-0@999-[textInputbar(>=0)]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView(0@750)][autoCompletionView(0@750)][typingIndicatorView(0)]-0@999-[textInputbar(>=0)]-0-|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[autoCompletionView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[typingIndicatorView]|" options:0 metrics:nil views:views]];
