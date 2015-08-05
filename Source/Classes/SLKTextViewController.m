@@ -347,10 +347,6 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
         _inputAccessoryView = [[SLKInputAccessoryView alloc] initWithFrame:self.textInputbar.bounds];
         _inputAccessoryView.backgroundColor = [UIColor clearColor];
         _inputAccessoryView.userInteractionEnabled = NO;
-        
-#if SLK_INPUT_ACCESSORY_DEBUG
-        _inputAccessoryView.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
-#endif
     }
     
     return _inputAccessoryView;
@@ -1110,11 +1106,6 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
             self.textView.inputAccessoryView = nil;
             [self.textView refreshInputViews];
         }
-    }
-    // Reload only if the input views if the frame doesn't match the text input bar's.
-    else if (CGRectGetHeight(self.inputAccessoryView.frame) != CGRectGetHeight(self.textInputbar.bounds)) {
-        self.textView.inputAccessoryView = self.inputAccessoryView;
-        [self.textView refreshInputViews];
     }
 }
 
@@ -1933,6 +1924,8 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 
 - (void)slk_registerNotifications
 {
+    [self slk_unregisterNotifications];
+    
     // Keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willShowOrHideKeyboard:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willShowOrHideKeyboard:) name:UIKeyboardWillHideNotification object:nil];
