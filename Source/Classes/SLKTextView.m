@@ -36,7 +36,7 @@ NSString * const SLKTextViewPastedItemData =                        @"SLKTextVie
 // The keyboard commands available for external keyboards
 @property (nonatomic, strong) NSArray *keyboardCommands;
 
-// Used for moving the care up/down
+// Used for moving the caret up/down
 @property (nonatomic) UITextLayoutDirection verticalMoveDirection;
 @property (nonatomic) CGRect verticalMoveStartCaretRect;
 @property (nonatomic) CGRect verticalMoveLastCaretRect;
