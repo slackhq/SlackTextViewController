@@ -14,7 +14,7 @@
 		<string>https://github.com/slackhq/SlackTextViewController.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Carthage/SlackTextViewController.xcodeproj</string>
+	<string>Framework/SlackTextViewController.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>8E9694F087F70D8D068B66654B1CC8608B5F6B2D</key>
