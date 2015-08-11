@@ -294,6 +294,14 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)willRequestUndo;
 
 /**
+ Show/Hides the input bar
+ 
+ @param hide Bool to determine whether to hide or show
+ @param animated Bool to determine whether change should be animated or not
+ */
+- (void)hideInputBar:(BOOL)hide animated:(BOOL)animated;
+
+/**
  Notifies the view controller when the user has pressed the Return key (↵) with an external keyboard.
  You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
  */
