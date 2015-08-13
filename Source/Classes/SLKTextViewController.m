@@ -822,9 +822,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)setTextInputbarHidden:(BOOL)hidden animated:(BOOL)animated
 {
-//    if (self.isTextInputbarHidden == hidden) {
-//        return;
-//    }
+    if (self.isTextInputbarHidden == hidden) {
+        return;
+    }
     
     __weak typeof(self) weakSelf = self;
     
@@ -846,9 +846,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     };
     
     if (animated) {
-        NSTimeInterval duration = animated ? 0.25 : 0.0;
-
-        [UIView animateWithDuration:duration animations:animations completion:completion];
+        [UIView animateWithDuration:0.25 animations:animations completion:completion];
     }
     else {
         animations();
