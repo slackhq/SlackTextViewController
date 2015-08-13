@@ -26,6 +26,8 @@ NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotifica
 
 NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKTextViewController' string
 
+CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
+
 @interface SLKTextViewController ()
 {
     CGPoint _scrollViewOffsetBeforeDragging;
@@ -795,12 +797,14 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
 
 - (CGFloat)maximumHeightForAutoCompletionView
 {
-    CGFloat maxiumumHeight = 140.0;
-    CGFloat scrollViewHeight = self.scrollViewHC.constant;
-    scrollViewHeight -= [self slk_topBarsHeight];
+    CGFloat maxiumumHeight = SLKAutoCompletionViewDefaultHeight;
     
-    if (scrollViewHeight < maxiumumHeight) {
-        maxiumumHeight = scrollViewHeight;
+    if (!self.isAutoCompleting) {
+        CGFloat scrollViewHeight = self.scrollViewHC.constant - [self slk_topBarsHeight];
+        
+        if (scrollViewHeight < maxiumumHeight) {
+            maxiumumHeight = scrollViewHeight;
+        }
     }
     
     return maxiumumHeight;
@@ -1590,11 +1594,11 @@ NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKT
         viewHeight = maximumHeight;
     }
     
-    CGFloat tableHeight = self.scrollViewHC.constant + self.autoCompletionViewHC.constant;
+    CGFloat contentViewHeight = self.scrollViewHC.constant + self.autoCompletionViewHC.constant;
     
-    // On iPhone, the auto-completion view can't extend beyond the table view height
-    if (SLK_IS_IPHONE && viewHeight > tableHeight) {
-        viewHeight = tableHeight;
+    // On iPhone, the auto-completion view can't extend beyond the content view height
+    if (SLK_IS_IPHONE && viewHeight > contentViewHeight) {
+        viewHeight = contentViewHeight;
     }
     
     self.autoCompletionViewHC.constant = viewHeight;
