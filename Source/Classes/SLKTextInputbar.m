@@ -187,7 +187,6 @@
         NSString *title = NSLocalizedString(@"Send", nil);
         
         [_rightButton setTitle:title forState:UIControlStateNormal];
-        [_rightButton setAccessibilityLabel:title];
     }
     return _rightButton;
 }
@@ -234,7 +233,6 @@
         NSString *title = NSLocalizedString(@"Editing Message", nil);
         
         _editorTitle.text = title;
-        _editorTitle.accessibilityLabel = title;
     }
     return _editorTitle;
 }
@@ -250,7 +248,6 @@
         NSString *title = NSLocalizedString(@"Cancel", nil);
         
         [_editorLeftButton setTitle:title forState:UIControlStateNormal];
-        [_editorLeftButton setAccessibilityLabel:title];
     }
     return _editorLeftButton;
 }
@@ -273,7 +270,6 @@
         NSString *title = NSLocalizedString(@"Save", nil);
         
         [_editorRightButton setTitle:title forState:UIControlStateNormal];
-        [_editorRightButton setAccessibilityLabel:title];
     }
     return _editorRightButton;
 }
