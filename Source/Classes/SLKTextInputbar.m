@@ -155,6 +155,18 @@
     return _textView;
 }
 
+- (SLKInputAccessoryView *)inputAccessoryView
+{
+    if (!_inputAccessoryView)
+    {
+        _inputAccessoryView = [[SLKInputAccessoryView alloc] initWithFrame:self.bounds];
+        _inputAccessoryView.backgroundColor = [UIColor clearColor];
+        _inputAccessoryView.userInteractionEnabled = NO;
+    }
+    
+    return _inputAccessoryView;
+}
+
 - (UIButton *)leftButton
 {
     if (!_leftButton)

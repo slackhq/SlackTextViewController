@@ -15,6 +15,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SLKInputAccessoryView.h"
 
 @class SLKTextViewController;
 @class SLKTextView;
@@ -44,6 +45,9 @@ typedef NS_ENUM(NSUInteger, SLKCounterPosition) {
  For iPad           (>=768pts): 8 lines
  */
 @property (nonatomic, strong) SLKTextView *textView;
+
+/** The custom input accessory view, used as empty achor view to detect the keyboard frame. */
+@property (nonatomic, strong) SLKInputAccessoryView *inputAccessoryView;
 
 /** The left action button action. */
 @property (nonatomic, strong) UIButton *leftButton;
