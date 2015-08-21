@@ -253,8 +253,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (UITableView *)tableViewWithStyle:(UITableViewStyle)style
 {
-    if (!_tableView)
-    {
+    if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:style];
         _tableView.translatesAutoresizingMaskIntoConstraints = NO;
         _tableView.scrollsToTop = YES;
@@ -267,8 +266,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (UICollectionView *)collectionViewWithLayout:(UICollectionViewLayout *)layout
 {
-    if (!_collectionView)
-    {
+    if (!_collectionView) {
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         _collectionView.translatesAutoresizingMaskIntoConstraints = NO;
         _collectionView.scrollsToTop = YES;
@@ -280,8 +278,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (UITableView *)autoCompletionView
 {
-    if (!_autoCompletionView)
-    {
+    if (!_autoCompletionView) {
         _autoCompletionView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         _autoCompletionView.translatesAutoresizingMaskIntoConstraints = NO;
         _autoCompletionView.backgroundColor = [UIColor colorWithWhite:0.97 alpha:1.0];
@@ -302,8 +299,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (SLKTextInputbar *)textInputbar
 {
-    if (!_textInputbar)
-    {
+    if (!_textInputbar) {
         _textInputbar = [[SLKTextInputbar alloc] initWithTextViewClass:self.textViewClass];
         _textInputbar.translatesAutoresizingMaskIntoConstraints = NO;
         _textInputbar.controller = self;
@@ -325,8 +321,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (UIView <SLKTypingIndicatorProtocol> *)typingIndicatorProxyView
 {
-    if (!_typingIndicatorProxyView)
-    {
+    if (!_typingIndicatorProxyView) {
         Class class = self.typingIndicatorViewClass ? : [SLKTypingIndicatorView class];
         
         _typingIndicatorProxyView = [[class alloc] init];
@@ -583,8 +578,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
-    if (!animated)
-    {
+    if (!animated) {
         [UIView performWithoutAnimation:^{
             [self.textView resignFirstResponder];
         }];

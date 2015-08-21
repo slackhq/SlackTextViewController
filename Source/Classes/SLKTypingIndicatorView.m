@@ -109,8 +109,7 @@
 
 - (UILabel *)textLabel
 {
-    if (!_textLabel)
-    {
+    if (!_textLabel) {
         _textLabel = [UILabel new];
         _textLabel.translatesAutoresizingMaskIntoConstraints = NO;
         _textLabel.backgroundColor = [UIColor clearColor];
