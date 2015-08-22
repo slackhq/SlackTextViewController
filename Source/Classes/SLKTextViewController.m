@@ -308,10 +308,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         
         _textInputbar.textView.delegate = self;
         
-        _verticalPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(slk_didPanTextView:)];
+        _verticalPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(slk_didPanScrollView:)];
         _verticalPanGesture.delegate = self;
         
-        [_textInputbar.textView addGestureRecognizer:self.verticalPanGesture];
+        [_textInputbar addGestureRecognizer:self.verticalPanGesture];
     }
     return _textInputbar;
 }
@@ -1870,17 +1870,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return [self.textView isFirstResponder] && !self.isExternalKeyboardDetected;
     }
     else if ([gesture isEqual:self.verticalPanGesture]) {
-        
-        if ([self.textView isFirstResponder]) {
-            return NO;
-        }
-        
-        CGPoint velocity = [self.verticalPanGesture velocityInView:self.view];
-        
-        // Vertical panning, from bottom to top only
-        if (velocity.y < 0 && ABS(velocity.y) > ABS(velocity.x) && ![self.textInputbar.textView isFirstResponder]) {
-            return YES;
-        }
+        return [self.textView isFirstResponder] && !self.isExternalKeyboardDetected;
     }
     
     return NO;

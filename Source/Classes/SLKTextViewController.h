@@ -69,10 +69,10 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  */
 @property (nonatomic, readonly) UIView <SLKTypingIndicatorProtocol> *typingIndicatorProxyView;
 
-/** A single tap gesture used to dismiss the keyboard. */
+/** A single tap gesture used to dismiss the keyboard. SLKTextViewController is its delegate. */
 @property (nonatomic, readonly) UIGestureRecognizer *singleTapGesture;
 
-/** A vertical pan gesture used for bringing the keyboard from the bottom. */
+/** A vertical pan gesture used for bringing the keyboard from the bottom. SLKTextViewController is its delegate. */
 @property (nonatomic, readonly) UIPanGestureRecognizer *verticalPanGesture;
 
 /** YES if control's animation should have bouncy effects. Default is YES. */
