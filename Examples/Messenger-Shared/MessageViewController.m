@@ -58,6 +58,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (void)commonInit
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:UIContentSizeCategoryDidChangeNotification object:nil];
+
     // Register a SLKTextView subclass, if you need any special appearance and/or behavior customisation.
     [self registerClassForTextView:[MessageTextView class]];
     
@@ -89,10 +91,20 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     self.messages = [[NSMutableArray alloc] initWithArray:reversed];
     
-    UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"] style:UIBarButtonItemStylePlain target:self action:@selector(editRandomMessage:)];
+    UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"]
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:self
+                                                                action:@selector(editRandomMessage:)];
     
-    UIBarButtonItem *typeItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_typing"] style:UIBarButtonItemStylePlain target:self action:@selector(simulateUserTyping:)];
-    UIBarButtonItem *appendItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_append"] style:UIBarButtonItemStylePlain target:self action:@selector(fillWithText:)];
+    UIBarButtonItem *typeItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_typing"]
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:self
+                                                                action:@selector(simulateUserTyping:)];
+    
+    UIBarButtonItem *appendItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_append"]
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(fillWithText:)];
     
     self.navigationItem.rightBarButtonItems = @[editItem, appendItem, typeItem];
     
@@ -106,26 +118,26 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.shouldScrollToBottomAfterKeyboardShows = NO;
     self.inverted = YES;
     
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.tableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:MessengerCellIdentifier];
-
     [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
     [self.leftButton setTintColor:[UIColor grayColor]];
     
     [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
-    
-    [self.textInputbar.editorTitle setTextColor:[UIColor darkGrayColor]];
-    [self.textInputbar.editorLeftButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
-    [self.textInputbar.editorRightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
     
     self.textInputbar.autoHideRightButton = YES;
     self.textInputbar.maxCharCount = 256;
     self.textInputbar.counterStyle = SLKCounterStyleSplit;
     self.textInputbar.counterPosition = SLKCounterPositionTop;
     
+    [self.textInputbar.editorTitle setTextColor:[UIColor darkGrayColor]];
+    [self.textInputbar.editorLeftButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
+    [self.textInputbar.editorRightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
+    
 #if !DEBUG_CUSTOM_TYPING_INDICATOR
     self.typingIndicatorView.canResignByTouch = YES;
 #endif
+    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.tableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:MessengerCellIdentifier];
     
     [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
     [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":", @"+:"]];
@@ -505,7 +517,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
         paragraphStyle.alignment = NSTextAlignmentLeft;
         
-        NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:16.0],
+         CGFloat pointSize = [MessageTableViewCell defaultFontSize];
+        
+        NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:pointSize],
                                      NSParagraphStyleAttributeName: paragraphStyle};
         
         CGFloat width = CGRectGetWidth(tableView.frame)-kMessageTableViewCellAvatarHeight;
@@ -576,5 +590,12 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     return [super textView:textView shouldChangeTextInRange:range replacementText:text];
 }
 
+
+#pragma mark - Lifeterm
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 @end
