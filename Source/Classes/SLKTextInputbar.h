@@ -95,11 +95,9 @@ typedef NS_ENUM(NSUInteger, SLKCounterPosition) {
 
 /** The 'cancel' button displayed left in the accessoryView. */
 @property (nonatomic, strong) UIButton *editorLeftButton;
-@property (nonatomic, readonly) UIButton *editortLeftButton DEPRECATED_MSG_ATTRIBUTE("Renamed to -editorLeftButton");
 
 /** The 'accept' button displayed right in the accessoryView. */
 @property (nonatomic, strong) UIButton *editorRightButton;
-@property (nonatomic, readonly) UIButton *editortRightButton DEPRECATED_MSG_ATTRIBUTE("Renamed to -editorRightButton");
 
 /** The accessory view's maximum height. Default is 38 pts. */
 @property (nonatomic, assign) CGFloat editorContentViewHeight;
