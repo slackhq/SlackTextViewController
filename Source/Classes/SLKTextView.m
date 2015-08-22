@@ -33,6 +33,9 @@ NSString * const SLKTextViewPastedItemData =                        @"SLKTextVie
 // The label used as placeholder
 @property (nonatomic, strong) UILabel *placeholderLabel;
 
+// The initial font point size, used for dynamic type calculations
+@property (nonatomic) CGFloat initialFontSize;
+
 // The keyboard commands available for external keyboards
 @property (nonatomic, strong) NSArray *keyboardCommands;
 
@@ -68,10 +71,11 @@ NSString * const SLKTextViewPastedItemData =                        @"SLKTextVie
 
 - (void)slk_commonInit
 {
-    self.pastableMediaTypes = SLKPastableMediaTypeNone;
+    _pastableMediaTypes = SLKPastableMediaTypeNone;
+    _dynamicTypeEnabled = YES;
+
     self.undoManagerEnabled = YES;
-    
-    self.font = [UIFont systemFontOfSize:14.0];
+
     self.editable = YES;
     self.selectable = YES;
     self.scrollEnabled = YES;
@@ -79,10 +83,7 @@ NSString * const SLKTextViewPastedItemData =                        @"SLKTextVie
     self.directionalLockEnabled = YES;
     self.dataDetectorTypes = UIDataDetectorTypeNone;
     
-    // UITextView notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didBeginEditing:) name:UITextViewTextDidBeginEditingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeText:) name:UITextViewTextDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didEndEditing:) name:UITextViewTextDidEndEditingNotification object:nil];
+    [self slk_registerNotifications];
     
     [self addObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize)) options:NSKeyValueObservingOptionNew context:NULL];
 }
@@ -92,17 +93,15 @@ NSString * const SLKTextViewPastedItemData =                        @"SLKTextVie
 
 - (CGSize)intrinsicContentSize
 {
-    return CGSizeMake(UIViewNoIntrinsicMetric, 34.0);
+    CGFloat height = self.font.lineHeight;
+    height += self.textContainerInset.top + self.textContainerInset.bottom;
+    
+    return CGSizeMake(UIViewNoIntrinsicMetric, height);
 }
 
 + (BOOL)requiresConstraintBasedLayout
 {
     return YES;
-}
-
-- (void)layoutIfNeeded
-{
-    [super layoutIfNeeded];
 }
 
 - (void)layoutSubviews
@@ -152,16 +151,39 @@ NSString * const SLKTextViewPastedItemData =                        @"SLKTextVie
 
 - (NSUInteger)numberOfLines
 {
-    return fabs(self.contentSize.height/self.font.lineHeight);
+    CGFloat contentHeight = self.contentSize.height;
+    contentHeight -= self.textContainerInset.top + self.textContainerInset.bottom;
+
+    return fabs(contentHeight/self.font.lineHeight);
 }
 
-// Returns a different number of lines when landscape and only on iPhone
 - (NSUInteger)maxNumberOfLines
 {
-    if (SLK_IS_IPHONE && SLK_IS_LANDSCAPE) {
-        return 2.0;
+    NSUInteger numberOfLines = _maxNumberOfLines;
+    
+    if (SLK_IS_LANDSCAPE) {
+        if ((SLK_IS_IPHONE4 || SLK_IS_IPHONE5)) {
+            numberOfLines = 2.0; // 2 lines max on smaller iPhones
+        }
+        else if (SLK_IS_IPHONE) {
+            numberOfLines /= 2.0; // Half size on larger iPhone
+        }
     }
-    return _maxNumberOfLines;
+    
+    if (self.isDynamicTypeEnabled) {
+        NSString *contentSizeCategory = [[UIApplication sharedApplication] preferredContentSizeCategory];
+        CGFloat pointSizeDifference = [SLKTextView pointSizeDifferenceForCategory:contentSizeCategory];
+        
+        CGFloat factor = pointSizeDifference/self.initialFontSize;
+        
+        if (fabs(factor) > 0.75) {
+            factor = 0.75;
+        }
+        
+        numberOfLines -= floorf(numberOfLines * factor); // Calculates a dynamic number of lines depending of the user preferred font size
+    }
+    
+    return numberOfLines;
 }
 
 - (BOOL)isTypingSuggestionEnabled
@@ -245,7 +267,6 @@ NSString * const SLKTextViewPastedItemData =                        @"SLKTextVie
     if (self.pastableMediaTypes & SLKPastableMediaTypeImages) {
         [types addObject:NSStringFromSLKPastableMediaType(SLKPastableMediaTypeImages)];
     }
-    
     
     return types;
 }
@@ -407,10 +428,38 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (void)setFont:(UIFont *)font
 {
-    [super setFont:font];
+    NSString *contentSizeCategory = [[UIApplication sharedApplication] preferredContentSizeCategory];
+    
+    [self setFontName:font.familyName pointSize:font.pointSize withContentSizeCategory:contentSizeCategory];
+    
+    self.initialFontSize = font.pointSize;
+}
+
+- (void)setFontName:(NSString *)fontName pointSize:(CGFloat)pointSize withContentSizeCategory:(NSString *)contentSizeCategory
+{
+    if (self.isDynamicTypeEnabled) {
+        pointSize += [SLKTextView pointSizeDifferenceForCategory:contentSizeCategory];
+    }
+    
+    UIFont *dynamicFont = [UIFont fontWithName:fontName size:pointSize];
+    
+    [super setFont:dynamicFont];
     
     // Updates the placeholder font too
-    self.placeholderLabel.font = self.font;
+    self.placeholderLabel.font = dynamicFont;
+}
+
+- (void)setDynamicTypeEnabled:(BOOL)dynamicTypeEnabled
+{
+    if (self.isDynamicTypeEnabled == dynamicTypeEnabled) {
+        return;
+    }
+    
+    _dynamicTypeEnabled = dynamicTypeEnabled;
+    
+    NSString *contentSizeCategory = [[UIApplication sharedApplication] preferredContentSizeCategory];
+
+    [self setFontName:self.font.familyName pointSize:self.initialFontSize withContentSizeCategory:contentSizeCategory];
 }
 
 - (void)setTextAlignment:(NSTextAlignment)textAlignment
@@ -593,6 +642,23 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     // Do something
 }
 
+- (void)slk_didChangeContentSizeCategory:(NSNotification *)notification
+{
+    if (!self.isDynamicTypeEnabled) {
+        return;
+    }
+    
+    NSString *contentSizeCategory = notification.userInfo[UIContentSizeCategoryNewValueKey];
+    
+    [self setFontName:self.font.familyName pointSize:self.initialFontSize withContentSizeCategory:contentSizeCategory];
+    
+    NSString *text = [self.text copy];
+    
+    // Reloads the content size of the text view
+    [self setText:@" "];
+    [self setText:text];
+}
+
 
 #pragma mark - KVO Listener
 
@@ -699,7 +765,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     }
     
     if (start) {
-        
         UITextPosition *end = [self slk_closestPositionToPosition:start inDirection:direction];
         
         if (end) {
@@ -774,11 +839,32 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 }
 
 
+#pragma mark - NSNotificationCenter register/unregister
+
+- (void)slk_registerNotifications
+{
+    [self slk_unregisterNotifications];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didBeginEditing:) name:UITextViewTextDidBeginEditingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeText:) name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didEndEditing:) name:UITextViewTextDidEndEditingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeContentSizeCategory:) name:UIContentSizeCategoryDidChangeNotification object:nil];
+}
+
+- (void)slk_unregisterNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidBeginEditingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidEndEditingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIContentSizeCategoryDidChangeNotification object:nil];
+}
+
+
 #pragma mark - Lifeterm
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self slk_unregisterNotifications];
     
     [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
     

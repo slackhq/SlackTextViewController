@@ -48,7 +48,8 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 /** The placeholder color. Default is lightGrayColor. */
 @property (nonatomic, copy) UIColor *placeholderColor;
 
-/** The maximum number of lines before enabling scrolling. Default is 0 wich means limitless. */
+/** The maximum number of lines before enabling scrolling. Default is 0 wich means limitless.
+ If dynamic type is enabled, the maximum number of lines will be calculated proportionally to the user preferred font size. */
 @property (nonatomic, readwrite) NSUInteger maxNumberOfLines;
 
 /** The current displayed number of lines. */
@@ -71,6 +72,9 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 
 /** YES if the text view supports undoing, either using UIMenuController, or with ctrl+z when using an external keyboard. Default is YES. */
 @property (nonatomic, readwrite) BOOL undoManagerEnabled;
+
+/** YES if the font size should dynamically adapt based on the font sizing option preferred by the user. Default is YES. */
+@property (nonatomic, getter=isDynamicTypeEnabled) BOOL dynamicTypeEnabled;
 
 /**
  Some text view properties don't update when it's already firstResponder (auto-correction, spelling-check, etc.)

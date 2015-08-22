@@ -90,8 +90,7 @@
     self.counterStyle = SLKCounterStyleNone;
     self.counterPosition = SLKCounterPositionTop;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
+    [self slk_registerNotifications];
     
     [self.leftButton.imageView addObserver:self forKeyPath:NSStringFromSelector(@selector(image)) options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
     [self.rightButton.titleLabel addObserver:self forKeyPath:NSStringFromSelector(@selector(font)) options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
@@ -112,7 +111,7 @@
 
 - (CGSize)intrinsicContentSize
 {
-    return CGSizeMake(UIViewNoIntrinsicMetric, 44.0);
+    return CGSizeMake(UIViewNoIntrinsicMetric, [self minimumInputbarHeight]);
 }
 
 + (BOOL)requiresConstraintBasedLayout
@@ -132,7 +131,7 @@
         _textView.translatesAutoresizingMaskIntoConstraints = NO;
         _textView.font = [UIFont systemFontOfSize:15.0];
         _textView.maxNumberOfLines = [self slk_defaultNumberOfLines];
-        
+
         _textView.typingSuggestionEnabled = YES;
         _textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
         _textView.keyboardType = UIKeyboardTypeTwitter;
@@ -312,7 +311,10 @@
 
 - (CGFloat)minimumInputbarHeight
 {
-    return self.intrinsicContentSize.height;
+    CGFloat minimumTextViewHeight = self.textView.intrinsicContentSize.height;
+    minimumTextViewHeight += self.contentInset.top + self.contentInset.bottom;
+    
+    return minimumTextViewHeight;
 }
 
 - (CGFloat)appropriateHeight
@@ -341,15 +343,10 @@
     return roundf(height);
 }
 
-- (CGFloat)slk_deltaInputbarHeight
-{
-    return self.textView.intrinsicContentSize.height-self.textView.font.lineHeight;
-}
-
 - (CGFloat)slk_inputBarHeightForLines:(NSUInteger)numberOfLines
 {
-    CGFloat height = [self slk_deltaInputbarHeight];
-    
+    CGFloat height = self.textView.intrinsicContentSize.height;
+    height -= self.textView.font.lineHeight;
     height += roundf(self.textView.font.lineHeight*numberOfLines);
     height += self.contentInset.top+self.contentInset.bottom;
     
@@ -627,6 +624,15 @@
     }
 }
 
+- (void)slk_didChangeContentSizeCategory:(NSNotification *)notification
+{
+    if (!self.textView.isDynamicTypeEnabled) {
+        return;
+    }
+    
+    [self layoutIfNeeded];
+}
+
 
 #pragma mark - View Auto-Layout
 
@@ -648,15 +654,13 @@
                               @"left" : @(self.contentInset.left),
                               @"right" : @(self.contentInset.right),
                               @"rightVerMargin" : @(rightVerMargin),
-                              @"minTextViewHeight" : @(self.textView.intrinsicContentSize.height),
                               };
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(left)-[leftButton(0)]-(<=left)-[textView]-(right)-[rightButton(0)]-(right)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[leftButton(0)]-(0@750)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=rightVerMargin)-[rightButton]-(<=rightVerMargin)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(left@250)-[charCountLabel(<=50@1000)]-(right@750)-|" options:0 metrics:metrics views:views]];
-    
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[contentView(0)]-(<=top)-[textView(minTextViewHeight@250)]-(<=bottom)-|" options:0 metrics:metrics views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[contentView(0)]-(<=top)-[textView(0@999)]-(bottom)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView]|" options:0 metrics:metrics views:views]];
     
     self.editorContentViewHC = [self slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.editorContentView secondItem:nil];
@@ -713,6 +717,7 @@
     }
 }
 
+
 #pragma mark - Observers
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -736,12 +741,30 @@
 }
 
 
+#pragma mark - NSNotificationCenter register/unregister
+
+- (void)slk_registerNotifications
+{
+    [self slk_unregisterNotifications];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeContentSizeCategory:) name:UIContentSizeCategoryDidChangeNotification object:nil];
+}
+
+- (void)slk_unregisterNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewContentSizeDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIContentSizeCategoryDidChangeNotification object:nil];
+}
+
+
 #pragma mark - Lifeterm
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewContentSizeDidChangeNotification object:nil];
+    [self slk_unregisterNotifications];
     
     [_leftButton.imageView removeObserver:self forKeyPath:NSStringFromSelector(@selector(image))];
     [_rightButton.titleLabel removeObserver:self forKeyPath:NSStringFromSelector(@selector(font))];
