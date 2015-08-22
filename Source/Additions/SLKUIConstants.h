@@ -26,26 +26,10 @@
 #define SLK_KEYBOARD_NOTIFICATION_DEBUG     DEBUG && 0  // Logs every keyboard notification being sent
 
 #if __has_attribute(objc_designated_initializer)
-#define SLK_DESIGNATED_INITIALIZER __attribute__((objc_designated_initializer))
+    #define SLK_DESIGNATED_INITIALIZER __attribute__((objc_designated_initializer))
 #endif
 
 static NSString *SLKTextViewControllerDomain = @"com.slack.TextViewController";
-
-inline static CGFloat minimumKeyboardHeight()
-{
-    if (SLK_IS_IPAD) {
-        if (SLK_IS_LANDSCAPE) return 352.f;
-        else return 264.f;
-    }
-    if (SLK_IS_IPHONE6PLUS) {
-        if (SLK_IS_LANDSCAPE) return 162.f;
-        else return 226.f;
-    }
-    else {
-        if (SLK_IS_LANDSCAPE) return 162.f;
-        else return 216.f;
-    }
-}
 
 inline static CGRect SLKRectInvert(CGRect rect)
 {
