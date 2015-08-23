@@ -308,7 +308,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         
         _textInputbar.textView.delegate = self;
         
-        _verticalPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(slk_didPanScrollView:)];
+        _verticalPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(slk_didPanTextInputBar:)];
         _verticalPanGesture.delegate = self;
         
         [_textInputbar addGestureRecognizer:self.verticalPanGesture];
@@ -494,7 +494,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     [scrollView addGestureRecognizer:self.singleTapGesture];
     
-    [scrollView.panGestureRecognizer addTarget:self action:@selector(slk_didPanScrollView:)];
+    [scrollView.panGestureRecognizer addTarget:self action:@selector(slk_didPanTextInputBar:)];
     
     _scrollViewProxy = scrollView;
 }
@@ -843,7 +843,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 #pragma mark - Private Methods
 
-- (void)slk_didPanScrollView:(UIPanGestureRecognizer *)gesture
+- (void)slk_didPanTextInputBar:(UIPanGestureRecognizer *)gesture
 {
     // Skips if the panning is not enabled
     if (!self.keyboardPanningEnabled) {
