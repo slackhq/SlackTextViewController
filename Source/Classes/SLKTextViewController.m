@@ -371,10 +371,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // Let's first detect keyboard special states such as external keyboard, undocked or split layouts.
     [self slk_detectKeyboardStatesInNotification:notification];
     
-    if (self.isExternalKeyboardDetected || self.isKeyboardUndocked) {
-        return 0.0;
-    }
-    
     if ([self ignoreTextInputbarAdjustment]) {
         return 0.0;
     }
@@ -592,6 +588,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (BOOL)ignoreTextInputbarAdjustment
 {
+    if (self.isExternalKeyboardDetected || self.isKeyboardUndocked) {
+        return YES;
+    }
+    
     return NO;
 }
 
@@ -846,7 +846,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_didPanTextInputBar:(UIPanGestureRecognizer *)gesture
 {
     // Textinput dragging isn't supported when
-    if (!self.view.window || !self.keyboardPanningEnabled || self.isPresentedInPopover) {
+    if (!self.view.window || !self.keyboardPanningEnabled || [self ignoreTextInputbarAdjustment] || self.isPresentedInPopover) {
         return;
     }
 
@@ -872,7 +872,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGFloat keyboardMaxY = CGRectGetHeight([UIScreen mainScreen].bounds);
     CGFloat keyboardMinY = keyboardMaxY - CGRectGetHeight(keyboardView.frame);
     
-    
+
     // Skips this if it's not the expected textView.
     // Checking the keyboard height constant helps to disable the view constraints update on iPad when the keyboard is undocked.
     // Checking the keyboard status allows to keep the inputAccessoryView valid when still reacing the bottom of the screen.
@@ -1016,6 +1016,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
                                  originalFrame = CGRectZero;
                                  dragging = NO;
                                  presenting = NO;
+                                 
+                                 self.movingKeyboard = NO;
                              }];
             
             break;
@@ -1028,7 +1030,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)slk_didTapScrollView:(UIGestureRecognizer *)gesture
 {
-    if (!self.isPresentedInPopover && !self.isExternalKeyboardDetected) {
+    if (!self.isPresentedInPopover && ![self ignoreTextInputbarAdjustment]) {
         [self dismissKeyboard:YES];
     }
 }
@@ -1049,7 +1051,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)slk_postKeyboarStatusNotification:(NSNotification *)notification
 {
-    if (self.isExternalKeyboardDetected || self.isRotating) {
+    if ([self ignoreTextInputbarAdjustment] || self.isRotating) {
         return;
     }
     
@@ -1264,7 +1266,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         [self didCancelTextEditing:sender];
     }
     
-    if (self.isExternalKeyboardDetected || ([self.textView isFirstResponder] && self.keyboardHC.constant == 0)) {
+    if ([self ignoreTextInputbarAdjustment] || ([self.textView isFirstResponder] && self.keyboardHC.constant == 0)) {
         return;
     }
     
@@ -1936,10 +1938,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture
 {
     if ([gesture isEqual:self.singleTapGesture]) {
-        return [self.textView isFirstResponder] && !self.isExternalKeyboardDetected;
+        return [self.textView isFirstResponder] && ![self ignoreTextInputbarAdjustment];
     }
     else if ([gesture isEqual:self.verticalPanGesture]) {
-        return self.keyboardPanningEnabled && !self.isExternalKeyboardDetected;
+        return self.keyboardPanningEnabled && ![self ignoreTextInputbarAdjustment];
     }
     
     return NO;

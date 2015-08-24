@@ -197,6 +197,22 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)dismissKeyboard:(BOOL)animated;
 
 /**
+ Verifies if the text input bar should still move up/down even if it is not first responder. Default is NO.
+ You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
+ 
+ @param responder The current first responder object.
+ @return YES so the text input bar still move up/down.
+ */
+- (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *)responder;
+
+/**
+ Verifies if the text input bar should still move up/down when it is first responder. Default is NO.
+ This is very useful when presenting the view controller in a custom modal presentation, when there keyboard events are being handled externally to reframe the presented view.
+ You SHOULD call super to inherit some conditionals.
+ */
+- (BOOL)ignoreTextInputbarAdjustment NS_REQUIRES_SUPER;
+
+/**
  Notifies the view controller that the keyboard changed status.
  You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
  
