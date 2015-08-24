@@ -457,7 +457,7 @@
 
 - (BOOL)canEditText:(NSString *)text
 {
-    if (self.isEditing && [self.textView.text isEqualToString:text]) {
+    if ((self.isEditing && [self.textView.text isEqualToString:text]) || self.controller.isTextInputbarHidden) {
         return NO;
     }
     
@@ -466,7 +466,7 @@
 
 - (void)beginTextEditing
 {
-    if (self.isEditing) {
+    if (self.isEditing || self.controller.isTextInputbarHidden) {
         return;
     }
     
@@ -481,7 +481,7 @@
 
 - (void)endTextEdition
 {
-    if (!self.isEditing) {
+    if (!self.isEditing || self.controller.isTextInputbarHidden) {
         return;
     }
     

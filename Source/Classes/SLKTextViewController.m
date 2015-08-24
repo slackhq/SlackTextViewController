@@ -709,7 +709,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     [self.textInputbar beginTextEditing];
     
-    // Setting the text after calling -beginTextEditing is safer when in landscape orientation
+    // Setting the text after calling -beginTextEditing is safer when on landscape orientation
     if (SLK_IS_LANDSCAPE) {
         [self.textView setText:text];
     }
