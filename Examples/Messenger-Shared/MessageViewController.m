@@ -122,7 +122,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.textInputbar.maxCharCount = 256;
     self.textInputbar.counterStyle = SLKCounterStyleSplit;
     self.textInputbar.counterPosition = SLKCounterPositionTop;
-
+    
 #if !DEBUG_CUSTOM_TYPING_INDICATOR
     self.typingIndicatorView.canResignByTouch = YES;
 #endif

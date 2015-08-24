@@ -820,20 +820,18 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
+    _textInputbarHidden = hidden;
+
     __weak typeof(self) weakSelf = self;
     
     void (^animations)() = ^void(){
         
         weakSelf.textInputbarHC.constant = hidden ? 0 : weakSelf.textInputbar.appropriateHeight;
         
-        [weakSelf.view setNeedsLayout];
         [weakSelf.view layoutIfNeeded];
     };
     
     void (^completion)(BOOL finished) = ^void(BOOL finished){
-        
-        _textInputbarHidden = hidden;
-        
         if (hidden) {
             [self dismissKeyboard:YES];
         }
