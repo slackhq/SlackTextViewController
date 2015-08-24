@@ -898,7 +898,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
             
             if (presenting) {
                 // Let's first present the keyboard
-                [self.textView becomeFirstResponder];
+                [self presentKeyboard:NO];
                 
                 // So we can capture the keyboard's view
                 keyboardView = [self.textInputbar.inputAccessoryView keyboardViewProxy];
