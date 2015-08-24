@@ -52,9 +52,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 // YES if the user is moving the keyboard with a gesture
 @property (nonatomic, assign, getter = isMovingKeyboard) BOOL movingKeyboard;
 
-// The setter of isExternalKeyboardDetected, for private use.
-@property (nonatomic, assign) BOOL externalKeyboardDetected;
-
 // The current keyboard status (hidden, showing, etc.)
 @property (nonatomic) SLKKeyboardStatus keyboardStatus;
 
@@ -341,11 +338,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     return nil;
 }
 
-- (BOOL)isExternalKeyboardDetected
-{
-    return _externalKeyboardDetected;
-}
-
 - (BOOL)isPresentedInPopover
 {
     return _presentedInPopover && SLK_IS_IPAD;
@@ -376,8 +368,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (CGFloat)slk_appropriateKeyboardHeightFromNotification:(NSNotification *)notification
 {
-    self.externalKeyboardDetected = [self slk_detectExternalKeyboardInNotification:notification];
-    if (self.externalKeyboardDetected) {
+    // Let's first detect keyboard special states such as external keyboard, undocked or split layouts.
+    [self slk_detectKeyboardStatesInNotification:notification];
+    
+    if (self.isExternalKeyboardDetected || self.isKeyboardUndocked) {
         return 0.0;
     }
     
@@ -1080,43 +1074,59 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [self.view layoutIfNeeded];
 }
 
-- (BOOL)slk_detectExternalKeyboardInNotification:(NSNotification *)notification
+- (void)slk_detectKeyboardStatesInNotification:(NSNotification *)notification
 {
-    if (!self.isMovingKeyboard) {
-        // Based on http://stackoverflow.com/a/5760910/287403
-        // We can determine if the external keyboard is showing by adding the origin.y of the target finish rect (end when showing, begin when hiding) to the inputAccessoryHeight.
-        // If it's greater(or equal) the window height, it's an external keyboard.
-        CGFloat inputAccessoryHeight = self.textInputbar.inputAccessoryView.frame.size.height;
-        CGRect beginRect = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-        CGRect endRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-        
-        // Grab the base view for conversions as we don't want window coordinates in < iOS 8
-        // iOS 8 fixes the whole coordinate system issue for us, but iOS 7 doesn't rotate the app window coordinate space.
-        UIView *baseView = ((UIWindow *)self.view.window).rootViewController.view;
-        
-        // Convert the main screen bounds into the correct coordinate space but ignore the origin.
-        CGRect bounds = [self.view convertRect:[UIScreen mainScreen].bounds fromView:nil];
-        bounds = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
-        
-        // We want these rects in the correct coordinate space as well.
-        CGRect convertBegin = [baseView convertRect:beginRect fromView:nil];
-        CGRect convertEnd = [baseView convertRect:endRect fromView:nil];
-        
-        if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-            if (convertEnd.origin.y + inputAccessoryHeight >= bounds.size.height) {
-                return YES;
-            }
-        }
-        else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
-            // The additional logic check here (== to width) accounts for a glitch (iOS 8 only?) where the window has rotated it's coordinates
-            // but the beginRect doesn't yet reflect that. It should never cause a false positive.
-            if (convertBegin.origin.y + inputAccessoryHeight >= bounds.size.height ||
-                convertBegin.origin.y + inputAccessoryHeight == bounds.size.width) {
-                return YES;
-            }
+    // Tear down
+    _externalKeyboardDetected = NO;
+    _keyboardUndocked = NO;
+    
+    if (self.isMovingKeyboard) {
+        return;
+    }
+    
+    // Based on http://stackoverflow.com/a/5760910/287403
+    // We can determine if the external keyboard is showing by adding the origin.y of the target finish rect (end when showing, begin when hiding) to the inputAccessoryHeight.
+    // If it's greater(or equal) the window height, it's an external keyboard.
+    CGFloat inputAccessoryHeight = self.textInputbar.inputAccessoryView.frame.size.height;
+    CGRect beginRect = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    CGRect endRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
+    // Grab the base view for conversions as we don't want window coordinates in < iOS 8
+    // iOS 8 fixes the whole coordinate system issue for us, but iOS 7 doesn't rotate the app window coordinate space.
+    UIView *baseView = self.view.window.rootViewController.view;
+    
+    CGRect screenBounds = [UIScreen mainScreen].bounds;
+    
+    // Convert the main screen bounds into the correct coordinate space but ignore the origin.
+    CGRect viewBounds = [self.view convertRect:screenBounds fromView:nil];
+    viewBounds = CGRectMake(0, 0, viewBounds.size.width, viewBounds.size.height);
+    
+    // We want these rects in the correct coordinate space as well.
+    CGRect convertBegin = [baseView convertRect:beginRect fromView:nil];
+    CGRect convertEnd = [baseView convertRect:endRect fromView:nil];
+    
+    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+        if (convertEnd.origin.y + inputAccessoryHeight >= viewBounds.size.height) {
+            _externalKeyboardDetected = YES;
         }
     }
-    return NO;
+    else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
+        // The additional logic check here (== to width) accounts for a glitch (iOS 8 only?) where the window has rotated it's coordinates
+        // but the beginRect doesn't yet reflect that. It should never cause a false positive.
+        if (convertBegin.origin.y + inputAccessoryHeight >= viewBounds.size.height ||
+            convertBegin.origin.y + inputAccessoryHeight == viewBounds.size.width) {
+            _externalKeyboardDetected = YES;
+        }
+    }
+    
+    if (SLK_IS_IPAD && CGRectGetMaxY(convertEnd) < CGRectGetMaxY(screenBounds)) {
+        
+        // The keyboard is undocked or split (iPad Only)
+        _keyboardUndocked = YES;
+        
+        // An external keyboard cannot be detected anymore
+        _externalKeyboardDetected = NO;
+    }
 }
 
 - (void)slk_reloadInputAccessoryViewIfNeeded

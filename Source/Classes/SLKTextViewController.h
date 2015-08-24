@@ -85,7 +85,10 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, assign, getter = isKeyboardPanningEnabled) BOOL keyboardPanningEnabled;
 
 /** YES if an external keyboard has been detected (this value updates only when the text view becomes first responder). */
-@property (nonatomic, readonly) BOOL isExternalKeyboardDetected;
+@property (nonatomic, readonly, getter=isExternalKeyboardDetected) BOOL externalKeyboardDetected;
+
+/**  */
+@property (nonatomic, readonly, getter=isKeyboardUndocked) BOOL keyboardUndocked;
 
 /** YES if after right button press, the text view is cleared out. Default is YES. */
 @property (nonatomic, assign) BOOL shouldClearTextAtRightButtonPress;
