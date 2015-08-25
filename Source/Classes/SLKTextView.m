@@ -125,8 +125,7 @@ NSString * const SLKTextViewPastedItemData =                        @"SLKTextVie
 
 - (UILabel *)placeholderLabel
 {
-    if (!_placeholderLabel)
-    {
+    if (!_placeholderLabel) {
         _placeholderLabel = [UILabel new];
         _placeholderLabel.clipsToBounds = NO;
         _placeholderLabel.autoresizesSubviews = NO;

@@ -194,22 +194,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)dismissKeyboard:(BOOL)animated;
 
 /**
- Verifies if the text input bar should still move up/down even if it is not first responder. Default is NO.
- You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
- 
- @param responder The current first responder object.
- @return YES so the text input bar still move up/down.
- */
-- (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *)responder;
-
-/**
- Verifies if the text input bar should still move up/down when it is first responder. Default is NO.
- This is very useful when presenting the view controller in a custom modal presentation, when there keyboard events are being handled externally to reframe the presented view.
- You don't need call super since this method doesn't do anything.
- */
-- (BOOL)ignoreTextInputbarAdjustment;
-
-/**
  Notifies the view controller that the keyboard changed status.
  You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
  
@@ -310,6 +294,40 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
  */
 - (void)didPressArrowKey:(id)sender NS_REQUIRES_SUPER;
+
+
+#pragma mark - Text Input Bar Adjustment
+///------------------------------------------------
+/// @name Text Input Bar Adjustment
+///------------------------------------------------
+
+/** YES if the text inputbar is visible. Default is YES. */
+@property (nonatomic, getter=isTextInputbarHidden) BOOL textInputbarHidden;
+
+/**
+ Changes the visibility of the text input bar.
+ Calling this method with the animated parameter set to NO is equivalent to setting the value of the toolbarHidden property directly.
+ 
+ @param hidden Specify YES to hide the toolbar or NO to show it.
+ @param animated Specify YES if you want the toolbar to be animated on or off the screen.
+ */
+- (void)setTextInputbarHidden:(BOOL)hidden animated:(BOOL)animated;
+
+/**
+ Verifies if the text input bar should still move up/down even if it is not first responder. Default is NO.
+ You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
+ 
+ @param responder The current first responder object.
+ @return YES so the text input bar still move up/down.
+ */
+- (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *)responder;
+
+/**
+ Verifies if the text input bar should still move up/down when it is first responder. Default is NO.
+ This is very useful when presenting the view controller in a custom modal presentation, when there keyboard events are being handled externally to reframe the presented view.
+ You don't need call super since this method doesn't do anything.
+ */
+- (BOOL)ignoreTextInputbarAdjustment;
 
 
 #pragma mark - Text Edition
