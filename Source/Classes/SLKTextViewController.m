@@ -385,9 +385,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     CGFloat viewHeight = CGRectGetHeight(self.view.bounds);
     CGFloat keyboardMinY = CGRectGetMinY(keyboardRect);
-    CGFloat inputAccessoryViewHeight = CGRectGetHeight(self.textInputbar.inputAccessoryView.bounds);
     
-    return MAX(0.0, viewHeight - (keyboardMinY + inputAccessoryViewHeight));
+    return MAX(0.0, viewHeight - keyboardMinY);
 }
 
 - (CGFloat)slk_appropriateScrollViewHeight
@@ -1066,7 +1065,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         endFrame = SLKRectInvert(endFrame);
     }
     
-    CGFloat keyboardHeight = CGRectGetHeight(endFrame)-CGRectGetHeight(self.textInputbar.inputAccessoryView.bounds);
+    CGFloat keyboardHeight = CGRectGetHeight(endFrame);
     
     beginFrame.size.height = keyboardHeight;
     endFrame.size.height = keyboardHeight;
@@ -1158,7 +1157,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // Based on http://stackoverflow.com/a/5760910/287403
     // We can determine if the external keyboard is showing by adding the origin.y of the target finish rect (end when showing, begin when hiding) to the inputAccessoryHeight.
     // If it's greater(or equal) the window height, it's an external keyboard.
-    CGFloat inputAccessoryHeight = self.textInputbar.inputAccessoryView.frame.size.height;
     CGRect beginRect = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGRect endRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
@@ -1177,15 +1175,15 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGRect convertEnd = [baseView convertRect:endRect fromView:nil];
     
     if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-        if (convertEnd.origin.y + inputAccessoryHeight >= viewBounds.size.height) {
+        if (convertEnd.origin.y >= viewBounds.size.height) {
             _externalKeyboardDetected = YES;
         }
     }
     else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
         // The additional logic check here (== to width) accounts for a glitch (iOS 8 only?) where the window has rotated it's coordinates
         // but the beginRect doesn't yet reflect that. It should never cause a false positive.
-        if (convertBegin.origin.y + inputAccessoryHeight >= viewBounds.size.height ||
-            convertBegin.origin.y + inputAccessoryHeight == viewBounds.size.width) {
+        if (convertBegin.origin.y >= viewBounds.size.height ||
+            convertBegin.origin.y == viewBounds.size.width) {
             _externalKeyboardDetected = YES;
         }
     }
