@@ -104,6 +104,20 @@ By default, the number of lines is set to best fit each device dimensions:
 
 On iPhone devices, in landscape orientation, the maximum number of lines is changed to fit the available space.
 
+
+###Inverted Mode
+
+Some layouts may require to show from bottom to top and new subviews are inserted from the bottom. To enable this, you must use the `inverted` flag property (default is YES). This will actually invert the entire ScrollView object. Make sure to apply the same transformation to every subview. In the case of UITableView, the best place for adjusting the transformation is in its data source methods like:
+
+````objc
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:chatCellIdentifier];
+    cell.transform = self.tableView.transform;
+}
+````
+
+
 ###Autocompletion
 
 We use autocompletion for many things: names, channels, emoji, and more.
@@ -237,22 +251,8 @@ A shake gesture to clear text is enabled by default with the `undoShakingEnabled
 
 You can optionally override `-willRequestUndo`, to implement your UI to ask the users if he would like to clean the text view's text. If there is not text entered, the method will not be called.
 
-If you don't override `-willRequestUndo` and `undoShakingEnabled` is set to `YES`, a system UIAlertView will prompt.
+If you don't override `-willRequestUndo` and `undoShakingEnabled` is set to `YES`, a system UIAlertView will 
 
-###Inverted Mode
-
-Some UITableView layouts may require that new messages enter from bottom to top. To enable this, you must use the `inverted` flag property. This will actually invert the UITableView or UICollectionView, so you will need to do a transform adjustment in your UITableViewDataSource method `-tableView:cellForRowAtIndexPath:` for the cells to show correctly.
-
-````objc
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:chatCellIdentifier];
-    
-    // Cells must inherit the table view's transform
-    // This is very important, since the main table view may be inverted
-    cell.transform = self.tableView.transform;
-}
-````
 
 ###External Keyboard
 
