@@ -24,7 +24,23 @@
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
     if (newSuperview) {
-        _keyboardViewProxy = newSuperview;
+        if (SLK_IS_IOS9_AND_HIGHER) {
+            
+            NSPredicate *windowPredicate = [NSPredicate predicateWithFormat:@"self isMemberOfClass: %@", NSClassFromString(@"UIRemoteKeyboardWindow")];
+            UIWindow *keyboardWindow = [[[UIApplication sharedApplication].windows filteredArrayUsingPredicate:windowPredicate] firstObject];
+            
+            for (UIView *subview in keyboardWindow.subviews) {
+                for (UIView *hostview in subview.subviews) {
+                    if ([hostview isMemberOfClass:NSClassFromString(@"UIInputSetHostView")]) {
+                        _keyboardViewProxy = hostview;
+                        break;
+                    }
+                }
+            }
+        }
+        else {
+            _keyboardViewProxy = newSuperview;
+        }
     }
 }
 
