@@ -990,7 +990,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
             
             BOOL hide = (gestureVelocity.y > minVelocity) || (presenting && transition.y < minDistance) || (!presenting && transition.y > minDistance);
             
+<<<<<<< HEAD
             if (hide) keyboardFrame.origin.y = keyboardMaxY;
+=======
+            if (hide) keyboardFrame.origin.y = CGRectGetHeight(SLKKeyWindowBounds());
+>>>>>>> Improves multi-tasking support on iPad
             
             self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromRect:keyboardFrame];
             self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
@@ -1164,7 +1168,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGRect screenBounds = [UIScreen mainScreen].bounds;
     
     // Convert the main screen bounds into the correct coordinate space but ignore the origin.
-    CGRect viewBounds = [self.view convertRect:screenBounds fromView:nil];
+    CGRect viewBounds = [self.view convertRect:SLKKeyWindowBounds() fromView:nil];
     viewBounds = CGRectMake(0, 0, viewBounds.size.width, viewBounds.size.height);
     
     // We want these rects in the correct coordinate space as well.
