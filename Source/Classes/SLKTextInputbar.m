@@ -467,7 +467,7 @@
         _charCountLabelVCs = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[charCountLabel]-(bottom)-[rightButton]" options:0 metrics:metrics views:views];
     }
     else {
-        _charCountLabelVCs = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(<=top,>=0)-[charCountLabel]-(>=0)-|" options:0 metrics:metrics views:views];
+        _charCountLabelVCs = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(top@750)-[charCountLabel]-(>=0)-|" options:0 metrics:metrics views:views];
     }
     
     [self addConstraints:self.charCountLabelVCs];
