@@ -2003,15 +2003,15 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 {
     NSMutableArray *keyboardCommands = [NSMutableArray new];
     
-    [keyboardCommands addObject:[self returnKeyCommand]];
-    [keyboardCommands addObject:[self escKeyCommand]];
-    [keyboardCommands addObject:[self arrowKeyCommand:UIKeyInputUpArrow]];
-    [keyboardCommands addObject:[self arrowKeyCommand:UIKeyInputDownArrow]];
+    [keyboardCommands addObject:[self slk_returnKeyCommand]];
+    [keyboardCommands addObject:[self slk_escKeyCommand]];
+    [keyboardCommands addObject:[self slk_arrowKeyCommand:UIKeyInputUpArrow]];
+    [keyboardCommands addObject:[self slk_arrowKeyCommand:UIKeyInputDownArrow]];
 
     return keyboardCommands;
 }
 
-- (UIKeyCommand *)returnKeyCommand
+- (UIKeyCommand *)slk_returnKeyCommand
 {
     UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:0 action:@selector(didPressReturnKey:)];
     
@@ -2030,7 +2030,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     return command;
 }
 
-- (UIKeyCommand *)escKeyCommand
+- (UIKeyCommand *)slk_escKeyCommand
 {
     UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(didPressEscapeKey:)];
     
@@ -2052,7 +2052,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     return command;
 }
 
-- (UIKeyCommand *)arrowKeyCommand:(NSString *)inputUpArrow
+- (UIKeyCommand *)slk_arrowKeyCommand:(NSString *)inputUpArrow
 {
     UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:inputUpArrow modifierFlags:0 action:@selector(didPressArrowKey:)];
 
