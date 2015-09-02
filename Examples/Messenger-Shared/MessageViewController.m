@@ -230,7 +230,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (BOOL)ignoreTextInputbarAdjustment
 {
-    return NO;
+    return [super ignoreTextInputbarAdjustment];
 }
 
 - (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status

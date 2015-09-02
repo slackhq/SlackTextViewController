@@ -69,10 +69,10 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  */
 @property (nonatomic, readonly) UIView <SLKTypingIndicatorProtocol> *typingIndicatorProxyView;
 
-/** A single tap gesture used to dismiss the keyboard. */
+/** A single tap gesture used to dismiss the keyboard. SLKTextViewController is its delegate. */
 @property (nonatomic, readonly) UIGestureRecognizer *singleTapGesture;
 
-/** A vertical pan gesture used for bringing the keyboard from the bottom. */
+/** A vertical pan gesture used for bringing the keyboard from the bottom. SLKTextViewController is its delegate. */
 @property (nonatomic, readonly) UIPanGestureRecognizer *verticalPanGesture;
 
 /** YES if control's animation should have bouncy effects. Default is YES. */
@@ -85,7 +85,10 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, assign, getter = isKeyboardPanningEnabled) BOOL keyboardPanningEnabled;
 
 /** YES if an external keyboard has been detected (this value updates only when the text view becomes first responder). */
-@property (nonatomic, readonly) BOOL isExternalKeyboardDetected;
+@property (nonatomic, readonly, getter=isExternalKeyboardDetected) BOOL externalKeyboardDetected;
+
+/**  */
+@property (nonatomic, readonly, getter=isKeyboardUndocked) BOOL keyboardUndocked;
 
 /** YES if after right button press, the text view is cleared out. Default is YES. */
 @property (nonatomic, assign) BOOL shouldClearTextAtRightButtonPress;
@@ -189,6 +192,22 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param animated YES if the keyboard should be dismissed using an animation.
  */
 - (void)dismissKeyboard:(BOOL)animated;
+
+/**
+ Verifies if the text input bar should still move up/down even if it is not first responder. Default is NO.
+ You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
+ 
+ @param responder The current first responder object.
+ @return YES so the text input bar still move up/down.
+ */
+- (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *)responder;
+
+/**
+ Verifies if the text input bar should still move up/down when it is first responder. Default is NO.
+ This is very useful when presenting the view controller in a custom modal presentation, when there keyboard events are being handled externally to reframe the presented view.
+ You SHOULD call super to inherit some conditionals.
+ */
+- (BOOL)ignoreTextInputbarAdjustment NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller that the keyboard changed status.
@@ -496,6 +515,8 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /** UIScrollViewDelegate */
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView NS_REQUIRES_SUPER;
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate NS_REQUIRES_SUPER;
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView NS_REQUIRES_SUPER;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView NS_REQUIRES_SUPER;
 
 /** UIGestureRecognizerDelegate */

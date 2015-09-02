@@ -157,7 +157,7 @@
 {
     if (!_inputAccessoryView)
     {
-        _inputAccessoryView = [[SLKInputAccessoryView alloc] initWithFrame:self.bounds];
+        _inputAccessoryView = [[SLKInputAccessoryView alloc] initWithFrame:CGRectZero];
         _inputAccessoryView.backgroundColor = [UIColor clearColor];
         _inputAccessoryView.userInteractionEnabled = NO;
     }
@@ -393,7 +393,6 @@
 - (void)setBackgroundColor:(UIColor *)color
 {
     self.barTintColor = color;
-    self.textView.inputAccessoryView.backgroundColor = color;
     self.editorContentView.backgroundColor = color;
 }
 

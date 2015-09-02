@@ -30,12 +30,12 @@
 
 - (BOOL)slk_isAtTop
 {
-    return CGRectGetMinY([self slk_visibleRect]) == CGRectGetMinY([self slk_topRect]);
+    return CGRectGetMinY([self slk_visibleRect]) < CGRectGetMinY([self slk_topRect]);
 }
 
 - (BOOL)slk_isAtBottom
 {
-    return CGRectGetMaxY([self slk_visibleRect]) == CGRectGetMaxY([self slk_bottomRect]);
+    return CGRectGetMaxY([self slk_visibleRect]) > CGRectGetMaxY([self slk_bottomRect]);
 }
 
 - (CGRect)slk_visibleRect
@@ -48,12 +48,12 @@
 
 - (CGRect)slk_topRect
 {
-    return CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    return CGRectMake(0, 0, CGRectGetWidth([self slk_visibleRect]), CGRectGetHeight([self slk_visibleRect]));
 }
 
 - (CGRect)slk_bottomRect
 {
-    return CGRectMake(0, self.contentSize.height - CGRectGetHeight(self.bounds), CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    return CGRectMake(0, self.contentSize.height - CGRectGetHeight([self slk_visibleRect]), CGRectGetWidth([self slk_visibleRect]), CGRectGetHeight([self slk_visibleRect]));
 }
 
 - (void)slk_stopScrolling
