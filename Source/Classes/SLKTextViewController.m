@@ -1870,12 +1870,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
 }
 
-- (void)textViewDidChange:(UITextView *)textView
+- (void)textViewDidChange:(SLKTextView *)textView
 {
     // Keep to avoid unnecessary crashes. Was meant to be overriden in subclass while calling super.
 }
 
-- (void)textViewDidChangeSelection:(UITextView *)textView
+- (void)textViewDidChangeSelection:(SLKTextView *)textView
 {
     // Keep to avoid unnecessary crashes. Was meant to be overriden in subclass while calling super.
 }

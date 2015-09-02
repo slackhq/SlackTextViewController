@@ -142,13 +142,6 @@
         _textView.layer.cornerRadius = 5.0;
         _textView.layer.borderWidth = 0.5;
         _textView.layer.borderColor =  [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:205.0/255.0 alpha:1.0].CGColor;
-        
-        // Adds an aditional action to a private gesture to detect when the magnifying glass becomes visible
-        for (UIGestureRecognizer *gesture in _textView.gestureRecognizers) {
-            if ([gesture isKindOfClass:NSClassFromString(@"UIVariableDelayLoupeGesture")]) {
-                [gesture addTarget:self action:@selector(slk_willShowLoupe:)];
-            }
-        }
     }
     return _textView;
 }
@@ -534,28 +527,6 @@
     
     self.charCountLabel.text = counter;
     self.charCountLabel.textColor = [self limitExceeded] ? self.charCountLabelWarningColor : self.charCountLabelNormalColor;
-}
-
-
-#pragma mark - Magnifying Glass handling
-
-- (void)slk_willShowLoupe:(UIGestureRecognizer *)gesture
-{
-    if (gesture.state == UIGestureRecognizerStateChanged) {
-        self.textView.loupeVisible = YES;
-    }
-    else {
-        self.textView.loupeVisible = NO;
-    }
-    
-    // We still need to notify a selection change in the textview after the magnifying class is dismissed
-    if (gesture.state == UIGestureRecognizerStateEnded) {
-        if (self.textView.delegate && [self.textView.delegate respondsToSelector:@selector(textViewDidChangeSelection:)]) {
-            [self.textView.delegate textViewDidChangeSelection:self.textView];
-        }
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewSelectedRangeDidChangeNotification object:self.textView userInfo:nil];
-    }
 }
 
 

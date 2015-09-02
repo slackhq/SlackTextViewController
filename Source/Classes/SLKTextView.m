@@ -396,6 +396,20 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 #pragma mark - UITextView Overrides
 
+- (NSArray *)gestureRecognizers
+{
+    NSArray *gestureRecognizers = [super gestureRecognizers];
+    
+    // Adds an aditional action to a private gesture to detect when the magnifying glass becomes visible
+    for (UIGestureRecognizer *gesture in gestureRecognizers) {
+        if ([gesture isMemberOfClass:NSClassFromString(@"UIVariableDelayLoupeGesture")]) {
+            [gesture addTarget:self action:@selector(slk_willShowLoupe:)];
+        }
+    }
+    
+    return gestureRecognizers;
+}
+
 - (void)setSelectedRange:(NSRange)selectedRange
 {
     [super setSelectedRange:selectedRange];
@@ -562,6 +576,25 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 
 #pragma mark - Custom Actions
+
+- (void)slk_willShowLoupe:(UIGestureRecognizer *)gesture
+{
+    if (gesture.state == UIGestureRecognizerStateChanged) {
+        self.loupeVisible = YES;
+    }
+    else {
+        self.loupeVisible = NO;
+    }
+    
+    // We still need to notify a selection change in the textview after the magnifying class is dismissed
+    if (gesture.state == UIGestureRecognizerStateEnded) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(textViewDidChangeSelection:)]) {
+            [self.delegate textViewDidChangeSelection:self];
+        }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewSelectedRangeDidChangeNotification object:self userInfo:nil];
+    }
+}
 
 - (void)slk_flashScrollIndicatorsIfNeeded
 {
