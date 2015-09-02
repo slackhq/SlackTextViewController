@@ -26,7 +26,7 @@ NSString * const SLKKeyboardDidShowNotification =   @"SLKKeyboardDidShowNotifica
 NSString * const SLKKeyboardWillHideNotification =  @"SLKKeyboardWillHideNotification";
 NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotification";
 
-NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKTextViewController' string
+#define kSLKAlertViewClearTextTag [NSStringFromClass([SLKTextViewController class]) hash]
 
 CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
@@ -789,7 +789,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [alert addButtonWithTitle:NSLocalizedString(@"Undo", nil)];
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     [alert setCancelButtonIndex:1];
-    [alert setTag:SLKAlertViewClearTextTag];
+    [alert setTag:kSLKAlertViewClearTextTag];
     [alert setDelegate:self];
     [alert show];
 }
@@ -1959,7 +1959,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag == SLKAlertViewClearTextTag && self.shakeToClearEnabled && buttonIndex != [alertView cancelButtonIndex] ) {
+    if (alertView.tag == kSLKAlertViewClearTextTag && self.shakeToClearEnabled && buttonIndex != [alertView cancelButtonIndex] ) {
         // Clears the text but doesn't clear the undo manager
         [self.textView slk_clearText:NO];
     }
