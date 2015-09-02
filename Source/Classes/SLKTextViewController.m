@@ -2019,7 +2019,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // Only available since iOS9
     if ([UIKeyCommand respondsToSelector:@selector(keyCommandWithInput:modifierFlags:action:discoverabilityTitle:)] ) {
         if (self.textInputbar.isEditing) {
-            command.discoverabilityTitle = [self.textInputbar.editortRightButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Commit Editing", nil);
+            command.discoverabilityTitle = [self.textInputbar.editorRightButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Commit Editing", nil);
         }
         else {
             command.discoverabilityTitle = [self.rightButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Send", nil);
@@ -2041,7 +2041,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
             command.discoverabilityTitle = NSLocalizedString(@"Exit Auto-Completion", nil);
         }
         else if (self.textInputbar.isEditing) {
-            command.discoverabilityTitle = [self.textInputbar.editortLeftButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Exit Editing", nil);
+            command.discoverabilityTitle = [self.textInputbar.editorRightButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Exit Editing", nil);
         }
         else if (!self.isExternalKeyboardDetected && self.keyboardHC.constant != 0) {
             command.discoverabilityTitle = NSLocalizedString(@"Hide Keyboard", nil);
