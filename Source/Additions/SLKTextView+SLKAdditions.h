@@ -77,4 +77,12 @@
  */
 - (void)slk_prepareForUndo:(NSString *)description;
 
+/**
+ Returns a constant font size difference reflecting the current accessibility settings.
+ 
+ @param category A content size category constant string.
+ @returns A float constant font size difference.
+ */
++ (CGFloat)pointSizeDifferenceForCategory:(NSString *)category;
+
 @end

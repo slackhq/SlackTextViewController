@@ -7,6 +7,7 @@
 //
 
 #import "MessageTableViewCell.h"
+#import "SLKTextView+SLKAdditions.h"
 
 @implementation MessageTableViewCell
 
@@ -47,7 +48,7 @@
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-left-[thumbnailView(tumbSize)]-right-[attachmentView]-right-|" options:0 metrics:metrics views:views]];
 
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-right-[thumbnailView(tumbSize)]-(>=0)-|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-padding-[titleLabel]-left-[bodyLabel(>=0)]-left-[attachmentView(>=0,<=attchSize)]-right-|" options:0 metrics:metrics views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-right-[titleLabel]-left-[bodyLabel(>=0)]-left-[attachmentView(>=0,<=attchSize)]-right-|" options:0 metrics:metrics views:views]];
 }
 
 - (void)prepareForReuse
@@ -56,8 +57,10 @@
     
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    self.titleLabel.font = [UIFont boldSystemFontOfSize:16.0];
-    self.bodyLabel.font = [UIFont systemFontOfSize:16.0];
+    CGFloat pointSize = [MessageTableViewCell defaultFontSize];
+    
+    self.titleLabel.font = [UIFont boldSystemFontOfSize:pointSize];
+    self.bodyLabel.font = [UIFont systemFontOfSize:pointSize];
     self.attachmentView.image = nil;
 }
 
@@ -71,9 +74,8 @@
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.userInteractionEnabled = NO;
         _titleLabel.numberOfLines = 0;
-
-        _titleLabel.font = [UIFont boldSystemFontOfSize:16.0];
         _titleLabel.textColor = [UIColor grayColor];
+        _titleLabel.font = [UIFont boldSystemFontOfSize:[MessageTableViewCell defaultFontSize]];
     }
     return _titleLabel;
 }
@@ -86,9 +88,8 @@
         _bodyLabel.backgroundColor = [UIColor clearColor];
         _bodyLabel.userInteractionEnabled = NO;
         _bodyLabel.numberOfLines = 0;
-        
-        _bodyLabel.font = [UIFont systemFontOfSize:16.0];
         _bodyLabel.textColor = [UIColor darkGrayColor];
+        _bodyLabel.font = [UIFont systemFontOfSize:[MessageTableViewCell defaultFontSize]];
     }
     return _bodyLabel;
 }
@@ -125,6 +126,16 @@
 - (BOOL)needsPlaceholder
 {
     return self.thumbnailView.image ? NO : YES;
+}
+
++ (CGFloat)defaultFontSize
+{
+    CGFloat pointSize = 16.0;
+    
+    NSString *contentSizeCategory = [[UIApplication sharedApplication] preferredContentSizeCategory];
+    pointSize += [SLKTextView pointSizeDifferenceForCategory:contentSizeCategory];
+    
+    return pointSize;
 }
 
 @end

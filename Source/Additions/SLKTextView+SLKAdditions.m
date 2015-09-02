@@ -166,4 +166,21 @@
     [self.undoManager setActionName:description];
 }
 
++ (CGFloat)pointSizeDifferenceForCategory:(NSString *)category
+{
+    if ([category isEqualToString:UIContentSizeCategoryExtraSmall])                         return -3.0;
+    if ([category isEqualToString:UIContentSizeCategorySmall])                              return -2.0;
+    if ([category isEqualToString:UIContentSizeCategoryMedium])                             return -1.0;
+    if ([category isEqualToString:UIContentSizeCategoryLarge])                              return 0.0;
+    if ([category isEqualToString:UIContentSizeCategoryExtraLarge])                         return 2.0;
+    if ([category isEqualToString:UIContentSizeCategoryExtraExtraLarge])                    return 4.0;
+    if ([category isEqualToString:UIContentSizeCategoryExtraExtraExtraLarge])               return 6.0;
+    if ([category isEqualToString:UIContentSizeCategoryAccessibilityMedium])                return 8.0;
+    if ([category isEqualToString:UIContentSizeCategoryAccessibilityLarge])                 return 10.0;
+    if ([category isEqualToString:UIContentSizeCategoryAccessibilityExtraLarge])            return 11.0;
+    if ([category isEqualToString:UIContentSizeCategoryAccessibilityExtraExtraLarge])       return 12.0;
+    if ([category isEqualToString:UIContentSizeCategoryAccessibilityExtraExtraExtraLarge])  return 13.0;
+    return 0;
+}
+
 @end

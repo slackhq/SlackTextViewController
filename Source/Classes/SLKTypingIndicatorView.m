@@ -233,7 +233,9 @@
     
     [self.usernames addObject:username];
     
-    self.textLabel.attributedText = [self attributedString];
+    NSAttributedString *attributedString = [self attributedString];
+    
+    self.textLabel.attributedText = attributedString;
     
     self.visible = YES;
 }
