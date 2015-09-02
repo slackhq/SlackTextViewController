@@ -18,6 +18,9 @@
 #import "SLKUIConstants.h"
 #import "UIResponder+SLKAdditions.h"
 
+/** Feature flagged while waiting to implement a more reliable technique. */
+#define SLKBottomPanningEnabled NO
+
 NSString * const SLKKeyboardWillShowNotification =  @"SLKKeyboardWillShowNotification";
 NSString * const SLKKeyboardDidShowNotification =   @"SLKKeyboardDidShowNotification";
 NSString * const SLKKeyboardWillHideNotification =  @"SLKKeyboardWillHideNotification";
@@ -886,7 +889,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
             }
         }
         
+#if SLKBottomPanningEnabled
         presenting = YES;
+#else
+        [self presentKeyboard:YES];
+        return;
+#endif
     }
 
     switch (gesture.state) {
@@ -896,7 +904,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
             dragging = NO;
             
             if (presenting) {
-                // Let's first present the keyboard
+                // Let's first present the keyboard without animation
                 [self presentKeyboard:NO];
                 
                 // So we can capture the keyboard's view
@@ -905,8 +913,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
                 originalFrame = keyboardView.frame;
                 originalFrame.origin.y = CGRectGetMaxY(self.view.frame);
                 
-                // And manipulate its frame (illegaly)
-                // TODO: Fix an occasional layout glitch when the keyboard appears for the first time
+                // And move the keyboard to the bottom edge
+                // TODO: Fix an occasional layout glitch when the keyboard appears for the first time.
                 keyboardView.frame = originalFrame;
             }
             
