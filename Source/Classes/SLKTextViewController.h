@@ -90,9 +90,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** YES if after right button press, the text view is cleared out. Default is YES. */
 @property (nonatomic, assign) BOOL shouldClearTextAtRightButtonPress;
 
-/** YES if the text input bar should still move up/down when other text inputs interacts with the keyboard. Default is NO. */
-@property (nonatomic, assign) BOOL shouldForceTextInputbarAdjustment DEPRECATED_MSG_ATTRIBUTE("Use -forceTextInputbarAdjustmentForResponder:");
-
 /** YES if the scrollView should scroll to bottom when the keyboard is shown. Default is NO.*/
 @property (nonatomic, assign) BOOL shouldScrollToBottomAfterKeyboardShows;
 
@@ -268,7 +265,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  
  @return YES if the typing indicator view should be presented.
  */
-- (BOOL)canShowTypeIndicator DEPRECATED_MSG_ATTRIBUTE("Renamed to -canShowTypingIndicator");
 - (BOOL)canShowTypingIndicator;
 
 /**

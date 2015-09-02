@@ -251,12 +251,6 @@
     return _editorLeftButton;
 }
 
-- (UIButton *)editortLeftButton
-{
-    // TODO: Deprecate in further versions
-    return self.editorLeftButton;
-}
-
 - (UIButton *)editorRightButton
 {
     if (!_editorRightButton) {
@@ -271,12 +265,6 @@
         [_editorRightButton setTitle:title forState:UIControlStateNormal];
     }
     return _editorRightButton;
-}
-
-- (UIButton *)editortRightButton
-{
-    // TODO: Deprecate in further versions
-    return self.editorRightButton;
 }
 
 - (UILabel *)charCountLabel
