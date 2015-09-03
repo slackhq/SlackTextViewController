@@ -403,7 +403,11 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     // Adds an aditional action to a private gesture to detect when the magnifying glass becomes visible
     for (UIGestureRecognizer *gesture in gestureRecognizers) {
         if ([gesture isMemberOfClass:NSClassFromString(@"UIVariableDelayLoupeGesture")]) {
-            [gesture addTarget:self action:@selector(slk_willShowLoupe:)];
+            
+            NSArray *targets = [gesture valueForKeyPath:@"_targets"];
+            if (targets.count > 0) {
+                [gesture addTarget:self action:@selector(slk_willShowLoupe:)];
+            }
         }
     }
     

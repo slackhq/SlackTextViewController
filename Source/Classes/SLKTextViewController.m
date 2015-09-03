@@ -386,7 +386,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGFloat viewHeight = CGRectGetHeight(self.view.bounds);
     CGFloat keyboardMinY = CGRectGetMinY(keyboardRect);
     
-    return MAX(0.0, viewHeight - keyboardMinY);
+    CGFloat keyboardHeight = MAX(0.0, viewHeight - keyboardMinY);
+//    CGFloat keyboardHeight = MAX(0.0, viewHeight - (keyboardMinY + inputAccessoryViewHeight));
+
+    return keyboardHeight;
 }
 
 - (CGFloat)slk_appropriateScrollViewHeight
@@ -860,7 +863,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGPoint gestureLocation = [gesture locationInView:self.view];
     CGPoint gestureVelocity = [gesture velocityInView:self.view];
     
-    CGFloat keyboardMaxY = CGRectGetHeight([UIScreen mainScreen].bounds);
+    CGFloat keyboardMaxY = CGRectGetHeight(SLKKeyWindowBounds());
     CGFloat keyboardMinY = keyboardMaxY - CGRectGetHeight(keyboardView.frame);
     
 
@@ -990,11 +993,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
             
             BOOL hide = (gestureVelocity.y > minVelocity) || (presenting && transition.y < minDistance) || (!presenting && transition.y > minDistance);
             
-<<<<<<< HEAD
             if (hide) keyboardFrame.origin.y = keyboardMaxY;
-=======
-            if (hide) keyboardFrame.origin.y = CGRectGetHeight(SLKKeyWindowBounds());
->>>>>>> Improves multi-tasking support on iPad
             
             self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromRect:keyboardFrame];
             self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
