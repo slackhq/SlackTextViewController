@@ -871,7 +871,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // Checking the keyboard height constant helps to disable the view constraints update on iPad when the keyboard is undocked.
     // Checking the keyboard status allows to keep the inputAccessoryView valid when still reacing the bottom of the screen.
     if (![self.textView isFirstResponder] || (self.keyboardHC.constant == 0 && self.keyboardStatus == SLKKeyboardStatusDidHide)) {
-
+#if SLKBottomPanningEnabled
         if ([gesture.view isEqual:self.scrollViewProxy]) {
             if (gestureVelocity.y > 0) {
                 return;
@@ -881,10 +881,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
             }
         }
         
-#if SLKBottomPanningEnabled
         presenting = YES;
 #else
-        [self presentKeyboard:YES];
+        if ([gesture.view isEqual:self.textInputbar] && gestureVelocity.y < 0) {
+            [self presentKeyboard:YES];
+        }
         return;
 #endif
     }
