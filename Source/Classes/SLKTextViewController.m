@@ -2152,10 +2152,17 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [self slk_prepareForInterfaceRotationWithDuration:duration];
 }
 
+#ifdef __IPHONE_9_0
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskAll;
 }
+#else
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAll;
+}
+#endif
 
 - (BOOL)shouldAutorotate
 {
