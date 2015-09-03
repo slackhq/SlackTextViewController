@@ -7,6 +7,7 @@
 //
 
 #import "TypingIndicatorView.h"
+#import "SLKUIConstants.h"
 
 @interface TypingIndicatorView ()
 @property (nonatomic, strong) UIImageView *thumbnailView;
@@ -102,7 +103,7 @@
 {
     if (!_backgroundGradient) {
         _backgroundGradient = [CAGradientLayer layer];
-        _backgroundGradient.frame = CGRectMake(0.0, 0.0, [UIScreen mainScreen].bounds.size.width, [self height]);
+        _backgroundGradient.frame = CGRectMake(0.0, 0.0, CGRectGetWidth(SLKKeyWindowBounds()), [self height]);
         
         _backgroundGradient.colors = @[(id)[UIColor colorWithWhite:1.0 alpha:0].CGColor,
                                        (id)[UIColor colorWithWhite:1.0 alpha:0.9].CGColor,

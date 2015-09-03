@@ -233,6 +233,12 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     return [super ignoreTextInputbarAdjustment];
 }
 
+- (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *)responder
+{
+    // On iOS 9, returning YES helps keeping the input view visible when the keyboard if presented from another app when using multi-tasking on iPad.
+    return SLK_IS_IPAD;
+}
+
 - (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status
 {
     // Notifies the view controller that the keyboard changed status.
@@ -582,9 +588,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 }
 
 
-#pragma mark - UIScrollViewDelegate Methods
+#pragma mark - UITextViewDelegate Methods
 
-/** UITextViewDelegate */
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     return [super textView:textView shouldChangeTextInRange:range replacementText:text];

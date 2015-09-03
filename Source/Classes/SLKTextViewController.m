@@ -26,7 +26,7 @@ NSString * const SLKKeyboardDidShowNotification =   @"SLKKeyboardDidShowNotifica
 NSString * const SLKKeyboardWillHideNotification =  @"SLKKeyboardWillHideNotification";
 NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotification";
 
-NSInteger const SLKAlertViewClearTextTag = 1534347677; // absolute hash of 'SLKTextViewController' string
+#define kSLKAlertViewClearTextTag [NSStringFromClass([SLKTextViewController class]) hash]
 
 CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
@@ -48,9 +48,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 @property (nonatomic, strong) NSLayoutConstraint *typingIndicatorViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *autoCompletionViewHC;
 @property (nonatomic, strong) NSLayoutConstraint *keyboardHC;
-
-// The keyboard commands available for external keyboards
-@property (nonatomic, strong) NSArray *keyboardCommands;
 
 // YES if the user is moving the keyboard with a gesture
 @property (nonatomic, assign, getter = isMovingKeyboard) BOOL movingKeyboard;
@@ -389,7 +386,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGFloat viewHeight = CGRectGetHeight(self.view.bounds);
     CGFloat keyboardMinY = CGRectGetMinY(keyboardRect);
     
-    return MAX(0.0, viewHeight - keyboardMinY);
+    CGFloat keyboardHeight = MAX(0.0, viewHeight - keyboardMinY);
+//    CGFloat keyboardHeight = MAX(0.0, viewHeight - (keyboardMinY + inputAccessoryViewHeight));
+
+    return keyboardHeight;
 }
 
 - (CGFloat)slk_appropriateScrollViewHeight
@@ -792,7 +792,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [alert addButtonWithTitle:NSLocalizedString(@"Undo", nil)];
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     [alert setCancelButtonIndex:1];
-    [alert setTag:SLKAlertViewClearTextTag];
+    [alert setTag:kSLKAlertViewClearTextTag];
     [alert setDelegate:self];
     [alert show];
 }
@@ -863,7 +863,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGPoint gestureLocation = [gesture locationInView:self.view];
     CGPoint gestureVelocity = [gesture velocityInView:self.view];
     
-    CGFloat keyboardMaxY = CGRectGetHeight([UIScreen mainScreen].bounds);
+    CGFloat keyboardMaxY = CGRectGetHeight(SLKKeyWindowBounds());
     CGFloat keyboardMinY = keyboardMaxY - CGRectGetHeight(keyboardView.frame);
     
 
@@ -1167,7 +1167,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGRect screenBounds = [UIScreen mainScreen].bounds;
     
     // Convert the main screen bounds into the correct coordinate space but ignore the origin.
-    CGRect viewBounds = [self.view convertRect:screenBounds fromView:nil];
+    CGRect viewBounds = [self.view convertRect:SLKKeyWindowBounds() fromView:nil];
     viewBounds = CGRectMake(0, 0, viewBounds.size.width, viewBounds.size.height);
     
     // We want these rects in the correct coordinate space as well.
@@ -1230,8 +1230,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
 }
 
-- (void)slk_prepareForInterfaceRotation
+- (void)slk_prepareForInterfaceRotationWithDuration:(NSTimeInterval)duration
 {
+    self.rotating = YES;
+    
     [self.view layoutIfNeeded];
     
     if ([self.textView isFirstResponder]) {
@@ -1240,6 +1242,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     else {
         [self.textView slk_scrollToBottomAnimated:NO];
     }
+    
+    // Disables the flag after the rotation animation is finished
+    // Hacky but works.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.rotating = NO;
+    });
 }
 
 
@@ -1249,10 +1257,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 {
     if (self.textInputbar.isEditing) {
         [self didCommitTextEditing:sender];
-        return;
     }
-    
-    [self slk_performRightAction];
+    else {
+        [self slk_performRightAction];
+    }
 }
 
 - (void)didPressEscapeKey:(id)sender
@@ -1861,12 +1869,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
 }
 
-- (void)textViewDidChange:(UITextView *)textView
+- (void)textViewDidChange:(SLKTextView *)textView
 {
     // Keep to avoid unnecessary crashes. Was meant to be overriden in subclass while calling super.
 }
 
-- (void)textViewDidChangeSelection:(UITextView *)textView
+- (void)textViewDidChangeSelection:(SLKTextView *)textView
 {
     // Keep to avoid unnecessary crashes. Was meant to be overriden in subclass while calling super.
 }
@@ -1950,7 +1958,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag == SLKAlertViewClearTextTag && self.shakeToClearEnabled && buttonIndex != [alertView cancelButtonIndex] ) {
+    if (alertView.tag == kSLKAlertViewClearTextTag && self.shakeToClearEnabled && buttonIndex != [alertView cancelButtonIndex] ) {
         // Clears the text but doesn't clear the undo manager
         [self.textView slk_clearText:NO];
     }
@@ -1992,22 +2000,74 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (NSArray *)keyCommands
 {
-    if (_keyboardCommands) {
-        return _keyboardCommands;
+    NSMutableArray *keyboardCommands = [NSMutableArray new];
+    
+    [keyboardCommands addObject:[self slk_returnKeyCommand]];
+    [keyboardCommands addObject:[self slk_escKeyCommand]];
+    [keyboardCommands addObject:[self slk_arrowKeyCommand:UIKeyInputUpArrow]];
+    [keyboardCommands addObject:[self slk_arrowKeyCommand:UIKeyInputDownArrow]];
+
+    return keyboardCommands;
+}
+
+- (UIKeyCommand *)slk_returnKeyCommand
+{
+    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:0 action:@selector(didPressReturnKey:)];
+    
+#ifdef __IPHONE_9_0
+    // Only available since iOS9
+    if ([UIKeyCommand respondsToSelector:@selector(keyCommandWithInput:modifierFlags:action:discoverabilityTitle:)] ) {
+        if (self.textInputbar.isEditing) {
+            command.discoverabilityTitle = [self.textInputbar.editorRightButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Commit Editing", nil);
+        }
+        else {
+            command.discoverabilityTitle = [self.rightButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Send", nil);
+        }
     }
+#endif
     
-    _keyboardCommands = @[
-          // Pressing Return key
-          [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:0 action:@selector(didPressReturnKey:)],
-          // Pressing Esc key
-          [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(didPressEscapeKey:)],
-          
-          // Arrow keys
-          [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(didPressArrowKey:)],
-          [UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(didPressArrowKey:)],
-          ];
+    return command;
+}
+
+- (UIKeyCommand *)slk_escKeyCommand
+{
+    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(didPressEscapeKey:)];
     
-    return _keyboardCommands;
+#ifdef __IPHONE_9_0
+    // Only available since iOS9
+    if ([UIKeyCommand respondsToSelector:@selector(keyCommandWithInput:modifierFlags:action:discoverabilityTitle:)] ) {
+        if (self.isAutoCompleting) {
+            command.discoverabilityTitle = NSLocalizedString(@"Exit Auto-Completion", nil);
+        }
+        else if (self.textInputbar.isEditing) {
+            command.discoverabilityTitle = [self.textInputbar.editorRightButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Exit Editing", nil);
+        }
+        else if (!self.isExternalKeyboardDetected && self.keyboardHC.constant != 0) {
+            command.discoverabilityTitle = NSLocalizedString(@"Hide Keyboard", nil);
+        }
+    }
+#endif
+    
+    return command;
+}
+
+- (UIKeyCommand *)slk_arrowKeyCommand:(NSString *)inputUpArrow
+{
+    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:inputUpArrow modifierFlags:0 action:@selector(didPressArrowKey:)];
+
+#ifdef __IPHONE_9_0
+    // Only available since iOS9
+    if ([UIKeyCommand respondsToSelector:@selector(keyCommandWithInput:modifierFlags:action:discoverabilityTitle:)] && self.textView.numberOfLines > 1) {
+        if ([inputUpArrow isEqualToString:UIKeyInputUpArrow]) {
+            command.discoverabilityTitle = NSLocalizedString(@"Move Up", nil);
+        }
+        if ([inputUpArrow isEqualToString:UIKeyInputDownArrow]) {
+            command.discoverabilityTitle = NSLocalizedString(@"Move Down", nil);
+        }
+    }
+#endif
+
+    return command;
 }
 
 
@@ -2077,22 +2137,21 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 #pragma mark - View Auto-Rotation
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [self slk_prepareForInterfaceRotationWithDuration:coordinator.transitionDuration];
+}
+
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    self.rotating = YES;
-    
-    [self slk_prepareForInterfaceRotation];
+    if ([self respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)]) {
+        return;
+    }
+
+    [self slk_prepareForInterfaceRotationWithDuration:duration];
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    // Delays the rotation flag
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        self.rotating = NO;
-    });
-}
-
-- (NSUInteger)supportedInterfaceOrientations
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskAll;
 }
@@ -2135,8 +2194,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     _typingIndicatorViewClass = nil;
     
     _registeredPrefixes = nil;
-    _keyboardCommands = nil;
-    
     _singleTapGesture.delegate = nil;
     _singleTapGesture = nil;
     _verticalPanGesture.delegate = nil;
