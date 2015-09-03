@@ -375,8 +375,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return 0.0;
     }
     
-    CGRect rect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    return [self slk_appropriateKeyboardHeightFromRect:rect];
+    CGRect keyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
+    return [self slk_appropriateKeyboardHeightFromRect:keyboardRect];
 }
 
 - (CGFloat)slk_appropriateKeyboardHeightFromRect:(CGRect)rect
@@ -387,22 +388,21 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGFloat keyboardMinY = CGRectGetMinY(keyboardRect);
     
     CGFloat keyboardHeight = MAX(0.0, viewHeight - keyboardMinY);
-//    CGFloat keyboardHeight = MAX(0.0, viewHeight - (keyboardMinY + inputAccessoryViewHeight));
-
+    
     return keyboardHeight;
 }
 
 - (CGFloat)slk_appropriateScrollViewHeight
 {
-    CGFloat height = CGRectGetHeight(self.view.bounds);
+    CGFloat scrollViewHeight = CGRectGetHeight(self.view.bounds);
     
-    height -= self.keyboardHC.constant;
-    height -= self.textInputbarHC.constant;
-    height -= self.autoCompletionViewHC.constant;
-    height -= self.typingIndicatorViewHC.constant;
+    scrollViewHeight -= self.keyboardHC.constant;
+    scrollViewHeight -= self.textInputbarHC.constant;
+    scrollViewHeight -= self.autoCompletionViewHC.constant;
+    scrollViewHeight -= self.typingIndicatorViewHC.constant;
     
-    if (height < 0) return 0;
-    else return roundf(height);
+    if (scrollViewHeight < 0) return 0;
+    else return scrollViewHeight;
 }
 
 - (CGFloat)slk_topBarsHeight
@@ -412,20 +412,20 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return 0.0;
     }
     
-    CGFloat height = CGRectGetHeight(self.navigationController.navigationBar.frame);
+    CGFloat topBarsHeight = CGRectGetHeight(self.navigationController.navigationBar.frame);
     
     if (SLK_IS_IPHONE && SLK_IS_LANDSCAPE && SLK_IS_IOS8_AND_HIGHER) {
-        return height;
+        return topBarsHeight;
     }
     if (SLK_IS_IPAD && self.modalPresentationStyle == UIModalPresentationFormSheet) {
-        return height;
+        return topBarsHeight;
     }
     if (self.isPresentedInPopover) {
-        return height;
+        return topBarsHeight;
     }
     
-    height += CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
-    return height;
+    topBarsHeight += CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
+    return topBarsHeight;
 }
 
 - (NSString *)slk_appropriateKeyboardNotificationName:(NSNotification *)notification
