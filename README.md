@@ -22,28 +22,32 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 - Flexible UI built with Auto Layout
 - Customizable: provides left and right button, and toolbar outlets
 - Tap Gesture for dismissing the keyboard
-- [Panning Gesture](https://github.com/slackhq/SlackTextViewController#panning-gesture) for sliding down the keyboard
 - [External keyboard](https://github.com/slackhq/SlackTextViewController#external-keyboard) commands support
 - Undo/Redo (with keyboard commands and UIMenuController)
 - Text Appending APIs
 
-### Optional
+### Additional
 - [Autocomplete Mode](https://github.com/slackhq/SlackTextViewController#autocompletion) by registering any prefix key (`@`, `#`, `/`)
 - [Edit Mode](https://github.com/slackhq/SlackTextViewController#edit-mode)
 - [Typing Indicator](https://github.com/slackhq/SlackTextViewController#typing-indicator) display
 - [Shake Gesture](https://github.com/slackhq/SlackTextViewController#shake-gesture) for clearing text view
 - Multimedia Pasting (png, gif, mov, etc.)
 - [Inverted Mode](https://github.com/slackhq/SlackTextViewController#inverted-mode) for displaying cells upside-down (using CATransform) -- a necessary hack for some messaging apps. `YES` by default, so beware, your entire cells might be flipped!
+- Tap Gesture for dismissing the keyboard
+- [Panning Gesture](https://github.com/slackhq/SlackTextViewController#panning-gesture) for sliding down/up the keyboard
+- [Dynamic Type](https://github.com/slackhq/SlackTextViewController#dynamic-type) for adjusting automatically the text input bar height based on the font size.
 - Bouncy Animations
 
 ### Compatibility
+- Carthage & Cocoapods
 - Swift: [A sample project is available in a different branch] (https://github.com/slackhq/SlackTextViewController/tree/swift-example)
-- iOS 7 & 8
+- iOS 7, 8 & 9
 - iPhone & iPad
 - [Storyboard](https://github.com/slackhq/SlackTextViewController#storyboard)
 - UIPopOverController & UITabBarController
 - Container View Controller
 - Auto-Rotation
+- iPad Multitasking (iOS 9 only)
 - Localization
 
 ## Installation
@@ -241,7 +245,7 @@ You can also dismiss it by calling `[self.typingIndicatorView dismissIndicator];
 
 ###Panning Gesture
 
-Dismissing the keyboard with a panning gesture is enabled by default with the `keyboardPanningEnabled` property. You can always disable it if you'd like.
+Dismissing the keyboard with a panning gesture is enabled by default with the `keyboardPanningEnabled` property. You can always disable it if you'd like. You can extend the `verticalPanGesture` behaviors with the `UIGestureRecognizerDelegate` methods.
 
 ###Shake Gesture
 
@@ -299,6 +303,13 @@ or the `UICollectionView` version:
     return [UICollectionViewFlowLayout new];
 }
 ```
+
+
+###Dynamic Type
+
+Dynamic Type is enabled by default with the `keyboardPanningEnabled` property. You can always disable it if you'd like.
+
+![Dynamic-Type](Screenshots/screenshot_dynamic-type.png)
 
 
 ##Sample Project
