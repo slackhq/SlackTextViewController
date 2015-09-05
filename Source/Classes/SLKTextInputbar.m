@@ -346,15 +346,22 @@
 
 - (CGFloat)slk_appropriateRightButtonWidth
 {
-    NSString *title = [self.rightButton titleForState:UIControlStateNormal];
-    CGSize rigthButtonSize = [title sizeWithAttributes:@{NSFontAttributeName: self.rightButton.titleLabel.font}];
-    
     if (self.autoHideRightButton) {
         if (self.textView.text.length == 0) {
             return 0.0;
         }
     }
-    return rigthButtonSize.width+self.contentInset.right;
+
+    NSString *title = [self.rightButton titleForState:UIControlStateNormal];
+
+    CGSize rightButtonSize;
+    if ([title length] == 0 && self.rightButton.imageView.image) {
+        rightButtonSize = self.rightButton.imageView.image.size;
+    } else {
+        rightButtonSize = [title sizeWithAttributes:@{NSFontAttributeName: self.rightButton.titleLabel.font}];
+    }
+
+    return rightButtonSize.width+self.contentInset.right;
 }
 
 - (CGFloat)slk_appropriateRightButtonMargin
