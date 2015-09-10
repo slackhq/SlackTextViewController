@@ -29,8 +29,6 @@
     self.pastableMediaTypes = SLKPastableMediaTypeAll;
     
     self.layer.borderColor = [UIColor colorWithRed:217.0/255.0 green:217.0/255.0 blue:217.0/255.0 alpha:1.0].CGColor;
-    self.layer.shouldRasterize = YES;
-    self.layer.rasterizationScale = [UIScreen mainScreen].scale;
 }
 
 @end

@@ -123,11 +123,6 @@
     return _attachmentView;
 }
 
-- (BOOL)needsPlaceholder
-{
-    return self.thumbnailView.image ? NO : YES;
-}
-
 + (CGFloat)defaultFontSize
 {
     CGFloat pointSize = 16.0;

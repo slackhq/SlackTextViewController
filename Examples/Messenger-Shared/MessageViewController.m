@@ -465,26 +465,10 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     if (message.attachment) {
         cell.attachmentView.image = message.attachment;
-        cell.attachmentView.layer.shouldRasterize = YES;
-        cell.attachmentView.layer.rasterizationScale = [UIScreen mainScreen].scale;
     }
     
     cell.indexPath = indexPath;
     cell.usedForMessage = YES;
-    
-    if (cell.needsPlaceholder)
-    {
-        CGFloat scale = [UIScreen mainScreen].scale;
-        CGSize imgSize = CGSizeMake(kMessageTableViewCellAvatarHeight*scale, kMessageTableViewCellAvatarHeight*scale);
-        
-        [LoremIpsum asyncPlaceholderImageWithSize:imgSize
-                                       completion:^(UIImage *image) {
-                                           UIImage *thumbnail = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
-                                           cell.thumbnailView.image = thumbnail;
-                                           cell.thumbnailView.layer.shouldRasterize = YES;
-                                           cell.thumbnailView.layer.rasterizationScale = [UIScreen mainScreen].scale;
-                                       }];
-    }
     
     // Cells must inherit the table view's transform
     // This is very important, since the main table view may be inverted

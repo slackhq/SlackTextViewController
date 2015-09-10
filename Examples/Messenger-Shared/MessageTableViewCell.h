@@ -20,7 +20,6 @@ static CGFloat kMessageTableViewCellAvatarHeight = 30.0;
 
 @property (nonatomic, strong) NSIndexPath *indexPath;
 
-@property (nonatomic, readonly) BOOL needsPlaceholder;
 @property (nonatomic) BOOL usedForMessage;
 
 + (CGFloat)defaultFontSize;
