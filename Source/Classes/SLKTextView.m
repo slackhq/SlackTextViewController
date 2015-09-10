@@ -396,6 +396,15 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 #pragma mark - UITextView Overrides
 
+- (void)layoutIfNeeded
+{
+    if (!self.window) {
+        return;
+    }
+    
+    [super layoutIfNeeded];
+}
+
 - (NSArray *)gestureRecognizers
 {
     NSArray *gestureRecognizers = [super gestureRecognizers];
