@@ -766,8 +766,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 {
     CGFloat maxiumumHeight = SLKAutoCompletionViewDefaultHeight;
     
-    if (!self.isAutoCompleting) {
-        CGFloat scrollViewHeight = self.scrollViewHC.constant - [self slk_topBarsHeight];
+    if (self.isAutoCompleting) {
+        CGFloat scrollViewHeight = self.scrollViewHC.constant;
+        scrollViewHeight -= [self slk_topBarsHeight];
         
         if (scrollViewHeight < maxiumumHeight) {
             maxiumumHeight = scrollViewHeight;
