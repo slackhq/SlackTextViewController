@@ -191,25 +191,24 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     }
 }
 
-- (void)cellDidLongPress:(UIGestureRecognizer *)gesture
+- (void)didLongPressCell:(UIGestureRecognizer *)gesture
 {
-    if ([UIAlertController class]) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        alertController.modalPresentationStyle = UIModalPresentationPopover;
-        alertController.popoverPresentationController.sourceView = gesture.view.superview;
-        alertController.popoverPresentationController.sourceRect = gesture.view.frame;
-        
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Edit Message" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self editCellMessage:gesture];
-        }]];
-        
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:NULL]];
-        
-        [self.navigationController presentViewController:alertController animated:YES completion:nil];
-    }
-    else {
+#ifdef __IPHONE_9_0
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    alertController.modalPresentationStyle = UIModalPresentationPopover;
+    alertController.popoverPresentationController.sourceView = gesture.view.superview;
+    alertController.popoverPresentationController.sourceRect = gesture.view.frame;
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Edit Message" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self editCellMessage:gesture];
-    }
+    }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:NULL]];
+    
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
+#else
+    [self editCellMessage:gesture];
+#endif
 }
 
 - (void)editCellMessage:(UIGestureRecognizer *)gesture
@@ -457,7 +456,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     MessageTableViewCell *cell = (MessageTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:MessengerCellIdentifier];
     
     if (!cell.textLabel.text) {
-        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(cellDidLongPress:)];
+        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPressCell:)];
         [cell addGestureRecognizer:longPress];
     }
     
