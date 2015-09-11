@@ -48,7 +48,7 @@
 		71BE102F1A72F42F0083EE32 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F86BF8E19F01234007A3D4A /* Images.xcassets */; };
 		71BE10301A76C4890083EE32 /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */; };
 		8C6D809F3C95C912F87F0D17 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
-		F5DE01401B9679C4005E9082 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F86BF7619F011D0007A3D4A /* LaunchScreen.xib */; settings = {ASSET_TAGS = (); }; };
+		F5DE01401B9679C4005E9082 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F86BF7619F011D0007A3D4A /* LaunchScreen.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -420,6 +420,9 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Slack Technologies, Inc.";
 				TargetAttributes = {
+					4F3EDB48199ED00F004C15D6 = {
+						DevelopmentTeam = BQR82RBBHL;
+					};
 					4F86BF6419F011D0007A3D4A = {
 						CreatedOnToolsVersion = 6.0.1;
 					};

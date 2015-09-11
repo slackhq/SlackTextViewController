@@ -396,6 +396,15 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 #pragma mark - UITextView Overrides
 
+- (void)layoutIfNeeded
+{
+    if (!self.window) {
+        return;
+    }
+    
+    [super layoutIfNeeded];
+}
+
 - (NSArray *)gestureRecognizers
 {
     NSArray *gestureRecognizers = [super gestureRecognizers];
@@ -442,6 +451,8 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     [self slk_prepareForUndo:@"Attributed Text Set"];
     
     [super setAttributedText:attributedText];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:self];
 }
 
 - (void)setFont:(UIFont *)font

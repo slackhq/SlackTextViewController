@@ -110,8 +110,6 @@
                                        (id)[UIColor colorWithWhite:1.0 alpha:1.0].CGColor];
         
         _backgroundGradient.locations = @[@0, @0.5, @1];
-        _backgroundGradient.rasterizationScale = [UIScreen mainScreen].scale;
-        _backgroundGradient.shouldRasterize = YES;
     }
     return _backgroundGradient;
 }

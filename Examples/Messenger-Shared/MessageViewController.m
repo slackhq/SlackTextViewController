@@ -191,6 +191,26 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     }
 }
 
+- (void)didLongPressCell:(UIGestureRecognizer *)gesture
+{
+#ifdef __IPHONE_8_0
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    alertController.modalPresentationStyle = UIModalPresentationPopover;
+    alertController.popoverPresentationController.sourceView = gesture.view.superview;
+    alertController.popoverPresentationController.sourceRect = gesture.view.frame;
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Edit Message" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self editCellMessage:gesture];
+    }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:NULL]];
+    
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
+#else
+    [self editCellMessage:gesture];
+#endif
+}
+
 - (void)editCellMessage:(UIGestureRecognizer *)gesture
 {
     MessageTableViewCell *cell = (MessageTableViewCell *)gesture.view;
@@ -313,31 +333,13 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)didPasteMediaContent:(NSDictionary *)userInfo
 {
     // Notifies the view controller when the user has pasted a media (image, video, etc) inside of the text view.
-    
+    [super didPasteMediaContent:userInfo];
+
     SLKPastableMediaType mediaType = [userInfo[SLKTextViewPastedItemMediaType] integerValue];
     NSString *contentType = userInfo[SLKTextViewPastedItemContentType];
-    NSData *contentData = userInfo[SLKTextViewPastedItemData];
+    id data = userInfo[SLKTextViewPastedItemData];
     
-    NSLog(@"%s : %@",__FUNCTION__, contentType);
-    
-    if ((mediaType & SLKPastableMediaTypePNG) || (mediaType & SLKPastableMediaTypeJPEG)) {
-        
-        Message *message = [Message new];
-        message.username = [LoremIpsum name];
-        message.text = @"Attachment";
-        message.attachment = [UIImage imageWithData:contentData scale:[UIScreen mainScreen].scale];
-        
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
-        UITableViewScrollPosition scrollPosition = self.inverted ? UITableViewScrollPositionBottom : UITableViewScrollPositionTop;
-        
-        [self.tableView beginUpdates];
-        [self.messages insertObject:message atIndex:0];
-        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
-        [self.tableView endUpdates];
-        
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
-    }
+    NSLog(@"%s : %@ (type = %ld) | data : %@",__FUNCTION__, contentType, (unsigned long)mediaType, data);
 }
 
 - (void)willRequestUndo
@@ -454,7 +456,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     MessageTableViewCell *cell = (MessageTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:MessengerCellIdentifier];
     
     if (!cell.textLabel.text) {
-        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(editCellMessage:)];
+        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPressCell:)];
         [cell addGestureRecognizer:longPress];
     }
     
@@ -463,28 +465,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     cell.titleLabel.text = message.username;
     cell.bodyLabel.text = message.text;
     
-    if (message.attachment) {
-        cell.attachmentView.image = message.attachment;
-        cell.attachmentView.layer.shouldRasterize = YES;
-        cell.attachmentView.layer.rasterizationScale = [UIScreen mainScreen].scale;
-    }
-    
     cell.indexPath = indexPath;
     cell.usedForMessage = YES;
-    
-    if (cell.needsPlaceholder)
-    {
-        CGFloat scale = [UIScreen mainScreen].scale;
-        CGSize imgSize = CGSizeMake(kMessageTableViewCellAvatarHeight*scale, kMessageTableViewCellAvatarHeight*scale);
-        
-        [LoremIpsum asyncPlaceholderImageWithSize:imgSize
-                                       completion:^(UIImage *image) {
-                                           UIImage *thumbnail = [UIImage imageWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
-                                           cell.thumbnailView.image = thumbnail;
-                                           cell.thumbnailView.layer.shouldRasterize = YES;
-                                           cell.thumbnailView.layer.rasterizationScale = [UIScreen mainScreen].scale;
-                                       }];
-    }
     
     // Cells must inherit the table view's transform
     // This is very important, since the main table view may be inverted
@@ -541,9 +523,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         CGFloat height = CGRectGetHeight(titleBounds);
         height += CGRectGetHeight(bodyBounds);
         height += 40.0;
-        if (message.attachment) {
-            height += 80.0 + 10.0;
-        }
         
         if (height < kMessageTableViewCellMinimumHeight) {
             height = kMessageTableViewCellMinimumHeight;

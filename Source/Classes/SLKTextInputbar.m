@@ -101,7 +101,7 @@
 
 - (void)layoutIfNeeded
 {
-    if (self.constraints.count == 0) {
+    if (self.constraints.count == 0 || !self.window) {
         return;
     }
     
@@ -274,22 +274,6 @@
     return _charCountLabel;
 }
 
-- (BOOL)isViewVisible
-{
-    SEL selector = NSSelectorFromString(@"isViewVisible");
-    
-    if ([self.controller respondsToSelector:selector]) {
-        
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        BOOL visible = (BOOL)[self.controller performSelector:selector];
-#pragma clang diagnostic pop
-        
-        return visible;
-    }
-    return NO;
-}
-
 - (CGFloat)minimumInputbarHeight
 {
     CGFloat minimumTextViewHeight = self.textView.intrinsicContentSize.height;
@@ -329,7 +313,7 @@
     CGFloat height = self.textView.intrinsicContentSize.height;
     height -= self.textView.font.lineHeight;
     height += roundf(self.textView.font.lineHeight*numberOfLines);
-    height += self.contentInset.top+self.contentInset.bottom;
+    height += self.contentInset.top + self.contentInset.bottom;
     
     return height;
 }
@@ -355,13 +339,15 @@
     NSString *title = [self.rightButton titleForState:UIControlStateNormal];
 
     CGSize rightButtonSize;
+    
     if ([title length] == 0 && self.rightButton.imageView.image) {
         rightButtonSize = self.rightButton.imageView.image.size;
-    } else {
+    }
+    else {
         rightButtonSize = [title sizeWithAttributes:@{NSFontAttributeName: self.rightButton.titleLabel.font}];
     }
 
-    return rightButtonSize.width+self.contentInset.right;
+    return rightButtonSize.width + self.contentInset.right;
 }
 
 - (CGFloat)slk_appropriateRightButtonMargin
@@ -405,6 +391,7 @@
     _autoHideRightButton = hide;
     
     self.rightButtonWC.constant = [self slk_appropriateRightButtonWidth];
+    
     [self layoutIfNeeded];
 }
 
@@ -507,6 +494,7 @@
     }
     
     self.editing = NO;
+    
     [self slk_updateConstraintConstants];
 }
 
@@ -570,7 +558,7 @@
         
         BOOL bounces = self.controller.bounces && [self.textView isFirstResponder];
         
-        if ([self isViewVisible]) {
+        if (self.window) {
             [self slk_animateLayoutIfNeededWithBounce:bounces
                                               options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState
                                            animations:NULL];
@@ -737,6 +725,7 @@
     _leftButton = nil;
     _rightButton = nil;
     
+    _inputAccessoryView = nil;
     _textView.delegate = nil;
     _textView = nil;
     

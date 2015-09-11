@@ -27,7 +27,7 @@
 
 - (void)slk_animateLayoutIfNeededWithBounce:(BOOL)bounce options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
-    NSTimeInterval duration = bounce ? 0.5 : 0.2;
+    NSTimeInterval duration = bounce ? 0.65 : 0.2;
     [self slk_animateLayoutIfNeededWithDuration:duration bounce:bounce options:options animations:animations completion:completion];
 }
 

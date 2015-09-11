@@ -11,7 +11,7 @@
 
 @implementation MessageTableViewCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
@@ -28,12 +28,10 @@
     [self.contentView addSubview:self.thumbnailView];
     [self.contentView addSubview:self.titleLabel];
     [self.contentView addSubview:self.bodyLabel];
-    [self.contentView addSubview:self.attachmentView];
 
     NSDictionary *views = @{@"thumbnailView": self.thumbnailView,
                             @"titleLabel": self.titleLabel,
                             @"bodyLabel": self.bodyLabel,
-                            @"attachmentView": self.attachmentView,
                             };
     
     NSDictionary *metrics = @{@"tumbSize": @(kMessageTableViewCellAvatarHeight),
@@ -45,10 +43,8 @@
     
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-left-[thumbnailView(tumbSize)]-right-[titleLabel(>=0)]-right-|" options:0 metrics:metrics views:views]];
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-left-[thumbnailView(tumbSize)]-right-[bodyLabel(>=0)]-right-|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-left-[thumbnailView(tumbSize)]-right-[attachmentView]-right-|" options:0 metrics:metrics views:views]];
-
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-right-[titleLabel(>=0@999)]-left-[bodyLabel(>=0@999)]-left-|" options:0 metrics:metrics views:views]];
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-right-[thumbnailView(tumbSize)]-(>=0)-|" options:0 metrics:metrics views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-right-[titleLabel]-left-[bodyLabel(>=0)]-left-[attachmentView(>=0,<=attchSize)]-right-|" options:0 metrics:metrics views:views]];
 }
 
 - (void)prepareForReuse
@@ -61,7 +57,10 @@
     
     self.titleLabel.font = [UIFont boldSystemFontOfSize:pointSize];
     self.bodyLabel.font = [UIFont systemFontOfSize:pointSize];
-    self.attachmentView.image = nil;
+    
+    self.titleLabel.text = @"";
+    self.bodyLabel.text = @"";
+
 }
 
 #pragma mark - Getters
@@ -106,26 +105,6 @@
         _thumbnailView.layer.masksToBounds = YES;
     }
     return _thumbnailView;
-}
-
-- (UIImageView *)attachmentView
-{
-    if (!_attachmentView) {
-        _attachmentView = [UIImageView new];
-        _attachmentView.translatesAutoresizingMaskIntoConstraints = NO;
-        _attachmentView.userInteractionEnabled = NO;
-        _attachmentView.backgroundColor = [UIColor clearColor];
-        _attachmentView.contentMode = UIViewContentModeCenter;
-        
-        _attachmentView.layer.cornerRadius = kMessageTableViewCellAvatarHeight/4.0;
-        _attachmentView.layer.masksToBounds = YES;
-    }
-    return _attachmentView;
-}
-
-- (BOOL)needsPlaceholder
-{
-    return self.thumbnailView.image ? NO : YES;
 }
 
 + (CGFloat)defaultFontSize
