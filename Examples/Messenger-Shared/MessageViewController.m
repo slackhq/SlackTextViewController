@@ -334,31 +334,13 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)didPasteMediaContent:(NSDictionary *)userInfo
 {
     // Notifies the view controller when the user has pasted a media (image, video, etc) inside of the text view.
-    
+    [super didPasteMediaContent:userInfo];
+
     SLKPastableMediaType mediaType = [userInfo[SLKTextViewPastedItemMediaType] integerValue];
     NSString *contentType = userInfo[SLKTextViewPastedItemContentType];
-    NSData *contentData = userInfo[SLKTextViewPastedItemData];
+    id data = userInfo[SLKTextViewPastedItemData];
     
-    NSLog(@"%s : %@",__FUNCTION__, contentType);
-    
-    if ((mediaType & SLKPastableMediaTypePNG) || (mediaType & SLKPastableMediaTypeJPEG)) {
-        
-        Message *message = [Message new];
-        message.username = [LoremIpsum name];
-        message.text = @"Attachment";
-        message.attachment = [UIImage imageWithData:contentData scale:[UIScreen mainScreen].scale];
-        
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
-        UITableViewScrollPosition scrollPosition = self.inverted ? UITableViewScrollPositionBottom : UITableViewScrollPositionTop;
-        
-        [self.tableView beginUpdates];
-        [self.messages insertObject:message atIndex:0];
-        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
-        [self.tableView endUpdates];
-        
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
-    }
+    NSLog(@"%s : %@ (type = %ld) | data : %@",__FUNCTION__, contentType, mediaType, data);
 }
 
 - (void)willRequestUndo
@@ -484,10 +466,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     cell.titleLabel.text = message.username;
     cell.bodyLabel.text = message.text;
     
-    if (message.attachment) {
-        cell.attachmentView.image = message.attachment;
-    }
-    
     cell.indexPath = indexPath;
     cell.usedForMessage = YES;
     
@@ -546,9 +524,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         CGFloat height = CGRectGetHeight(titleBounds);
         height += CGRectGetHeight(bodyBounds);
         height += 40.0;
-        if (message.attachment) {
-            height += 80.0 + 10.0;
-        }
         
         if (height < kMessageTableViewCellMinimumHeight) {
             height = kMessageTableViewCellMinimumHeight;
