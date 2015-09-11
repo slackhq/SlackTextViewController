@@ -61,8 +61,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 // YES if the view controller did appear and everything is finished configurating. This allows blocking some layout animations among other things.
 @property (nonatomic, getter=isViewVisible) BOOL viewVisible;
 
-// The setter of isExternalKeyboardDetected, for private use.
-@property (nonatomic, getter = isRotating) BOOL rotating;
+// YES if the view controller's view's size is changing by its parent (i.e. when its window rotates or is resized)
+@property (nonatomic, getter = isTransitioning) BOOL transitioning;
 
 // Optional classes to be used instead of the default ones.
 @property (nonatomic, strong) Class textViewClass;
@@ -1049,7 +1049,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)slk_postKeyboarStatusNotification:(NSNotification *)notification
 {
-    if ([self ignoreTextInputbarAdjustment] || self.isRotating) {
+    if ([self ignoreTextInputbarAdjustment] || self.isTransitioning) {
         return;
     }
     
@@ -1216,9 +1216,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
 }
 
-- (void)slk_prepareForInterfaceRotationWithDuration:(NSTimeInterval)duration
+- (void)slk_prepareForInterfaceTransitionWithDuration:(NSTimeInterval)duration
 {
-    self.rotating = YES;
+    self.transitioning = YES;
     
     [self.view layoutIfNeeded];
     
@@ -1232,7 +1232,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // Disables the flag after the rotation animation is finished
     // Hacky but works.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        self.rotating = NO;
+        self.transitioning = NO;
     });
 }
 
@@ -1533,7 +1533,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)slk_processTextForAutoCompletion
 {
-    if (self.isRotating) {
+    if (self.isTransitioning) {
         return;
     }
     
@@ -1659,8 +1659,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)slk_showAutoCompletionView:(BOOL)show
 {
-    // Skips if rotating
-    if (self.isRotating) {
+    // Skips if transitioning
+    if (self.isTransitioning) {
         return;
     }
     
@@ -2123,9 +2123,16 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 #pragma mark - View Auto-Rotation
 
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+}
+
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [self slk_prepareForInterfaceRotationWithDuration:coordinator.transitionDuration];
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+
+    [self slk_prepareForInterfaceTransitionWithDuration:coordinator.transitionDuration];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -2134,7 +2141,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
 
-    [self slk_prepareForInterfaceRotationWithDuration:duration];
+    [self slk_prepareForInterfaceTransitionWithDuration:duration];
 }
 
 #ifdef __IPHONE_9_0
