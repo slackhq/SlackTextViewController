@@ -725,6 +725,7 @@
     _leftButton = nil;
     _rightButton = nil;
     
+    _inputAccessoryView = nil;
     _textView.delegate = nil;
     _textView = nil;
     

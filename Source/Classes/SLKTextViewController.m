@@ -637,9 +637,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         }
     }
     
-    // Only updates the input view if the number of line changed
-    [self slk_reloadInputAccessoryViewIfNeeded];
-    
     // Toggles auto-correction if requiered
     [self slk_enableTypingSuggestionIfNeeded];
 }
@@ -1199,19 +1196,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
 }
 
-- (void)slk_reloadInputAccessoryViewIfNeeded
-{
-    // Reload only if the input views if the text view is first responder.
-    if (!self.isKeyboardPanningEnabled || ![self.textView isFirstResponder]) {
-        
-        // Disables the input accessory when not first responder so when showing the keyboard back, there is no delay in the animation.
-        if (self.textInputbar.inputAccessoryView) {
-            self.textView.inputAccessoryView = nil;
-            [self.textView refreshInputViews];
-        }
-    }
-}
-
 - (void)slk_adjustContentConfigurationIfNeeded
 {
     // When inverted, we need to substract the top bars height (generally status bar + navigation bar's) to align the top of the
@@ -1385,7 +1369,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     // Updates the dismiss mode and input accessory view, if needed.
-    [self slk_reloadInputAccessoryViewIfNeeded];
+//    [self slk_reloadInputAccessoryViewIfNeeded];
     
     // Very important to invalidate this flag after the keyboard is dismissed or presented, to start with a clean state next time.
     self.movingKeyboard = NO;
@@ -1404,7 +1388,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_willChangeTextViewText:(NSNotification *)notification
 {
     // Skips this it's not the expected textView.
-    if (![notification.object isEqual:self.textView]) {
+    if (![notification.object isEqual:self.textView] || !self.textView.window) {
         return;
     }
     
@@ -1414,7 +1398,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_didChangeTextViewText:(NSNotification *)notification
 {
     // Skips this it's not the expected textView.
-    if (![notification.object isEqual:self.textView]) {
+    if (![notification.object isEqual:self.textView] || !self.textView.window) {
         return;
     }
     
@@ -1430,7 +1414,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_didChangeTextViewContentSize:(NSNotification *)notification
 {
     // Skips this it's not the expected textView.
-    if (![notification.object isEqual:self.textView]) {
+    if (![notification.object isEqual:self.textView] || !self.textView.window) {
         return;
     }
     
@@ -1441,7 +1425,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_didChangeTextViewSelectedRange:(NSNotification *)notification
 {
     // Skips this it's not the expected textView.
-    if (![notification.object isEqual:self.textView]) {
+    if (![notification.object isEqual:self.textView] || !self.textView.window) {
         return;
     }
     
