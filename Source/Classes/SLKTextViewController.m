@@ -19,7 +19,7 @@
 #import "UIResponder+SLKAdditions.h"
 
 /** Feature flagged while waiting to implement a more reliable technique. */
-#define SLKBottomPanningEnabled NO
+#define SLKBottomPanningEnabled 0
 
 NSString * const SLKKeyboardWillShowNotification =  @"SLKKeyboardWillShowNotification";
 NSString * const SLKKeyboardDidShowNotification =   @"SLKKeyboardDidShowNotification";
