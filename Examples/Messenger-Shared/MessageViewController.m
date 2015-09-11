@@ -195,6 +195,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     if ([UIAlertController class]) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        alertController.modalPresentationStyle = UIModalPresentationPopover;
+        alertController.popoverPresentationController.sourceView = gesture.view.superview;
+        alertController.popoverPresentationController.sourceRect = gesture.view.frame;
         
         [alertController addAction:[UIAlertAction actionWithTitle:@"Edit Message" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [self editCellMessage:gesture];
