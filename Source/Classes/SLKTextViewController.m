@@ -283,6 +283,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         _autoCompletionView.dataSource = self;
         _autoCompletionView.delegate = self;
         
+#ifdef __IPHONE_9_0
+        if ([_autoCompletionView respondsToSelector:@selector(cellLayoutMarginsFollowReadableWidth)]) {
+            _autoCompletionView.cellLayoutMarginsFollowReadableWidth = NO;
+        }
+#endif
+        
         CGRect rect = CGRectZero;
         rect.size = CGSizeMake(CGRectGetWidth(self.view.frame), 0.5);
         
