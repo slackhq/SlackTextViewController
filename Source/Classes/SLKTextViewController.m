@@ -1370,9 +1370,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         [self slk_postKeyboarStatusNotification:notification];
     }
     
-    // Updates the dismiss mode and input accessory view, if needed.
-//    [self slk_reloadInputAccessoryViewIfNeeded];
-    
     // Very important to invalidate this flag after the keyboard is dismissed or presented, to start with a clean state next time.
     self.movingKeyboard = NO;
 }
@@ -1660,11 +1657,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)slk_showAutoCompletionView:(BOOL)show
 {
-    // Skips if transitioning
-    if (self.isTransitioning) {
-        return;
-    }
-    
     // Reloads the tableview before showing/hiding
     [self.autoCompletionView reloadData];
     
@@ -2124,6 +2116,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 #pragma mark - View Auto-Rotation
 
+#ifdef __IPHONE_8_0
 - (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
 {
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
@@ -2131,11 +2124,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-
     [self slk_prepareForInterfaceTransitionWithDuration:coordinator.transitionDuration];
+    
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
-
+#else
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     if ([self respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)]) {
@@ -2144,6 +2137,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
     [self slk_prepareForInterfaceTransitionWithDuration:duration];
 }
+#endif
 
 #ifdef __IPHONE_9_0
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations

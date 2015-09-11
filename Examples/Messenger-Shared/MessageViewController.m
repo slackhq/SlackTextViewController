@@ -199,7 +199,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     alertController.popoverPresentationController.sourceView = gesture.view.superview;
     alertController.popoverPresentationController.sourceRect = gesture.view.frame;
     
-    [alertController addAction:[UIAlertAction actionWithTitle:@"Edit Message" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Edit Message" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self editCellMessage:gesture];
     }]];
     
@@ -339,7 +339,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     NSString *contentType = userInfo[SLKTextViewPastedItemContentType];
     id data = userInfo[SLKTextViewPastedItemData];
     
-    NSLog(@"%s : %@ (type = %ld) | data : %@",__FUNCTION__, contentType, mediaType, data);
+    NSLog(@"%s : %@ (type = %ld) | data : %@",__FUNCTION__, contentType, (unsigned long)mediaType, data);
 }
 
 - (void)willRequestUndo
