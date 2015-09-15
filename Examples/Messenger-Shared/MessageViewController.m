@@ -202,7 +202,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)didLongPressCell:(UIGestureRecognizer *)gesture
 {
 #ifdef __IPHONE_8_0
-    if ([UIAlertController class]) {
+    if (SLK_IS_IOS8_AND_HIGHER && [UIAlertController class]) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         alertController.modalPresentationStyle = UIModalPresentationPopover;
         alertController.popoverPresentationController.sourceView = gesture.view.superview;
