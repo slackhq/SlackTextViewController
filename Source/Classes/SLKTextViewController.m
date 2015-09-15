@@ -700,23 +700,16 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // Caches the current text, in case the user cancels the edition
     [self slk_cacheTextToDisk:self.textView.text];
     
-    if (!SLK_IS_LANDSCAPE) {
-        [self.textView setText:text];
-    }
-    
     [self.textInputbar beginTextEditing];
     
-    // Setting the text after calling -beginTextEditing is safer when on landscape orientation
-    if (SLK_IS_LANDSCAPE) {
-        [self.textView setText:text];
-    }
+    // Setting the text after calling -beginTextEditing is safer
+    [self.textView setText:text];
     
     [self.textView slk_scrollToCaretPositonAnimated:YES];
     
     // Brings up the keyboard if needed
     [self presentKeyboard:YES];
 }
-
 - (void)didCommitTextEditing:(id)sender
 {
     if (!self.textInputbar.isEditing) {
