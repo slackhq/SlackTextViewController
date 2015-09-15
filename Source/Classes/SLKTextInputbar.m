@@ -17,9 +17,14 @@
 #import "SLKTextInputbar.h"
 #import "SLKTextViewController.h"
 #import "SLKTextView.h"
+#import "SLKInputAccessoryView.h"
+
 #import "SLKTextView+SLKAdditions.h"
-#import "SLKUIConstants.h"
 #import "UIView+SLKAdditions.h"
+
+#import "SLKUIConstants.h"
+
+NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMoveNotification";
 
 @interface SLKTextInputbar ()
 
@@ -35,6 +40,8 @@
 @property (nonatomic, strong) NSArray *charCountLabelVCs;
 
 @property (nonatomic, strong) UILabel *charCountLabel;
+
+@property (nonatomic) CGPoint previousOrigin;
 
 @property (nonatomic, strong) Class textViewClass;
 
@@ -91,9 +98,6 @@
     self.counterPosition = SLKCounterPositionTop;
     
     [self slk_registerNotifications];
-    
-    [self.leftButton.imageView addObserver:self forKeyPath:NSStringFromSelector(@selector(image)) options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
-    [self.rightButton.titleLabel addObserver:self forKeyPath:NSStringFromSelector(@selector(font)) options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
 }
 
 
@@ -675,17 +679,24 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([object isEqual:self.leftButton.imageView] && [keyPath isEqualToString:NSStringFromSelector(@selector(image))]) {
+    if ([object isEqual:self.layer] && [keyPath isEqualToString:NSStringFromSelector(@selector(position))]) {
+        
+        if (!CGPointEqualToPoint(self.previousOrigin, self.frame.origin)) {
+            self.previousOrigin = self.frame.origin;
+            [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextInputbarDidMoveNotification object:self userInfo:@{@"origin": [NSValue valueWithCGPoint:self.previousOrigin]}];
+        }
+    }
+    else if ([object isEqual:self.leftButton.imageView] && [keyPath isEqualToString:NSStringFromSelector(@selector(image))]) {
+        
         UIImage *newImage = change[NSKeyValueChangeNewKey];
         UIImage *oldImage = change[NSKeyValueChangeOldKey];
         
-        if ([newImage isEqual:oldImage]) {
-            return;
+        if (![newImage isEqual:oldImage]) {
+            [self slk_updateConstraintConstants];
         }
-        
-        [self slk_updateConstraintConstants];
     }
     else if ([object isEqual:self.rightButton.titleLabel] && [keyPath isEqualToString:NSStringFromSelector(@selector(font))]) {
+        
         [self slk_updateConstraintConstants];
     }
     else {
@@ -703,6 +714,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeContentSizeCategory:) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    
+    NSKeyValueObservingOptions options = NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld;
+    
+    [self.layer addObserver:self forKeyPath:NSStringFromSelector(@selector(position)) options:options context:NULL];
+    [self.leftButton.imageView addObserver:self forKeyPath:NSStringFromSelector(@selector(image)) options:options context:NULL];
+    [self.rightButton.titleLabel addObserver:self forKeyPath:NSStringFromSelector(@selector(font)) options:options context:NULL];
 }
 
 - (void)slk_unregisterNotifications

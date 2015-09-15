@@ -15,18 +15,19 @@
 //
 
 #import "SLKTextViewController.h"
-#import "SLKUIConstants.h"
+#import "SLKInputAccessoryView.h"
+
 #import "UIResponder+SLKAdditions.h"
 
 /** Feature flagged while waiting to implement a more reliable technique. */
 #define SLKBottomPanningEnabled 0
 
-NSString * const SLKKeyboardWillShowNotification =  @"SLKKeyboardWillShowNotification";
-NSString * const SLKKeyboardDidShowNotification =   @"SLKKeyboardDidShowNotification";
-NSString * const SLKKeyboardWillHideNotification =  @"SLKKeyboardWillHideNotification";
-NSString * const SLKKeyboardDidHideNotification =   @"SLKKeyboardDidHideNotification";
-
 #define kSLKAlertViewClearTextTag [NSStringFromClass([SLKTextViewController class]) hash]
+
+NSString * const SLKKeyboardWillShowNotification =      @"SLKKeyboardWillShowNotification";
+NSString * const SLKKeyboardDidShowNotification =       @"SLKKeyboardDidShowNotification";
+NSString * const SLKKeyboardWillHideNotification =      @"SLKKeyboardWillHideNotification";
+NSString * const SLKKeyboardDidHideNotification =       @"SLKKeyboardDidHideNotification";
 
 CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
