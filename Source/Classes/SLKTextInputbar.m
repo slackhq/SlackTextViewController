@@ -98,6 +98,10 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
     self.counterPosition = SLKCounterPositionTop;
     
     [self slk_registerNotifications];
+    
+    [self slk_registerTo:self.layer forSelector:@selector(position)];
+    [self slk_registerTo:self.leftButton.imageView forSelector:@selector(image)];
+    [self slk_registerTo:self.rightButton.titleLabel forSelector:@selector(font)];
 }
 
 
@@ -677,6 +681,20 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
 
 #pragma mark - Observers
 
+- (void)slk_registerTo:(id)object forSelector:(SEL)selector
+{
+    if (object) {
+        [object addObserver:self forKeyPath:NSStringFromSelector(selector) options:NSKeyValueObservingOptionNew context:NULL];
+    }
+}
+
+- (void)slk_unregisterFrom:(id)object forSelector:(SEL)selector
+{
+    if (object) {
+        [object removeObserver:self forKeyPath:NSStringFromSelector(selector)];
+    }
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ([object isEqual:self.layer] && [keyPath isEqualToString:NSStringFromSelector(@selector(position))]) {
@@ -714,12 +732,6 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeContentSizeCategory:) name:UIContentSizeCategoryDidChangeNotification object:nil];
-    
-    NSKeyValueObservingOptions options = NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld;
-    
-    [self.layer addObserver:self forKeyPath:NSStringFromSelector(@selector(position)) options:options context:NULL];
-    [self.leftButton.imageView addObserver:self forKeyPath:NSStringFromSelector(@selector(image)) options:options context:NULL];
-    [self.rightButton.titleLabel addObserver:self forKeyPath:NSStringFromSelector(@selector(font)) options:options context:NULL];
 }
 
 - (void)slk_unregisterNotifications
@@ -736,8 +748,9 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
 {
     [self slk_unregisterNotifications];
     
-    [_leftButton.imageView removeObserver:self forKeyPath:NSStringFromSelector(@selector(image))];
-    [_rightButton.titleLabel removeObserver:self forKeyPath:NSStringFromSelector(@selector(font))];
+    [self slk_unregisterFrom:self.layer forSelector:@selector(position)];
+    [self slk_unregisterFrom:self.leftButton.imageView forSelector:@selector(image)];
+    [self slk_unregisterFrom:self.rightButton.titleLabel forSelector:@selector(font)];
     
     _leftButton = nil;
     _rightButton = nil;
