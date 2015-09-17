@@ -656,7 +656,14 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     // Skips if the loupe is visible or if there is a real text selection
-    if (self.textView.isLoupeVisible || self.textView.isTrackpadEnabled || self.textView.selectedRange.length > 0) {
+    if (self.textView.isLoupeVisible || self.textView.isTrackpadEnabled) {
+        return;
+    }
+    
+    if (self.textView.selectedRange.length > 0) {
+        if (self.isAutoCompleting) {
+            [self cancelAutoCompletion];
+        }
         return;
     }
     
