@@ -67,6 +67,9 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 /** YES if the magnifying glass is visible. */
 @property (nonatomic, getter=isLoupeVisible) BOOL loupeVisible;
 
+/** YES if the keyboard track pad has been recognized. iOS 9 only. */
+@property (nonatomic, readonly, getter=isTrackpadEnabled) BOOL trackpadEnabled;
+
 /** YES if autocorrection and spell checking are enabled. On iOS8, this property also controls the predictive QuickType bar from being visible. Default is YES. */
 @property (nonatomic, getter=isTypingSuggestionEnabled) BOOL typingSuggestionEnabled;
 
