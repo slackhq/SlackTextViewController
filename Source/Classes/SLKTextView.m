@@ -500,6 +500,31 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 }
 
 
+#pragma mark - UITextInput Overrides
+
+- (void)beginFloatingCursorAtPoint:(CGPoint)point
+{
+    _trackpadEnabled = YES;
+}
+
+- (void)updateFloatingCursorAtPoint:(CGPoint)point
+{
+    // Do something
+}
+
+- (void)endFloatingCursor
+{
+    _trackpadEnabled = NO;
+    
+    // We still need to notify a selection change in the textview after the trackpad is disabled
+    if (self.delegate && [self.delegate respondsToSelector:@selector(textViewDidChangeSelection:)]) {
+        [self.delegate textViewDidChangeSelection:self];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewSelectedRangeDidChangeNotification object:self userInfo:nil];
+}
+
+
 #pragma mark - UIResponder Overrides
 
 - (BOOL)canBecomeFirstResponder
@@ -594,11 +619,11 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (void)slk_willShowLoupe:(UIGestureRecognizer *)gesture
 {
-    if (gesture.state == UIGestureRecognizerStateChanged) {
-        self.loupeVisible = YES;
+    if (gesture.state == UIGestureRecognizerStateBegan || gesture.state == UIGestureRecognizerStateChanged) {
+        _loupeVisible = YES;
     }
     else {
-        self.loupeVisible = NO;
+        _loupeVisible = NO;
     }
     
     // We still need to notify a selection change in the textview after the magnifying class is dismissed
