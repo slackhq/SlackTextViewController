@@ -1328,14 +1328,24 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         [self slk_postKeyboarStatusNotification:notification];
     }
     
-    // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
-    [self.view slk_animateLayoutIfNeededWithDuration:duration
-                                              bounce:NO
-                                             options:(curve<<16)|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
-                                          animations:^{
-                                              [self slk_scrollToBottomIfNeeded];
-                                          }
-                                          completion:NULL];
+    CGRect beginFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    // Begin and end frames are the same when the keyboard is shown during navigation controller's push animation.
+    // The animation happens in window coordinates (slides from right to left) but doesn't in the view controller's view coordinates.
+    BOOL frameWillChange = !CGRectEqualToRect(beginFrame, endFrame);
+    
+    if (frameWillChange) {
+        // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
+        [self.view slk_animateLayoutIfNeededWithDuration:duration
+                                                  bounce:NO
+                                                 options:(curve<<16)|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
+                                              animations:^{
+                                                  [self slk_scrollToBottomIfNeeded];
+                                              }
+                                              completion:NULL];
+    } else {
+        [self slk_scrollToTopIfNeeded];
+    }
 }
 
 - (void)slk_didShowOrHideKeyboard:(NSNotification *)notification
