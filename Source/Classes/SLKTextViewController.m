@@ -1306,6 +1306,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
+    CGRect beginFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
     SLKKeyboardStatus status = [self slk_keyboardStatusForNotification:notification];
     
     // Programatically stops scrolling before updating the view constraints (to avoid scrolling glitch).
@@ -1328,23 +1331,23 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         [self slk_postKeyboarStatusNotification:notification];
     }
     
-    CGRect beginFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    void (^animations)() = ^void() {
+        [self slk_scrollToBottomIfNeeded];
+    };
+    
     // Begin and end frames are the same when the keyboard is shown during navigation controller's push animation.
     // The animation happens in window coordinates (slides from right to left) but doesn't in the view controller's view coordinates.
-    BOOL frameWillChange = !CGRectEqualToRect(beginFrame, endFrame);
-    
-    if (frameWillChange) {
+    if (!CGRectEqualToRect(beginFrame, endFrame))
+    {
         // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
         [self.view slk_animateLayoutIfNeededWithDuration:duration
                                                   bounce:NO
                                                  options:(curve<<16)|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
-                                              animations:^{
-                                                  [self slk_scrollToBottomIfNeeded];
-                                              }
+                                              animations:animations
                                               completion:NULL];
-    } else {
-        [self slk_scrollToTopIfNeeded];
+    }
+    else {
+        animations();
     }
 }
 
