@@ -29,6 +29,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 @property (nonatomic, strong) NSArray *searchResult;
 
+@property (nonatomic, strong) UIWindow *pipWindow;
+
 @end
 
 @implementation MessageViewController
@@ -59,6 +61,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)commonInit
 {
     [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputbarDidMove:) name:SLKTextInputbarDidMoveNotification object:nil];
 
     // Register a SLKTextView subclass, if you need any special appearance and/or behavior customisation.
     [self registerClassForTextView:[MessageTextView class]];
@@ -106,7 +109,12 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
                                                                   target:self
                                                                   action:@selector(fillWithText:)];
     
-    self.navigationItem.rightBarButtonItems = @[editItem, appendItem, typeItem];
+    UIBarButtonItem *pipItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_pic"]
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:self
+                                                                action:@selector(togglePIPWindow:)];
+    
+    self.navigationItem.rightBarButtonItems = @[pipItem, editItem, appendItem, typeItem];
     
     self.users = @[@"Allen", @"Anna", @"Alicia", @"Arnold", @"Armando", @"Antonio", @"Brad", @"Catalaya", @"Christoph", @"Emerson", @"Eric", @"Everyone", @"Steve"];
     self.channels = @[@"General", @"Random", @"iOS", @"Bugs", @"Sports", @"Android", @"UI", @"SSB"];
@@ -194,7 +202,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)didLongPressCell:(UIGestureRecognizer *)gesture
 {
 #ifdef __IPHONE_8_0
-    if ([UIAlertController class]) {
+    if (SLK_IS_IOS8_AND_HIGHER && [UIAlertController class]) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         alertController.modalPresentationStyle = UIModalPresentationPopover;
         alertController.popoverPresentationController.sourceView = gesture.view.superview;
@@ -248,6 +256,60 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [self editText:lastMessage.text];
     
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:lastRowIndex inSection:lastSectionIndex] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+}
+
+- (void)togglePIPWindow:(id)sender
+{
+    if (!_pipWindow) {
+        [self showPIPWindow:sender];
+    }
+    else {
+        [self hidePIPWindow:sender];
+    }
+}
+
+- (void)showPIPWindow:(id)sender
+{
+    CGRect frame = CGRectMake(CGRectGetWidth(self.view.frame) - 60.0, 0.0, 50.0, 50.0);
+    frame.origin.y = CGRectGetMinY(self.textInputbar.frame) - 60.0;
+    
+    _pipWindow = [[UIWindow alloc] initWithFrame:frame];
+    _pipWindow.backgroundColor = [UIColor blackColor];
+    _pipWindow.layer.cornerRadius = 10.0;
+    _pipWindow.layer.masksToBounds = YES;
+    _pipWindow.hidden = NO;
+    _pipWindow.alpha = 0.0;
+    
+    [[UIApplication sharedApplication].keyWindow addSubview:_pipWindow];
+    
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         _pipWindow.alpha = 1.0;
+                     }];
+}
+
+- (void)hidePIPWindow:(id)sender
+{
+    [UIView animateWithDuration:0.3
+                     animations:^{
+                         _pipWindow.alpha = 0.0;
+                     }
+                     completion:^(BOOL finished) {
+                         _pipWindow.hidden = YES;
+                         _pipWindow = nil;
+                     }];
+}
+
+- (void)textInputbarDidMove:(NSNotification *)note
+{
+    if (!_pipWindow) {
+        return;
+    }
+    
+    CGRect frame = self.pipWindow.frame;
+    frame.origin.y = [note.userInfo[@"origin"] CGPointValue].y - 60.0;
+    
+    self.pipWindow.frame = frame;
 }
 
 

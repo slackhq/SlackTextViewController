@@ -37,6 +37,8 @@ UIKIT_EXTERN NSString *const SLKKeyboardDidShowNotification;
 UIKIT_EXTERN NSString *const SLKKeyboardWillHideNotification;
 UIKIT_EXTERN NSString *const SLKKeyboardDidHideNotification;
 
+UIKIT_EXTERN NSString *const SLKTextInputbarDidMoveNotification;
+
 typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
     SLKKeyboardStatusDidHide,
     SLKKeyboardStatusWillShow,

@@ -17,9 +17,14 @@
 #import "SLKTextInputbar.h"
 #import "SLKTextViewController.h"
 #import "SLKTextView.h"
+#import "SLKInputAccessoryView.h"
+
 #import "SLKTextView+SLKAdditions.h"
-#import "SLKUIConstants.h"
 #import "UIView+SLKAdditions.h"
+
+#import "SLKUIConstants.h"
+
+NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMoveNotification";
 
 @interface SLKTextInputbar ()
 
@@ -35,6 +40,8 @@
 @property (nonatomic, strong) NSArray *charCountLabelVCs;
 
 @property (nonatomic, strong) UILabel *charCountLabel;
+
+@property (nonatomic) CGPoint previousOrigin;
 
 @property (nonatomic, strong) Class textViewClass;
 
@@ -92,8 +99,9 @@
     
     [self slk_registerNotifications];
     
-    [self.leftButton.imageView addObserver:self forKeyPath:NSStringFromSelector(@selector(image)) options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
-    [self.rightButton.titleLabel addObserver:self forKeyPath:NSStringFromSelector(@selector(font)) options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
+    [self slk_registerTo:self.layer forSelector:@selector(position)];
+    [self slk_registerTo:self.leftButton.imageView forSelector:@selector(image)];
+    [self slk_registerTo:self.rightButton.titleLabel forSelector:@selector(font)];
 }
 
 
@@ -673,19 +681,40 @@
 
 #pragma mark - Observers
 
+- (void)slk_registerTo:(id)object forSelector:(SEL)selector
+{
+    if (object) {
+        [object addObserver:self forKeyPath:NSStringFromSelector(selector) options:NSKeyValueObservingOptionNew context:NULL];
+    }
+}
+
+- (void)slk_unregisterFrom:(id)object forSelector:(SEL)selector
+{
+    if (object) {
+        [object removeObserver:self forKeyPath:NSStringFromSelector(selector)];
+    }
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([object isEqual:self.leftButton.imageView] && [keyPath isEqualToString:NSStringFromSelector(@selector(image))]) {
+    if ([object isEqual:self.layer] && [keyPath isEqualToString:NSStringFromSelector(@selector(position))]) {
+        
+        if (!CGPointEqualToPoint(self.previousOrigin, self.frame.origin)) {
+            self.previousOrigin = self.frame.origin;
+            [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextInputbarDidMoveNotification object:self userInfo:@{@"origin": [NSValue valueWithCGPoint:self.previousOrigin]}];
+        }
+    }
+    else if ([object isEqual:self.leftButton.imageView] && [keyPath isEqualToString:NSStringFromSelector(@selector(image))]) {
+        
         UIImage *newImage = change[NSKeyValueChangeNewKey];
         UIImage *oldImage = change[NSKeyValueChangeOldKey];
         
-        if ([newImage isEqual:oldImage]) {
-            return;
+        if (![newImage isEqual:oldImage]) {
+            [self slk_updateConstraintConstants];
         }
-        
-        [self slk_updateConstraintConstants];
     }
     else if ([object isEqual:self.rightButton.titleLabel] && [keyPath isEqualToString:NSStringFromSelector(@selector(font))]) {
+        
         [self slk_updateConstraintConstants];
     }
     else {
@@ -719,8 +748,9 @@
 {
     [self slk_unregisterNotifications];
     
-    [_leftButton.imageView removeObserver:self forKeyPath:NSStringFromSelector(@selector(image))];
-    [_rightButton.titleLabel removeObserver:self forKeyPath:NSStringFromSelector(@selector(font))];
+    [self slk_unregisterFrom:self.layer forSelector:@selector(position)];
+    [self slk_unregisterFrom:self.leftButton.imageView forSelector:@selector(image)];
+    [self slk_unregisterFrom:self.rightButton.titleLabel forSelector:@selector(font)];
     
     _leftButton = nil;
     _rightButton = nil;

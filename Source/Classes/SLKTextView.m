@@ -15,7 +15,9 @@
 //
 
 #import "SLKTextView.h"
+
 #import "SLKTextView+SLKAdditions.h"
+
 #import "SLKUIConstants.h"
 
 NSString * const SLKTextViewTextWillChangeNotification =            @"SLKTextViewTextWillChangeNotification";

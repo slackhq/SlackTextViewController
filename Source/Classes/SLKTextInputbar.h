@@ -15,10 +15,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SLKInputAccessoryView.h"
 
 @class SLKTextViewController;
 @class SLKTextView;
+@class SLKInputAccessoryView;
 
 typedef NS_ENUM(NSUInteger, SLKCounterStyle) {
     SLKCounterStyleNone,
