@@ -318,7 +318,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /// @name Text Input Bar Adjustment
 ///------------------------------------------------
 
-/** YES if the text inputbar is visible. Default is YES. */
+/** YES if the text inputbar is hidden. Default is NO. */
 @property (nonatomic, getter=isTextInputbarHidden) BOOL textInputbarHidden;
 
 /**
