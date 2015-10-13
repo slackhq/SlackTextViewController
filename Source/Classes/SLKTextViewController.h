@@ -372,6 +372,9 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** The table view used to display autocompletion results. */
 @property (nonatomic, readonly) UITableView *autoCompletionView;
 
+/** YES if the autocompletion mode is active. */
+@property (nonatomic, readonly, getter = isAutoCompleting) BOOL autoCompleting;
+
 /** The recently found prefix symbol used as prefix for autocompletion mode. */
 @property (nonatomic, readonly, copy) NSString *foundPrefix;
 
@@ -381,19 +384,36 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** The recently found word at the text view's caret position. */
 @property (nonatomic, readonly, copy) NSString *foundWord;
 
-/** YES if the autocompletion mode is active. */
-@property (nonatomic, readonly, getter = isAutoCompleting) BOOL autoCompleting;
-
 /** An array containing all the registered prefix strings for autocompletion. */
 @property (nonatomic, readonly, copy) NSArray *registeredPrefixes;
 
 /**
  Registers any string prefix for autocompletion detection, useful for user mentions and/or hashtags autocompletion.
  The prefix must be valid NSString (i.e: '@', '#', '\', and so on). This also checks if no repeated prefix is inserted.
+ You can also use longer prefixes.
  
  @param prefixes An array of prefix strings.
  */
 - (void)registerPrefixesForAutoCompletion:(NSArray *)prefixes;
+
+/**
+ Notifies the view controller either the autocompletion prefix or word have changed.
+ Use this method to modify your data source or fetch data asynchronously from an HTTP resource.
+ Once your data source is ready, make sure to call -showAutoCompletionView: to display the view accordingly.
+ You don't need call super since this method doesn't do anything.
+
+ @param prefix The detected prefix.
+ @param word The derected word.
+ */
+- (void)didChangeAutoCompletionPrefix:(NSString *)prefix andWord:(NSString *)word;
+
+/**
+ Use this method to programatically show/hide the autocompletion view.
+ Right before the view is shown, -reloadData is called. So avoid calling it manually.
+ 
+ @param show YES if the autocompletion view should be shown.
+ */
+- (void)showAutoCompletionView:(BOOL)show;
 
 /**
  Verifies that the autocompletion view should be shown. Default is NO.
@@ -401,7 +421,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  
  @return YES if the autocompletion view should be shown.
  */
-- (BOOL)canShowAutoCompletion;
+- (BOOL)canShowAutoCompletion DEPRECATED_MSG_ATTRIBUTE("Override -didChangeAutoCompletionPrefix:andWord: instead");
 
 /**
  Returns a custom height for the autocompletion view. Default is 0.0.
