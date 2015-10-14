@@ -718,6 +718,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // Brings up the keyboard if needed
     [self presentKeyboard:YES];
 }
+
 - (void)didCommitTextEditing:(id)sender
 {
     if (!self.textInputbar.isEditing) {
@@ -758,11 +759,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     return YES;
-}
-
-- (BOOL)canShowAutoCompletion
-{
-    return NO;
 }
 
 - (CGFloat)heightForAutoCompletionView
@@ -1549,6 +1545,95 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     _registeredPrefixes = [[NSArray alloc] initWithArray:array];
 }
 
+- (void)didChangeAutoCompletionPrefix:(NSString *)prefix andWord:(NSString *)word
+{
+    // No implementation here. Meant to be overriden in subclass.
+}
+
+- (BOOL)canShowAutoCompletion
+{
+    // Let's keep this around for a bit, for backwards compatibility.
+    return NO;
+}
+
+- (void)showAutoCompletionView:(BOOL)show
+{
+    // Reloads the tableview before showing/hiding
+    if (show) {
+        [self.autoCompletionView reloadData];
+    }
+    
+    self.autoCompleting = show;
+    
+    // Toggles auto-correction if requiered
+    [self slk_enableTypingSuggestionIfNeeded];
+    
+    CGFloat viewHeight = show ? [self heightForAutoCompletionView] : 0.0;
+    
+    if (self.autoCompletionViewHC.constant == viewHeight) {
+        return;
+    }
+    
+    // If the auto-completion view height is bigger than the maximum height allows, it is reduce to that size. Default 140 pts.
+    CGFloat maximumHeight = [self maximumHeightForAutoCompletionView];
+    
+    if (viewHeight > maximumHeight) {
+        viewHeight = maximumHeight;
+    }
+    
+    CGFloat contentViewHeight = self.scrollViewHC.constant + self.autoCompletionViewHC.constant;
+    
+    // On iPhone, the auto-completion view can't extend beyond the content view height
+    if (SLK_IS_IPHONE && viewHeight > contentViewHeight) {
+        viewHeight = contentViewHeight;
+    }
+    
+    self.autoCompletionViewHC.constant = viewHeight;
+    
+    [self.view slk_animateLayoutIfNeededWithBounce:self.bounces
+                                           options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
+                                        animations:NULL];
+}
+
+- (void)acceptAutoCompletionWithString:(NSString *)string
+{
+    [self acceptAutoCompletionWithString:string keepPrefix:YES];
+}
+
+- (void)acceptAutoCompletionWithString:(NSString *)string keepPrefix:(BOOL)keepPrefix
+{
+    if (string.length == 0) {
+        return;
+    }
+    
+    SLKTextView *textView = self.textView;
+    
+    NSUInteger location = self.foundPrefixRange.location;
+    if (keepPrefix) {
+        location += self.foundPrefixRange.length;
+    }
+    
+    NSUInteger length = self.foundWord.length;
+    if (!keepPrefix) {
+        length += self.foundPrefixRange.length;
+    }
+    
+    NSRange range = NSMakeRange(location, length);
+    NSRange insertionRange = [textView slk_insertText:string inRange:range];
+    
+    textView.selectedRange = NSMakeRange(insertionRange.location, 0);
+    
+    [self cancelAutoCompletion];
+    
+    [textView slk_scrollToCaretPositonAnimated:NO];
+}
+
+- (void)cancelAutoCompletion
+{
+    [self slk_invalidateAutoCompletion];
+    [self slk_hideAutoCompletionViewIfNeeded];
+}
+
 - (void)slk_processTextForAutoCompletion
 {
     if (self.isTransitioning) {
@@ -1617,13 +1702,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return [self cancelAutoCompletion];
     }
     
-    [self slk_showAutoCompletionView:[self canShowAutoCompletion]];
-}
-
-- (void)cancelAutoCompletion
-{
-    [self slk_invalidateAutoCompletion];
-    [self slk_hideAutoCompletionViewIfNeeded];
+    [self didChangeAutoCompletionPrefix:self.foundPrefix andWord:self.foundWord];
 }
 
 - (void)slk_invalidateAutoCompletion
@@ -1635,81 +1714,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [self.autoCompletionView setContentOffset:CGPointZero];
 }
 
-- (void)acceptAutoCompletionWithString:(NSString *)string
-{
-    [self acceptAutoCompletionWithString:string keepPrefix:YES];
-}
-
-- (void)acceptAutoCompletionWithString:(NSString *)string keepPrefix:(BOOL)keepPrefix
-{
-    if (string.length == 0) {
-        return;
-    }
-    
-    SLKTextView *textView = self.textView;
-    
-    NSUInteger location = self.foundPrefixRange.location;
-    if (keepPrefix) {
-        location += self.foundPrefixRange.length;
-    }
-    
-    NSUInteger length = self.foundWord.length;
-    if (!keepPrefix) {
-        length += self.foundPrefixRange.length;
-    }
-    
-    NSRange range = NSMakeRange(location, length);
-    NSRange insertionRange = [textView slk_insertText:string inRange:range];
-    
-    textView.selectedRange = NSMakeRange(insertionRange.location, 0);
-    
-    [self cancelAutoCompletion];
-    
-    [textView slk_scrollToCaretPositonAnimated:NO];
-}
-
 - (void)slk_hideAutoCompletionViewIfNeeded
 {
     if (self.isAutoCompleting) {
-        [self slk_showAutoCompletionView:NO];
+        [self showAutoCompletionView:NO];
     }
-}
-
-- (void)slk_showAutoCompletionView:(BOOL)show
-{
-    // Reloads the tableview before showing/hiding
-    [self.autoCompletionView reloadData];
-    
-    self.autoCompleting = show;
-    
-    // Toggles auto-correction if requiered
-    [self slk_enableTypingSuggestionIfNeeded];
-    
-    CGFloat viewHeight = show ? [self heightForAutoCompletionView] : 0.0;
-    
-    if (self.autoCompletionViewHC.constant == viewHeight) {
-        return;
-    }
-    
-    // If the auto-completion view height is bigger than the maximum height allows, it is reduce to that size. Default 140 pts.
-    CGFloat maximumHeight = [self maximumHeightForAutoCompletionView];
-    
-    if (viewHeight > maximumHeight) {
-        viewHeight = maximumHeight;
-    }
-    
-    CGFloat contentViewHeight = self.scrollViewHC.constant + self.autoCompletionViewHC.constant;
-    
-    // On iPhone, the auto-completion view can't extend beyond the content view height
-    if (SLK_IS_IPHONE && viewHeight > contentViewHeight) {
-        viewHeight = contentViewHeight;
-    }
-    
-    self.autoCompletionViewHC.constant = viewHeight;
-    
-    [self.view slk_animateLayoutIfNeededWithBounce:self.bounces
-                                           options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
-                                        animations:NULL];
 }
 
 

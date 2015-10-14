@@ -452,11 +452,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 #endif
 }
 
-- (BOOL)canShowAutoCompletion
+- (void)didChangeAutoCompletionPrefix:(NSString *)prefix andWord:(NSString *)word
 {
     NSArray *array = nil;
-    NSString *prefix = self.foundPrefix;
-    NSString *word = self.foundWord;
     
     self.searchResult = nil;
     
@@ -481,7 +479,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     self.searchResult = [[NSMutableArray alloc] initWithArray:array];
     
-    return self.searchResult.count > 0;
+    BOOL show = (self.searchResult.count > 0);
+    
+    [self showAutoCompletionView:show];
 }
 
 - (CGFloat)heightForAutoCompletionView
