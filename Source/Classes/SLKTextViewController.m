@@ -188,13 +188,13 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // Invalidates this flag when the view appears
     self.textView.didNotResignFirstResponder = NO;
     
+    // Helps laying out subviews with recently added constraints.
+    [self.view layoutIfNeeded];
+    
     [UIView performWithoutAnimation:^{
         // Reloads any cached text
         [self slk_reloadTextView];
     }];
-    
-    // Helps laying out subviews with recently added constraints.
-    [self.view layoutIfNeeded];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -1503,7 +1503,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_willTerminateApplication:(NSNotification *)notification
 {
     // Caches the text before it's too late!
-    [self slk_cacheTextView];
+    if (self.isViewVisible) {
+        [self slk_cacheTextView];
+    }
 }
 
 
@@ -1732,24 +1734,18 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (NSString *)slk_keyForPersistency
 {
-    NSString *keyForTextCaching = [self keyForTextCaching];
-    NSString *previousCachedText = [[NSUserDefaults standardUserDefaults] objectForKey:keyForTextCaching];
-    
-    if ([previousCachedText isKindOfClass:[NSString class]]) {
-        return keyForTextCaching;
-    }
-    else {
-        return [NSString stringWithFormat:@"%@.%@", SLKTextViewControllerDomain, [self keyForTextCaching]];
-    }
+    NSString *key = [self keyForTextCaching];
+    return [NSString stringWithFormat:@"%@.%@", SLKTextViewControllerDomain, key];
 }
 
 - (void)slk_reloadTextView
 {
-    if (self.textView.text.length > 0 || !self.slk_isCachingEnabled) {
-        return;
-    }
+    NSString *key = [self slk_keyForPersistency];
+    NSString *cachedText = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     
-    self.textView.text = [self slk_cachedText];
+    if (self.textView.text.length == 0 || cachedText.length > 0) {
+        self.textView.text = cachedText;
+    }
 }
 
 - (void)slk_cacheTextView
@@ -1760,6 +1756,32 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)clearCachedText
 {
     [self slk_cacheTextToDisk:nil];
+}
+
+- (void)slk_cacheTextToDisk:(NSString *)text
+{
+    NSString *key = [self slk_keyForPersistency];
+
+    if (!key || key.length == 0) {
+        return;
+    }
+    
+    NSString *cachedText = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+    
+    // Caches text only if its a valid string and not already cached
+    if (text.length > 0 && ![text isEqualToString:cachedText]) {
+        [[NSUserDefaults standardUserDefaults] setObject:text forKey:key];
+    }
+    // Clears cache only if it exists
+    else if (text.length == 0 && cachedText.length > 0) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+    }
+    else {
+        // Skips so it doesn't hit 'synchronize' unnecessarily
+        return;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 + (void)clearAllCachedText
@@ -1778,46 +1800,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     for (NSString *cachedKey in cachedKeys) {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:cachedKey];
-    }
-    
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (BOOL)slk_isCachingEnabled
-{
-    return ([self keyForTextCaching] != nil);
-}
-
-- (NSString *)slk_cachedText
-{
-    if (!self.slk_isCachingEnabled) {
-        return nil;
-    }
-    
-    NSString *key = [self slk_keyForPersistency];
-    return [[NSUserDefaults standardUserDefaults] objectForKey:key];
-}
-
-- (void)slk_cacheTextToDisk:(NSString *)text
-{
-    if (!self.slk_isCachingEnabled) {
-        return;
-    }
-    
-    NSString *cachedText = [self slk_cachedText];
-    NSString *key = [self slk_keyForPersistency];
-    
-    // Caches text only if its a valid string and not already cached
-    if (text.length > 0 && ![text isEqualToString:cachedText]) {
-        [[NSUserDefaults standardUserDefaults] setObject:text forKey:key];
-    }
-    // Clears cache only if it exists
-    else if (text.length == 0 && cachedText.length > 0) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-    }
-    else {
-        // Skips so it doesn't hit 'synchronize' unnecessarily
-        return;
     }
     
     [[NSUserDefaults standardUserDefaults] synchronize];

@@ -470,11 +470,11 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  Returns the key to be associated with a given text to be cached. Default is nil.
  To enable text caching, you must override this method to return valid key.
  The text view will be populated automatically when the view controller is configured.
- You don't need call super since this method doesn't do anything.
+ You don't need to call super since this method doesn't do anything.
  
- @return The key for which to enable text caching.
+ @return The string key for which to enable text caching.
  */
-- (id)keyForTextCaching;
+- (NSString *)keyForTextCaching;
 
 /**
  Removes the current's vien controller cached text.
