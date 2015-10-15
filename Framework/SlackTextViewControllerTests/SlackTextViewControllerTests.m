@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Slack. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import <SlackTextViewController/SLKTextViewController.h>
+
+#import <SlackTextViewController/SlackTextViewController.h>
 
 @interface SLKTextViewControllerTest : SLKTextViewController
 @end

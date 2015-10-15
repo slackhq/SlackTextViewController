@@ -9,32 +9,41 @@
 /* Begin PBXBuildFile section */
 		48C64A351ABA222C00021C91 /* SlackTextViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 48C64A211ABA222C00021C91 /* SlackTextViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F8B71661ABC9404006594B9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F8B71651ABC9404006594B9 /* UIKit.framework */; };
-		4F8B71711ABC94A2006594B9 /* SlackTextViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8B71701ABC94A2006594B9 /* SlackTextViewControllerTests.m */; };
 		4F8B71721ABC94A2006594B9 /* SlackTextViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48C64A031ABA215600021C91 /* SlackTextViewController.framework */; };
-		4FB17BE41B75079000858D9E /* SLKTextView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB17BCF1B75079000858D9E /* SLKTextView+SLKAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FB17BE51B75079000858D9E /* SLKTextView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB17BD01B75079000858D9E /* SLKTextView+SLKAdditions.m */; };
-		4FB17BE61B75079000858D9E /* SLKUIConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB17BD11B75079000858D9E /* SLKUIConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FB17BE71B75079000858D9E /* UIResponder+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB17BD21B75079000858D9E /* UIResponder+SLKAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FB17BE81B75079000858D9E /* UIResponder+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB17BD31B75079000858D9E /* UIResponder+SLKAdditions.m */; };
-		4FB17BE91B75079000858D9E /* UIScrollView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB17BD41B75079000858D9E /* UIScrollView+SLKAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FB17BEA1B75079000858D9E /* UIScrollView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB17BD51B75079000858D9E /* UIScrollView+SLKAdditions.m */; };
-		4FB17BEB1B75079000858D9E /* UIView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB17BD61B75079000858D9E /* UIView+SLKAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FB17BEC1B75079000858D9E /* UIView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB17BD71B75079000858D9E /* UIView+SLKAdditions.m */; };
-		4FB17BED1B75079000858D9E /* SLKInputAccessoryView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB17BD91B75079000858D9E /* SLKInputAccessoryView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FB17BEE1B75079000858D9E /* SLKInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB17BDA1B75079000858D9E /* SLKInputAccessoryView.m */; };
-		4FB17BEF1B75079000858D9E /* SLKTextInputbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB17BDB1B75079000858D9E /* SLKTextInputbar.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FB17BF01B75079000858D9E /* SLKTextInputbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB17BDC1B75079000858D9E /* SLKTextInputbar.m */; };
-		4FB17BF11B75079000858D9E /* SLKTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB17BDD1B75079000858D9E /* SLKTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FB17BF21B75079000858D9E /* SLKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB17BDE1B75079000858D9E /* SLKTextView.m */; };
-		4FB17BF31B75079000858D9E /* SLKTextViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB17BDF1B75079000858D9E /* SLKTextViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FB17BF41B75079000858D9E /* SLKTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB17BE01B75079000858D9E /* SLKTextViewController.m */; };
-		4FB17BF51B75079000858D9E /* SLKTypingIndicatorProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB17BE11B75079000858D9E /* SLKTypingIndicatorProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FB17BF61B75079000858D9E /* SLKTypingIndicatorView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB17BE21B75079000858D9E /* SLKTypingIndicatorView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FB17BF71B75079000858D9E /* SLKTypingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB17BE31B75079000858D9E /* SLKTypingIndicatorView.m */; };
+		F5ABA2231BD02347007D1664 /* SLKInputAccessoryView.h in Headers */ = {isa = PBXBuildFile; fileRef = F5ABA20F1BD02347007D1664 /* SLKInputAccessoryView.h */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2241BD02347007D1664 /* SLKInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA2101BD02347007D1664 /* SLKInputAccessoryView.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2251BD02347007D1664 /* SLKInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA2101BD02347007D1664 /* SLKInputAccessoryView.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2261BD02347007D1664 /* SLKTextInputbar.h in Headers */ = {isa = PBXBuildFile; fileRef = F5ABA2111BD02347007D1664 /* SLKTextInputbar.h */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2271BD02347007D1664 /* SLKTextInputbar.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA2121BD02347007D1664 /* SLKTextInputbar.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2281BD02347007D1664 /* SLKTextInputbar.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA2121BD02347007D1664 /* SLKTextInputbar.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2291BD02347007D1664 /* SLKTextView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5ABA2131BD02347007D1664 /* SLKTextView+SLKAdditions.h */; settings = {ASSET_TAGS = (); }; };
+		F5ABA22A1BD02347007D1664 /* SLKTextView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA2141BD02347007D1664 /* SLKTextView+SLKAdditions.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA22B1BD02347007D1664 /* SLKTextView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA2141BD02347007D1664 /* SLKTextView+SLKAdditions.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA22C1BD02347007D1664 /* SLKTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = F5ABA2151BD02347007D1664 /* SLKTextView.h */; settings = {ASSET_TAGS = (); }; };
+		F5ABA22D1BD02347007D1664 /* SLKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA2161BD02347007D1664 /* SLKTextView.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA22E1BD02347007D1664 /* SLKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA2161BD02347007D1664 /* SLKTextView.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA22F1BD02347007D1664 /* SLKTextViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5ABA2171BD02347007D1664 /* SLKTextViewController.h */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2301BD02347007D1664 /* SLKTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA2181BD02347007D1664 /* SLKTextViewController.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2311BD02347007D1664 /* SLKTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA2181BD02347007D1664 /* SLKTextViewController.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2321BD02347007D1664 /* SLKTypingIndicatorProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = F5ABA2191BD02347007D1664 /* SLKTypingIndicatorProtocol.h */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2331BD02347007D1664 /* SLKTypingIndicatorView.h in Headers */ = {isa = PBXBuildFile; fileRef = F5ABA21A1BD02347007D1664 /* SLKTypingIndicatorView.h */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2341BD02347007D1664 /* SLKTypingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA21B1BD02347007D1664 /* SLKTypingIndicatorView.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2351BD02347007D1664 /* SLKTypingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA21B1BD02347007D1664 /* SLKTypingIndicatorView.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2361BD02347007D1664 /* SLKUIConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = F5ABA21C1BD02347007D1664 /* SLKUIConstants.h */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2371BD02347007D1664 /* UIResponder+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5ABA21D1BD02347007D1664 /* UIResponder+SLKAdditions.h */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2381BD02347007D1664 /* UIResponder+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA21E1BD02347007D1664 /* UIResponder+SLKAdditions.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2391BD02347007D1664 /* UIResponder+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA21E1BD02347007D1664 /* UIResponder+SLKAdditions.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA23A1BD02347007D1664 /* UIScrollView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5ABA21F1BD02347007D1664 /* UIScrollView+SLKAdditions.h */; settings = {ASSET_TAGS = (); }; };
+		F5ABA23B1BD02347007D1664 /* UIScrollView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA2201BD02347007D1664 /* UIScrollView+SLKAdditions.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA23C1BD02347007D1664 /* UIScrollView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA2201BD02347007D1664 /* UIScrollView+SLKAdditions.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA23D1BD02347007D1664 /* UIView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5ABA2211BD02347007D1664 /* UIView+SLKAdditions.h */; settings = {ASSET_TAGS = (); }; };
+		F5ABA23E1BD02347007D1664 /* UIView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA2221BD02347007D1664 /* UIView+SLKAdditions.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA23F1BD02347007D1664 /* UIView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABA2221BD02347007D1664 /* UIView+SLKAdditions.m */; settings = {ASSET_TAGS = (); }; };
+		F5ABA2401BD023E9007D1664 /* SlackTextViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8B71701ABC94A2006594B9 /* SlackTextViewControllerTests.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4F8B71731ABC94A2006594B9 /* PBXContainerItemProxy */ = {
+		F5ABA2411BD02420007D1664 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 48C649FA1ABA215600021C91 /* Project object */;
 			proxyType = 1;
@@ -51,26 +60,26 @@
 		4F8B716C1ABC94A2006594B9 /* SlackTextViewControllerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SlackTextViewControllerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F8B716F1ABC94A2006594B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F8B71701ABC94A2006594B9 /* SlackTextViewControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SlackTextViewControllerTests.m; sourceTree = "<group>"; };
-		4FB17BCF1B75079000858D9E /* SLKTextView+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SLKTextView+SLKAdditions.h"; sourceTree = "<group>"; };
-		4FB17BD01B75079000858D9E /* SLKTextView+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SLKTextView+SLKAdditions.m"; sourceTree = "<group>"; };
-		4FB17BD11B75079000858D9E /* SLKUIConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKUIConstants.h; sourceTree = "<group>"; };
-		4FB17BD21B75079000858D9E /* UIResponder+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+SLKAdditions.h"; sourceTree = "<group>"; };
-		4FB17BD31B75079000858D9E /* UIResponder+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+SLKAdditions.m"; sourceTree = "<group>"; };
-		4FB17BD41B75079000858D9E /* UIScrollView+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SLKAdditions.h"; sourceTree = "<group>"; };
-		4FB17BD51B75079000858D9E /* UIScrollView+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SLKAdditions.m"; sourceTree = "<group>"; };
-		4FB17BD61B75079000858D9E /* UIView+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+SLKAdditions.h"; sourceTree = "<group>"; };
-		4FB17BD71B75079000858D9E /* UIView+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+SLKAdditions.m"; sourceTree = "<group>"; };
-		4FB17BD91B75079000858D9E /* SLKInputAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKInputAccessoryView.h; sourceTree = "<group>"; };
-		4FB17BDA1B75079000858D9E /* SLKInputAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKInputAccessoryView.m; sourceTree = "<group>"; };
-		4FB17BDB1B75079000858D9E /* SLKTextInputbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextInputbar.h; sourceTree = "<group>"; };
-		4FB17BDC1B75079000858D9E /* SLKTextInputbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextInputbar.m; sourceTree = "<group>"; };
-		4FB17BDD1B75079000858D9E /* SLKTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextView.h; sourceTree = "<group>"; };
-		4FB17BDE1B75079000858D9E /* SLKTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextView.m; sourceTree = "<group>"; };
-		4FB17BDF1B75079000858D9E /* SLKTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextViewController.h; sourceTree = "<group>"; };
-		4FB17BE01B75079000858D9E /* SLKTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextViewController.m; sourceTree = "<group>"; };
-		4FB17BE11B75079000858D9E /* SLKTypingIndicatorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTypingIndicatorProtocol.h; sourceTree = "<group>"; };
-		4FB17BE21B75079000858D9E /* SLKTypingIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTypingIndicatorView.h; sourceTree = "<group>"; };
-		4FB17BE31B75079000858D9E /* SLKTypingIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTypingIndicatorView.m; sourceTree = "<group>"; };
+		F5ABA20F1BD02347007D1664 /* SLKInputAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKInputAccessoryView.h; sourceTree = "<group>"; };
+		F5ABA2101BD02347007D1664 /* SLKInputAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKInputAccessoryView.m; sourceTree = "<group>"; };
+		F5ABA2111BD02347007D1664 /* SLKTextInputbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextInputbar.h; sourceTree = "<group>"; };
+		F5ABA2121BD02347007D1664 /* SLKTextInputbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextInputbar.m; sourceTree = "<group>"; };
+		F5ABA2131BD02347007D1664 /* SLKTextView+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SLKTextView+SLKAdditions.h"; sourceTree = "<group>"; };
+		F5ABA2141BD02347007D1664 /* SLKTextView+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SLKTextView+SLKAdditions.m"; sourceTree = "<group>"; };
+		F5ABA2151BD02347007D1664 /* SLKTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextView.h; sourceTree = "<group>"; };
+		F5ABA2161BD02347007D1664 /* SLKTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextView.m; sourceTree = "<group>"; };
+		F5ABA2171BD02347007D1664 /* SLKTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextViewController.h; sourceTree = "<group>"; };
+		F5ABA2181BD02347007D1664 /* SLKTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextViewController.m; sourceTree = "<group>"; };
+		F5ABA2191BD02347007D1664 /* SLKTypingIndicatorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTypingIndicatorProtocol.h; sourceTree = "<group>"; };
+		F5ABA21A1BD02347007D1664 /* SLKTypingIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTypingIndicatorView.h; sourceTree = "<group>"; };
+		F5ABA21B1BD02347007D1664 /* SLKTypingIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTypingIndicatorView.m; sourceTree = "<group>"; };
+		F5ABA21C1BD02347007D1664 /* SLKUIConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKUIConstants.h; sourceTree = "<group>"; };
+		F5ABA21D1BD02347007D1664 /* UIResponder+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+SLKAdditions.h"; sourceTree = "<group>"; };
+		F5ABA21E1BD02347007D1664 /* UIResponder+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+SLKAdditions.m"; sourceTree = "<group>"; };
+		F5ABA21F1BD02347007D1664 /* UIScrollView+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SLKAdditions.h"; sourceTree = "<group>"; };
+		F5ABA2201BD02347007D1664 /* UIScrollView+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SLKAdditions.m"; sourceTree = "<group>"; };
+		F5ABA2211BD02347007D1664 /* UIView+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+SLKAdditions.h"; sourceTree = "<group>"; };
+		F5ABA2221BD02347007D1664 /* UIView+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+SLKAdditions.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,7 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				48C64A211ABA222C00021C91 /* SlackTextViewController.h */,
-				4FB17BCD1B75079000858D9E /* Source */,
+				F5ABA20E1BD02347007D1664 /* Source */,
 				48C64A061ABA215600021C91 /* Supporting Files */,
 			);
 			path = SlackTextViewController;
@@ -155,48 +164,32 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		4FB17BCD1B75079000858D9E /* Source */ = {
+		F5ABA20E1BD02347007D1664 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4FB17BCE1B75079000858D9E /* Additions */,
-				4FB17BD81B75079000858D9E /* Classes */,
+				F5ABA20F1BD02347007D1664 /* SLKInputAccessoryView.h */,
+				F5ABA2101BD02347007D1664 /* SLKInputAccessoryView.m */,
+				F5ABA2111BD02347007D1664 /* SLKTextInputbar.h */,
+				F5ABA2121BD02347007D1664 /* SLKTextInputbar.m */,
+				F5ABA2131BD02347007D1664 /* SLKTextView+SLKAdditions.h */,
+				F5ABA2141BD02347007D1664 /* SLKTextView+SLKAdditions.m */,
+				F5ABA2151BD02347007D1664 /* SLKTextView.h */,
+				F5ABA2161BD02347007D1664 /* SLKTextView.m */,
+				F5ABA2171BD02347007D1664 /* SLKTextViewController.h */,
+				F5ABA2181BD02347007D1664 /* SLKTextViewController.m */,
+				F5ABA2191BD02347007D1664 /* SLKTypingIndicatorProtocol.h */,
+				F5ABA21A1BD02347007D1664 /* SLKTypingIndicatorView.h */,
+				F5ABA21B1BD02347007D1664 /* SLKTypingIndicatorView.m */,
+				F5ABA21C1BD02347007D1664 /* SLKUIConstants.h */,
+				F5ABA21D1BD02347007D1664 /* UIResponder+SLKAdditions.h */,
+				F5ABA21E1BD02347007D1664 /* UIResponder+SLKAdditions.m */,
+				F5ABA21F1BD02347007D1664 /* UIScrollView+SLKAdditions.h */,
+				F5ABA2201BD02347007D1664 /* UIScrollView+SLKAdditions.m */,
+				F5ABA2211BD02347007D1664 /* UIView+SLKAdditions.h */,
+				F5ABA2221BD02347007D1664 /* UIView+SLKAdditions.m */,
 			);
 			name = Source;
 			path = ../../Source;
-			sourceTree = "<group>";
-		};
-		4FB17BCE1B75079000858D9E /* Additions */ = {
-			isa = PBXGroup;
-			children = (
-				4FB17BCF1B75079000858D9E /* SLKTextView+SLKAdditions.h */,
-				4FB17BD01B75079000858D9E /* SLKTextView+SLKAdditions.m */,
-				4FB17BD11B75079000858D9E /* SLKUIConstants.h */,
-				4FB17BD21B75079000858D9E /* UIResponder+SLKAdditions.h */,
-				4FB17BD31B75079000858D9E /* UIResponder+SLKAdditions.m */,
-				4FB17BD41B75079000858D9E /* UIScrollView+SLKAdditions.h */,
-				4FB17BD51B75079000858D9E /* UIScrollView+SLKAdditions.m */,
-				4FB17BD61B75079000858D9E /* UIView+SLKAdditions.h */,
-				4FB17BD71B75079000858D9E /* UIView+SLKAdditions.m */,
-			);
-			path = Additions;
-			sourceTree = "<group>";
-		};
-		4FB17BD81B75079000858D9E /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				4FB17BD91B75079000858D9E /* SLKInputAccessoryView.h */,
-				4FB17BDA1B75079000858D9E /* SLKInputAccessoryView.m */,
-				4FB17BDB1B75079000858D9E /* SLKTextInputbar.h */,
-				4FB17BDC1B75079000858D9E /* SLKTextInputbar.m */,
-				4FB17BDD1B75079000858D9E /* SLKTextView.h */,
-				4FB17BDE1B75079000858D9E /* SLKTextView.m */,
-				4FB17BDF1B75079000858D9E /* SLKTextViewController.h */,
-				4FB17BE01B75079000858D9E /* SLKTextViewController.m */,
-				4FB17BE11B75079000858D9E /* SLKTypingIndicatorProtocol.h */,
-				4FB17BE21B75079000858D9E /* SLKTypingIndicatorView.h */,
-				4FB17BE31B75079000858D9E /* SLKTypingIndicatorView.m */,
-			);
-			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -206,18 +199,18 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FB17BF31B75079000858D9E /* SLKTextViewController.h in Headers */,
-				4FB17BE61B75079000858D9E /* SLKUIConstants.h in Headers */,
-				4FB17BE71B75079000858D9E /* UIResponder+SLKAdditions.h in Headers */,
-				4FB17BF51B75079000858D9E /* SLKTypingIndicatorProtocol.h in Headers */,
-				4FB17BF11B75079000858D9E /* SLKTextView.h in Headers */,
-				4FB17BEB1B75079000858D9E /* UIView+SLKAdditions.h in Headers */,
-				4FB17BED1B75079000858D9E /* SLKInputAccessoryView.h in Headers */,
-				4FB17BE91B75079000858D9E /* UIScrollView+SLKAdditions.h in Headers */,
+				F5ABA2371BD02347007D1664 /* UIResponder+SLKAdditions.h in Headers */,
+				F5ABA2361BD02347007D1664 /* SLKUIConstants.h in Headers */,
+				F5ABA2231BD02347007D1664 /* SLKInputAccessoryView.h in Headers */,
+				F5ABA22F1BD02347007D1664 /* SLKTextViewController.h in Headers */,
+				F5ABA23D1BD02347007D1664 /* UIView+SLKAdditions.h in Headers */,
+				F5ABA2261BD02347007D1664 /* SLKTextInputbar.h in Headers */,
+				F5ABA2331BD02347007D1664 /* SLKTypingIndicatorView.h in Headers */,
+				F5ABA2291BD02347007D1664 /* SLKTextView+SLKAdditions.h in Headers */,
+				F5ABA23A1BD02347007D1664 /* UIScrollView+SLKAdditions.h in Headers */,
+				F5ABA22C1BD02347007D1664 /* SLKTextView.h in Headers */,
 				48C64A351ABA222C00021C91 /* SlackTextViewController.h in Headers */,
-				4FB17BEF1B75079000858D9E /* SLKTextInputbar.h in Headers */,
-				4FB17BE41B75079000858D9E /* SLKTextView+SLKAdditions.h in Headers */,
-				4FB17BF61B75079000858D9E /* SLKTypingIndicatorView.h in Headers */,
+				F5ABA2321BD02347007D1664 /* SLKTypingIndicatorProtocol.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,7 +246,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				4F8B71741ABC94A2006594B9 /* PBXTargetDependency */,
+				F5ABA2421BD02420007D1664 /* PBXTargetDependency */,
 			);
 			name = SlackTextViewControllerTests;
 			productName = SlackTextViewControllerTests;
@@ -317,15 +310,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FB17BE81B75079000858D9E /* UIResponder+SLKAdditions.m in Sources */,
-				4FB17BF21B75079000858D9E /* SLKTextView.m in Sources */,
-				4FB17BEC1B75079000858D9E /* UIView+SLKAdditions.m in Sources */,
-				4FB17BEE1B75079000858D9E /* SLKInputAccessoryView.m in Sources */,
-				4FB17BF01B75079000858D9E /* SLKTextInputbar.m in Sources */,
-				4FB17BE51B75079000858D9E /* SLKTextView+SLKAdditions.m in Sources */,
-				4FB17BF41B75079000858D9E /* SLKTextViewController.m in Sources */,
-				4FB17BEA1B75079000858D9E /* UIScrollView+SLKAdditions.m in Sources */,
-				4FB17BF71B75079000858D9E /* SLKTypingIndicatorView.m in Sources */,
+				F5ABA2271BD02347007D1664 /* SLKTextInputbar.m in Sources */,
+				F5ABA23E1BD02347007D1664 /* UIView+SLKAdditions.m in Sources */,
+				F5ABA2381BD02347007D1664 /* UIResponder+SLKAdditions.m in Sources */,
+				F5ABA23B1BD02347007D1664 /* UIScrollView+SLKAdditions.m in Sources */,
+				F5ABA2241BD02347007D1664 /* SLKInputAccessoryView.m in Sources */,
+				F5ABA2341BD02347007D1664 /* SLKTypingIndicatorView.m in Sources */,
+				F5ABA22D1BD02347007D1664 /* SLKTextView.m in Sources */,
+				F5ABA2301BD02347007D1664 /* SLKTextViewController.m in Sources */,
+				F5ABA22A1BD02347007D1664 /* SLKTextView+SLKAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -333,17 +326,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F8B71711ABC94A2006594B9 /* SlackTextViewControllerTests.m in Sources */,
+				F5ABA23C1BD02347007D1664 /* UIScrollView+SLKAdditions.m in Sources */,
+				F5ABA2351BD02347007D1664 /* SLKTypingIndicatorView.m in Sources */,
+				F5ABA2391BD02347007D1664 /* UIResponder+SLKAdditions.m in Sources */,
+				F5ABA2281BD02347007D1664 /* SLKTextInputbar.m in Sources */,
+				F5ABA2401BD023E9007D1664 /* SlackTextViewControllerTests.m in Sources */,
+				F5ABA2251BD02347007D1664 /* SLKInputAccessoryView.m in Sources */,
+				F5ABA22E1BD02347007D1664 /* SLKTextView.m in Sources */,
+				F5ABA23F1BD02347007D1664 /* UIView+SLKAdditions.m in Sources */,
+				F5ABA2311BD02347007D1664 /* SLKTextViewController.m in Sources */,
+				F5ABA22B1BD02347007D1664 /* SLKTextView+SLKAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4F8B71741ABC94A2006594B9 /* PBXTargetDependency */ = {
+		F5ABA2421BD02420007D1664 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 48C64A021ABA215600021C91 /* SlackTextViewController */;
-			targetProxy = 4F8B71731ABC94A2006594B9 /* PBXContainerItemProxy */;
+			targetProxy = F5ABA2411BD02420007D1664 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

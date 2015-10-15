@@ -19,12 +19,15 @@
 FOUNDATION_EXPORT double SlackTextViewControllerVersionNumber;
 FOUNDATION_EXPORT const unsigned char SlackTextViewControllerVersionString[];
 
-#import <SlackTextViewController/SLKUIConstants.h>
 #import <SlackTextViewController/SLKTextViewController.h>
 #import <SlackTextViewController/SLKTextView.h>
 #import <SlackTextViewController/SLKTextInputbar.h>
 #import <SlackTextViewController/SLKInputAccessoryView.h>
 #import <SlackTextViewController/SLKTypingIndicatorView.h>
+#import <SlackTextViewController/SLKTypingIndicatorProtocol.h>
+
+#import <SlackTextViewController/SLKUIConstants.h>
+
 #import <SlackTextViewController/UIView+SLKAdditions.h>
 #import <SlackTextViewController/UIScrollView+SLKAdditions.h>
 #import <SlackTextViewController/SLKTextView+SLKAdditions.h>

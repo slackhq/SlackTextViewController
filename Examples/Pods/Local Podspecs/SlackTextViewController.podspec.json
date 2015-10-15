@@ -1,6 +1,6 @@
 {
   "name": "SlackTextViewController",
-  "version": "1.5",
+  "version": "1.7",
   "summary": "A drop-in UIViewController subclass with a custom growing text input and other useful messaging features.",
   "description": "Meant to be a replacement for UITableViewController & UICollectionViewController. This library is used in Slack's iOS app. It was built to fit our needs, but is flexible enough to be reused by others wanting to build great messaging apps for iOS.",
   "homepage": "https://slack.com/",
@@ -14,7 +14,7 @@
   },
   "source": {
     "git": "https://github.com/slackhq/SlackTextViewController.git",
-    "tag": "v1.5"
+    "tag": "v1.7"
   },
   "platforms": {
     "ios": "7.0"
