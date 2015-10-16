@@ -531,4 +531,11 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** UIAlertViewDelegate */
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex NS_REQUIRES_SUPER;
 
+#pragma mark - Life Cycle Methods Requiring Super
+
+/**
+ Configures view hierarchy and layout constraints. If you override this method, make sure to call [super viewDidLoad].
+ */
+- (void)viewDidLoad NS_REQUIRES_SUPER;
+
 @end
