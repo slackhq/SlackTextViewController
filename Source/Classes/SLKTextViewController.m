@@ -169,6 +169,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 #pragma mark - View lifecycle
 
+- (void)loadView
+{
+    [super loadView];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
