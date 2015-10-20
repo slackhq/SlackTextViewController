@@ -162,10 +162,26 @@ NSString * const SLKTextViewPastedItemData =                        @"SLKTextVie
 
 - (NSUInteger)numberOfLines
 {
-    CGFloat contentHeight = self.contentSize.height;
+    CGSize contentSize = self.contentSize;
+    
+    CGFloat contentHeight = contentSize.height;
     contentHeight -= self.textContainerInset.top + self.textContainerInset.bottom;
-
-    return fabs(contentHeight/self.font.lineHeight);
+    
+    NSUInteger lines = fabs(contentHeight/self.font.lineHeight);
+    
+    // This helps preventing the content's height to be larger that the bounds' height
+    // Avoiding this way to have unnecessary scrolling in the text view when there is only 1 line of content
+    if (lines == 1 && contentSize.height > self.bounds.size.height) {
+        contentSize.height = self.bounds.size.height;
+        self.contentSize = contentSize;
+    }
+    
+    // Let's fallback to the minimum line count
+    if (lines == 0) {
+        lines = 1;
+    }
+    
+    return lines;
 }
 
 - (NSUInteger)maxNumberOfLines
