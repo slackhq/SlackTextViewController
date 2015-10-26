@@ -399,7 +399,8 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
     _autoHideRightButton = hide;
     
     self.rightButtonWC.constant = [self slk_appropriateRightButtonWidth];
-    
+    self.rightMarginWC.constant = [self slk_appropriateRightButtonMargin];
+
     [self layoutIfNeeded];
 }
 
