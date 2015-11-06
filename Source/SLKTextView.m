@@ -30,6 +30,8 @@ NSString * const SLKTextViewPastedItemContentType =                 @"SLKTextVie
 NSString * const SLKTextViewPastedItemMediaType =                   @"SLKTextViewPastedItemMediaType";
 NSString * const SLKTextViewPastedItemData =                        @"SLKTextViewPastedItemData";
 
+static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format_";
+
 @interface SLKTextView ()
 
 // The label used as placeholder
@@ -48,6 +50,9 @@ NSString * const SLKTextViewPastedItemData =                        @"SLKTextVie
 
 // Used for detecting if the scroll indicator was previously flashed
 @property (nonatomic) BOOL didFlashScrollIndicators;
+
+@property (nonatomic, copy) NSMutableDictionary *formattingAdapters;
+@property (nonatomic, getter=isFormatting) BOOL formatting;
 
 @end
 
@@ -538,12 +543,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (BOOL)canBecomeFirstResponder
 {
-    // Adds undo/redo items to the Menu Controller
-    if (self.undoManagerEnabled) {
-        UIMenuItem *undo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Undo", nil) action:@selector(slk_undo:)];
-        UIMenuItem *redo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Redo", nil) action:@selector(slk_redo:)];
-        [[UIMenuController sharedMenuController] setMenuItems:@[undo,redo]];
-    }
+    [self slk_addCustomMenuControllerItems];
     
     return [super canBecomeFirstResponder];
 }
@@ -557,7 +557,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 {
     // Removes undo/redo items
     if (self.undoManagerEnabled) {
-        [[UIMenuController sharedMenuController] setMenuItems:@[]];
         [self.undoManager removeAllActions];
     }
     
@@ -571,12 +570,29 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
+    if (self.isFormatting) {
+        NSString *sel = NSStringFromSelector(action);
+        NSRange match = [sel rangeOfString:SLKTextViewGenericFormattingSelectorPrefix];
+        
+        if (match.location != NSNotFound) {
+            return YES;
+        }
+        return NO;
+    }
+
     if (action == @selector(delete:)) {
         return NO;
     }
     
-    if ((action == @selector(copy:) || action == @selector(cut:))
-        && self.selectedRange.length > 0) {
+    if (action == NSSelectorFromString(@"_share:") || action == NSSelectorFromString(@"_define:") || action == NSSelectorFromString(@"_promptForReplace:")) {
+        return NO;
+    }
+    
+    if (action == @selector(slk_presentFormattingMenu:)) {
+        return self.selectedRange.length > 0 ? YES : NO;
+    }
+    
+    if (action == @selector(paste:) && [self slk_isPasteboardItemSupported]) {
         return YES;
     }
     
@@ -690,6 +706,15 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     _didNotResignFirstResponder = NO;
 }
 
+- (void)slk_addCustomMenuControllerItems
+{
+    UIMenuItem *undo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Undo", nil) action:@selector(slk_undo:)];
+    UIMenuItem *redo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Redo", nil) action:@selector(slk_redo:)];
+    UIMenuItem *format = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Format", nil) action:@selector(slk_presentFormattingMenu:)];
+    
+    [[UIMenuController sharedMenuController] setMenuItems:@[undo, redo, format]];
+}
+
 - (void)slk_undo:(id)sender
 {
     [self.undoManager undo];
@@ -698,6 +723,70 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 - (void)slk_redo:(id)sender
 {
     [self.undoManager redo];
+}
+
+- (void)slk_presentFormattingMenu:(id)sender
+{
+    NSMutableArray *items = [NSMutableArray arrayWithCapacity:self.formattingAdapters.count];
+    
+    [self.formattingAdapters enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *title, BOOL * _Nonnull stop) {
+        NSString *sel = [NSString stringWithFormat:@"%@%@", SLKTextViewGenericFormattingSelectorPrefix, title];
+        
+        UIMenuItem *item = [[UIMenuItem alloc] initWithTitle:title action:NSSelectorFromString(sel)];
+        [items addObject:item];
+    }];
+    
+    self.formatting = YES;
+    
+    UIMenuController *menu = [UIMenuController sharedMenuController];
+    [menu setMenuItems:items];
+    [menu setMenuVisible:YES animated:YES];
+}
+
+- (void)slk_format:(NSString *)title
+{
+    NSLog(@"%s: %@",__FUNCTION__, title);
+    
+    NSArray *keys = [self.formattingAdapters allKeysForObject:title];
+    NSString *key = [keys firstObject];
+    
+    if (key.length > 0) {
+        [self slk_insertText:key inRange:NSMakeRange(self.selectedRange.location, 0)];
+        [self slk_insertText:key inRange:NSMakeRange(self.selectedRange.location+self.selectedRange.length, 0)];
+    }
+}
+
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)sel
+{
+    if ([super methodSignatureForSelector:sel]) {
+        return [super methodSignatureForSelector:sel];
+    }
+    return [super methodSignatureForSelector:@selector(slk_format:)];
+}
+
+- (void)forwardInvocation:(NSInvocation *)invocation
+{
+    NSString *sel = NSStringFromSelector([invocation selector]);
+    NSRange match = [sel rangeOfString:SLKTextViewGenericFormattingSelectorPrefix];
+    
+    if (match.location != NSNotFound) {
+        [self slk_format:[sel substringFromIndex:SLKTextViewGenericFormattingSelectorPrefix.length]];
+    }
+    else {
+        [super forwardInvocation:invocation];
+    }
+}
+
+
+#pragma mark - Markdown Auto-Detection
+
+- (void)registerMarkdownFormattingKey:(NSString *)key name:(NSString *)name
+{
+    if (!_formattingAdapters) {
+        _formattingAdapters = [NSMutableDictionary new];
+    }
+    
+    [self.formattingAdapters setObject:name forKey:key];
 }
 
 
@@ -754,6 +843,18 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     // Reloads the content size of the text view
     [self setText:@" "];
     [self setText:text];
+}
+
+- (void)slk_willShowMenuController:(NSNotification *)notification
+{
+    
+}
+
+- (void)slk_didHideMenuController:(NSNotification *)notification
+{
+    self.formatting = NO;
+    
+    [self slk_addCustomMenuControllerItems];
 }
 
 
@@ -947,6 +1048,8 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didEndEditing:) name:UITextViewTextDidEndEditingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextInputMode:) name:UITextInputCurrentInputModeDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeContentSizeCategory:) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willShowMenuController:) name:UIMenuControllerWillShowMenuNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didHideMenuController:) name:UIMenuControllerDidHideMenuNotification object:nil];
 }
 
 - (void)slk_unregisterNotifications

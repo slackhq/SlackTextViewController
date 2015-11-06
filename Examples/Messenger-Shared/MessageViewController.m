@@ -149,6 +149,11 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
     [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":", @"+:"]];
+    
+    [self.textView registerMarkdownFormattingKey:@"*" name:@"Bold"];
+    [self.textView registerMarkdownFormattingKey:@"_" name:@"Italic"];
+    [self.textView registerMarkdownFormattingKey:@"~" name:@"Strikethrough"];
+    [self.textView registerMarkdownFormattingKey:@"`" name:@"Code"];
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -79,6 +79,8 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 /** YES if the font size should dynamically adapt based on the font sizing option preferred by the user. Default is YES. */
 @property (nonatomic, getter=isDynamicTypeEnabled) BOOL dynamicTypeEnabled;
 
+
+
 /**
  Some text view properties don't update when it's already firstResponder (auto-correction, spelling-check, etc.)
  To be able to update the text view while still being first responder, requieres to switch quickly from -resignFirstResponder to -becomeFirstResponder.
@@ -93,5 +95,13 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
  Notifies the text view that the user pressed any arrow key. This is used to move the cursor up and down while having multiple lines.
  */
 - (void)didPressAnyArrowKey:(id)sender;
+
+
+#pragma mark - Markdown Auto-Detection
+
+/**
+ 
+ */
+- (void)registerMarkdownFormattingKey:(NSString *)key name:(NSString *)name;
 
 @end
