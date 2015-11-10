@@ -51,12 +51,14 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
 // Used for detecting if the scroll indicator was previously flashed
 @property (nonatomic) BOOL didFlashScrollIndicators;
 
-@property (nonatomic, copy) NSMutableDictionary *formattingAdapters;
+@property (nonatomic, strong) NSMutableArray *registeredFormaterNames;
+@property (nonatomic, strong) NSMutableArray *registeredFormaterSymbols;
 @property (nonatomic, getter=isFormatting) BOOL formatting;
 
 @end
 
 @implementation SLKTextView
+@synthesize delegate = _delegate;
 
 #pragma mark - Initialization
 
@@ -82,7 +84,8 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
     _dynamicTypeEnabled = YES;
 
     self.undoManagerEnabled = YES;
-
+    self.autoCompleteFormatting = YES;
+    
     self.editable = YES;
     self.selectable = YES;
     self.scrollEnabled = YES;
@@ -221,6 +224,14 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
 - (BOOL)isTypingSuggestionEnabled
 {
     return (self.autocorrectionType == UITextAutocorrectionTypeNo) ? NO : YES;
+}
+
+- (BOOL)autoCompleteFormatting
+{
+    if (_registeredFormaterNames.count == 0) {
+        return NO;
+    }
+    return _autoCompleteFormatting;
 }
 
 // Returns only a supported pasted item
@@ -571,12 +582,15 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
     if (self.isFormatting) {
-        NSString *sel = NSStringFromSelector(action);
-        NSRange match = [sel rangeOfString:SLKTextViewGenericFormattingSelectorPrefix];
-        
-        if (match.location != NSNotFound) {
-            return YES;
+        NSString *name = [self slk_formatterNameFromSelector:action];
+        NSString *symbol = [self slk_formatterSymbolForName:name];
+
+        if (symbol.length > 0) {
+            if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldOfferFormattingForSymbol:)]) {
+                return [self.delegate textView:self shouldOfferFormattingForSymbol:symbol];
+            }
         }
+        
         return NO;
     }
 
@@ -636,6 +650,29 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
         // Inserting the text fixes a UITextView bug whitch automatically scrolls to the bottom
         // and beyond scroll content size sometimes when the text is too long
         [self slk_insertTextAtCaretRange:pastedItem];
+    }
+}
+
+
+#pragma mark - NSObject Overrides
+
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)sel
+{
+    if ([super methodSignatureForSelector:sel]) {
+        return [super methodSignatureForSelector:sel];
+    }
+    return [super methodSignatureForSelector:@selector(slk_format:)];
+}
+
+- (void)forwardInvocation:(NSInvocation *)invocation
+{
+    NSString *name = [self slk_formatterNameFromSelector:[invocation selector]];
+    
+    if (name.length > 0) {
+        [self slk_format:name];
+    }
+    else {
+        [super forwardInvocation:invocation];
     }
 }
 
@@ -727,66 +764,97 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (void)slk_presentFormattingMenu:(id)sender
 {
-    NSMutableArray *items = [NSMutableArray arrayWithCapacity:self.formattingAdapters.count];
+    NSMutableArray *items = [NSMutableArray arrayWithCapacity:self.registeredFormaterNames.count];
     
-    [self.formattingAdapters enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *title, BOOL * _Nonnull stop) {
-        NSString *sel = [NSString stringWithFormat:@"%@%@", SLKTextViewGenericFormattingSelectorPrefix, title];
+    for (NSString *name in self.registeredFormaterNames) {
         
-        UIMenuItem *item = [[UIMenuItem alloc] initWithTitle:title action:NSSelectorFromString(sel)];
+        NSString *sel = [NSString stringWithFormat:@"%@%@", SLKTextViewGenericFormattingSelectorPrefix, name];
+        
+        UIMenuItem *item = [[UIMenuItem alloc] initWithTitle:name action:NSSelectorFromString(sel)];
         [items addObject:item];
-    }];
+    }
     
     self.formatting = YES;
     
     UIMenuController *menu = [UIMenuController sharedMenuController];
     [menu setMenuItems:items];
+    
+    NSLayoutManager *manager = self.layoutManager;
+    CGRect targetRect = [manager boundingRectForGlyphRange:self.selectedRange inTextContainer:self.textContainer];
+    
+    [menu setTargetRect:targetRect inView:self];
+    
     [menu setMenuVisible:YES animated:YES];
 }
 
-- (void)slk_format:(NSString *)title
+- (NSString *)slk_formatterNameFromSelector:(SEL)selector
 {
-    NSLog(@"%s: %@",__FUNCTION__, title);
-    
-    NSArray *keys = [self.formattingAdapters allKeysForObject:title];
-    NSString *key = [keys firstObject];
-    
-    if (key.length > 0) {
-        [self slk_insertText:key inRange:NSMakeRange(self.selectedRange.location, 0)];
-        [self slk_insertText:key inRange:NSMakeRange(self.selectedRange.location+self.selectedRange.length, 0)];
-    }
-}
-
-- (NSMethodSignature *)methodSignatureForSelector:(SEL)sel
-{
-    if ([super methodSignatureForSelector:sel]) {
-        return [super methodSignatureForSelector:sel];
-    }
-    return [super methodSignatureForSelector:@selector(slk_format:)];
-}
-
-- (void)forwardInvocation:(NSInvocation *)invocation
-{
-    NSString *sel = NSStringFromSelector([invocation selector]);
-    NSRange match = [sel rangeOfString:SLKTextViewGenericFormattingSelectorPrefix];
+    NSString *selectorString = NSStringFromSelector(selector);
+    NSRange match = [selectorString rangeOfString:SLKTextViewGenericFormattingSelectorPrefix];
     
     if (match.location != NSNotFound) {
-        [self slk_format:[sel substringFromIndex:SLKTextViewGenericFormattingSelectorPrefix.length]];
+        return [selectorString substringFromIndex:SLKTextViewGenericFormattingSelectorPrefix.length];
     }
-    else {
-        [super forwardInvocation:invocation];
+    
+    return nil;
+}
+
+- (NSString *)slk_formatterSymbolForName:(NSString *)name
+{
+    NSUInteger idx = [self.registeredFormaterNames indexOfObject:name];
+    
+    if (idx < self.registeredFormaterSymbols.count -1) {
+        return self.registeredFormaterSymbols[idx];
+    }
+    
+    return nil;
+}
+
+- (void)slk_format:(NSString *)name
+{
+    NSString *symbol = [self slk_formatterSymbolForName:name];
+    
+    if (symbol.length > 0) {
+        NSRange selection = self.selectedRange;
+        
+        NSRange range = [self slk_insertText:symbol inRange:NSMakeRange(selection.location, 0)];
+        range.location += selection.length;
+        range.length = 0;
+        
+        // The default behavior is to add a closure
+        BOOL addClosure = YES;
+        
+        if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldInsertClosureForFormattingWithSymbol:inRange:)]) {
+            addClosure = [self.delegate textView:self shouldInsertClosureForFormattingWithSymbol:symbol inRange:selection];
+        }
+        
+        if (addClosure) {
+            self.selectedRange = [self slk_insertText:symbol inRange:range];
+        }
     }
 }
 
 
-#pragma mark - Markdown Auto-Detection
+#pragma mark - Markdown Formatting
 
-- (void)registerMarkdownFormattingKey:(NSString *)key name:(NSString *)name
+- (void)registerMarkdownFormattingSymbol:(NSString *)symbol forName:(NSString *)name
 {
-    if (!_formattingAdapters) {
-        _formattingAdapters = [NSMutableDictionary new];
+    if (!symbol || !name) {
+        return;
     }
     
-    [self.formattingAdapters setObject:name forKey:key];
+    if (!_registeredFormaterNames) {
+        _registeredFormaterNames = [NSMutableArray new];
+        _registeredFormaterSymbols = [NSMutableArray new];
+    }
+    
+    [self.registeredFormaterNames addObject:name];
+    [self.registeredFormaterSymbols addObject:symbol];
+}
+
+- (NSArray *)registeredFormattingSymbols
+{
+    return self.registeredFormaterSymbols;
 }
 
 

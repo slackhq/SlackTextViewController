@@ -150,10 +150,12 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
     [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":", @"+:"]];
     
-    [self.textView registerMarkdownFormattingKey:@"*" name:@"Bold"];
-    [self.textView registerMarkdownFormattingKey:@"_" name:@"Italic"];
-    [self.textView registerMarkdownFormattingKey:@"~" name:@"Strikethrough"];
-    [self.textView registerMarkdownFormattingKey:@"`" name:@"Code"];
+    [self.textView registerMarkdownFormattingSymbol:@"*" forName:@"Bold"];
+    [self.textView registerMarkdownFormattingSymbol:@"_" forName:@"Italics"];
+    [self.textView registerMarkdownFormattingSymbol:@"~" forName:@"Strike"];
+    [self.textView registerMarkdownFormattingSymbol:@"`" forName:@"Code"];
+    [self.textView registerMarkdownFormattingSymbol:@"```" forName:@"Preformatted"];
+    [self.textView registerMarkdownFormattingSymbol:@">" forName:@"Quote"];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -648,6 +650,40 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     return [super textView:textView shouldChangeTextInRange:range replacementText:text];
+}
+
+- (BOOL)textView:(SLKTextView *)textView shouldOfferFormattingForSymbol:(NSString *)symbol
+{
+    if ([symbol isEqualToString:@">"]) {
+        
+        NSRange selection = textView.selectedRange;
+        
+        // The Quote formatting only applies new paragraphs
+        if (selection.location == 0 && selection.length > 0) {
+            return YES;
+        }
+        
+        // or older paragraphs too
+        NSString *prevString = [textView.text substringWithRange:NSMakeRange(selection.location-1, 1)];
+        
+        if ([[NSCharacterSet newlineCharacterSet] characterIsMember:[prevString characterAtIndex:0]]) {
+            return YES;
+        }
+
+        return NO;
+    }
+    return YES;
+}
+
+- (BOOL)textView:(SLKTextView *)textView shouldInsertClosureForFormattingWithSymbol:(NSString *)symbol inRange:(NSRange)range
+{
+    BOOL shouldInsert = [super textView:textView shouldInsertClosureForFormattingWithSymbol:symbol inRange:range];
+    
+    if ([symbol isEqualToString:@">"]) {
+        return NO;
+    }
+    
+    return shouldInsert;
 }
 
 

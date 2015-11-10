@@ -39,8 +39,12 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
     SLKPastableMediaTypeAll         = SLKPastableMediaTypeImages|SLKPastableMediaTypeMOV
 };
 
+@protocol SLKTextViewDelegate;
+
 /** @name A custom text input view. */
 @interface SLKTextView : UITextView
+
+@property (nonatomic, weak) id<SLKTextViewDelegate,UITextViewDelegate>delegate;
 
 /** The placeholder text string. Default is nil. */
 @property (nonatomic, copy) NSString *placeholder;
@@ -97,11 +101,38 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 - (void)didPressAnyArrowKey:(id)sender;
 
 
-#pragma mark - Markdown Auto-Detection
+#pragma mark - Markdown Formatting
 
 /**
  
  */
-- (void)registerMarkdownFormattingKey:(NSString *)key name:(NSString *)name;
+@property (nonatomic) BOOL autoCompleteFormatting;
+
+/**
+ 
+ */
+@property (nonatomic, readonly) NSArray *registeredFormattingSymbols;
+
+/**
+ 
+ */
+- (void)registerMarkdownFormattingSymbol:(NSString *)symbol forName:(NSString *)name;
+
+@end
+
+
+@protocol SLKTextViewDelegate <UITextViewDelegate>
+
+@optional
+
+/**
+ 
+ */
+- (BOOL)textView:(SLKTextView *)textView shouldOfferFormattingForSymbol:(NSString *)symbol;
+
+/**
+ 
+ */
+- (BOOL)textView:(SLKTextView *)textView shouldInsertClosureForFormattingWithSymbol:(NSString *)symbol inRange:(NSRange)range;
 
 @end
