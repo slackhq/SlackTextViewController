@@ -70,6 +70,16 @@
  */
 - (NSString *)slk_wordAtCaretRange:(NSRangePointer)range;
 
+
+/**
+ Finds the word close to specific range.
+ 
+ @param range The range to be used for searching the word.
+ @param rangePointer Returns the range of the found word.
+ @returns The found word.
+ */
+- (NSString *)slk_wordAtRange:(NSRange)range rangeInText:(NSRangePointer)rangePointer;
+
 /**
  Registers the current text for future undo actions.
  
