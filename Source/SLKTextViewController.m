@@ -574,13 +574,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)dismissKeyboard:(BOOL)animated
 {
-    if (![self.textView isFirstResponder]) {
-        
-        // Dismisses the keyboard from any first responder in the window.
-        if (self.keyboardHC.constant > 0) {
-            [self.view.window endEditing:NO];
-        }
-        return;
+    // Dismisses the keyboard from any first responder in the window.
+    if (![self.textView isFirstResponder] && self.keyboardHC.constant > 0) {
+        [self.view.window endEditing:NO];
     }
     
     if (!animated) {
