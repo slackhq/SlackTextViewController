@@ -734,6 +734,11 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     // Do something
 }
 
+- (void)slk_didChangeTextInputMode:(NSNotification *)notification
+{
+    // Do something
+}
+
 - (void)slk_didChangeContentSizeCategory:(NSNotification *)notification
 {
     if (!self.isDynamicTypeEnabled) {
@@ -940,6 +945,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didBeginEditing:) name:UITextViewTextDidBeginEditingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeText:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didEndEditing:) name:UITextViewTextDidEndEditingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextInputMode:) name:UITextInputCurrentInputModeDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeContentSizeCategory:) name:UIContentSizeCategoryDidChangeNotification object:nil];
 }
 
@@ -948,6 +954,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidBeginEditingNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidEndEditingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextInputCurrentInputModeDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIContentSizeCategoryDidChangeNotification object:nil];
 }
 
