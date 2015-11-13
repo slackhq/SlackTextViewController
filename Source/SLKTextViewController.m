@@ -184,6 +184,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [self.view addSubview:self.textInputbar];
     
     [self slk_setupViewConstraints];
+    
+    // Forces laying out the recently added subviews and update their constraints
+    [self.view layoutIfNeeded];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -192,9 +195,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     // Invalidates this flag when the view appears
     self.textView.didNotResignFirstResponder = NO;
-    
-    // Helps laying out subviews with recently added constraints.
-    [self.view layoutIfNeeded];
     
     [UIView performWithoutAnimation:^{
         // Reloads any cached text
@@ -1316,8 +1316,16 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     // Skips this it's not the expected textView and shouldn't force adjustment of the text input bar.
     // This will also dismiss the text input bar if it's visible, and exit auto-completion mode if enabled.
-    if (![self.textView isFirstResponder] && ![self forceTextInputbarAdjustmentForResponder:[UIResponder slk_currentFirstResponder]]) {
-        return [self slk_dismissTextInputbarIfNeeded];
+    if (![self.textView isFirstResponder]) {
+        // Detect the current first responder. If there is no first responder, we should just ignore these notifications.
+        UIResponder *currentResponder = [UIResponder slk_currentFirstResponder];
+        
+        if (!currentResponder) {
+            return;
+        }
+        else if (![self forceTextInputbarAdjustmentForResponder:currentResponder]) {
+            return [self slk_dismissTextInputbarIfNeeded];
+        }
     }
     
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
