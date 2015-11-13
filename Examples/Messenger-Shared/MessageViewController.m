@@ -322,6 +322,10 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *)responder
 {
+    if ([responder isKindOfClass:[UIAlertController class]]) {
+        return YES;
+    }
+    
     // On iOS 9, returning YES helps keeping the input view visible when the keyboard if presented from another app when using multi-tasking on iPad.
     return SLK_IS_IPAD;
 }

@@ -790,14 +790,33 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)willRequestUndo
 {
+    NSString *title = NSLocalizedString(@"Undo Typing", nil);
+    NSString *acceptTitle = NSLocalizedString(@"Undo", nil);
+    NSString *cancelTitle = NSLocalizedString(@"Cancel", nil);
+    
+#ifdef __IPHONE_8_0
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:nil preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:acceptTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        // Clears the text but doesn't clear the undo manager
+        if (self.shakeToClearEnabled) {
+            [self.textView slk_clearText:NO];
+        }
+    }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:cancelTitle style:UIAlertActionStyleCancel handler:NULL]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+#else
     UIAlertView *alert = [UIAlertView new];
-    [alert setTitle:NSLocalizedString(@"Undo Typing", nil)];
-    [alert addButtonWithTitle:NSLocalizedString(@"Undo", nil)];
-    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+    [alert setTitle:title];
+    [alert addButtonWithTitle:acceptTitle];
+    [alert addButtonWithTitle:cancelTitle];
     [alert setCancelButtonIndex:1];
     [alert setTag:kSLKAlertViewClearTextTag];
     [alert setDelegate:self];
     [alert show];
+#endif
 }
 
 - (void)setTextInputbarHidden:(BOOL)hidden
@@ -1949,8 +1968,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag == kSLKAlertViewClearTextTag && self.shakeToClearEnabled && buttonIndex != [alertView cancelButtonIndex] ) {
-        // Clears the text but doesn't clear the undo manager
+    if (alertView.tag != kSLKAlertViewClearTextTag || buttonIndex == [alertView cancelButtonIndex] ) {
+        return;
+    }
+    
+    // Clears the text but doesn't clear the undo manager
+    if (self.shakeToClearEnabled) {
         [self.textView slk_clearText:NO];
     }
 }
