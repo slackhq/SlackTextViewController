@@ -51,8 +51,8 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
 // Used for detecting if the scroll indicator was previously flashed
 @property (nonatomic) BOOL didFlashScrollIndicators;
 
-@property (nonatomic, strong) NSMutableArray *registeredFormaterNames;
-@property (nonatomic, strong) NSMutableArray *registeredFormaterSymbols;
+@property (nonatomic, strong) NSMutableArray *registeredFormattingTitles;
+@property (nonatomic, strong) NSMutableArray *registeredFormattingSymbols;
 @property (nonatomic, getter=isFormatting) BOOL formatting;
 
 @end
@@ -228,7 +228,7 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
 
 - (BOOL)autoCompleteFormatting
 {
-    if (_registeredFormaterNames.count == 0) {
+    if (_registeredFormattingSymbols.count == 0) {
         return NO;
     }
     return _autoCompleteFormatting;
@@ -582,8 +582,8 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
     if (self.isFormatting) {
-        NSString *name = [self slk_formatterNameFromSelector:action];
-        NSString *symbol = [self slk_formatterSymbolForName:name];
+        NSString *title = [self slk_formattingTitleFromSelector:action];
+        NSString *symbol = [self slk_formattingSymbolWithTitle:title];
 
         if (symbol.length > 0) {
             if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldOfferFormattingForSymbol:)]) {
@@ -666,10 +666,10 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (void)forwardInvocation:(NSInvocation *)invocation
 {
-    NSString *name = [self slk_formatterNameFromSelector:[invocation selector]];
+    NSString *title = [self slk_formattingTitleFromSelector:[invocation selector]];
     
-    if (name.length > 0) {
-        [self slk_format:name];
+    if (title.length > 0) {
+        [self slk_format:title];
     }
     else {
         [super forwardInvocation:invocation];
@@ -764,9 +764,9 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (void)slk_presentFormattingMenu:(id)sender
 {
-    NSMutableArray *items = [NSMutableArray arrayWithCapacity:self.registeredFormaterNames.count];
+    NSMutableArray *items = [NSMutableArray arrayWithCapacity:self.registeredFormattingTitles.count];
     
-    for (NSString *name in self.registeredFormaterNames) {
+    for (NSString *name in self.registeredFormattingTitles) {
         
         NSString *sel = [NSString stringWithFormat:@"%@%@", SLKTextViewGenericFormattingSelectorPrefix, name];
         
@@ -787,7 +787,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     [menu setMenuVisible:YES animated:YES];
 }
 
-- (NSString *)slk_formatterNameFromSelector:(SEL)selector
+- (NSString *)slk_formattingTitleFromSelector:(SEL)selector
 {
     NSString *selectorString = NSStringFromSelector(selector);
     NSRange match = [selectorString rangeOfString:SLKTextViewGenericFormattingSelectorPrefix];
@@ -799,20 +799,20 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     return nil;
 }
 
-- (NSString *)slk_formatterSymbolForName:(NSString *)name
+- (NSString *)slk_formattingSymbolWithTitle:(NSString *)title
 {
-    NSUInteger idx = [self.registeredFormaterNames indexOfObject:name];
+    NSUInteger idx = [self.registeredFormattingTitles indexOfObject:title];
     
-    if (idx < self.registeredFormaterSymbols.count -1) {
-        return self.registeredFormaterSymbols[idx];
+    if (idx < self.registeredFormattingSymbols.count -1) {
+        return self.registeredFormattingSymbols[idx];
     }
     
     return nil;
 }
 
-- (void)slk_format:(NSString *)name
+- (void)slk_format:(NSString *)titles
 {
-    NSString *symbol = [self slk_formatterSymbolForName:name];
+    NSString *symbol = [self slk_formattingSymbolWithTitle:titles];
     
     if (symbol.length > 0) {
         NSRange selection = self.selectedRange;
@@ -824,8 +824,8 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
         // The default behavior is to add a closure
         BOOL addClosure = YES;
         
-        if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldInsertClosureForFormattingWithSymbol:inRange:)]) {
-            addClosure = [self.delegate textView:self shouldInsertClosureForFormattingWithSymbol:symbol inRange:selection];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldInsertSuffixForFormattingWithSymbol:prefixRange:)]) {
+            addClosure = [self.delegate textView:self shouldInsertSuffixForFormattingWithSymbol:symbol prefixRange:selection];
         }
         
         if (addClosure) {
@@ -837,24 +837,27 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 #pragma mark - Markdown Formatting
 
-- (void)registerMarkdownFormattingSymbol:(NSString *)symbol forName:(NSString *)name
+- (void)registerMarkdownFormattingSymbol:(NSString *)symbol withTitle:(NSString *)title
 {
-    if (!symbol || !name) {
+    if (!symbol || !title) {
         return;
     }
     
-    if (!_registeredFormaterNames) {
-        _registeredFormaterNames = [NSMutableArray new];
-        _registeredFormaterSymbols = [NSMutableArray new];
+    if (!_registeredFormattingTitles) {
+        _registeredFormattingTitles = [NSMutableArray new];
+        _registeredFormattingSymbols = [NSMutableArray new];
     }
     
-    [self.registeredFormaterNames addObject:name];
-    [self.registeredFormaterSymbols addObject:symbol];
+    // Adds the symbol if not contained already
+    if (![self.registeredSymbols containsObject:symbol]) {
+        [self.registeredFormattingTitles addObject:title];
+        [self.registeredFormattingSymbols addObject:symbol];
+    }
 }
 
-- (NSArray *)registeredFormattingSymbols
+- (NSArray *)registeredSymbols
 {
-    return self.registeredFormaterSymbols;
+    return self.registeredFormattingSymbols;
 }
 
 

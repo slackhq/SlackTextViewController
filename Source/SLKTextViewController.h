@@ -408,8 +408,8 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Registers any string prefix for autocompletion detection, useful for user mentions and/or hashtags autocompletion.
- The prefix must be valid NSString (i.e: '@', '#', '\', and so on). This also checks if no repeated prefix is inserted.
- You can also use longer prefixes.
+ The prefix must be valid string (i.e: '@', '#', '\', and so on). This also checks if no repeated prefix are inserted.
+ Prefixes can be of any length.
  
  @param prefixes An array of prefix strings.
  */
@@ -537,7 +537,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /** SLKTextViewDelegate */
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text NS_REQUIRES_SUPER;
-- (BOOL)textView:(SLKTextView *)textView shouldInsertClosureForFormattingWithSymbol:(NSString *)symbol inRange:(NSRange)range NS_REQUIRES_SUPER;
+- (BOOL)textView:(SLKTextView *)textView shouldInsertSuffixForFormattingWithSymbol:(NSString *)symbol prefixRange:(NSRange)prefixRange NS_REQUIRES_SUPER;
 
 /** UIScrollViewDelegate */
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView NS_REQUIRES_SUPER;

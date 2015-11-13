@@ -1856,7 +1856,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     // Records text for undo for every new word
     if (newWordInserted) {
-        [self.textView slk_prepareForUndo:@"Word Change"];
+        [textView slk_prepareForUndo:@"Word Change"];
     }
     
     // Detects double spacebar tapping, to replace the default "." insert with a formatting symbol, if needed.
@@ -1869,24 +1869,37 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         NSRange caretRange = range;
         caretRange.location -= 2;
         
-        NSRange rangeToSearch = NSMakeRange(0, caretRange.location);
-        NSRange rangeOfOpeningSymbol;
+        NSArray *symbols = textView.registeredSymbols;
         
-        for (NSString *symbol in self.textView.registeredFormattingSymbols) {
+        NSMutableCharacterSet *invalidCharacters = [NSMutableCharacterSet new];
+        [invalidCharacters formUnionWithCharacterSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        [invalidCharacters formUnionWithCharacterSet:[NSCharacterSet punctuationCharacterSet]];
+        [invalidCharacters addCharactersInString:[symbols componentsJoinedByString:@""]];
+        
+        for (NSString *symbol in symbols) {
             
-            rangeOfOpeningSymbol = [self.textView.text rangeOfString:symbol options:NSBackwardsSearch range:rangeToSearch];
+            // Detects the closest registered symbol to the caret, from right to left
+            NSRange searchRange = NSMakeRange(0, caretRange.location);
+            NSRange prefixRange = [textView.text rangeOfString:symbol options:NSBackwardsSearch range:searchRange];
             
-            if (rangeOfOpeningSymbol.location != NSNotFound) {
+            if (prefixRange.location == NSNotFound) {
+                continue;
+            }
+            
+            NSRange nextCharRange = NSMakeRange(prefixRange.location+1, 1);
+            NSString *charAfterSymbol = [textView.text substringWithRange:nextCharRange];
+            
+            if (prefixRange.location != NSNotFound && ![invalidCharacters characterIsMember:[charAfterSymbol characterAtIndex:0]]) {
                 
-                if ([self textView:self.textView shouldInsertClosureForFormattingWithSymbol:symbol inRange:rangeOfOpeningSymbol]) {
+                if ([self textView:textView shouldInsertSuffixForFormattingWithSymbol:symbol prefixRange:prefixRange]) {
                     
-                    NSRange lastWordRange;
-                    [self.textView slk_wordAtRange:caretRange rangeInText:&lastWordRange];
+                    NSRange suffixRange;
+                    [textView slk_wordAtRange:caretRange rangeInText:&suffixRange];
                     
-                    lastWordRange.location += lastWordRange.length;
-                    lastWordRange.length = 0;
+                    suffixRange.location += suffixRange.length;
+                    suffixRange.length = 0;
                     
-                    [textView slk_insertText:symbol inRange:lastWordRange];
+                    [textView slk_insertText:symbol inRange:suffixRange];
                     shouldChange = NO;
                     
                     break; // exit
@@ -1925,12 +1938,13 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     return YES;
 }
 
-- (BOOL)textView:(SLKTextView *)textView shouldInsertClosureForFormattingWithSymbol:(NSString *)symbol inRange:(NSRange)range
+- (BOOL)textView:(SLKTextView *)textView shouldInsertSuffixForFormattingWithSymbol:(NSString *)symbol prefixRange:(NSRange)prefixRange
 {
-    if (range.location > 0) {
-        NSRange previousCharRange = NSMakeRange(range.location-1, 1);
+    if (prefixRange.location > 0) {
+        NSRange previousCharRange = NSMakeRange(prefixRange.location-1, 1);
         NSString *previousCharacter = [self.textView.text substringWithRange:previousCharRange];
         
+        // Only insert a suffix if the character before the prefix was a whitespace or a line break
         if ([previousCharacter rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].location != NSNotFound) {
             return YES;
         }

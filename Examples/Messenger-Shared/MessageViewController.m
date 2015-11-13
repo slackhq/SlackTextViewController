@@ -150,12 +150,12 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
     [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":", @"+:"]];
     
-    [self.textView registerMarkdownFormattingSymbol:@"*" forName:@"Bold"];
-    [self.textView registerMarkdownFormattingSymbol:@"_" forName:@"Italics"];
-    [self.textView registerMarkdownFormattingSymbol:@"~" forName:@"Strike"];
-    [self.textView registerMarkdownFormattingSymbol:@"`" forName:@"Code"];
-    [self.textView registerMarkdownFormattingSymbol:@"```" forName:@"Preformatted"];
-    [self.textView registerMarkdownFormattingSymbol:@">" forName:@"Quote"];
+    [self.textView registerMarkdownFormattingSymbol:@"*" withTitle:@"Bold"];
+    [self.textView registerMarkdownFormattingSymbol:@"_" withTitle:@"Italics"];
+    [self.textView registerMarkdownFormattingSymbol:@"~" withTitle:@"Strike"];
+    [self.textView registerMarkdownFormattingSymbol:@"`" withTitle:@"Code"];
+    [self.textView registerMarkdownFormattingSymbol:@"```" withTitle:@"Preformatted"];
+    [self.textView registerMarkdownFormattingSymbol:@">" withTitle:@"Quote"];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -640,7 +640,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    // Since SLKTextViewController uses UIScrollViewDelegate to update a few things, it is important that if you ovveride this method, to call super.
+    // Since SLKTextViewController uses UIScrollViewDelegate to update a few things, it is important that if you override this method, to call super.
     [super scrollViewDidScroll:scrollView];
 }
 
@@ -672,18 +672,17 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
         return NO;
     }
-    return YES;
+    
+    return [super textView:textView shouldOfferFormattingForSymbol:symbol];
 }
 
-- (BOOL)textView:(SLKTextView *)textView shouldInsertClosureForFormattingWithSymbol:(NSString *)symbol inRange:(NSRange)range
+- (BOOL)textView:(SLKTextView *)textView shouldInsertSuffixForFormattingWithSymbol:(NSString *)symbol prefixRange:(NSRange)prefixRange
 {
-    BOOL shouldInsert = [super textView:textView shouldInsertClosureForFormattingWithSymbol:symbol inRange:range];
-    
     if ([symbol isEqualToString:@">"]) {
         return NO;
     }
     
-    return shouldInsert;
+    return [super textView:textView shouldInsertSuffixForFormattingWithSymbol:symbol prefixRange:prefixRange];
 }
 
 

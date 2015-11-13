@@ -83,8 +83,6 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 /** YES if the font size should dynamically adapt based on the font sizing option preferred by the user. Default is YES. */
 @property (nonatomic, getter=isDynamicTypeEnabled) BOOL dynamicTypeEnabled;
 
-
-
 /**
  Some text view properties don't update when it's already firstResponder (auto-correction, spelling-check, etc.)
  To be able to update the text view while still being first responder, requieres to switch quickly from -resignFirstResponder to -becomeFirstResponder.
@@ -103,36 +101,45 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 
 #pragma mark - Markdown Formatting
 
-/**
- 
+/** YES if the a markdown closure symbol should be added automatically after double spacebar tap, just like the native gesture to add a sentence period. Default is NO.
+ This will always be NO if there isn't any registered formatting symbols.
  */
 @property (nonatomic) BOOL autoCompleteFormatting;
 
-/**
- 
- */
-@property (nonatomic, readonly) NSArray *registeredFormattingSymbols;
+/** An array of the registered formatting symbols. */
+@property (nonatomic, readonly) NSArray *registeredSymbols;
 
 /**
+ Registers any string markdown symbol for formatting tooltip, presented after selecting some text.
+ The symbol must be valid string (i.e: '*', '~', '_', and so on). This also checks if no repeated symbols are inserted, and respects the ordering for the tooltip.
  
+ @param symbol A markdown symbol to be prefixed and sufixed to a text selection.
+ @param title The tooltip item title for this formatting.
  */
-- (void)registerMarkdownFormattingSymbol:(NSString *)symbol forName:(NSString *)name;
+- (void)registerMarkdownFormattingSymbol:(NSString *)symbol withTitle:(NSString *)title;
 
 @end
 
 
 @protocol SLKTextViewDelegate <UITextViewDelegate>
-
 @optional
 
 /**
+ Asks the delegate whether the specified formatting symbol should be displayed in the tooltip.
+ This is useful to remove some tooltip options when they no longer apply in some context.
+ For example, Blockquotes formatting requires the symbol to be prefixed at the begining of a paragraph.
  
+ @param textView The text view containing the changes.
+ @param symbol The formatting symbol to be verified.
+ @return YES if the formatting symbol should be displayed in the tooltip. Default is YES.
  */
 - (BOOL)textView:(SLKTextView *)textView shouldOfferFormattingForSymbol:(NSString *)symbol;
 
 /**
- 
+ Asks the delegate whether the specified formatting symbol should be suffixed, to close the formatting wrap.
+
+ @para  The prefix range
  */
-- (BOOL)textView:(SLKTextView *)textView shouldInsertClosureForFormattingWithSymbol:(NSString *)symbol inRange:(NSRange)range;
+- (BOOL)textView:(SLKTextView *)textView shouldInsertSuffixForFormattingWithSymbol:(NSString *)symbol prefixRange:(NSRange)prefixRange;
 
 @end
