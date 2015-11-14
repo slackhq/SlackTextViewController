@@ -184,6 +184,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [self.view addSubview:self.textInputbar];
     
     [self slk_setupViewConstraints];
+    
+    // Forces laying out the recently added subviews and update their constraints
+    [self.view layoutIfNeeded];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -192,9 +195,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     // Invalidates this flag when the view appears
     self.textView.didNotResignFirstResponder = NO;
-    
-    // Helps laying out subviews with recently added constraints.
-    [self.view layoutIfNeeded];
     
     [UIView performWithoutAnimation:^{
         // Reloads any cached text
@@ -574,13 +574,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)dismissKeyboard:(BOOL)animated
 {
-    if (![self.textView isFirstResponder]) {
-        
-        // Dismisses the keyboard from any first responder in the window.
-        if (self.keyboardHC.constant > 0) {
-            [self.view.window endEditing:NO];
-        }
-        return;
+    // Dismisses the keyboard from any first responder in the window.
+    if (![self.textView isFirstResponder] && self.keyboardHC.constant > 0) {
+        [self.view.window endEditing:NO];
     }
     
     if (!animated) {
@@ -794,14 +790,33 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)willRequestUndo
 {
+    NSString *title = NSLocalizedString(@"Undo Typing", nil);
+    NSString *acceptTitle = NSLocalizedString(@"Undo", nil);
+    NSString *cancelTitle = NSLocalizedString(@"Cancel", nil);
+    
+#ifdef __IPHONE_8_0
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:nil preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:acceptTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        // Clears the text but doesn't clear the undo manager
+        if (self.shakeToClearEnabled) {
+            [self.textView slk_clearText:NO];
+        }
+    }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:cancelTitle style:UIAlertActionStyleCancel handler:NULL]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+#else
     UIAlertView *alert = [UIAlertView new];
-    [alert setTitle:NSLocalizedString(@"Undo Typing", nil)];
-    [alert addButtonWithTitle:NSLocalizedString(@"Undo", nil)];
-    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+    [alert setTitle:title];
+    [alert addButtonWithTitle:acceptTitle];
+    [alert addButtonWithTitle:cancelTitle];
     [alert setCancelButtonIndex:1];
     [alert setTag:kSLKAlertViewClearTextTag];
     [alert setDelegate:self];
     [alert show];
+#endif
 }
 
 - (void)setTextInputbarHidden:(BOOL)hidden
@@ -1301,17 +1316,24 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     // Skips this it's not the expected textView and shouldn't force adjustment of the text input bar.
     // This will also dismiss the text input bar if it's visible, and exit auto-completion mode if enabled.
-    if (![self.textView isFirstResponder] && ![self forceTextInputbarAdjustmentForResponder:[UIResponder slk_currentFirstResponder]]) {
-        return [self slk_dismissTextInputbarIfNeeded];
+    if (![self.textView isFirstResponder]) {
+        // Detect the current first responder. If there is no first responder, we should just ignore these notifications.
+        UIResponder *currentResponder = [UIResponder slk_currentFirstResponder];
+        
+        if (!currentResponder) {
+            return;
+        }
+        else if (![self forceTextInputbarAdjustmentForResponder:currentResponder]) {
+            return [self slk_dismissTextInputbarIfNeeded];
+        }
     }
     
-    NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    
-    CGRect beginFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    
     SLKKeyboardStatus status = [self slk_keyboardStatusForNotification:notification];
+    
+    // Skips if it's the current status
+    if (self.keyboardStatus == status) {
+        return;
+    }
     
     // Programatically stops scrolling before updating the view constraints (to avoid scrolling glitch).
     if (status == SLKKeyboardStatusWillShow) {
@@ -1332,6 +1354,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         // Posts custom keyboard notification, if logical conditions apply
         [self slk_postKeyboarStatusNotification:notification];
     }
+    
+    NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    
+    CGRect beginFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
     void (^animations)() = ^void() {
         [self slk_scrollToBottomIfNeeded];
@@ -1372,7 +1400,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     SLKKeyboardStatus status = [self slk_keyboardStatusForNotification:notification];
     
-    if (status == SLKKeyboardStatusDidHide) {
+    // Skips if it's the current status
+    if (self.keyboardStatus == status) {
         return;
     }
     
@@ -1953,8 +1982,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag == kSLKAlertViewClearTextTag && self.shakeToClearEnabled && buttonIndex != [alertView cancelButtonIndex] ) {
-        // Clears the text but doesn't clear the undo manager
+    if (alertView.tag != kSLKAlertViewClearTextTag || buttonIndex == [alertView cancelButtonIndex] ) {
+        return;
+    }
+    
+    // Clears the text but doesn't clear the undo manager
+    if (self.shakeToClearEnabled) {
         [self.textView slk_clearText:NO];
     }
 }
