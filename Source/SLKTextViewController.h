@@ -548,8 +548,9 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer NS_REQUIRES_SUPER;
 
 /** UIAlertViewDelegate */
+#ifndef __IPHONE_8_0
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex NS_REQUIRES_SUPER;
-
+#endif
 
 #pragma mark - Life Cycle Methods Requiring Super
 ///------------------------------------------------
