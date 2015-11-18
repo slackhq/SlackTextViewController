@@ -1769,12 +1769,18 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (NSString *)slk_keyForPersistency
 {
     NSString *key = [self keyForTextCaching];
+    if (key == nil) {
+        return nil;
+    }
     return [NSString stringWithFormat:@"%@.%@", SLKTextViewControllerDomain, key];
 }
 
 - (void)slk_reloadTextView
 {
     NSString *key = [self slk_keyForPersistency];
+    if (key == nil) {
+        return;
+    }
     NSString *cachedText = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     
     if (self.textView.text.length == 0 || cachedText.length > 0) {
