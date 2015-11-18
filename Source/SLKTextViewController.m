@@ -1769,6 +1769,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (NSString *)slk_keyForPersistency
 {
     NSString *key = [self keyForTextCaching];
+    if (key == nil) {
+        return nil;
+    }
     return [NSString stringWithFormat:@"%@.%@", SLKTextViewControllerDomain, key];
 }
 
