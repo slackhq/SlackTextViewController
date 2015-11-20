@@ -468,7 +468,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 {
     NSString *contentSizeCategory = [[UIApplication sharedApplication] preferredContentSizeCategory];
     
-    [self setFontName:font.familyName pointSize:font.pointSize withContentSizeCategory:contentSizeCategory];
+    [self setFontName:font.fontName pointSize:font.pointSize withContentSizeCategory:contentSizeCategory];
     
     self.initialFontSize = font.pointSize;
 }
@@ -497,7 +497,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     
     NSString *contentSizeCategory = [[UIApplication sharedApplication] preferredContentSizeCategory];
 
-    [self setFontName:self.font.familyName pointSize:self.initialFontSize withContentSizeCategory:contentSizeCategory];
+    [self setFontName:self.font.fontName pointSize:self.initialFontSize withContentSizeCategory:contentSizeCategory];
 }
 
 - (void)setTextAlignment:(NSTextAlignment)textAlignment
@@ -747,7 +747,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     
     NSString *contentSizeCategory = notification.userInfo[UIContentSizeCategoryNewValueKey];
     
-    [self setFontName:self.font.familyName pointSize:self.initialFontSize withContentSizeCategory:contentSizeCategory];
+    [self setFontName:self.font.fontName pointSize:self.initialFontSize withContentSizeCategory:contentSizeCategory];
     
     NSString *text = [self.text copy];
     
