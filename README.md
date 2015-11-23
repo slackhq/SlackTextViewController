@@ -3,9 +3,9 @@
 [![Build Status](https://img.shields.io/travis/slackhq/SlackTextViewController.svg?style=flat-square)](https://travis-ci.org/slackhq/SlackTextViewController)
 [![Coverage Status](https://img.shields.io/coveralls/slackhq/SlackTextViewController/master.svg?style=flat-square)](https://coveralls.io/r/slackhq/SlackTextViewController)
 
-[![Pod Version](http://img.shields.io/cocoapods/v/SlackTextViewController.svg?style=flat-square)](https://cocoadocs.org/docsets/SlackTextViewController)
+[![Pod Version](https://img.shields.io/cocoapods/v/SlackTextViewController.svg?style=flat-square)](https://cocoadocs.org/docsets/SlackTextViewController)
 [![Carthage compatible](https://img.shields.io/badge/carthage-compatible-F5B369.svg?style=flat-square)](https://github.com/Carthage/Carthage)
-[![License](http://img.shields.io/badge/license-apache%202.0-blue.svg?style=flat-square)](http://opensource.org/licenses/Apache2.0)
+[![License](https://img.shields.io/badge/license-apache%202.0-blue.svg?style=flat-square)](http://opensource.org/licenses/Apache2.0)
 
 
 A drop-in UIViewController subclass with a growing text input view and other useful messaging features. Meant to be a replacement for UITableViewController & UICollectionViewController.
@@ -53,7 +53,7 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 
 ## Installation
 
-###### With [Cocoa Pods](http://cocoapods.org):
+###### With [Cocoa Pods](https://cocoapods.org/):
 ```ruby
 pod 'SlackTextViewController'
 ```
@@ -340,4 +340,4 @@ To install them, open up your terminal and type:
 sh ./SlackTextViewController/File\ Templates/install.sh
 ```
 
-These templates are also available in [Alcatraz](https://github.com/supermarin/Alcatraz).
+These templates are also available in [Alcatraz](https://github.com/alcatraz/Alcatraz).
