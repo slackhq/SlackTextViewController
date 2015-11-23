@@ -101,7 +101,7 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 
 #pragma mark - Markdown Formatting
 
-/** YES if the a markdown closure symbol should be added automatically after double spacebar tap, just like the native gesture to add a sentence period. Default is NO.
+/** YES if the a markdown closure symbol should be added automatically after double spacebar tap, just like the native gesture to add a sentence period. Default is YES.
  This will always be NO if there isn't any registered formatting symbols.
  */
 @property (nonatomic) BOOL autoCompleteFormatting;

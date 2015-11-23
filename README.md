@@ -231,6 +231,64 @@ Notice that you must call `super` at some point, so the text input exits the edi
 Use the `editing` property to know if the editing mode is on.
 
 
+###Markdown Formatting
+
+![Markdown Formatting](Screenshots/screenshot_markdown-formatting.png)
+
+You can register markdown formatting symbols so they can be easily be used to wrap a text selection, with the help of the  native contextual menu, aka `UIMenuController`. By enabling `autoCompleteFormatting`, any pending markdown closure symbol can be added automatically after double tapping on the keyboard spacebar, just like the native gesture to add a sentence period.
+
+![Markdown Formatting Animated](Screenshots/screenshot_markdown-formatting.gif)
+
+#### 1. Registration
+
+You must first register the formatting symbol and assign a title string to be used in the menu controller item.
+````objc
+[self.textView registerMarkdownFormattingSymbol:@"*" withTitle:@"Bold"];
+````
+
+#### 2. Customisation
+
+Futher more, you can customise some of the behavior for special formatting cases, using the `UITextViewDelegate` methods.
+In the following example, we don't present the Quote formatting in the contextual menu when the text selection isn't a paragraph.
+
+````objc
+- (BOOL)textView:(SLKTextView *)textView shouldOfferFormattingForSymbol:(NSString *)symbol
+{
+    if ([symbol isEqualToString:@">"]) {
+        
+        NSRange selection = textView.selectedRange;
+        
+        // The Quote formatting only applies new paragraphs
+        if (selection.location == 0 && selection.length > 0) {
+            return YES;
+        }
+        
+        // or older paragraphs too
+        NSString *prevString = [textView.text substringWithRange:NSMakeRange(selection.location-1, 1)];
+        
+        if ([[NSCharacterSet newlineCharacterSet] characterIsMember:[prevString characterAtIndex:0]]) {
+            return YES;
+        }
+
+        return NO;
+    }
+    
+    return [super textView:textView shouldOfferFormattingForSymbol:symbol];
+}
+````
+
+In this other method implementation, we don't want to allow auto-completion for the Quote formatting since it doesn't require a closure.
+````objc
+- (BOOL)textView:(SLKTextView *)textView shouldInsertSuffixForFormattingWithSymbol:(NSString *)symbol prefixRange:(NSRange)prefixRange
+{
+    if ([symbol isEqualToString:@">"]) {
+        return NO;
+    }
+    
+    return [super textView:textView shouldInsertSuffixForFormattingWithSymbol:symbol prefixRange:prefixRange];
+}
+````
+
 ###Typing Indicator
 
 ![Typing Indicator](Screenshots/screenshot_typing-indicator.png)
@@ -315,7 +373,7 @@ or the `UICollectionView` version:
 
 ###Dynamic Type
 
-Dynamic Type is enabled by default with the `keyboardPanningEnabled` property. You can always disable it if you'd like.
+Dynamic Type is enabled by default with the `keyboardPanningEnabled` property. You can always disable it if you'd like, but the text input bar would still adjust to best fit the font size of the text view.
 
 ![Dynamic-Type](Screenshots/screenshot_dynamic-type.png)
 
