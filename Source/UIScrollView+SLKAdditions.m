@@ -20,12 +20,12 @@
 
 - (void)slk_scrollToTopAnimated:(BOOL)animated
 {
-    [self scrollRectToVisible:self.bounds animated:animated];
+    [self setContentOffset:CGPointZero animated:animated];
 }
 
 - (void)slk_scrollToBottomAnimated:(BOOL)animated
 {
-    [self scrollRectToVisible:[self slk_bottomRect] animated:animated];
+    [self setContentOffset:[self slk_bottomRect].origin animated:animated];
 }
 
 - (BOOL)slk_isAtTop
@@ -48,7 +48,7 @@
 
 - (CGRect)slk_bottomRect
 {
-    return CGRectMake(0, self.contentSize.height - CGRectGetHeight(self.bounds), CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    return CGRectMake(0.0, self.contentSize.height - CGRectGetHeight(self.bounds), CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
 }
 
 - (void)slk_stopScrolling
