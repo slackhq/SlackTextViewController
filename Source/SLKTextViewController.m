@@ -164,6 +164,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     self.keyboardPanningEnabled = YES;
     self.shouldClearTextAtRightButtonPress = YES;
     self.shouldScrollToBottomAfterKeyboardShows = NO;
+    
+    self.automaticallyAdjustsScrollViewInsets = YES;
+    self.extendedLayoutIncludesOpaqueBars = YES;
 }
 
 
@@ -530,7 +533,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     _inverted = inverted;
     
     self.scrollViewProxy.transform = inverted ? CGAffineTransformMake(1, 0, 0, -1, 0, 0) : CGAffineTransformIdentity;
-    self.automaticallyAdjustsScrollViewInsets = inverted ? NO : YES;
 }
 
 - (BOOL)slk_updateKeyboardStatus:(SLKKeyboardStatus)status
@@ -1100,38 +1102,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [[NSNotificationCenter defaultCenter] postNotificationName:name object:self.textView userInfo:userInfo];
 }
 
-- (BOOL)slk_scrollToTopIfNeeded
-{
-    if (!self.scrollViewProxy.scrollsToTop || self.keyboardStatus == SLKKeyboardStatusWillShow) {
-        return NO;
-    }
-    
-    if (self.isInverted) {
-        [self.scrollViewProxy slk_scrollToTopAnimated:YES];
-        return NO;
-    }
-    else {
-        return YES;
-    }
-}
-
-- (BOOL)slk_scrollToBottomIfNeeded
-{
-    // Scrolls to bottom only if the keyboard is about to show.
-    if (!self.shouldScrollToBottomAfterKeyboardShows || self.keyboardStatus != SLKKeyboardStatusWillShow) {
-        return NO;
-    }
-    
-    if (self.isInverted) {
-        [self.scrollViewProxy slk_scrollToTopAnimated:YES];
-    }
-    else {
-        [self.scrollViewProxy slk_scrollToBottomAnimated:YES];
-    }
-    
-    return YES;
-}
-
 - (void)slk_enableTypingSuggestionIfNeeded
 {
     if (![self.textView isFirstResponder]) {
@@ -1223,21 +1193,20 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)slk_adjustContentConfigurationIfNeeded
 {
+    UIEdgeInsets contentInset = self.scrollViewProxy.contentInset;
+
     // When inverted, we need to substract the top bars height (generally status bar + navigation bar's) to align the top of the
     // scrollView correctly to its top edge.
     if (self.inverted) {
-        UIEdgeInsets contentInset = self.scrollViewProxy.contentInset;
+        contentInset.top = 0.0;
         contentInset.bottom = [self slk_topBarsHeight];
-        
-        self.scrollViewProxy.contentInset = contentInset;
-        self.scrollViewProxy.scrollIndicatorInsets = contentInset;
+    }
+    else {
+        contentInset.bottom = 0.0;
     }
     
-    // Substracts the bottom edge rect if present. This fixes the text input layout when using inside of a view controller container
-    // such as a UITabBarController or a custom container.
-    if (((self.edgesForExtendedLayout & UIRectEdgeBottom) > 0)) {
-        self.edgesForExtendedLayout = self.edgesForExtendedLayout & ~UIRectEdgeBottom;
-    }
+    self.scrollViewProxy.contentInset = contentInset;
+    self.scrollViewProxy.scrollIndicatorInsets = contentInset;
 }
 
 - (void)slk_prepareForInterfaceTransitionWithDuration:(NSTimeInterval)duration
@@ -1362,7 +1331,15 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
     void (^animations)() = ^void() {
-        [self slk_scrollToBottomIfNeeded];
+        // Scrolls to bottom only if the keyboard is about to show.
+        if (self.shouldScrollToBottomAfterKeyboardShows && self.keyboardStatus == SLKKeyboardStatusWillShow) {
+            if (self.isInverted) {
+                [self.scrollViewProxy slk_scrollToTopAnimated:YES];
+            }
+            else {
+                [self.scrollViewProxy slk_scrollToBottomAnimated:YES];
+            }
+        }
     };
     
     // Begin and end frames are the same when the keyboard is shown during navigation controller's push animation.
@@ -1940,7 +1917,17 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView
 {
-    return [self slk_scrollToTopIfNeeded];
+    if (!self.scrollViewProxy.scrollsToTop || self.keyboardStatus == SLKKeyboardStatusWillShow) {
+        return NO;
+    }
+    
+    if (self.isInverted) {
+        [self.scrollViewProxy slk_scrollToBottomAnimated:YES];
+        return NO;
+    }
+    else {
+        return YES;
+    }
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
