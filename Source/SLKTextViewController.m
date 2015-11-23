@@ -164,6 +164,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     self.keyboardPanningEnabled = YES;
     self.shouldClearTextAtRightButtonPress = YES;
     self.shouldScrollToBottomAfterKeyboardShows = NO;
+    
+    self.automaticallyAdjustsScrollViewInsets = YES;
+    self.extendedLayoutIncludesOpaqueBars = YES;
 }
 
 
@@ -530,7 +533,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     _inverted = inverted;
     
     self.scrollViewProxy.transform = inverted ? CGAffineTransformMake(1, 0, 0, -1, 0, 0) : CGAffineTransformIdentity;
-    self.automaticallyAdjustsScrollViewInsets = inverted ? NO : YES;
 }
 
 - (BOOL)slk_updateKeyboardStatus:(SLKKeyboardStatus)status
@@ -1223,21 +1225,20 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)slk_adjustContentConfigurationIfNeeded
 {
+    UIEdgeInsets contentInset = self.scrollViewProxy.contentInset;
+
     // When inverted, we need to substract the top bars height (generally status bar + navigation bar's) to align the top of the
     // scrollView correctly to its top edge.
     if (self.inverted) {
-        UIEdgeInsets contentInset = self.scrollViewProxy.contentInset;
+        contentInset.top = 0.0;
         contentInset.bottom = [self slk_topBarsHeight];
-        
-        self.scrollViewProxy.contentInset = contentInset;
-        self.scrollViewProxy.scrollIndicatorInsets = contentInset;
+    }
+    else {
+        contentInset.bottom = 0.0;
     }
     
-    // Substracts the bottom edge rect if present. This fixes the text input layout when using inside of a view controller container
-    // such as a UITabBarController or a custom container.
-    if (((self.edgesForExtendedLayout & UIRectEdgeBottom) > 0)) {
-        self.edgesForExtendedLayout = self.edgesForExtendedLayout & ~UIRectEdgeBottom;
-    }
+    self.scrollViewProxy.contentInset = contentInset;
+    self.scrollViewProxy.scrollIndicatorInsets = contentInset;
 }
 
 - (void)slk_prepareForInterfaceTransitionWithDuration:(NSTimeInterval)duration
