@@ -20,7 +20,7 @@
 
 - (void)slk_scrollToTopAnimated:(BOOL)animated
 {
-    [self scrollRectToVisible:[self slk_topRect] animated:animated];
+    [self scrollRectToVisible:self.bounds animated:animated];
 }
 
 - (void)slk_scrollToBottomAnimated:(BOOL)animated
@@ -30,7 +30,7 @@
 
 - (BOOL)slk_isAtTop
 {
-    return CGRectGetMinY([self slk_visibleRect]) <= CGRectGetMinY([self slk_topRect]);
+    return CGRectGetMinY([self slk_visibleRect]) <= CGRectGetMinY(self.bounds);
 }
 
 - (BOOL)slk_isAtBottom
@@ -44,11 +44,6 @@
     visibleRect.origin = self.contentOffset;
     visibleRect.size = self.frame.size;
     return visibleRect;
-}
-
-- (CGRect)slk_topRect
-{
-    return CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
 }
 
 - (CGRect)slk_bottomRect

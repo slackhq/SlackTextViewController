@@ -1109,7 +1109,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     if (self.isInverted) {
-        [self.scrollViewProxy slk_scrollToTopAnimated:YES];
+        [self.scrollViewProxy slk_scrollToBottomAnimated:YES];
         return NO;
     }
     else {
