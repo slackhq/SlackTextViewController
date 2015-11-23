@@ -584,7 +584,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     if (self.isFormatting) {
         NSString *title = [self slk_formattingTitleFromSelector:action];
         NSString *symbol = [self slk_formattingSymbolWithTitle:title];
-
+        
         if (symbol.length > 0) {
             if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldOfferFormattingForSymbol:)]) {
                 return [self.delegate textView:self shouldOfferFormattingForSymbol:symbol];
@@ -803,7 +803,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 {
     NSUInteger idx = [self.registeredFormattingTitles indexOfObject:title];
     
-    if (idx < self.registeredFormattingSymbols.count -1) {
+    if (idx <= self.registeredFormattingSymbols.count -1) {
         return self.registeredFormattingSymbols[idx];
     }
     

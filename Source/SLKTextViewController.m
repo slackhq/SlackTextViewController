@@ -1866,20 +1866,20 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         
         BOOL shouldChange = YES;
         
-        NSRange caretRange = range;
-        caretRange.location -= 2;
+        NSRange wordRange = range;
+        wordRange.location -= 2;
         
         NSArray *symbols = textView.registeredSymbols;
         
         NSMutableCharacterSet *invalidCharacters = [NSMutableCharacterSet new];
         [invalidCharacters formUnionWithCharacterSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         [invalidCharacters formUnionWithCharacterSet:[NSCharacterSet punctuationCharacterSet]];
-        [invalidCharacters addCharactersInString:[symbols componentsJoinedByString:@""]];
+        [invalidCharacters removeCharactersInString:[symbols componentsJoinedByString:@""]];
         
         for (NSString *symbol in symbols) {
             
             // Detects the closest registered symbol to the caret, from right to left
-            NSRange searchRange = NSMakeRange(0, caretRange.location);
+            NSRange searchRange = NSMakeRange(0, wordRange.location);
             NSRange prefixRange = [textView.text rangeOfString:symbol options:NSBackwardsSearch range:searchRange];
             
             if (prefixRange.location == NSNotFound) {
@@ -1894,10 +1894,17 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
                 if ([self textView:textView shouldInsertSuffixForFormattingWithSymbol:symbol prefixRange:prefixRange]) {
                     
                     NSRange suffixRange;
-                    [textView slk_wordAtRange:caretRange rangeInText:&suffixRange];
+                    [textView slk_wordAtRange:wordRange rangeInText:&suffixRange];
                     
                     suffixRange.location += suffixRange.length;
                     suffixRange.length = 0;
+                    
+                    NSString *lastCharacter = [textView.text substringWithRange:NSMakeRange(suffixRange.location, 1)];
+                    
+                    // Checks if the last character was a line break, so we append the symbol in the next line too
+                    if ([[NSCharacterSet newlineCharacterSet] characterIsMember:[lastCharacter characterAtIndex:0]]) {
+                        suffixRange.location += 1;
+                    }
                     
                     [textView slk_insertText:symbol inRange:suffixRange];
                     shouldChange = NO;
