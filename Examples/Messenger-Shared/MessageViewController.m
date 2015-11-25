@@ -31,6 +31,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 @property (nonatomic, strong) UIWindow *pipWindow;
 
+@property (nonatomic, weak) Message *editingMessage;
+
 @end
 
 @implementation MessageViewController
@@ -227,9 +229,10 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)editCellMessage:(UIGestureRecognizer *)gesture
 {
     MessageTableViewCell *cell = (MessageTableViewCell *)gesture.view;
-    Message *message = self.messages[cell.indexPath.row];
     
-    [self editText:message.text];
+    self.editingMessage = self.messages[cell.indexPath.row];
+    
+    [self editText:self.editingMessage.text];
     
     [self.tableView scrollToRowAtIndexPath:cell.indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
@@ -423,13 +426,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)didCommitTextEditing:(id)sender
 {
     // Notifies the view controller when tapped on the right "Accept" button for commiting the edited text
+    self.editingMessage.text = [self.textView.text copy];
     
-    Message *message = [Message new];
-    message.username = [LoremIpsum name];
-    message.text = [self.textView.text copy];
-    
-    [self.messages removeObjectAtIndex:0];
-    [self.messages insertObject:message atIndex:0];
     [self.tableView reloadData];
     
     [super didCommitTextEditing:sender];
