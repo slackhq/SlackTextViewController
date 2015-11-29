@@ -589,6 +589,9 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
             if (self.delegate && [self.delegate respondsToSelector:@selector(textView:shouldOfferFormattingForSymbol:)]) {
                 return [self.delegate textView:self shouldOfferFormattingForSymbol:symbol];
             }
+            else {
+                return YES;
+            }
         }
         
         return NO;
