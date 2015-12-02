@@ -106,6 +106,15 @@ NSString * const SLKTextViewPastedItemData =                        @"SLKTextVie
     return YES;
 }
 
+- (void)layoutIfNeeded
+{
+    if (!self.window) {
+        return;
+    }
+    
+    [super layoutIfNeeded];
+}
+
 - (void)layoutSubviews
 {
     [super layoutSubviews];
@@ -369,11 +378,12 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (CGRect)slk_placeholderRectThatFits:(CGRect)bounds
 {
-    CGRect rect = CGRectZero;
-    rect.size = [self.placeholderLabel sizeThatFits:bounds.size];
-    rect.origin = UIEdgeInsetsInsetRect(bounds, self.textContainerInset).origin;
-    
     CGFloat padding = self.textContainer.lineFragmentPadding;
+    
+    CGRect rect = CGRectZero;
+    rect.size.height = [self.placeholderLabel sizeThatFits:bounds.size].height;
+    rect.size.width = self.textContainer.size.width - padding*2.0;
+    rect.origin = UIEdgeInsetsInsetRect(bounds, self.textContainerInset).origin;
     rect.origin.x += padding;
     
     return rect;
@@ -422,15 +432,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 
 #pragma mark - UITextView Overrides
-
-- (void)layoutIfNeeded
-{
-    if (!self.window) {
-        return;
-    }
-    
-    [super layoutIfNeeded];
-}
 
 - (void)setSelectedRange:(NSRange)selectedRange
 {
