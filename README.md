@@ -29,6 +29,7 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 ### Additional
 - [Autocomplete Mode](https://github.com/slackhq/SlackTextViewController#autocompletion) by registering any prefix key (`@`, `#`, `/`)
 - [Edit Mode](https://github.com/slackhq/SlackTextViewController#edit-mode)
+- [Markdown Formatting](https://github.com/slackhq/SlackTextViewController#markdown-formatting)
 - [Typing Indicator](https://github.com/slackhq/SlackTextViewController#typing-indicator) display
 - [Shake Gesture](https://github.com/slackhq/SlackTextViewController#shake-gesture) for clearing text view
 - Multimedia Pasting (png, gif, mov, etc.)
