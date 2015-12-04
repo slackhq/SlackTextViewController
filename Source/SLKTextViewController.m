@@ -1867,7 +1867,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         BOOL shouldChange = YES;
         
         NSRange wordRange = range;
-        wordRange.location -= 2;
+        wordRange.location -= 2; // minus the white space added with the double space bar tapping
         
         NSArray *symbols = textView.registeredSymbols;
         
@@ -1895,6 +1895,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
                     
                     NSRange suffixRange;
                     [textView slk_wordAtRange:wordRange rangeInText:&suffixRange];
+                    
+                    // Skip if the detected word already has a suffix
+                    if ([[textView.text substringWithRange:suffixRange] hasSuffix:symbol]) {
+                        continue;
+                    }
                     
                     suffixRange.location += suffixRange.length;
                     suffixRange.length = 0;
