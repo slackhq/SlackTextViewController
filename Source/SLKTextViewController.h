@@ -91,7 +91,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** YES if an external keyboard has been detected (this value updates only when the text view becomes first responder). */
 @property (nonatomic, readonly, getter=isExternalKeyboardDetected) BOOL externalKeyboardDetected;
 
-/**  */
+/** YES if the keyboard has been detected as undocked or split (iPad Only). */
 @property (nonatomic, readonly, getter=isKeyboardUndocked) BOOL keyboardUndocked;
 
 /** YES if after right button press, the text view is cleared out. Default is YES. */
