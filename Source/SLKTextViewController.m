@@ -56,9 +56,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 // The current keyboard status (hidden, showing, etc.)
 @property (nonatomic) SLKKeyboardStatus keyboardStatus;
 
-// YES if a new word has been typed recently
-@property (nonatomic) BOOL newWordInserted;
-
 // YES if the view controller did appear and everything is finished configurating. This allows blocking some layout animations among other things.
 @property (nonatomic, getter=isViewVisible) BOOL viewVisible;
 
@@ -1846,11 +1843,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 }
 
 
-#pragma mark - UITextViewDelegate Methods
+#pragma mark - SLKTextViewDelegate Methods
 
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    self.newWordInserted = ([text rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].location != NSNotFound);
+    BOOL newWordInserted = ([text rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].location != NSNotFound);
     
     // It should not change if auto-completion is active and trying to replace with an auto-correction suggested text.
     if (self.isAutoCompleting && text.length > 1) {
@@ -1858,12 +1855,74 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     // Records text for undo for every new word
-    if (self.newWordInserted) {
-        [self.textView slk_prepareForUndo:@"Word Change"];
+    if (newWordInserted) {
+        [textView slk_prepareForUndo:@"Word Change"];
     }
     
-    if ([text isEqualToString:@"\n"]) {
-        //Detected break. Should insert new line break manually.
+    // Detects double spacebar tapping, to replace the default "." insert with a formatting symbol, if needed.
+    if (textView.autoCompleteFormatting && range.location > 0 && [text length] > 0 &&
+        [[NSCharacterSet whitespaceCharacterSet] characterIsMember:[text characterAtIndex:0]] &&
+        [[NSCharacterSet whitespaceCharacterSet] characterIsMember:[textView.text characterAtIndex:range.location - 1]]) {
+        
+        BOOL shouldChange = YES;
+        
+        NSRange wordRange = range;
+        wordRange.location -= 2; // minus the white space added with the double space bar tapping
+        
+        NSArray *symbols = textView.registeredSymbols;
+        
+        NSMutableCharacterSet *invalidCharacters = [NSMutableCharacterSet new];
+        [invalidCharacters formUnionWithCharacterSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        [invalidCharacters formUnionWithCharacterSet:[NSCharacterSet punctuationCharacterSet]];
+        [invalidCharacters removeCharactersInString:[symbols componentsJoinedByString:@""]];
+        
+        for (NSString *symbol in symbols) {
+            
+            // Detects the closest registered symbol to the caret, from right to left
+            NSRange searchRange = NSMakeRange(0, wordRange.location);
+            NSRange prefixRange = [textView.text rangeOfString:symbol options:NSBackwardsSearch range:searchRange];
+            
+            if (prefixRange.location == NSNotFound) {
+                continue;
+            }
+            
+            NSRange nextCharRange = NSMakeRange(prefixRange.location+1, 1);
+            NSString *charAfterSymbol = [textView.text substringWithRange:nextCharRange];
+            
+            if (prefixRange.location != NSNotFound && ![invalidCharacters characterIsMember:[charAfterSymbol characterAtIndex:0]]) {
+                
+                if ([self textView:textView shouldInsertSuffixForFormattingWithSymbol:symbol prefixRange:prefixRange]) {
+                    
+                    NSRange suffixRange;
+                    [textView slk_wordAtRange:wordRange rangeInText:&suffixRange];
+                    
+                    // Skip if the detected word already has a suffix
+                    if ([[textView.text substringWithRange:suffixRange] hasSuffix:symbol]) {
+                        continue;
+                    }
+                    
+                    suffixRange.location += suffixRange.length;
+                    suffixRange.length = 0;
+                    
+                    NSString *lastCharacter = [textView.text substringWithRange:NSMakeRange(suffixRange.location, 1)];
+                    
+                    // Checks if the last character was a line break, so we append the symbol in the next line too
+                    if ([[NSCharacterSet newlineCharacterSet] characterIsMember:[lastCharacter characterAtIndex:0]]) {
+                        suffixRange.location += 1;
+                    }
+                    
+                    [textView slk_insertText:symbol inRange:suffixRange];
+                    shouldChange = NO;
+                    
+                    break; // exit
+                }
+            }
+        }
+        
+        return shouldChange;
+    }
+    else if ([text isEqualToString:@"\n"]) {
+        //Detected break. Should insert new line break programatically instead.
         [textView slk_insertNewLineBreak];
         
         return NO;
@@ -1884,6 +1943,29 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)textViewDidChangeSelection:(SLKTextView *)textView
 {
     // Keep to avoid unnecessary crashes. Was meant to be overriden in subclass while calling super.
+}
+
+- (BOOL)textView:(SLKTextView *)textView shouldOfferFormattingForSymbol:(NSString *)symbol
+{
+    return YES;
+}
+
+- (BOOL)textView:(SLKTextView *)textView shouldInsertSuffixForFormattingWithSymbol:(NSString *)symbol prefixRange:(NSRange)prefixRange
+{
+    if (prefixRange.location > 0) {
+        NSRange previousCharRange = NSMakeRange(prefixRange.location-1, 1);
+        NSString *previousCharacter = [self.textView.text substringWithRange:previousCharRange];
+        
+        // Only insert a suffix if the character before the prefix was a whitespace or a line break
+        if ([previousCharacter rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].location != NSNotFound) {
+            return YES;
+        }
+        else {
+            return NO;
+        }
+    }
+    
+    return YES;
 }
 
 
