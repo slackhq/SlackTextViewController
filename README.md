@@ -14,7 +14,7 @@ A drop-in UIViewController subclass with a growing text input view and other use
 
 This library is used in Slack's iOS app. It was built to fit our needs, but is flexible enough to be reused by others wanting to build great messaging apps for iOS.
 
-## Features
+## Feature List
 
 ### Core
 - Works out of the box with [UITableView or UICollectionView or UIScrollView](https://github.com/slackhq/SlackTextViewController/tree/swift-example#subclassing)
@@ -69,6 +69,7 @@ There are two ways to do this:
 - Copy and drag the `Source/` folder to your project.
 - or compile the project located in `Builder/SlackTextViewController.xcodeproj` to create a `SlackTextViewController.framework` package. You could also [link the library into your project](https://developer.apple.com/library/ios/recipes/xcode_help-project_editor/Articles/AddingaLibrarytoaTarget.html#//apple_ref/doc/uid/TP40010155-CH17-SW1).
 
+
 ##How to use
 
 ###Subclassing
@@ -91,10 +92,40 @@ or the `UIScrollView` version:
 [super initWithScrollView:self.myStrongScrollView]
 ```
 
-
 Protocols like `UITableViewDelegate` and `UITableViewDataSource` are already setup for you. You will be able to call whatever delegate and data source methods you need for customising your control.
 
 Calling `[super init]` will call `[super initWithTableViewStyle:UITableViewStylePlain]` by default.
+
+###Storyboard
+
+When using SlackTextViewController with storyboards, instead of overriding the traditional `initWithCoder:` you will need to override any of the two custom methods below. This approach helps preserving the exact same features from the programatic approach, but also limits the edition of the nib of your `SLKTextViewController` subclass since it doesn't layout subviews from the nib (subviews are still initialized and layed out programatically).
+
+if you wish to use the `UITableView` version, call:
+```objc
++ (UITableViewStyle)tableViewStyleForCoder:(NSCoder *)decoder
+{
+    return UITableViewStylePlain;
+}
+```
+
+or the `UICollectionView` version:
+```objc
++ (UICollectionViewLayout *)collectionViewLayoutForCoder:(NSCoder *)decoder
+{
+    return [UICollectionViewFlowLayout new];
+}
+```
+
+###Sample Project
+
+Check out the sample project,  everything is demo'd there.
+There are 2 main examples (different targets) for testing the programatic and storyboard approaches. Most of the features are implemented for you to quickly start using them.
+
+A CollectionView example, using Swift, is in progress on the `swift-example` branch. The idea with this project is to build a custom collection view layout allowing to display cells from the bottom (currently working but needs serious tweaks to make it perfect).
+Feel free to contribute!
+
+
+##Features
 
 
 ###Growing Text View
@@ -236,9 +267,11 @@ Use the `editing` property to know if the editing mode is on.
 
 ![Markdown Formatting](Screenshots/screenshot_markdown-formatting.png)
 
-You can register markdown formatting symbols so they can be easily be used to wrap a text selection, with the help of the  native contextual menu, aka `UIMenuController`. By enabling `autoCompleteFormatting`, any pending markdown closure symbol can be added automatically after double tapping on the keyboard spacebar, just like the native gesture to add a sentence period.
+You can register markdown formatting symbols so they can easily be used to wrap a text selection, with the help of the  native contextual menu, aka `UIMenuController`. This feature doesn't take care of the rendering of the markdown: it's sole purpose is to ease the formatting tools to the user.
+Optionally, you can enable `autoCompleteFormatting` so any pending markdown closure symbol can be added automatically after double tapping on the keyboard spacebar, just like the native gesture to add a sentence period. The sentence period is still being added as a fallback.
 
 ![Markdown Formatting Animated](Screenshots/screenshot_markdown-formatting.gif)
+
 
 #### 1. Registration
 
@@ -290,6 +323,7 @@ In this other method implementation, we don't want to allow auto-completion for 
 }
 ````
 
+
 ###Typing Indicator
 
 ![Typing Indicator](Screenshots/screenshot_typing-indicator.png)
@@ -302,17 +336,20 @@ You can remove names from the list by calling `[self.typingIndicatorView removeU
 
 You can also dismiss it by calling `[self.typingIndicatorView dismissIndicator];`
 
+
 ###Panning Gesture
 
 Dismissing the keyboard with a panning gesture is enabled by default with the `keyboardPanningEnabled` property. You can always disable it if you'd like. You can extend the `verticalPanGesture` behaviors with the `UIGestureRecognizerDelegate` methods.
 
+
 ###Hiddable TextInputbar
 
 Sometimes you may need to hide the text input bar.
-Very similar to `UINavigationViewController`'s API, simple do:
+Very similar to `UINavigationViewController`'s API, simply do:
 ```objc
 [self setTextInputbarHidden:YES animated:YES];
 ```
+
 
 ###Shake Gesture
 
@@ -351,25 +388,7 @@ To add additional key commands, simply override `-keyCommands` and append `super
 }
 ````
 
-##Storyboard
-
-When using SlackTextViewController with storyboards, instead of overriding the traditional `initWithCoder:` you will need to override any of the two custom methods below. This approach helps preserving the exact same features from the programatic approach, but also limits the edition of the nib of your `SLKTextViewController` subclass since it doesn't layout subviews from the nib (subviews are still initialized and layed out programatically).
-
-if you wish to use the `UITableView` version, call:
-```objc
-+ (UITableViewStyle)tableViewStyleForCoder:(NSCoder *)decoder
-{
-    return UITableViewStylePlain;
-}
-```
-
-or the `UICollectionView` version:
-```objc
-+ (UICollectionViewLayout *)collectionViewLayoutForCoder:(NSCoder *)decoder
-{
-    return [UICollectionViewFlowLayout new];
-}
-```
+There are also a set of useful flags for keyboard special detections such as `isExternalKeyboardDetected`, `isKeyboardUndocked`, `typingSuggestionEnabled` and `isTrackpadEnabled` (iOS 9 only)
 
 
 ###Dynamic Type
@@ -379,16 +398,7 @@ Dynamic Type is enabled by default with the `keyboardPanningEnabled` property. Y
 ![Dynamic-Type](Screenshots/screenshot_dynamic-type.png)
 
 
-##Sample Project
-
-Check out the sample project,  everything is demo'd there.
-There are 2 main examples (different targets) for testing the programatic and storyboard approaches.
-
-A CollectionView example, using Swift, is in progress on the `swift-example` branch. The idea with this project is to build a custom collection view layout allowing to display cells from the bottom (currently working but needs serious tweaks to make it perfect).
-Feel free to contribute!
-
-
-##XCode Templates
+###XCode Templates
 
 ![Template](Screenshots/screenshot_template.png)
 
