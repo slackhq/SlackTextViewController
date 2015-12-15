@@ -1601,7 +1601,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     self.autoCompletionViewHC.constant = viewHeight;
     
     [self.view slk_animateLayoutIfNeededWithBounce:self.bounces
-                                           options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
+                                           options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction
                                         animations:NULL];
 }
 
