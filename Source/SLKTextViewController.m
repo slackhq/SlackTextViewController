@@ -830,7 +830,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     _textInputbarHidden = hidden;
-
+    
     __weak typeof(self) weakSelf = self;
     
     void (^animations)() = ^void(){
@@ -861,10 +861,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_didPanTextInputBar:(UIPanGestureRecognizer *)gesture
 {
     // Textinput dragging isn't supported when
-    if (!self.view.window || !self.keyboardPanningEnabled || [self ignoreTextInputbarAdjustment] || self.isPresentedInPopover) {
+    if (!self.view.window || !self.keyboardPanningEnabled || [self ignoreTextInputbarAdjustment]
+        || self.isPresentedInPopover || self.textView.isLoupeVisible) {
         return;
     }
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [self slk_handlePanGestureRecognizer:gesture];
     });
@@ -887,7 +888,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGFloat keyboardMaxY = CGRectGetHeight(SLKKeyWindowBounds());
     CGFloat keyboardMinY = keyboardMaxY - CGRectGetHeight(keyboardView.frame);
     
-
+    
     // Skips this if it's not the expected textView.
     // Checking the keyboard height constant helps to disable the view constraints update on iPad when the keyboard is undocked.
     // Checking the keyboard status allows to keep the inputAccessoryView valid when still reacing the bottom of the screen.
@@ -910,7 +911,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
 #endif
     }
-
+    
     switch (gesture.state) {
         case UIGestureRecognizerStateBegan: {
             
@@ -1043,7 +1044,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
             
             break;
         }
-    
+            
         default:
             break;
     }
@@ -1191,7 +1192,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_adjustContentConfigurationIfNeeded
 {
     UIEdgeInsets contentInset = self.scrollViewProxy.contentInset;
-
+    
     // When inverted, we need to substract the top bars height (generally status bar + navigation bar's) to align the top of the
     // scrollView correctly to its top edge.
     if (self.inverted) {
@@ -1775,7 +1776,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_cacheTextToDisk:(NSString *)text
 {
     NSString *key = [self slk_keyForPersistency];
-
+    
     if (!key || key.length == 0) {
         return;
     }
@@ -2109,7 +2110,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [keyboardCommands addObject:[self slk_escKeyCommand]];
     [keyboardCommands addObject:[self slk_arrowKeyCommand:UIKeyInputUpArrow]];
     [keyboardCommands addObject:[self slk_arrowKeyCommand:UIKeyInputDownArrow]];
-
+    
     return keyboardCommands;
 }
 
@@ -2157,7 +2158,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (UIKeyCommand *)slk_arrowKeyCommand:(NSString *)inputUpArrow
 {
     UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:inputUpArrow modifierFlags:0 action:@selector(didPressArrowKey:)];
-
+    
 #ifdef __IPHONE_9_0
     // Only available since iOS 9
     if ([UIKeyCommand respondsToSelector:@selector(keyCommandWithInput:modifierFlags:action:discoverabilityTitle:)] ) {
@@ -2169,7 +2170,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         }
     }
 #endif
-
+    
     return command;
 }
 
@@ -2258,7 +2259,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     if ([self respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)]) {
         return;
     }
-
+    
     [self slk_prepareForInterfaceTransitionWithDuration:duration];
 }
 #endif
