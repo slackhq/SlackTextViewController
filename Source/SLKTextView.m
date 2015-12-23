@@ -530,16 +530,20 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (void)beginFloatingCursorAtPoint:(CGPoint)point
 {
+    [super beginFloatingCursorAtPoint:point];
+    
     _trackpadEnabled = YES;
 }
 
 - (void)updateFloatingCursorAtPoint:(CGPoint)point
 {
-    // Do something
+    [super updateFloatingCursorAtPoint:point];
 }
 
 - (void)endFloatingCursor
 {
+    [super endFloatingCursor];
+
     _trackpadEnabled = NO;
     
     // We still need to notify a selection change in the textview after the trackpad is disabled
