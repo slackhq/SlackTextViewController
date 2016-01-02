@@ -384,7 +384,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [self slk_detectKeyboardStatesInNotification:notification];
     
     if ([self ignoreTextInputbarAdjustment]) {
-        return 0.0;
+        return [self slk_appropriateBottomMargin];
     }
     
     CGRect keyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
@@ -404,14 +404,23 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // When the keyboard height is zero, we can assume there is no keyboard visible
     // In that case, let's see if there are any other views outside of the view hiearchy
     // requiring to adjust the text input bottom margin
-    if (keyboardHeight == 0.0 && (self.edgesForExtendedLayout & UIRectEdgeBottom) > 0) {
-        // Like a UITabBar
-        if (self.tabBarController) {
-            keyboardHeight = CGRectGetHeight(self.tabBarController.tabBar.frame);
-        }
+    if (keyboardHeight == 0.0) {
+        keyboardHeight = [self slk_appropriateBottomMargin];
     }
     
     return keyboardHeight;
+}
+
+- (CGFloat)slk_appropriateBottomMargin
+{
+    // A bottom margin is required only if the view is extended out of it bounds
+    if ((self.edgesForExtendedLayout & UIRectEdgeBottom) > 0) {
+        if (self.tabBarController) {
+            return CGRectGetHeight(self.tabBarController.tabBar.frame);
+        }
+    }
+    
+    return 0.0;
 }
 
 - (CGFloat)slk_appropriateScrollViewHeight
