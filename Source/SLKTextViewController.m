@@ -400,12 +400,13 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGFloat keyboardMinY = CGRectGetMinY(keyboardRect);
     
     CGFloat keyboardHeight = MAX(0.0, viewHeight - keyboardMinY);
+    CGFloat bottomMargin = [self slk_appropriateBottomMargin];
     
     // When the keyboard height is zero, we can assume there is no keyboard visible
     // In that case, let's see if there are any other views outside of the view hiearchy
     // requiring to adjust the text input bottom margin
-    if (keyboardHeight == 0.0) {
-        keyboardHeight = [self slk_appropriateBottomMargin];
+    if (keyboardHeight < bottomMargin) {
+        keyboardHeight = bottomMargin;
     }
     
     return keyboardHeight;
@@ -913,7 +914,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     CGFloat keyboardMaxY = CGRectGetHeight(SLKKeyWindowBounds());
     CGFloat keyboardMinY = keyboardMaxY - CGRectGetHeight(keyboardView.frame);
-    
     
     // Skips this if it's not the expected textView.
     // Checking the keyboard height constant helps to disable the view constraints update on iPad when the keyboard is undocked.
