@@ -401,6 +401,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     CGFloat keyboardHeight = MAX(0.0, viewHeight - keyboardMinY);
     
+    // When there is not keyboard to show, let's adjust to bottom margin in case a UITabBar is visible
+    if (keyboardHeight == 0.0) {
+        keyboardHeight = CGRectGetHeight(self.tabBarController.tabBar.frame);
+    }
+    
     return keyboardHeight;
 }
 
@@ -426,13 +431,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     CGFloat topBarsHeight = CGRectGetHeight(self.navigationController.navigationBar.frame);
     
-    if (SLK_IS_IPHONE && SLK_IS_LANDSCAPE && SLK_IS_IOS8_AND_HIGHER) {
-        return topBarsHeight;
-    }
-    if (SLK_IS_IPAD && self.modalPresentationStyle == UIModalPresentationFormSheet) {
-        return topBarsHeight;
-    }
-    if (self.isPresentedInPopover) {
+    if ((SLK_IS_IPHONE && SLK_IS_LANDSCAPE && SLK_IS_IOS8_AND_HIGHER) ||
+        (SLK_IS_IPAD && self.modalPresentationStyle == UIModalPresentationFormSheet) ||
+        self.isPresentedInPopover) {
         return topBarsHeight;
     }
     
@@ -2093,6 +2094,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     self.textInputbarHC.constant = self.textInputbar.minimumInputbarHeight;
     self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
+    self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromRect:CGRectNull];
     
     if (self.textInputbar.isEditing) {
         self.textInputbarHC.constant += self.textInputbar.editorContentViewHeight;
