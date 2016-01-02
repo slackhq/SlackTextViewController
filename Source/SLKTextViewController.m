@@ -401,9 +401,14 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     CGFloat keyboardHeight = MAX(0.0, viewHeight - keyboardMinY);
     
-    // When there is not keyboard to show, let's adjust to bottom margin in case a UITabBar is visible
-    if (keyboardHeight == 0.0) {
-        keyboardHeight = CGRectGetHeight(self.tabBarController.tabBar.frame);
+    // When the keyboard height is zero, we can assume there is no keyboard visible
+    // In that case, let's see if there are any other views outside of the view hiearchy
+    // requiring to adjust the text input bottom margin
+    if (keyboardHeight == 0.0 && (self.edgesForExtendedLayout & UIRectEdgeBottom) > 0) {
+        // Like a UITabBar
+        if (self.tabBarController) {
+            keyboardHeight = CGRectGetHeight(self.tabBarController.tabBar.frame);
+        }
     }
     
     return keyboardHeight;
@@ -493,6 +498,17 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 
 #pragma mark - Setters
+
+- (void)setEdgesForExtendedLayout:(UIRectEdge)rectEdge
+{
+    if (self.edgesForExtendedLayout == rectEdge) {
+        return;
+    }
+    
+    [super setEdgesForExtendedLayout:rectEdge];
+    
+    [self slk_updateViewConstraints];
+}
 
 - (void)setScrollViewProxy:(UIScrollView *)scrollView
 {
@@ -2092,6 +2108,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     self.textInputbarHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.textInputbar secondItem:nil];
     self.keyboardHC = [self.view slk_constraintForAttribute:NSLayoutAttributeBottom firstItem:self.view secondItem:self.textInputbar];
     
+    [self slk_updateViewConstraints];
+}
+
+- (void)slk_updateViewConstraints
+{
     self.textInputbarHC.constant = self.textInputbar.minimumInputbarHeight;
     self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
     self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromRect:CGRectNull];
@@ -2099,6 +2120,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     if (self.textInputbar.isEditing) {
         self.textInputbarHC.constant += self.textInputbar.editorContentViewHeight;
     }
+    
+    [super updateViewConstraints];
 }
 
 
