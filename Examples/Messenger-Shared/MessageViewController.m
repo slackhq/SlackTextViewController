@@ -64,7 +64,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:UIContentSizeCategoryDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputbarDidMove:) name:SLKTextInputbarDidMoveNotification object:nil];
-
+    
     // Register a SLKTextView subclass, if you need any special appearance and/or behavior customisation.
     [self registerClassForTextView:[MessageTextView class]];
     
@@ -276,7 +276,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     NSInteger lastRowIndex = [self.tableView numberOfRowsInSection:lastSectionIndex]-1;
     
     Message *lastMessage = [self.messages objectAtIndex:lastRowIndex];
-
+    
     [self editText:lastMessage.text];
     
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:lastRowIndex inSection:lastSectionIndex] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
@@ -362,14 +362,14 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)textWillUpdate
 {
     // Notifies the view controller that the text will update.
-
+    
     [super textWillUpdate];
 }
 
 - (void)textDidUpdate:(BOOL)animated
 {
     // Notifies the view controller that the text did update.
-
+    
     [super textDidUpdate:animated];
 }
 
@@ -394,7 +394,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
     UITableViewScrollPosition scrollPosition = self.inverted ? UITableViewScrollPositionBottom : UITableViewScrollPositionTop;
-
+    
     [self.tableView beginUpdates];
     [self.messages insertObject:message atIndex:0];
     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
@@ -429,7 +429,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     // Notifies the view controller when the user has pasted a media (image, video, etc) inside of the text view.
     [super didPasteMediaContent:userInfo];
-
+    
     SLKPastableMediaType mediaType = [userInfo[SLKTextViewPastedItemMediaType] integerValue];
     NSString *contentType = userInfo[SLKTextViewPastedItemContentType];
     id data = userInfo[SLKTextViewPastedItemData];
@@ -457,7 +457,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)didCancelTextEditing:(id)sender
 {
     // Notifies the view controller when tapped on the left "Cancel" button
-
+    
     [super didCancelTextEditing:sender];
 }
 
@@ -569,7 +569,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     MessageTableViewCell *cell = (MessageTableViewCell *)[self.autoCompletionView dequeueReusableCellWithIdentifier:AutoCompletionCellIdentifier];
     cell.indexPath = indexPath;
-
+    
     NSString *item = self.searchResult[indexPath.row];
     
     if ([self.foundPrefix isEqualToString:@"#"]) {
@@ -595,7 +595,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
         paragraphStyle.alignment = NSTextAlignmentLeft;
         
-         CGFloat pointSize = [MessageTableViewCell defaultFontSize];
+        CGFloat pointSize = [MessageTableViewCell defaultFontSize];
         
         NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:pointSize],
                                      NSParagraphStyleAttributeName: paragraphStyle};
@@ -681,7 +681,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         if ([[NSCharacterSet newlineCharacterSet] characterIsMember:[prevString characterAtIndex:0]]) {
             return YES;
         }
-
+        
         return NO;
     }
     

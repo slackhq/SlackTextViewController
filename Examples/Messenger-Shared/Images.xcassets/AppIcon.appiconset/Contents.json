@@ -3,73 +3,79 @@
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "29pt_@2x.png",
+      "filename" : "AppIcon-29@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "29pt_@3x.png",
+      "filename" : "AppIcon-29@3x.png",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "40pt_@2x.png",
+      "filename" : "AppIcon-40@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "40pt_@3x.png",
+      "filename" : "AppIcon-40@3x.png",
       "scale" : "3x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "60pt_@2x.png",
+      "filename" : "AppIcon-60@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "60pt_@3x.png",
+      "filename" : "AppIcon-60@3x.png",
       "scale" : "3x"
     },
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "29pt_@1x.png",
+      "filename" : "AppIcon-29~ipad.png",
       "scale" : "1x"
     },
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "29pt_@2x-1.png",
+      "filename" : "AppIcon-29@2x~ipad.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "40pt_@1x.png",
+      "filename" : "AppIcon-40~ipad.png",
       "scale" : "1x"
     },
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "40pt_@2x-1.png",
+      "filename" : "AppIcon-40@2x~ipad.png",
       "scale" : "2x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "76pt_@1x.png",
+      "filename" : "AppIcon-76~ipad.png",
       "scale" : "1x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "76pt_@2x.png",
+      "filename" : "AppIcon-76@2x~ipad.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "83.5x83.5",
+      "idiom" : "ipad",
+      "filename" : "AppIcon-83.5@2x.png",
       "scale" : "2x"
     }
   ],

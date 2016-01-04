@@ -384,7 +384,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [self slk_detectKeyboardStatesInNotification:notification];
     
     if ([self ignoreTextInputbarAdjustment]) {
-        return 0.0;
+        return [self slk_appropriateBottomMargin];
     }
     
     CGRect keyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
@@ -400,8 +400,28 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGFloat keyboardMinY = CGRectGetMinY(keyboardRect);
     
     CGFloat keyboardHeight = MAX(0.0, viewHeight - keyboardMinY);
+    CGFloat bottomMargin = [self slk_appropriateBottomMargin];
+    
+    // When the keyboard height is zero, we can assume there is no keyboard visible
+    // In that case, let's see if there are any other views outside of the view hiearchy
+    // requiring to adjust the text input bottom margin
+    if (keyboardHeight < bottomMargin) {
+        keyboardHeight = bottomMargin;
+    }
     
     return keyboardHeight;
+}
+
+- (CGFloat)slk_appropriateBottomMargin
+{
+    // A bottom margin is required only if the view is extended out of it bounds
+    if ((self.edgesForExtendedLayout & UIRectEdgeBottom) > 0) {
+        if (self.tabBarController) {
+            return CGRectGetHeight(self.tabBarController.tabBar.frame);
+        }
+    }
+    
+    return 0.0;
 }
 
 - (CGFloat)slk_appropriateScrollViewHeight
@@ -426,13 +446,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     CGFloat topBarsHeight = CGRectGetHeight(self.navigationController.navigationBar.frame);
     
-    if (SLK_IS_IPHONE && SLK_IS_LANDSCAPE && SLK_IS_IOS8_AND_HIGHER) {
-        return topBarsHeight;
-    }
-    if (SLK_IS_IPAD && self.modalPresentationStyle == UIModalPresentationFormSheet) {
-        return topBarsHeight;
-    }
-    if (self.isPresentedInPopover) {
+    if ((SLK_IS_IPHONE && SLK_IS_LANDSCAPE && SLK_IS_IOS8_AND_HIGHER) ||
+        (SLK_IS_IPAD && self.modalPresentationStyle == UIModalPresentationFormSheet) ||
+        self.isPresentedInPopover) {
         return topBarsHeight;
     }
     
@@ -492,6 +508,17 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 
 #pragma mark - Setters
+
+- (void)setEdgesForExtendedLayout:(UIRectEdge)rectEdge
+{
+    if (self.edgesForExtendedLayout == rectEdge) {
+        return;
+    }
+    
+    [super setEdgesForExtendedLayout:rectEdge];
+    
+    [self slk_updateViewConstraints];
+}
 
 - (void)setScrollViewProxy:(UIScrollView *)scrollView
 {
@@ -887,7 +914,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     CGFloat keyboardMaxY = CGRectGetHeight(SLKKeyWindowBounds());
     CGFloat keyboardMinY = keyboardMaxY - CGRectGetHeight(keyboardView.frame);
-    
     
     // Skips this if it's not the expected textView.
     // Checking the keyboard height constant helps to disable the view constraints update on iPad when the keyboard is undocked.
@@ -1844,10 +1870,14 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 }
 
 
-#pragma mark - SLKTextViewDelegate Methods
+#pragma mark - UITextViewDelegate Methods
 
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+    if (![textView isKindOfClass:[SLKTextView class]]) {
+        return YES;
+    }
+    
     BOOL newWordInserted = ([text rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].location != NSNotFound);
     
     // It should not change if auto-completion is active and trying to replace with an auto-correction suggested text.
@@ -1945,6 +1975,29 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 {
     // Keep to avoid unnecessary crashes. Was meant to be overriden in subclass while calling super.
 }
+
+- (BOOL)textViewShouldBeginEditing:(SLKTextView *)textView
+{
+    return YES;
+}
+
+- (BOOL)textViewShouldEndEditing:(SLKTextView *)textView
+{
+    return YES;
+}
+
+- (void)textViewDidBeginEditing:(SLKTextView *)textView
+{
+    // No implementation here. Meant to be overriden in subclass.
+}
+
+- (void)textViewDidEndEditing:(SLKTextView *)textView
+{
+    // No implementation here. Meant to be overriden in subclass.
+}
+
+
+#pragma mark - SLKTextViewDelegate Methods
 
 - (BOOL)textView:(SLKTextView *)textView shouldOfferFormattingForSymbol:(NSString *)symbol
 {
@@ -2091,12 +2144,20 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     self.textInputbarHC = [self.view slk_constraintForAttribute:NSLayoutAttributeHeight firstItem:self.textInputbar secondItem:nil];
     self.keyboardHC = [self.view slk_constraintForAttribute:NSLayoutAttributeBottom firstItem:self.view secondItem:self.textInputbar];
     
+    [self slk_updateViewConstraints];
+}
+
+- (void)slk_updateViewConstraints
+{
     self.textInputbarHC.constant = self.textInputbar.minimumInputbarHeight;
     self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
+    self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromRect:CGRectNull];
     
     if (self.textInputbar.isEditing) {
         self.textInputbarHC.constant += self.textInputbar.editorContentViewHeight;
     }
+    
+    [super updateViewConstraints];
 }
 
 
