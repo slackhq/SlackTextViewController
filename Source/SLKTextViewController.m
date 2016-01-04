@@ -1870,10 +1870,14 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 }
 
 
-#pragma mark - SLKTextViewDelegate Methods
+#pragma mark - UITextViewDelegate Methods
 
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+    if (![textView isKindOfClass:[SLKTextView class]]) {
+        return YES;
+    }
+    
     BOOL newWordInserted = ([text rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].location != NSNotFound);
     
     // It should not change if auto-completion is active and trying to replace with an auto-correction suggested text.
@@ -1971,6 +1975,29 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 {
     // Keep to avoid unnecessary crashes. Was meant to be overriden in subclass while calling super.
 }
+
+- (BOOL)textViewShouldBeginEditing:(SLKTextView *)textView
+{
+    return YES;
+}
+
+- (BOOL)textViewShouldEndEditing:(SLKTextView *)textView
+{
+    return YES;
+}
+
+- (void)textViewDidBeginEditing:(SLKTextView *)textView
+{
+    // No implementation here. Meant to be overriden in subclass.
+}
+
+- (void)textViewDidEndEditing:(SLKTextView *)textView
+{
+    // No implementation here. Meant to be overriden in subclass.
+}
+
+
+#pragma mark - SLKTextViewDelegate Methods
 
 - (BOOL)textView:(SLKTextView *)textView shouldOfferFormattingForSymbol:(NSString *)symbol
 {
