@@ -689,12 +689,19 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (void)slk_gestureRecognized:(UIGestureRecognizer *)gesture
 {
-    // In iOS 8 and earlier, the gesture recognizer responsible for the magnifying glass movement was 'UIVariableDelayLoupeGesture'
-    // Since iOS 9, that gesture is now called '_UITextSelectionForceGesture'
+    // NOTE:
+    // In iOS 8 and earlier, the gesture recognizer responsible for the magnifying glass movement was 'UIVariableDelayLoupeGesture'.
+    // That gesture is called '_UITextSelectionForceGesture' since iOS 9.
+    // We are disabling the detection of these gesture objects until a public API is available.
+    //
+    // Open Radar: http://openradar.appspot.com/radar?id=5021485877952512
+    
+    /*
     if ([gesture isMemberOfClass:NSClassFromString(@"UIVariableDelayLoupeGesture")] ||
         [gesture isMemberOfClass:NSClassFromString(@"_UITextSelectionForceGesture")]) {
         [self slk_willShowLoupe:gesture];
     }
+     */
 }
 
 - (void)slk_willShowLoupe:(UIGestureRecognizer *)gesture
