@@ -908,6 +908,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     __block UIView *keyboardView = [self.textInputbar.inputAccessoryView keyboardViewProxy];
     
+    // When no keyboard view has been detecting, let's skip any handling.
+    if (!keyboardView) {
+        return;
+    }
+    
     // Dynamic variables
     CGPoint gestureLocation = [gesture locationInView:self.view];
     CGPoint gestureVelocity = [gesture velocityInView:self.view];
