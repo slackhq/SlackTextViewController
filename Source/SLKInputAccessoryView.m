@@ -27,7 +27,8 @@
     if (newSuperview) {
         if (SLK_IS_IOS9_AND_HIGHER) {
             
-            // NOTE: Because the keyboard is on its own view hierarchy since iOS 9,
+            // NOTE:
+            // Because the keyboard is on its own view hierarchy since iOS 9,
             // we needed to lookup for its view so we can move the text input whenever its origin changed.
             // We are disabling the detection of the keyboard on iOS 9 until a public API is available.
             //

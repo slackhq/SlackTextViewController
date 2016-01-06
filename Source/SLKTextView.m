@@ -697,9 +697,9 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     // Open Radar: http://openradar.appspot.com/radar?id=5021485877952512
     //
     // From now, the isLoupeVisible flag will always be false.
-    // Whenever a user hits a range that requires auto-completion, the magnifying glass would disappear.
-    // Why, you say? Because we need to reload the textView and disable auto-correction since it overrides any
-    // auto-completion while typing.
+    // Whenever a user activates the magnifying glass by long pressing on the text content area and moves the cursor into a range of text
+    // that requires auto-completion, the magnifying glass would disappear all of the sudden, causing erratic UI behaviours.
+    // Why, you say? Because we need to reload the textView and disable auto-correction since it overrides any auto-completion while typing.
     
     /*
     if ([gesture isMemberOfClass:NSClassFromString(@"UIVariableDelayLoupeGesture")] ||
