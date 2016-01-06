@@ -68,8 +68,10 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 /** YES if quickly refreshed the textview without the intension to dismiss the keyboard. @view -disableQuicktypeBar: for more details. */
 @property (nonatomic, readwrite) BOOL didNotResignFirstResponder;
 
-/** YES if the magnifying glass is visible. */
-@property (nonatomic, getter=isLoupeVisible) BOOL loupeVisible;
+/** YES if the magnifying glass is visible.
+ This feature is deprecated since there are no legit alternatives to detect the magnifying glass.
+ */
+@property (nonatomic, getter=isLoupeVisible) BOOL loupeVisible DEPRECATED_ATTRIBUTE;
 
 /** YES if the keyboard track pad has been recognized. iOS 9 only. */
 @property (nonatomic, readonly, getter=isTrackpadEnabled) BOOL trackpadEnabled;
