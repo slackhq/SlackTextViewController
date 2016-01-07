@@ -342,7 +342,7 @@ You can also dismiss it by calling `[self.typingIndicatorView dismissIndicator];
 Dismissing the keyboard with a panning gesture is enabled by default with the `keyboardPanningEnabled` property. You can always disable it if you'd like. You can extend the `verticalPanGesture` behaviors with the `UIGestureRecognizerDelegate` methods.
 
 
-###Hiddable TextInputbar
+###Hideable TextInputbar
 
 Sometimes you may need to hide the text input bar.
 Very similar to `UINavigationViewController`'s API, simply do:
@@ -393,7 +393,7 @@ There are also a set of useful flags for keyboard special detections such as `is
 
 ###Dynamic Type
 
-Dynamic Type is enabled by default with the `keyboardPanningEnabled` property. You can always disable it if you'd like, but the text input bar would still adjust to best fit the font size of the text view.
+Dynamic Type is enabled by default with the `dynamicTypeEnabled` property. You can always disable it if you'd like, but the text input bar would still adjust to best fit the font size of the text view.
 
 ![Dynamic-Type](Screenshots/screenshot_dynamic-type.png)
 
