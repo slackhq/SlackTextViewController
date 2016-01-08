@@ -683,8 +683,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
-    // Skips if the loupe is visible or if there is a real text selection
-    if (self.textView.isLoupeVisible || self.textView.isTrackpadEnabled) {
+    // Skips there is a real text selection
+    if (self.textView.isTrackpadEnabled) {
         return;
     }
     
@@ -888,8 +888,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_didPanTextInputBar:(UIPanGestureRecognizer *)gesture
 {
     // Textinput dragging isn't supported when
-    if (!self.view.window || !self.keyboardPanningEnabled || [self ignoreTextInputbarAdjustment]
-        || self.isPresentedInPopover || self.textView.isLoupeVisible) {
+    if (!self.view.window || !self.keyboardPanningEnabled ||
+        [self ignoreTextInputbarAdjustment] || self.isPresentedInPopover) {
         return;
     }
     

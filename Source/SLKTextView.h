@@ -70,6 +70,7 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 
 /** YES if the magnifying glass is visible.
  This feature is deprecated since there are no legit alternatives to detect the magnifying glass.
+ Open Radar: http://openradar.appspot.com/radar?id=5021485877952512
  */
 @property (nonatomic, getter=isLoupeVisible) BOOL loupeVisible DEPRECATED_ATTRIBUTE;
 

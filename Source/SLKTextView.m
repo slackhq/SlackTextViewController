@@ -138,15 +138,6 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
     }
 }
 
-- (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
-{
-    if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]]) {
-        [gestureRecognizer addTarget:self action:@selector(slk_gestureRecognized:)];
-    }
-    
-    [super addGestureRecognizer:gestureRecognizer];
-}
-
 
 #pragma mark - Getters
 
@@ -686,47 +677,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 
 #pragma mark - Custom Actions
-
-- (void)slk_gestureRecognized:(UIGestureRecognizer *)gesture
-{
-    // NOTE:
-    // In iOS 8 and earlier, the gesture recognizer responsible for the magnifying glass movement was 'UIVariableDelayLoupeGesture'.
-    // That gesture is called '_UITextSelectionForceGesture' since iOS 9.
-    //
-    // We are disabling the detection of these gesture objects until a public API is available.
-    // Open Radar: http://openradar.appspot.com/radar?id=5021485877952512
-    //
-    // From now, the isLoupeVisible flag will always be false.
-    // Whenever a user activates the magnifying glass by long pressing on the text content area and moves the cursor into a range of text
-    // that requires auto-completion, the magnifying glass would disappear all of the sudden, causing erratic UI behaviours.
-    // Why, you say? Because we need to reload the textView and disable auto-correction since it overrides any auto-completion while typing.
-    
-    /*
-    if ([gesture isMemberOfClass:NSClassFromString(@"UIVariableDelayLoupeGesture")] ||
-        [gesture isMemberOfClass:NSClassFromString(@"_UITextSelectionForceGesture")]) {
-        [self slk_willShowLoupe:gesture];
-    }
-     */
-}
-
-- (void)slk_willShowLoupe:(UIGestureRecognizer *)gesture
-{
-    if (gesture.state == UIGestureRecognizerStateBegan || gesture.state == UIGestureRecognizerStateChanged) {
-        _loupeVisible = YES;
-    }
-    else {
-        _loupeVisible = NO;
-    }
-    
-    // We still need to notify a selection change in the textview after the magnifying class is dismissed
-    if (gesture.state == UIGestureRecognizerStateEnded) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(textViewDidChangeSelection:)]) {
-            [self.delegate textViewDidChangeSelection:self];
-        }
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewSelectedRangeDidChangeNotification object:self userInfo:nil];
-    }
-}
 
 - (void)slk_flashScrollIndicatorsIfNeeded
 {
