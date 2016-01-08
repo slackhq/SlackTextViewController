@@ -36,7 +36,7 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 - [Inverted Mode](https://github.com/slackhq/SlackTextViewController#inverted-mode) for displaying cells upside-down (using CATransform) -- a necessary hack for some messaging apps. `YES` by default, so beware, your entire cells might be flipped!
 - Tap Gesture for dismissing the keyboard
 - [Panning Gesture](https://github.com/slackhq/SlackTextViewController#panning-gesture) for sliding down/up the keyboard
-- [Hiddable TextInputbar](https://github.com/slackhq/SlackTextViewController#hiddable-textinputbar)
+- [Hideable TextInputbar](https://github.com/slackhq/SlackTextViewController#hideable-textinputbar)
 - [Dynamic Type](https://github.com/slackhq/SlackTextViewController#dynamic-type) for adjusting automatically the text input bar height based on the font size.
 - Bouncy Animations
 
