@@ -495,12 +495,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     return -1;
 }
 
-- (BOOL)slk_isIllogicalKeyboardStatus:(SLKKeyboardStatus)status
+- (BOOL)slk_isIllogicalKeyboardStatus:(SLKKeyboardStatus)newStatus
 {
-    if ((self.keyboardStatus == 0 && status == 1) ||
-        (self.keyboardStatus == 1 && status == 2) ||
-        (self.keyboardStatus == 2 && status == 3) ||
-        (self.keyboardStatus == 3 && status == 0)) {
+    if ((self.keyboardStatus == SLKKeyboardStatusDidHide && newStatus == SLKKeyboardStatusWillShow) ||
+        (self.keyboardStatus == SLKKeyboardStatusWillShow && newStatus == SLKKeyboardStatusDidShow) ||
+        (self.keyboardStatus == SLKKeyboardStatusDidShow && newStatus == SLKKeyboardStatusWillHide) ||
+        (self.keyboardStatus == SLKKeyboardStatusWillHide && newStatus == SLKKeyboardStatusDidHide)) {
         return NO;
     }
     return YES;
@@ -915,6 +915,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGFloat keyboardMaxY = CGRectGetHeight(SLKKeyWindowBounds());
     CGFloat keyboardMinY = keyboardMaxY - CGRectGetHeight(keyboardView.frame);
     
+    
     // Skips this if it's not the expected textView.
     // Checking the keyboard height constant helps to disable the view constraints update on iPad when the keyboard is undocked.
     // Checking the keyboard status allows to keep the inputAccessoryView valid when still reacing the bottom of the screen.
@@ -1155,9 +1156,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     [self slk_hideAutoCompletionViewIfNeeded];
     
-    // Forces the keyboard status change
-    [self slk_updateKeyboardStatus:SLKKeyboardStatusDidHide];
-    
     [self.view layoutIfNeeded];
 }
 
@@ -1307,6 +1305,19 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
+    SLKKeyboardStatus status = [self slk_keyboardStatusForNotification:notification];
+    
+    // Skips if it's the current status
+    if (self.keyboardStatus == status) {
+        return;
+    }
+    
+    // Updates and notifies about the keyboard status update
+    if ([self slk_updateKeyboardStatus:status]) {
+        // Posts custom keyboard notification, if logical conditions apply
+        [self slk_postKeyboarStatusNotification:notification];
+    }
+    
     // Skips this it's not the expected textView and shouldn't force adjustment of the text input bar.
     // This will also dismiss the text input bar if it's visible, and exit auto-completion mode if enabled.
     if (![self.textView isFirstResponder]) {
@@ -1319,13 +1330,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         else if (![self forceTextInputbarAdjustmentForResponder:currentResponder]) {
             return [self slk_dismissTextInputbarIfNeeded];
         }
-    }
-    
-    SLKKeyboardStatus status = [self slk_keyboardStatusForNotification:notification];
-    
-    // Skips if it's the current status
-    if (self.keyboardStatus == status) {
-        return;
     }
     
     // Programatically stops scrolling before updating the view constraints (to avoid scrolling glitch).
@@ -1342,11 +1346,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromNotification:notification];
     self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
     
-    // Updates and notifies about the keyboard status update
-    if ([self slk_updateKeyboardStatus:status]) {
-        // Posts custom keyboard notification, if logical conditions apply
-        [self slk_postKeyboarStatusNotification:notification];
-    }
     
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
@@ -1406,6 +1405,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
+    // Updates and notifies about the keyboard status update
+    if ([self slk_updateKeyboardStatus:status]) {
+        // Posts custom keyboard notification, if logical conditions apply
+        [self slk_postKeyboarStatusNotification:notification];
+    }
+    
     // After showing keyboard, check if the current cursor position could diplay autocompletion
     if ([self.textView isFirstResponder] && status == SLKKeyboardStatusDidShow && !self.isAutoCompleting) {
         
@@ -1413,12 +1418,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self slk_processTextForAutoCompletion];
         });
-    }
-    
-    // Updates and notifies about the keyboard status update
-    if ([self slk_updateKeyboardStatus:status]) {
-        // Posts custom keyboard notification, if logical conditions apply
-        [self slk_postKeyboarStatusNotification:notification];
     }
     
     // Very important to invalidate this flag after the keyboard is dismissed or presented, to start with a clean state next time.
