@@ -20,37 +20,13 @@
 
 @implementation SLKInputAccessoryView
 
+
 #pragma mark - Super Overrides
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
     if (newSuperview) {
-        if (SLK_IS_IOS9_AND_HIGHER) {
-            
-            // NOTE:
-            // Because the keyboard is on its own view hierarchy since iOS 9,
-            // we needed to lookup for its view so we can move the text input whenever its origin changed.
-            // We are disabling the detection of the keyboard on iOS 9 until a public API is available.
-            //
-            // Open Radar: http://openradar.appspot.com/radar?id=5021485877952512
-            
-            /*
-            NSPredicate *windowPredicate = [NSPredicate predicateWithFormat:@"self isMemberOfClass: %@", NSClassFromString(@"UIRemoteKeyboardWindow")];
-            UIWindow *keyboardWindow = [[[UIApplication sharedApplication].windows filteredArrayUsingPredicate:windowPredicate] firstObject];
-            
-            for (UIView *subview in keyboardWindow.subviews) {
-                for (UIView *hostview in subview.subviews) {
-                    if ([hostview isMemberOfClass:NSClassFromString(@"UIInputSetHostView")]) {
-                        _keyboardViewProxy = hostview;
-                        break;
-                    }
-                }
-            }
-             */
-        }
-        else {
-            _keyboardViewProxy = newSuperview;
-        }
+        _keyboardViewProxy = newSuperview;
     }
 }
 
