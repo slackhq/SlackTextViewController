@@ -37,6 +37,10 @@ UIKIT_EXTERN NSString *const SLKKeyboardDidShowNotification;
 UIKIT_EXTERN NSString *const SLKKeyboardWillHideNotification;
 UIKIT_EXTERN NSString *const SLKKeyboardDidHideNotification;
 
+/**
+ This feature doesn't work on iOS 9 due to no legit alternatives to detect the keyboard view.
+ Open Radar: http://openradar.appspot.com/radar?id=5021485877952512
+ */
 UIKIT_EXTERN NSString *const SLKTextInputbarDidMoveNotification;
 
 typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
@@ -87,7 +91,9 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  YES if keyboard can be dismissed gradually with a vertical panning gesture. Default is YES.
- This feature is disabled on iOS 9 due to no legit alternatives to detect the keyboard frame.
+ 
+ This feature doesn't work on iOS 9 due to no legit alternatives to detect the keyboard view.
+ Open Radar: http://openradar.appspot.com/radar?id=5021485877952512
  */
 @property (nonatomic, assign, getter = isKeyboardPanningEnabled) BOOL keyboardPanningEnabled;
 
