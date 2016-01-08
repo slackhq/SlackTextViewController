@@ -689,12 +689,24 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (void)slk_gestureRecognized:(UIGestureRecognizer *)gesture
 {
-    // In iOS 8 and earlier, the gesture recognizer responsible for the magnifying glass movement was 'UIVariableDelayLoupeGesture'
-    // Since iOS 9, that gesture is now called '_UITextSelectionForceGesture'
+    // NOTE:
+    // In iOS 8 and earlier, the gesture recognizer responsible for the magnifying glass movement was 'UIVariableDelayLoupeGesture'.
+    // That gesture is called '_UITextSelectionForceGesture' since iOS 9.
+    //
+    // We are disabling the detection of these gesture objects until a public API is available.
+    // Open Radar: http://openradar.appspot.com/radar?id=5021485877952512
+    //
+    // From now, the isLoupeVisible flag will always be false.
+    // Whenever a user activates the magnifying glass by long pressing on the text content area and moves the cursor into a range of text
+    // that requires auto-completion, the magnifying glass would disappear all of the sudden, causing erratic UI behaviours.
+    // Why, you say? Because we need to reload the textView and disable auto-correction since it overrides any auto-completion while typing.
+    
+    /*
     if ([gesture isMemberOfClass:NSClassFromString(@"UIVariableDelayLoupeGesture")] ||
         [gesture isMemberOfClass:NSClassFromString(@"_UITextSelectionForceGesture")]) {
         [self slk_willShowLoupe:gesture];
     }
+     */
 }
 
 - (void)slk_willShowLoupe:(UIGestureRecognizer *)gesture

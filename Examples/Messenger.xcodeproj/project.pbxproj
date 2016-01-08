@@ -426,7 +426,7 @@
 				ORGANIZATIONNAME = "Slack Technologies, Inc.";
 				TargetAttributes = {
 					4F3EDB48199ED00F004C15D6 = {
-						DevelopmentTeam = BQR82RBBHL;
+						DevelopmentTeam = S6MX3RA9ZM;
 					};
 					4F86BF6419F011D0007A3D4A = {
 						CreatedOnToolsVersion = 6.0.1;

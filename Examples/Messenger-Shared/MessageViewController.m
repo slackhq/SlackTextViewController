@@ -16,9 +16,6 @@
 
 #define DEBUG_CUSTOM_TYPING_INDICATOR 0
 
-static NSString *MessengerCellIdentifier = @"MessengerCell";
-static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
-
 @interface MessageViewController ()
 
 @property (nonatomic, strong) NSMutableArray *messages;
@@ -570,17 +567,16 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     MessageTableViewCell *cell = (MessageTableViewCell *)[self.autoCompletionView dequeueReusableCellWithIdentifier:AutoCompletionCellIdentifier];
     cell.indexPath = indexPath;
     
-    NSString *item = self.searchResult[indexPath.row];
+    NSString *text = self.searchResult[indexPath.row];
     
     if ([self.foundPrefix isEqualToString:@"#"]) {
-        item = [NSString stringWithFormat:@"# %@", item];
+        text = [NSString stringWithFormat:@"# %@", text];
     }
     else if (([self.foundPrefix isEqualToString:@":"] || [self.foundPrefix isEqualToString:@"+:"])) {
-        item = [NSString stringWithFormat:@":%@:", item];
+        text = [NSString stringWithFormat:@":%@:", text];
     }
     
-    cell.titleLabel.text = item;
-    cell.titleLabel.font = [UIFont systemFontOfSize:14.0];
+    cell.titleLabel.text = text;
     cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     
     return cell;
