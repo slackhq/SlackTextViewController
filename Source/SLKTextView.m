@@ -58,7 +58,7 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
 @end
 
 @implementation SLKTextView
-@synthesize delegate = _delegate;
+@dynamic delegate;
 
 #pragma mark - Initialization
 
