@@ -1901,11 +1901,17 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     // Detects double spacebar tapping, to replace the default "." insert with a formatting symbol, if needed.
-    if (textView.isFormattingEnabled && range.location > 0 && text.length > 0 && textView.text.length > 1 &&
+    if (textView.isFormattingEnabled && range.location > 0 && text.length > 0 &&
         [[NSCharacterSet whitespaceCharacterSet] characterIsMember:[text characterAtIndex:0]] &&
         [[NSCharacterSet whitespaceCharacterSet] characterIsMember:[textView.text characterAtIndex:range.location - 1]]) {
         
         BOOL shouldChange = YES;
+        
+        // Since we are moving 2 characters to the left, we need for to make sure that the string's lenght,
+        // before the caret position, is higher than 2.
+        if ([textView.text substringToIndex:textView.selectedRange.location].length < 2) {
+            return YES;
+        }
         
         NSRange wordRange = range;
         wordRange.location -= 2; // minus the white space added with the double space bar tapping
