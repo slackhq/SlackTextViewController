@@ -1901,7 +1901,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     // Detects double spacebar tapping, to replace the default "." insert with a formatting symbol, if needed.
-    if (textView.autoCompleteFormatting && range.location > 0 && [text length] > 0 &&
+    if (textView.isFormattingEnabled && range.location > 0 && text.length > 0 && textView.text.length > 1 &&
         [[NSCharacterSet whitespaceCharacterSet] characterIsMember:[text characterAtIndex:0]] &&
         [[NSCharacterSet whitespaceCharacterSet] characterIsMember:[textView.text characterAtIndex:range.location - 1]]) {
         
@@ -1909,6 +1909,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         
         NSRange wordRange = range;
         wordRange.location -= 2; // minus the white space added with the double space bar tapping
+        
+        if (wordRange.location == NSNotFound) {
+            return YES;
+        }
         
         NSArray *symbols = textView.registeredSymbols;
         
