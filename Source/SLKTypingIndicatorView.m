@@ -125,7 +125,7 @@
         return nil;
     }
     
-    NSString *text = nil;
+    NSString *text = @"";
     NSString *firstObject = [self.usernames firstObject];
     NSString *lastObject = [self.usernames lastObject];
     
