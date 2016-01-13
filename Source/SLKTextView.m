@@ -84,7 +84,6 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
     _dynamicTypeEnabled = YES;
 
     self.undoManagerEnabled = YES;
-    self.autoCompleteFormatting = YES;
     
     self.editable = YES;
     self.selectable = YES;
@@ -226,12 +225,9 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
     return (self.autocorrectionType == UITextAutocorrectionTypeNo) ? NO : YES;
 }
 
-- (BOOL)autoCompleteFormatting
+- (BOOL)isFormattingEnabled
 {
-    if (_registeredFormattingSymbols.count == 0) {
-        return NO;
-    }
-    return _autoCompleteFormatting;
+    return (_registeredFormattingSymbols.count > 0) ? YES : NO;
 }
 
 // Returns only a supported pasted item
