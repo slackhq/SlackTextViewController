@@ -56,7 +56,7 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 
 ###### With [Cocoa Pods](https://cocoapods.org/):
 ```ruby
-pod 'SlackTextViewController'
+pod "SlackTextViewController"
 ```
 
 ###### With [Carthage](https://github.com/Carthage/Carthage):
