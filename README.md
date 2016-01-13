@@ -60,7 +60,7 @@ pod 'SlackTextViewController'
 ```
 
 ###### With [Carthage](https://github.com/Carthage/Carthage):
-```
+```swift
 github "slackhq/SlackTextViewController"
 ```
 
