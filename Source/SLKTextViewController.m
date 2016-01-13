@@ -2119,6 +2119,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 #pragma mark - UIAlertViewDelegate Methods
 
+#ifndef __IPHONE_8_0
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (alertView.tag != kSLKAlertViewClearTextTag || buttonIndex == [alertView cancelButtonIndex] ) {
@@ -2130,6 +2131,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         [self.textView slk_clearText:NO];
     }
 }
+#endif
 
 
 #pragma mark - View Auto-Layout
