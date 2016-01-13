@@ -593,10 +593,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
         return NO;
     }
     
-    if (action == NSSelectorFromString(@"_share:") || action == NSSelectorFromString(@"_define:") || action == NSSelectorFromString(@"_promptForReplace:")) {
-        return NO;
-    }
-    
     if (action == @selector(slk_presentFormattingMenu:)) {
         return self.selectedRange.length > 0 ? YES : NO;
     }
