@@ -1030,7 +1030,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     UITextPosition *checkPosition = position;
     UITextPosition *closestPosition = position;
     CGRect startingCaretRect = [self caretRectForPosition:position];
-    CGRect nextLineCaretRect;
+    CGRect nextLineCaretRect = CGRectZero;
     BOOL isInNextLine = NO;
     
     while (YES) {
