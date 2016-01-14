@@ -1,6 +1,6 @@
 #SlackTextViewController
 
-**IMPORTANT NOTICE: Please update to `1.9` to avoid any risk of app rejection.
+**IMPORTANT NOTICE: Please update to >= `1.9` to avoid any risk of app rejection.
 More details in [#361](https://github.com/slackhq/SlackTextViewController/issues/361)**
 
 [![Build Status](https://img.shields.io/travis/slackhq/SlackTextViewController.svg?style=flat-square)](https://travis-ci.org/slackhq/SlackTextViewController)
