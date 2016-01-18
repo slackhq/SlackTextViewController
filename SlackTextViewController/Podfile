@@ -1,0 +1,11 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+xcodeproj 'SlackTextViewController.xcodeproj'
+inhibit_all_warnings!
+
+platform :ios, '7.0'
+
+target 'SnapshotTests', :exclusive => true do
+    pod 'Expecta+Snapshots'
+	pod 'Specta'
+end
