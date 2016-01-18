@@ -64,7 +64,7 @@ NSString *_deviceSuffix() {
 
 NSString *_specName(NSString *name) {
     
-    NSMutableString *specName = [NSMutableString stringWithString:name];
+    NSMutableString *specName = [NSMutableString stringWithString:[name stringByReplacingOccurrencesOfString:@" " withString:@"_"]];
     [specName appendString:_deviceSuffix()];
     
     return [specName lowercaseString];
@@ -77,7 +77,7 @@ NSString *_imagePathForTestSpec(NSString *test, NSString *spec) {
     NSString *folderName = [NSString stringWithFormat:@"%@Spec", [[pathComponents lastObject] stringByDeletingPathExtension]];
     
     [pathComponents removeObjectsInRange:NSMakeRange([pathComponents count]-2, 2)];
-    [pathComponents addObject:@"ReferenceImages"];
+    [pathComponents addObject:@"SnapshotTests/ReferenceImages"];
     
     NSString *path = [pathComponents componentsJoinedByString:@"/"];
     

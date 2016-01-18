@@ -1,9 +1,8 @@
 //
-//  SLKTextViewControllerTests.m
-//  Messenger
+//  DisplayTests.m
 //
-//  Created by Ignacio Romero Z. on 3/11/15.
-//  Copyright (c) 2015 Slack Technologies, Inc. All rights reserved.
+//  Created by Ignacio Romero Z. on 18/1/16.
+//  Copyright (c) 2016 Slack Technologies, Inc. All rights reserved.
 //
 
 #define EXP_SHORTHAND
@@ -17,7 +16,7 @@
 #import "SLKTextViewControllerStub.h"
 #import "SLKTextViewStub.h"
 
-SpecBegin(SLKTextViewControllerTests)
+SpecBegin(DisplayTests)
 
 __block UIWindow *window = nil;
 __block SLKTextViewControllerStub *tvc = nil;
@@ -26,16 +25,6 @@ __block UINavigationController *nvc = nil;
 beforeAll(^{
     
     tvc = [[SLKTextViewControllerStub alloc] init];
-    tvc.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    tvc.textView.placeholder = @"Placeholder";
-    tvc.textView.tintColor = tvc.textView.backgroundColor; // This helps preventing the caret to be displayed in the tests
-    
-    [tvc.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
-    [tvc.leftButton setTintColor:[UIColor grayColor]];
-    
-    [tvc registerClassForTextView:[SLKTextViewStub class]];
-    
     nvc = [[UINavigationController alloc] initWithRootViewController:tvc];
     nvc.view.backgroundColor = [UIColor whiteColor];
     
@@ -105,7 +94,7 @@ describe(@"Growing Text View Tests", ^{
         
         tvc.textView.text = [NSString sentencesWithNumber:5];
         
-        expect(tvc.textView.numberOfLines).will.beGreaterThan(@10);
+        expect(tvc.textView.numberOfLines).will.beGreaterThanOrEqualTo(@9);
         
         return window;
     });
@@ -116,54 +105,6 @@ describe(@"Growing Text View Tests", ^{
         [tvc didPressRightButton:tvc.rightButton];
         
         expect(tvc.textView.numberOfLines).will.equal(@1);
-        
-        return window;
-    });
-});
-
-
-#pragma mark - Autocompletion Tests
-
-describe(@"Autocompletion Tests", ^{
-    
-    beforeEach(^{
-        [tvc presentKeyboard:NO];
-        
-        [tvc.textView slk_clearText:YES];
-        [tvc.textView slk_insertTextAtCaretRange:@"hello @"];
-    });
-    
-    itShould(@"display the autocompletion view", ^{
-        
-        expect(tvc.foundPrefix).to.equal(@"@");
-        expect(tvc.foundWord).to.beNil;
-        expect(tvc.autoCompleting).to.beTruthy;
-        
-        return window;
-    });
-    
-    itShould(@"filter results in autocompletion view", ^{
-        
-        [tvc.textView slk_insertTextAtCaretRange:@"an"];
-        
-        // Auto-completion mode should be enabled
-        expect(tvc.foundPrefix).to.equal(@"@");
-        expect(tvc.foundWord).to.equal(@"an");
-        expect(tvc.autoCompleting).to.beTruthy;
-        
-        return window;
-    });
-    
-    itShould(@"insert the first autocompletion item to the text input with prefix", ^{
-        
-        [tvc acceptAutoCompletionWithString:@"Anna" keepPrefix:YES];
-        
-        // Auto-completion mode should now be disabled
-        expect(tvc.foundPrefix).to.beNil;
-        expect(tvc.foundWord).to.beNil;
-        expect(tvc.autoCompleting).to.beFalsy;
-        
-        expect(tvc.textView.text).to.equal(@"hello @Anna");
         
         return window;
     });

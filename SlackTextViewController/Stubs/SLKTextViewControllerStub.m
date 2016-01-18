@@ -7,6 +7,7 @@
 //
 
 #import "SLKTextViewControllerStub.h"
+#import "SLKTextViewStub.h"
 #import "NSString+LoremIpsum.h"
 
 @interface SLKTextViewControllerStub ()
@@ -25,8 +26,43 @@
     return self;
 }
 
+- (void)loadView
+{
+    [super loadView];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+}
+
 - (void)configure
 {
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    self.textView.placeholder = @"Placeholder";
+    self.textView.tintColor = self.textView.backgroundColor; // This helps preventing the caret to be displayed in the tests
+    
+    [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
+    [self.leftButton setTintColor:[UIColor grayColor]];
+    
+    [self registerClassForTextView:[SLKTextViewStub class]];
+    
     self.usernames = @[@"Allen", @"Anna", @"Alicia", @"Arnold", @"Armando", @"Antonio", @"Brad", @"Catalaya", @"Christoph", @"Emerson", @"Eric", @"Everyone", @"Steve"];
     
     [self registerPrefixesForAutoCompletion:@[@"@"]];
@@ -35,11 +71,9 @@
 
 #pragma mark - Auto-Completion Methods
 
-- (BOOL)canShowAutoCompletion
+- (void)didChangeAutoCompletionPrefix:(NSString *)prefix andWord:(NSString *)word
 {
     NSArray *array = nil;
-    NSString *prefix = self.foundPrefix;
-    NSString *word = self.foundWord;
     
     self.searchResult = nil;
     
@@ -58,7 +92,9 @@
     
     self.searchResult = [[NSArray alloc] initWithArray:array];
     
-    return self.searchResult.count > 0;
+    BOOL show = (self.searchResult.count > 0);
+    
+    [self showAutoCompletionView:show];
 }
 
 - (CGFloat)heightForAutoCompletionView
