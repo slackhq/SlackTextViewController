@@ -33,8 +33,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F5A7827D1BD0CEF400EC230B"
-               BuildableName = "SlackTextViewControllerTests.xctest"
-               BlueprintName = "SlackTextViewControllerTests"
+               BuildableName = "Tests.xctest"
+               BlueprintName = "Tests"
                ReferencedContainer = "container:SlackTextViewController.xcodeproj">
             </BuildableReference>
          </TestableReference>

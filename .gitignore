@@ -17,5 +17,6 @@ DerivedData
 *.hmap
 .gutter.json
 
-Tests/Pods
-Tests/Podfile.lock
+SlackTextViewController/Pods
+SlackTextViewController/Podfile.lock
+SlackTextViewController/*.xcworkspace
