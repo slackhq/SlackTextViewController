@@ -1,14 +1,20 @@
-language:
-- objective-c
+osx_image: xcode7
+language: objective-c
+
 cache:
-- bundler
+	- bundler
+	- cocoapods
+
 before_install:
-- bundle install
-- cd Tests && pod install && cd $TRAVIS_BUILD_DIR
+	- bundle install
+	- cd SlackTextViewController && pod install && cd $TRAVIS_BUILD_DIR
+
 script:
-- xctool test
+	- xctool test
+
 notifications:
   slack:
-    secure: DOv3x21M1pnyrZ5jT5bZyHG0lg2E2tnj+6TVNHUD2ZYjab3X9oYz6PzL0YaC0M2S0rtiJtjO7jd1hdXHPg9CTUg04oGLSWe43Fmt2WAprszSXwyvNnqHNilBHFwhuM7MqcbV1uu3R/5CZVuHA0MKZqLQtDx2N4ep/5Lg6ehmuoA=
+    - secure: DOv3x21M1pnyrZ5jT5bZyHG0lg2E2tnj+6TVNHUD2ZYjab3X9oYz6PzL0YaC0M2S0rtiJtjO7jd1hdXHPg9CTUg04oGLSWe43Fmt2WAprszSXwyvNnqHNilBHFwhuM7MqcbV1uu3R/5CZVuHA0MKZqLQtDx2N4ep/5Lg6ehmuoA=
+
 after_success:
-- bundle exec slather
+	- bundle exec slather
