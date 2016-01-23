@@ -271,6 +271,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 {
     if (!_collectionView) {
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.backgroundColor = [UIColor whiteColor];
         _collectionView.translatesAutoresizingMaskIntoConstraints = NO;
         _collectionView.scrollsToTop = YES;
         _collectionView.dataSource = self;
