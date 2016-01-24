@@ -32,6 +32,8 @@ typedef NS_ENUM(NSUInteger, SLKCounterPosition) {
     SLKCounterPositionBottom
 };
 
+NS_ASSUME_NONNULL_BEGIN
+
 /** @name A custom tool bar encapsulating messaging controls. */
 @interface SLKTextInputbar : UIToolbar
 
@@ -151,3 +153,6 @@ typedef NS_ENUM(NSUInteger, SLKCounterPosition) {
 @property (nonatomic, strong, readwrite) UIColor *charCountLabelWarningColor;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

@@ -16,6 +16,8 @@
 
 #import "SLKTextView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /** @name SLKTextView additional features used for SlackTextViewController. */
 @interface SLKTextView (SLKAdditions)
 
@@ -96,3 +98,6 @@
 + (CGFloat)pointSizeDifferenceForCategory:(NSString *)category;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

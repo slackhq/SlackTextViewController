@@ -28,6 +28,8 @@
 
 #import "SLKUIConstants.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  UIKeyboard notification replacement, posting reliably only when showing/hiding the keyboard (not when resizing keyboard, or with inputAccessoryView reloads, etc).
  Only triggered when using SLKTextViewController's text view.
@@ -56,19 +58,19 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
                                                                                 UIGestureRecognizerDelegate, UIAlertViewDelegate>
 
 /** The main table view managed by the controller object. Created by default initializing with -init or initWithNibName:bundle: */
-@property (nonatomic, readonly) UITableView *tableView;
+@property (nonatomic, readonly) UITableView *_Nullable tableView;
 
 /** The main collection view managed by the controller object. Not nil if the controller is initialised with -initWithCollectionViewLayout: */
-@property (nonatomic, readonly) UICollectionView *collectionView;
+@property (nonatomic, readonly) UICollectionView *_Nullable collectionView;
 
 /** The main scroll view managed by the controller object. Not nil if the controller is initialised with -initWithScrollView: */
-@property (nonatomic, readonly) UIScrollView *scrollView;
+@property (nonatomic, readonly) UIScrollView *_Nullable scrollView;
 
 /** The bottom toolbar containing a text view and buttons. */
 @property (nonatomic, readonly) SLKTextInputbar *textInputbar;
 
 /** The default typing indicator used to display user names horizontally. */
-@property (nonatomic, readonly) SLKTypingIndicatorView *typingIndicatorView;
+@property (nonatomic, readonly) SLKTypingIndicatorView *_Nullable typingIndicatorView;
 
 /**
  The custom typing indicator view. Default is kind of SLKTypingIndicatorView.
@@ -216,7 +218,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param responder The current first responder object.
  @return YES so the text input bar still move up/down.
  */
-- (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *)responder;
+- (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *_Nullable)responder;
 
 /**
  Verifies if the text input bar should still move up/down when it is first responder. Default is NO.
@@ -272,7 +274,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  
  @param sender The object calling this method.
  */
-- (void)didPressLeftButton:(id)sender;
+- (void)didPressLeftButton:(id _Nullable)sender;
 
 /**
  Notifies the view controller when the right button's action has been triggered, manually or by using the keyboard return key.
@@ -281,7 +283,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  
  @param sender The object calling this method.
  */
-- (void)didPressRightButton:(id)sender NS_REQUIRES_SUPER;
+- (void)didPressRightButton:(id _Nullable)sender NS_REQUIRES_SUPER;
 
 /**
  Verifies if the right button can be pressed. If NO, the button is disabled.
@@ -321,21 +323,21 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  You can override this method to perform additional tasks.
  You MUST call super at some point in your implementation.
  */
-- (void)didPressReturnKey:(id)sender NS_REQUIRES_SUPER;
+- (void)didPressReturnKey:(id _Nullable)sender NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller when the user has pressed the Escape key (Esc) with an external keyboard.
  You can override this method to perform additional tasks.
  You MUST call super at some point in your implementation.
  */
-- (void)didPressEscapeKey:(id)sender NS_REQUIRES_SUPER;
+- (void)didPressEscapeKey:(id _Nullable)sender NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller when the user has pressed the arrow key with an external keyboard.
  You can override this method to perform additional tasks.
  You MUST call super at some point in your implementation.
  */
-- (void)didPressArrowKey:(id)sender NS_REQUIRES_SUPER;
+- (void)didPressArrowKey:(id _Nullable)sender NS_REQUIRES_SUPER;
 
 
 #pragma mark - Text Input Bar Adjustment
@@ -404,16 +406,16 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, readonly, getter = isAutoCompleting) BOOL autoCompleting;
 
 /** The recently found prefix symbol used as prefix for autocompletion mode. */
-@property (nonatomic, readonly, copy) NSString *foundPrefix;
+@property (nonatomic, readonly, copy) NSString *_Nullable foundPrefix;
 
 /** The range of the found prefix in the text view content. */
 @property (nonatomic, readonly) NSRange foundPrefixRange;
 
 /** The recently found word at the text view's caret position. */
-@property (nonatomic, readonly, copy) NSString *foundWord;
+@property (nonatomic, readonly, copy) NSString *_Nullable foundWord;
 
 /** An array containing all the registered prefix strings for autocompletion. */
-@property (nonatomic, readonly, copy) NSArray *registeredPrefixes;
+@property (nonatomic, readonly, copy) NSArray *_Nullable registeredPrefixes;
 
 /**
  Registers any string prefix for autocompletion detection, useful for user mentions and/or hashtags autocompletion.
@@ -422,7 +424,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  
  @param prefixes An array of prefix strings.
  */
-- (void)registerPrefixesForAutoCompletion:(NSArray *)prefixes;
+- (void)registerPrefixesForAutoCompletion:(NSArray *_Nullable)prefixes;
 
 /**
  Notifies the view controller either the autocompletion prefix or word have changed.
@@ -478,7 +480,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  
  @param string The string to be used for replacing autocompletion placeholders.
  */
-- (void)acceptAutoCompletionWithString:(NSString *)string;
+- (void)acceptAutoCompletionWithString:(NSString *_Nullable)string;
 
 /**
  Accepts the autocompletion, replacing the detected word with a new string, and optionally replacing the prefix too.
@@ -486,7 +488,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param string The string to be used for replacing autocompletion placeholders.
  @param keepPrefix YES if the prefix shouldn't be overidden.
  */
-- (void)acceptAutoCompletionWithString:(NSString *)string keepPrefix:(BOOL)keepPrefix;
+- (void)acceptAutoCompletionWithString:(NSString *_Nullable)string keepPrefix:(BOOL)keepPrefix;
 
 
 #pragma mark - Text Caching
@@ -502,7 +504,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  
  @return The string key for which to enable text caching.
  */
-- (NSString *)keyForTextCaching;
+- (nullable NSString *)keyForTextCaching;
 
 /**
  Removes the current's vien controller cached text.
@@ -527,7 +529,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  
  @param aClass A SLKTextView subclass.
  */
-- (void)registerClassForTextView:(Class)aClass;
+- (void)registerClassForTextView:(Class _Nullable)aClass;
 
 /**
  Registers a class for customizing the behavior and appearance of the typing indicator view.
@@ -536,7 +538,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  
  @param aClass A UIView subclass conforming to the SLKTypingIndicatorProtocol.
  */
-- (void)registerClassForTypingIndicatorView:(Class)aClass;
+- (void)registerClassForTypingIndicatorView:(Class _Nullable)aClass;
 
 
 #pragma mark - Delegate Methods Requiring Super
@@ -582,3 +584,5 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)viewDidLayoutSubviews NS_REQUIRES_SUPER;
 
 @end
+
+NS_ASSUME_NONNULL_END

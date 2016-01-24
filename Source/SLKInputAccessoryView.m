@@ -20,7 +20,6 @@
 
 @implementation SLKInputAccessoryView
 
-
 #pragma mark - Super Overrides
 
 - (void)willMoveToSuperview:(UIView *)newSuperview

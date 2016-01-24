@@ -17,6 +17,8 @@
 #import <UIKit/UIKit.h>
 #import "SLKTypingIndicatorProtocol.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /** @name A custom view to display an indicator of users typing. */
 @interface SLKTypingIndicatorView : UIView <SLKTypingIndicatorProtocol>
 
@@ -52,7 +54,7 @@
  
  @param username The user name string.
  */
-- (void)insertUsername:(NSString *)username;
+- (void)insertUsername:(NSString *_Nullable)username;
 
 /**
  Removes a user name, if existent on the list.
@@ -60,6 +62,8 @@
  
  @param username The user name string.
  */
-- (void)removeUsername:(NSString *)username;
+- (void)removeUsername:(NSString *_Nullable)username;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -24,6 +24,6 @@
  
  @return A UIResponder instance.
  */
-+ (instancetype)slk_currentFirstResponder;
++ (nullable instancetype)slk_currentFirstResponder;
 
 @end

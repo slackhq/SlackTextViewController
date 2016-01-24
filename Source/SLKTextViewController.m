@@ -94,7 +94,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (instancetype)initWithTableViewStyle:(UITableViewStyle)style
 {
     NSAssert([self class] != [SLKTextViewController class], @"Oops! You must subclass SLKTextViewController.");
-    
+    NSAssert(style == UITableViewStylePlain || style == UITableViewStyleGrouped, @"Oops! You must pass a valid UITableViewStyle.");
+
     if (self = [super initWithNibName:nil bundle:nil])
     {
         self.scrollViewProxy = [self tableViewWithStyle:style];
@@ -106,7 +107,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
     NSAssert([self class] != [SLKTextViewController class], @"Oops! You must subclass SLKTextViewController.");
-    
+    NSAssert([layout isKindOfClass:[UICollectionViewLayout class]], @"Oops! You must pass a valid UICollectionViewLayout object.");
+
     if (self = [super initWithNibName:nil bundle:nil])
     {
         self.scrollViewProxy = [self collectionViewWithLayout:layout];
@@ -118,7 +120,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (instancetype)initWithScrollView:(UIScrollView *)scrollView
 {
     NSAssert([self class] != [SLKTextViewController class], @"Oops! You must subclass SLKTextViewController.");
-    
+    NSAssert([scrollView isKindOfClass:[UIScrollView class]], @"Oops! You must pass a valid UIScrollView object.");
+
     if (self = [super initWithNibName:nil bundle:nil])
     {
         _scrollView = scrollView;
@@ -133,7 +136,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (instancetype)initWithCoder:(NSCoder *)decoder
 {
     NSAssert([self class] != [SLKTextViewController class], @"Oops! You must subclass SLKTextViewController.");
-    
+    NSAssert([decoder isKindOfClass:[NSCoder class]], @"Oops! You must pass a valid decoder object.");
+
     if (self = [super initWithCoder:decoder])
     {
         UITableViewStyle tableViewStyle = [[self class] tableViewStyleForCoder:decoder];
@@ -1505,7 +1509,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     // Notifies only if the pasted item is nested in a dictionary.
-    if ([notification.userInfo isKindOfClass:[NSDictionary class]]) {
+    if (notification.userInfo) {
         [self didPasteMediaContent:notification.userInfo];
     }
 }
@@ -1523,29 +1527,29 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
 }
 
-- (void)slk_willShowOrHideTypeIndicatorView:(UIView <SLKTypingIndicatorProtocol> *)typingIndicatorView
+- (void)slk_willShowOrHideTypeIndicatorView:(UIView <SLKTypingIndicatorProtocol> *)view
 {
     // Skips if the typing indicator should not show. Ignores the checking if it's trying to hide.
-    if (![self canShowTypingIndicator] && typingIndicatorView.isVisible) {
+    if (![self canShowTypingIndicator] && view.isVisible) {
         return;
     }
     
-    CGFloat systemLayoutSizeHeight = [typingIndicatorView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-    CGFloat height = typingIndicatorView.isVisible ? systemLayoutSizeHeight : 0.0;
+    CGFloat systemLayoutSizeHeight = [view systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    CGFloat height = view.isVisible ? systemLayoutSizeHeight : 0.0;
     
     self.typingIndicatorViewHC.constant = height;
     self.scrollViewHC.constant -= height;
     
-    if (typingIndicatorView.isVisible) {
-        typingIndicatorView.hidden = NO;
+    if (view.isVisible) {
+        view.hidden = NO;
     }
     
     [self.view slk_animateLayoutIfNeededWithBounce:self.bounces
                                            options:UIViewAnimationOptionCurveEaseInOut
                                         animations:NULL
                                         completion:^(BOOL finished) {
-                                            if (!typingIndicatorView.isVisible) {
-                                                typingIndicatorView.hidden = YES;
+                                            if (!view.isVisible) {
+                                                view.hidden = YES;
                                             }
                                         }];
 }
