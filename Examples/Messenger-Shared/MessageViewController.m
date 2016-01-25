@@ -511,6 +511,49 @@
 }
 
 
+#pragma mark - SLKTextViewDelegate Methods
+
+- (BOOL)textView:(SLKTextView *)textView shouldOfferFormattingForSymbol:(NSString *)symbol
+{
+    if ([symbol isEqualToString:@">"]) {
+        
+        NSRange selection = textView.selectedRange;
+        
+        // The Quote formatting only applies new paragraphs
+        if (selection.location == 0 && selection.length > 0) {
+            return YES;
+        }
+        
+        // or older paragraphs too
+        NSString *prevString = [textView.text substringWithRange:NSMakeRange(selection.location-1, 1)];
+        
+        if ([[NSCharacterSet newlineCharacterSet] characterIsMember:[prevString characterAtIndex:0]]) {
+            return YES;
+        }
+        
+        return NO;
+    }
+    
+    return [super textView:textView shouldOfferFormattingForSymbol:symbol];
+}
+
+- (BOOL)textView:(SLKTextView *)textView shouldInsertSuffixForFormattingWithSymbol:(NSString *)symbol prefixRange:(NSRange)prefixRange
+{
+    if ([symbol isEqualToString:@">"]) {
+        return NO;
+    }
+    
+    return [super textView:textView shouldInsertSuffixForFormattingWithSymbol:symbol prefixRange:prefixRange];
+}
+
+#pragma mark - UITextViewDelegate Methods
+
+- (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    return [super textView:textView shouldChangeTextInRange:range replacementText:text];
+}
+
+
 #pragma mark - UITableViewDataSource Methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -650,47 +693,6 @@
 {
     // Since SLKTextViewController uses UIScrollViewDelegate to update a few things, it is important that if you override this method, to call super.
     [super scrollViewDidScroll:scrollView];
-}
-
-
-#pragma mark - UITextViewDelegate Methods
-
-- (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    return [super textView:textView shouldChangeTextInRange:range replacementText:text];
-}
-
-- (BOOL)textView:(SLKTextView *)textView shouldOfferFormattingForSymbol:(NSString *)symbol
-{
-    if ([symbol isEqualToString:@">"]) {
-        
-        NSRange selection = textView.selectedRange;
-        
-        // The Quote formatting only applies new paragraphs
-        if (selection.location == 0 && selection.length > 0) {
-            return YES;
-        }
-        
-        // or older paragraphs too
-        NSString *prevString = [textView.text substringWithRange:NSMakeRange(selection.location-1, 1)];
-        
-        if ([[NSCharacterSet newlineCharacterSet] characterIsMember:[prevString characterAtIndex:0]]) {
-            return YES;
-        }
-        
-        return NO;
-    }
-    
-    return [super textView:textView shouldOfferFormattingForSymbol:symbol];
-}
-
-- (BOOL)textView:(SLKTextView *)textView shouldInsertSuffixForFormattingWithSymbol:(NSString *)symbol prefixRange:(NSRange)prefixRange
-{
-    if ([symbol isEqualToString:@">"]) {
-        return NO;
-    }
-    
-    return [super textView:textView shouldInsertSuffixForFormattingWithSymbol:symbol prefixRange:prefixRange];
 }
 
 
