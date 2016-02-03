@@ -344,17 +344,8 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
         }
     }
 
-    NSString *title = [self.rightButton titleForState:UIControlStateNormal];
-
-    CGSize rightButtonSize;
+    CGSize rightButtonSize = [self.rightButton intrinsicContentSize];
     
-    if ([title length] == 0 && self.rightButton.imageView.image) {
-        rightButtonSize = self.rightButton.imageView.image.size;
-    }
-    else {
-        rightButtonSize = [title sizeWithAttributes:@{NSFontAttributeName: self.rightButton.titleLabel.font}];
-    }
-
     return rightButtonSize.width + self.contentInset.right;
 }
 
