@@ -8,13 +8,16 @@
 
 import UIKit
 
+let kMessageCellFont: UIFont = UIFont.systemFontOfSize(15)
+
 class MessageCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var titleLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        self.titleLabel.font = kMessageCellFont
     }
 
 }

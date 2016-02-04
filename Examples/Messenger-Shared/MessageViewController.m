@@ -34,7 +34,7 @@
 
 @implementation MessageViewController
 
-- (id)init
+- (instancetype)init
 {
     self = [super initWithTableViewStyle:UITableViewStylePlain];
     if (self) {
@@ -43,7 +43,7 @@
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     if (self) {

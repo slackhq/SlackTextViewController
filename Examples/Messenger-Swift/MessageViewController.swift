@@ -9,6 +9,11 @@
 import Foundation
 import UIKit
 
+let kMessageCellIdentifier: String = "MessageCell"
+let kMessageCellHeight:CGFloat = 44
+
+let kAutoCompletionCellIdentifier:String = "AutoCompletionCell"
+
 class MessageViewController: SLKTextViewController {
 
     var messages: [String] = []
@@ -18,13 +23,23 @@ class MessageViewController: SLKTextViewController {
 
     var searchResult: [String] = []
     
-    var kMessageCellIdentifier: String = "MessageCell"
-
-    var kAutoCompletionCellIdentifier: String = "AutoCompletionCell"
-    let kAutoCompletionCellHeight:CGFloat = 44
-
+    override class func tableViewStyleForCoder(decoder: NSCoder) -> UITableViewStyle {
+        return .Plain
+    }
+    
     override class func collectionViewLayoutForCoder(decoder: NSCoder) -> UICollectionViewLayout {
         return MessageCollectionViewLayout()
+    }
+    
+    override var keyCommands: [UIKeyCommand]? {
+        
+        var commands = super.keyCommands
+        
+        // Edit last message
+        let command = UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: .Command, action: "editLastMessage:")
+        commands?.append(command)
+        
+        return commands
     }
     
     // MARK: - View lifecycle
@@ -67,7 +82,10 @@ class MessageViewController: SLKTextViewController {
         self.autoCompletionView.registerClass(UITableViewCell.self, forCellReuseIdentifier: kAutoCompletionCellIdentifier)
         
         self.registerPrefixesForAutoCompletion(["@", "#"])
+        
+        self.textView.registerMarkdownFormattingSymbol("*", withTitle: "Bold")
     }
+    
     
     // MARK: - SLKTextViewController
     
@@ -98,6 +116,22 @@ class MessageViewController: SLKTextViewController {
         super.didPressRightButton(sender)
     }
     
+    override func didCommitTextEditing(sender: AnyObject) {
+        
+        let message:String = self.textView.text
+        
+        self.messages.removeAtIndex(0)
+        self.messages.insert(message, atIndex: 0)
+        
+        self.tableView!.reloadData()
+        
+        super.didCommitTextEditing(sender)
+    }
+    
+    override func didCancelTextEditing(sender: AnyObject) {
+        
+        super.didCancelTextEditing(sender)
+    }
     
     override func keyForTextCaching() -> String? {
         return NSBundle.mainBundle().bundleIdentifier
@@ -134,10 +168,10 @@ class MessageViewController: SLKTextViewController {
     }
     
     override func heightForAutoCompletionView() -> CGFloat {
-        return kAutoCompletionCellHeight * CGFloat(self.searchResult.count)
+        return kMessageCellHeight * CGFloat(self.searchResult.count)
     }
     
-    // MARK: - UITextViewDelegate
+    // MARK: - SLKTextViewDelegate
     
     // MARK: - UITextViewDelegate
     
@@ -164,8 +198,7 @@ class MessageViewController: SLKTextViewController {
     func collectionView(collectionView: UICollectionView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
         let text = self.messages[indexPath.row]
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(kMessageCellIdentifier, forIndexPath: indexPath) as! MessageCollectionViewCell
-
+        
         let maxWidth: CGFloat = CGRectGetWidth(collectionView.frame)
         let minHeight: CGFloat = 40
         
@@ -177,8 +210,8 @@ class MessageViewController: SLKTextViewController {
         paragraphStyle.lineBreakMode = NSLineBreakMode.ByWordWrapping
         paragraphStyle.alignment = NSTextAlignment.Left
         
-        let attributes = [NSFontAttributeName: cell.titleLabel.font, NSParagraphStyleAttributeName: paragraphStyle]
-        let boundingRect = text.boundingRectWithSize(CGSizeMake(maxWidth, 0.0), options:NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: attributes, context: nil)
+        let attributes = [NSFontAttributeName: kMessageCellFont, NSParagraphStyleAttributeName: paragraphStyle]
+        let boundingRect = text.boundingRectWithSize(CGSizeMake(maxWidth, 0), options:NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: attributes, context: nil)
         
         let height = max(CGRectGetHeight(boundingRect), minHeight)
         print("height: ", height)
@@ -198,20 +231,29 @@ class MessageViewController: SLKTextViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(kAutoCompletionCellIdentifier)!
-        cell.textLabel!.text = self.searchResult[indexPath.row]
+        if let cell = tableView.dequeueReusableCellWithIdentifier(kAutoCompletionCellIdentifier) {
+            cell.textLabel!.text = self.searchResult[indexPath.row]
+            
+            return cell
+        }
         
-        return cell
+        return UITableViewCell()
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return kAutoCompletionCellHeight
+        return kMessageCellHeight
     }
     
     // MARK: - UITableViewDelegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
+        if tableView.isEqual(tableView) {
+            var item = self.searchResult[indexPath.row]
+            item += " "
+            
+            self.acceptAutoCompletionWithString(item)
+        }
     }
     
     // MARK: - UIScrollViewDelegate

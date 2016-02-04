@@ -48,6 +48,7 @@
 		71BE10301A76C4890083EE32 /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */; };
 		8C6D809F3C95C912F87F0D17 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFA9095EABC480682E6396C /* libPods.a */; };
 		F556AFAE1BA7B41F009898BD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F556AFAD1BA7B41F009898BD /* QuartzCore.framework */; };
+		F56A8EBB1C5EFC7F00C2B5A7 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = F56A8EBA1C5EFC7F00C2B5A7 /* README.md */; };
 		F5A1CC981C542EB600908ECB /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A1CC971C542EB600908ECB /* MessageViewController.swift */; };
 		F5A1CC9E1C546C1E00908ECB /* MessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A1CC9A1C546B6D00908ECB /* MessageCollectionViewCell.swift */; };
 		F5A1CC9F1C546C2600908ECB /* MessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5A1CC9B1C546B6D00908ECB /* MessageCollectionViewCell.xib */; };
@@ -107,6 +108,7 @@
 		DDFA9095EABC480682E6396C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E76FE7634642D0C745F673A5 /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F556AFAD1BA7B41F009898BD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		F56A8EBA1C5EFC7F00C2B5A7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
 		F5A1CC971C542EB600908ECB /* MessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 		F5A1CC991C546B6C00908ECB /* Messenger-Programatic-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Messenger-Programatic-Bridging-Header.h"; sourceTree = "<group>"; };
 		F5A1CC9A1C546B6D00908ECB /* MessageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 		4F86BF8D19F01234007A3D4A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				F56A8EBA1C5EFC7F00C2B5A7 /* README.md */,
 				4F86BF9119F01234007A3D4A /* MessageViewController.h */,
 				4F86BF9219F01234007A3D4A /* MessageViewController.m */,
 				4F86BF8F19F01234007A3D4A /* MessageTableViewCell.h */,
@@ -663,6 +666,7 @@
 				4F86BF9519F01234007A3D4A /* MessageTableViewCell.m in Sources */,
 				4FF04E591B3F7A04004C3BED /* TypingIndicatorView.m in Sources */,
 				4F3EDB59199ED00F004C15D6 /* main.m in Sources */,
+				F56A8EBB1C5EFC7F00C2B5A7 /* README.md in Sources */,
 				4F32561E1AA77431008C1DD9 /* MessageTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
