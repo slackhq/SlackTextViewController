@@ -156,8 +156,7 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
 
 - (SLKInputAccessoryView *)inputAccessoryView
 {
-    if (!_inputAccessoryView)
-    {
+    if (!_inputAccessoryView) {
         _inputAccessoryView = [[SLKInputAccessoryView alloc] initWithFrame:CGRectZero];
         _inputAccessoryView.backgroundColor = [UIColor clearColor];
         _inputAccessoryView.userInteractionEnabled = NO;
@@ -354,6 +353,7 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
             return 0.0;
         }
     }
+    
     return self.contentInset.right;
 }
 
@@ -362,7 +362,7 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
     if (SLK_IS_IPAD) {
         return 8;
     }
-    if (SLK_IS_IPHONE4) {
+    else if (SLK_IS_IPHONE4) {
         return 4;
     }
     else {
