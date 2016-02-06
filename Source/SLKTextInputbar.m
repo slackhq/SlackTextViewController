@@ -543,12 +543,14 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
     {
         CGFloat rightButtonNewWidth = [self slk_appropriateRightButtonWidth];
         
+        // Only updates if the width did change
         if (self.rightButtonWC.constant == rightButtonNewWidth) {
             return;
         }
         
         self.rightButtonWC.constant = rightButtonNewWidth;
         self.rightMarginWC.constant = [self slk_appropriateRightButtonMargin];
+        [self.rightButton layoutIfNeeded]; // Avoids the right button to stretch when animating the constraint changes
         
         BOOL bounces = self.controller.bounces && [self.textView isFirstResponder];
         
