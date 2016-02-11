@@ -209,10 +209,10 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)dismissKeyboard:(BOOL)animated;
 
 /**
- Dimisses the text input bar, if not already
+ Dismisses the text input bar, if not already
  
- The recommend method to use is forceTextInputbarAdjustmentForResponder:
- only if that dosent dismiss the textInputBar should this be used.
+ The recommended method to use is forceTextInputbarAdjustmentForResponder:
+ Only if that doesn't dismiss the textInputBar should this be used.
  */
 - (void)dismissTextInputbarIfNeeded;
 
