@@ -904,20 +904,16 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         
         weakSelf.keyboardHC.constant = 0.0;
         weakSelf.scrollViewHC.constant = [weakSelf slk_appropriateScrollViewHeight];
+        [weakSelf slk_hideAutoCompletionViewIfNeeded];
 
         [weakSelf.view layoutIfNeeded];
     };
     
-    void (^completion)(BOOL finished) = ^void(BOOL finished){
-        [weakSelf slk_hideAutoCompletionViewIfNeeded];
-    };
-    
     if (animated) {
-        [UIView animateWithDuration:0.25 animations:animations completion:completion];
+        [UIView animateWithDuration:0.25 animations:animations completion:nil];
     }
     else {
         animations();
-        completion(NO);
     }
 }
 
