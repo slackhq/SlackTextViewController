@@ -900,11 +900,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     __weak typeof(self) weakSelf = self;
     
+    [self slk_hideAutoCompletionViewIfNeeded];
+    
     void (^animations)() = ^void(){
         
         weakSelf.keyboardHC.constant = 0.0;
         weakSelf.scrollViewHC.constant = [weakSelf slk_appropriateScrollViewHeight];
-        [weakSelf slk_hideAutoCompletionViewIfNeeded];
 
         [weakSelf.view layoutIfNeeded];
     };
