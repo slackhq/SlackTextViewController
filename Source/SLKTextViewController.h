@@ -213,8 +213,10 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  
  The recommended method to use is forceTextInputbarAdjustmentForResponder:
  Only if that doesn't dismiss the textInputBar should this be used.
+ 
+ @param animated YES if the textInputBar should be dismissed using an animation.
  */
-- (void)dismissTextInputbarIfNeeded;
+- (void)dismissTextInputbar:(BOOL)animated;
 
 /**
  Verifies if the text input bar should still move up/down even if it is not first responder. Default is NO.

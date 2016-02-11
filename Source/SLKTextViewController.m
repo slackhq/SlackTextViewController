@@ -892,18 +892,33 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
 }
 
-- (void)dismissTextInputbarIfNeeded
+- (void)dismissTextInputbar:(BOOL)animated
 {
     if (self.keyboardHC.constant == 0) {
         return;
     }
     
-    self.keyboardHC.constant = 0.0;
-    self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
+    __weak typeof(self) weakSelf = self;
     
-    [self slk_hideAutoCompletionViewIfNeeded];
+    void (^animations)() = ^void(){
+        
+        weakSelf.keyboardHC.constant = 0.0;
+        weakSelf.scrollViewHC.constant = [weakSelf slk_appropriateScrollViewHeight];
+
+        [weakSelf.view layoutIfNeeded];
+    };
     
-    [self.view layoutIfNeeded];
+    void (^completion)(BOOL finished) = ^void(BOOL finished){
+        [weakSelf slk_hideAutoCompletionViewIfNeeded];
+    };
+    
+    if (animated) {
+        [UIView animateWithDuration:0.25 animations:animations completion:completion];
+    }
+    else {
+        animations();
+        completion(NO);
+    }
 }
 
 
@@ -1343,7 +1358,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
             return;
         }
         else if (![self forceTextInputbarAdjustmentForResponder:currentResponder]) {
-            return [self dismissTextInputbarIfNeeded];
+            return [self dismissTextInputbar:false];
         }
     }
     
