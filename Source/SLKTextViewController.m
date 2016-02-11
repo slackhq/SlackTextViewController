@@ -892,6 +892,20 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
 }
 
+- (void)dismissTextInputbarIfNeeded
+{
+    if (self.keyboardHC.constant == 0) {
+        return;
+    }
+    
+    self.keyboardHC.constant = 0.0;
+    self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
+    
+    [self slk_hideAutoCompletionViewIfNeeded];
+    
+    [self.view layoutIfNeeded];
+}
+
 
 #pragma mark - Private Methods
 
@@ -1160,20 +1174,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [self.textView setTypingSuggestionEnabled:enable];
 }
 
-- (void)slk_dismissTextInputbarIfNeeded
-{
-    if (self.keyboardHC.constant == 0) {
-        return;
-    }
-    
-    self.keyboardHC.constant = 0.0;
-    self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
-    
-    [self slk_hideAutoCompletionViewIfNeeded];
-    
-    [self.view layoutIfNeeded];
-}
-
 - (void)slk_detectKeyboardStatesInNotification:(NSNotification *)notification
 {
     // Tear down
@@ -1343,7 +1343,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
             return;
         }
         else if (![self forceTextInputbarAdjustmentForResponder:currentResponder]) {
-            return [self slk_dismissTextInputbarIfNeeded];
+            return [self dismissTextInputbarIfNeeded];
         }
     }
     
