@@ -56,7 +56,7 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 
 ## Installation
 
-###### With [Cocoa Pods](https://cocoapods.org/):
+###### With [CocoaPods](https://cocoapods.org/):
 ```ruby
 pod "SlackTextViewController"
 ```
