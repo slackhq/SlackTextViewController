@@ -43,7 +43,7 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 - Bouncy Animations
 
 ### Compatibility
-- Carthage & Cocoapods
+- Carthage & CocoaPods
 - Swift: [A sample project is available in a different branch] (https://github.com/slackhq/SlackTextViewController/tree/swift-example)
 - iOS 7, 8 & 9
 - iPhone & iPad
@@ -56,7 +56,7 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 
 ## Installation
 
-###### With [Cocoa Pods](https://cocoapods.org/):
+###### With [CocoaPods](https://cocoapods.org/):
 ```ruby
 pod "SlackTextViewController"
 ```
