@@ -1355,7 +1355,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
             return;
         }
         else if (![self forceTextInputbarAdjustmentForResponder:currentResponder]) {
-            return [self dismissTextInputbar:false];
+            return [self dismissTextInputbar:NO];
         }
     }
     
