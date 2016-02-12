@@ -379,12 +379,10 @@
 
 - (void)didPressRightButton:(id)sender
 {
-    [self dismissTextInputbar:true];
-    [super didPressRightButton:sender];
     // Notifies the view controller when the right button's action has been triggered, manually or by using the keyboard return key.
     
     // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button
-    /*[self.textView refreshFirstResponder];
+    [self.textView refreshFirstResponder];
     
     Message *message = [Message new];
     message.username = [LoremIpsum name];
@@ -405,7 +403,7 @@
     // See https://github.com/slackhq/SlackTextViewController/issues/94#issuecomment-69929927
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     
-    [super didPressRightButton:sender];*/
+    [super didPressRightButton:sender];
 }
 
 - (void)didPressArrowKey:(id)sender
