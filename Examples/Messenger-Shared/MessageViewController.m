@@ -183,8 +183,7 @@
                                                                target:self
                                                                action:@selector(togglePIPWindow:)];
     
-    self.navigationItem.leftBarButtonItems = @[arrowItem];
-    self.navigationItem.rightBarButtonItems = @[pipItem, editItem, appendItem, typeItem];
+    self.navigationItem.rightBarButtonItems = @[arrowItem, pipItem, editItem, appendItem, typeItem];
 }
 
 
@@ -425,12 +424,13 @@
 
 - (void)didPressArrowKey:(id)sender
 {
-    [super didPressArrowKey:sender];
-    
     UIKeyCommand *keyCommand = (UIKeyCommand *)sender;
     
-    if ([keyCommand.input isEqualToString:UIKeyInputUpArrow]) {
+    if ([keyCommand.input isEqualToString:UIKeyInputUpArrow] && self.textView.text.length == 0) {
         [self editLastMessage:nil];
+    }
+    else {
+        [super didPressArrowKey:sender];
     }
 }
 

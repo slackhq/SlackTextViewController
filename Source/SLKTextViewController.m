@@ -62,9 +62,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 // YES if the view controller's view's size is changing by its parent (i.e. when its window rotates or is resized)
 @property (nonatomic, getter = isTransitioning) BOOL transitioning;
 
-// The keyboard commands available for external keyboards
-@property (nonatomic, strong) NSArray *keyboardCommands;
-
 // Optional classes to be used instead of the default ones.
 @property (nonatomic, strong) Class textViewClass;
 @property (nonatomic, strong) Class typingIndicatorViewClass;
@@ -187,6 +184,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [self.view addSubview:self.textInputbar];
     
     [self slk_setupViewConstraints];
+    
+    [self slk_registerKeyCommands];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -2202,72 +2201,41 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 }
 
 
-#pragma mark - External Keyboard Support
+#pragma mark - Keyboard Command registration
+
+- (void)slk_registerKeyCommands
+{
+    __weak typeof(self) weakSelf = self;
+
+    // Enter Key
+    [self.textView observeKeyInput:@"\r" modifiers:0 title:NSLocalizedString(@"Send/Accept", nil) completion:^(UIKeyCommand *keyCommand) {
+        [weakSelf didPressReturnKey:keyCommand];
+    }];
+    
+    // Esc Key
+    [self.textView observeKeyInput:UIKeyInputEscape modifiers:0 title:NSLocalizedString(@"Dismiss", nil) completion:^(UIKeyCommand *keyCommand) {
+        [weakSelf didPressEscapeKey:keyCommand];
+    }];
+    
+    // Up Arrow
+    [self.textView observeKeyInput:UIKeyInputUpArrow modifiers:0 title:nil completion:^(UIKeyCommand *keyCommand) {
+        [weakSelf didPressArrowKey:keyCommand];
+    }];
+    
+    // Down Arrow
+    [self.textView observeKeyInput:UIKeyInputDownArrow modifiers:0 title:nil completion:^(UIKeyCommand *keyCommand) {
+        [weakSelf didPressArrowKey:keyCommand];
+    }];
+}
 
 - (NSArray *)keyCommands
 {
-    if (_keyboardCommands) {
-        return _keyboardCommands;
-    }
-    
-    _keyboardCommands = @[[self slk_returnKeyCommand],
-                          [self slk_escKeyCommand],
-                          [self slk_arrowKeyCommand:UIKeyInputUpArrow],
-                          [self slk_arrowKeyCommand:UIKeyInputDownArrow],
-                          ];
-    
-    return _keyboardCommands;
-}
-
-- (UIKeyCommand *)slk_returnKeyCommand
-{
-    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:0 action:@selector(didPressReturnKey:)];
-    
-#ifdef __IPHONE_9_0
-    if ([UIKeyCommand respondsToSelector:@selector(keyCommandWithInput:modifierFlags:action:discoverabilityTitle:)] ) {
-        // Only available since iOS 9
-        command.discoverabilityTitle = [self.rightButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Send/Accept", nil);
-    }
-#endif
-    
-    return command;
-}
-
-- (UIKeyCommand *)slk_escKeyCommand
-{
-    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(didPressEscapeKey:)];
-    
-#ifdef __IPHONE_9_0
-    if ([UIKeyCommand respondsToSelector:@selector(keyCommandWithInput:modifierFlags:action:discoverabilityTitle:)] ) {
-        // Only available since iOS 9
-        command.discoverabilityTitle = NSLocalizedString(@"Dismiss", nil);
-    }
-#endif
-    
-    return command;
-}
-
-- (UIKeyCommand *)slk_arrowKeyCommand:(NSString *)inputUpArrow
-{
-    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:inputUpArrow modifierFlags:0 action:@selector(didPressArrowKey:)];
-    
-#ifdef __IPHONE_9_0
-    // Only available since iOS 9
-    if ([UIKeyCommand respondsToSelector:@selector(keyCommandWithInput:modifierFlags:action:discoverabilityTitle:)] ) {
-        if ([inputUpArrow isEqualToString:UIKeyInputUpArrow]) {
-            command.discoverabilityTitle = NSLocalizedString(@"Move Up", nil);
-        }
-        if ([inputUpArrow isEqualToString:UIKeyInputDownArrow]) {
-            command.discoverabilityTitle = NSLocalizedString(@"Move Down", nil);
-        }
-    }
-#endif
-    
-    return command;
+    // Important to keep this in, for backwards compatibility.
+    return @[];
 }
 
 
-#pragma mark - NSNotificationCenter register/unregister
+#pragma mark - NSNotificationCenter registration
 
 - (void)slk_registerNotifications
 {
