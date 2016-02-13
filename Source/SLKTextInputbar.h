@@ -16,7 +16,6 @@
 
 #import <UIKit/UIKit.h>
 
-@class SLKTextViewController;
 @class SLKTextView;
 @class SLKInputAccessoryView;
 
@@ -34,9 +33,6 @@ typedef NS_ENUM(NSUInteger, SLKCounterPosition) {
 
 /** @name A custom tool bar encapsulating messaging controls. */
 @interface SLKTextInputbar : UIToolbar
-
-/** A weak reference to the core view controller. */
-@property (nonatomic, weak) SLKTextViewController *controller;
 
 /** The centered text input view.
  The maximum number of lines is configured by default, to best fit each devices dimensions.
@@ -57,6 +53,9 @@ typedef NS_ENUM(NSUInteger, SLKCounterPosition) {
 
 /** YES if the right button should be hidden animatedly in case the text view has no text in it. Default is YES. */
 @property (nonatomic, readwrite) BOOL autoHideRightButton;
+
+/** YES if animations should have bouncy effects. Default is YES. */
+@property (nonatomic, assign) BOOL bounces;
 
 /** The inner padding to use when laying out content in the view. Default is {5, 8, 5, 8}. */
 @property (nonatomic, assign) UIEdgeInsets contentInset;

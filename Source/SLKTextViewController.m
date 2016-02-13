@@ -314,7 +314,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     if (!_textInputbar) {
         _textInputbar = [[SLKTextInputbar alloc] initWithTextViewClass:self.textViewClass];
         _textInputbar.translatesAutoresizingMaskIntoConstraints = NO;
-        _textInputbar.controller = self;
         
         [_textInputbar.leftButton addTarget:self action:@selector(didPressLeftButton:) forControlEvents:UIControlEventTouchUpInside];
         [_textInputbar.rightButton addTarget:self action:@selector(didPressRightButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -356,6 +355,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (BOOL)isPresentedInPopover
 {
     return _presentedInPopover && SLK_IS_IPAD;
+}
+
+- (BOOL)isTextInputbarHidden
+{
+    return _textInputbar.hidden;
 }
 
 - (SLKTextView *)textView
@@ -566,6 +570,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     self.scrollViewProxy.transform = inverted ? CGAffineTransformMake(1, 0, 0, -1, 0, 0) : CGAffineTransformIdentity;
 }
 
+- (void)setBounces:(BOOL)bounces
+{
+    _bounces = bounces;
+    _textInputbar.bounces = bounces;
+}
+
 - (BOOL)slk_updateKeyboardStatus:(SLKKeyboardStatus)status
 {
     // Skips if trying to update the same status
@@ -654,7 +664,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)textDidUpdate:(BOOL)animated
 {
-    if (self.textInputbarHidden) {
+    if (self.isTextInputbarHidden) {
         return;
     }
     
@@ -871,7 +881,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
-    _textInputbarHidden = hidden;
+    _textInputbar.hidden = hidden;
     
     __weak typeof(self) weakSelf = self;
     

@@ -83,7 +83,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** A vertical pan gesture used for bringing the keyboard from the bottom. SLKTextViewController is its delegate. */
 @property (nonatomic, readonly) UIPanGestureRecognizer *verticalPanGesture;
 
-/** YES if control's animation should have bouncy effects. Default is YES. */
+/** YES if animations should have bouncy effects. Default is YES. */
 @property (nonatomic, assign) BOOL bounces;
 
 /** YES if text view's content can be cleaned with a shake gesture. Default is NO. */

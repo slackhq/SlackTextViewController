@@ -158,6 +158,11 @@
 
 - (void)configureActionItems
 {
+    UIBarButtonItem *arrowItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_arrow_down"]
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(hideOrShowTextInputbar:)];
+    
     UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"]
                                                                  style:UIBarButtonItemStylePlain
                                                                 target:self
@@ -178,11 +183,23 @@
                                                                target:self
                                                                action:@selector(togglePIPWindow:)];
     
+    self.navigationItem.leftBarButtonItems = @[arrowItem];
     self.navigationItem.rightBarButtonItems = @[pipItem, editItem, appendItem, typeItem];
 }
 
 
 #pragma mark - Action Methods
+
+- (void)hideOrShowTextInputbar:(id)sender
+{
+    BOOL hide = !self.textInputbarHidden;
+    
+    UIImage *image = hide ? [UIImage imageNamed:@"icn_arrow_up"] : [UIImage imageNamed:@"icn_arrow_down"];
+    UIBarButtonItem *buttonItem = (UIBarButtonItem *)sender;
+    
+    [self setTextInputbarHidden:hide animated:YES];
+    [buttonItem setImage:image];
+}
 
 - (void)fillWithText:(id)sender
 {
