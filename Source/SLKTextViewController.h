@@ -209,16 +209,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)dismissKeyboard:(BOOL)animated;
 
 /**
- Dismisses the text input bar, if not already
- 
- The recommended method to use is forceTextInputbarAdjustmentForResponder:
- Only if that doesn't dismiss the textInputBar should this be used.
- 
- @param animated YES if the textInputBar should be dismissed using an animation.
- */
-- (void)dismissTextInputbar:(BOOL)animated;
-
-/**
  Verifies if the text input bar should still move up/down even if it is not first responder. Default is NO.
  You can override this method to perform additional tasks associated with presenting the view.
  You don't need call super since this method doesn't do anything.
