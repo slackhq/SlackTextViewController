@@ -99,7 +99,7 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 /**
  Notifies the text view that the user pressed any arrow key. This is used to move the cursor up and down while having multiple lines.
  */
-- (void)didPressAnyArrowKey:(UIKeyCommand *)keyCommand;
+- (void)didPressArrowKey:(UIKeyCommand *)keyCommand;
 
 
 #pragma mark - Markdown Formatting

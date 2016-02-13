@@ -975,7 +975,7 @@ typedef void (^SLKKeyCommandHandler)(UIKeyCommand *keyCommand);
 
 #pragma mark Up/Down Cursor Movement
 
-- (void)didPressAnyArrowKey:(UIKeyCommand *)keyCommand
+- (void)didPressArrowKey:(UIKeyCommand *)keyCommand
 {
     if (![keyCommand isKindOfClass:[UIKeyCommand class]] || self.text.length == 0 || self.numberOfLines < 2) {
         return;

@@ -1283,23 +1283,23 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 #pragma mark - Keyboard Events
 
-- (void)didPressReturnKey:(id)sender
+- (void)didPressReturnKey:(UIKeyCommand *)keyCommand
 {
     if (_textInputbar.isEditing) {
-        [self didCommitTextEditing:sender];
+        [self didCommitTextEditing:keyCommand];
     }
     else {
         [self slk_performRightAction];
     }
 }
 
-- (void)didPressEscapeKey:(id)sender
+- (void)didPressEscapeKey:(UIKeyCommand *)keyCommand
 {
     if (self.isAutoCompleting) {
         [self cancelAutoCompletion];
     }
     else if (_textInputbar.isEditing) {
-        [self didCancelTextEditing:sender];
+        [self didCancelTextEditing:keyCommand];
     }
     
     if ([self ignoreTextInputbarAdjustment] || ([self.textView isFirstResponder] && self.keyboardHC.constant == 0)) {
@@ -1309,9 +1309,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [self dismissKeyboard:YES];
 }
 
-- (void)didPressArrowKey:(id)sender
+- (void)didPressArrowKey:(UIKeyCommand *)keyCommand
 {
-    [self.textView didPressAnyArrowKey:sender];
+    [self.textView didPressArrowKey:keyCommand];
 }
 
 

@@ -422,15 +422,13 @@
     [super didPressRightButton:sender];
 }
 
-- (void)didPressArrowKey:(id)sender
+- (void)didPressArrowKey:(UIKeyCommand *)keyCommand
 {
-    UIKeyCommand *keyCommand = (UIKeyCommand *)sender;
-    
     if ([keyCommand.input isEqualToString:UIKeyInputUpArrow] && self.textView.text.length == 0) {
         [self editLastMessage:nil];
     }
     else {
-        [super didPressArrowKey:sender];
+        [super didPressArrowKey:keyCommand];
     }
 }
 
