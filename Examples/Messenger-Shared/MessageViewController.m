@@ -655,6 +655,16 @@
 
 #pragma mark - UITextViewDelegate Methods
 
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    return YES;
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView
+{
+    return YES;
+}
+
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     return [super textView:textView shouldChangeTextInRange:range replacementText:text];
