@@ -516,6 +516,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 #pragma mark - UITextInput Overrides
 
+#ifdef __IPHONE_9_0
 - (void)beginFloatingCursorAtPoint:(CGPoint)point
 {
     [super beginFloatingCursorAtPoint:point];
@@ -541,7 +542,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     
     [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewSelectedRangeDidChangeNotification object:self userInfo:nil];
 }
-
+#endif
 
 #pragma mark - UIResponder Overrides
 
