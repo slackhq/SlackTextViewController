@@ -15,7 +15,6 @@
 //
 
 #import "SLKTextInputbar.h"
-#import "SLKTextViewController.h"
 #import "SLKTextView.h"
 #import "SLKInputAccessoryView.h"
 
@@ -45,9 +44,12 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
 
 @property (nonatomic, strong) Class textViewClass;
 
+@property (nonatomic, getter=isHidden) BOOL hidden; // Required override
+
 @end
 
 @implementation SLKTextInputbar
+@synthesize hidden = _hidden;
 
 #pragma mark - Initialization
 
@@ -281,6 +283,11 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
     return _charCountLabel;
 }
 
+- (BOOL)isHidden
+{
+    return _hidden;
+}
+
 - (CGFloat)minimumInputbarHeight
 {
     CGFloat minimumTextViewHeight = self.textView.intrinsicContentSize.height;
@@ -425,6 +432,14 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
     _editorContentView.hidden = !editing;
 }
 
+- (void)setHidden:(BOOL)hidden
+{
+    // We don't call super here, since we want to avoid to visually hide the view.
+    // The hidden render state is handled by the view controller.
+    
+    _hidden = hidden;
+}
+
 - (void)setCounterPosition:(SLKCounterPosition)counterPosition
 {
     if (self.counterPosition == counterPosition && self.charCountLabelVCs) {
@@ -463,7 +478,7 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
 
 - (BOOL)canEditText:(NSString *)text
 {
-    if ((self.isEditing && [self.textView.text isEqualToString:text]) || self.controller.isTextInputbarHidden) {
+    if ((self.isEditing && [self.textView.text isEqualToString:text]) || self.isHidden) {
         return NO;
     }
     
@@ -472,7 +487,7 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
 
 - (void)beginTextEditing
 {
-    if (self.isEditing || self.controller.isTextInputbarHidden) {
+    if (self.isEditing || self.isHidden) {
         return;
     }
     
@@ -487,7 +502,7 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
 
 - (void)endTextEdition
 {
-    if (!self.isEditing || self.controller.isTextInputbarHidden) {
+    if (!self.isEditing || self.isHidden) {
         return;
     }
     
@@ -552,7 +567,7 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
         self.rightMarginWC.constant = [self slk_appropriateRightButtonMargin];
         [self.rightButton layoutIfNeeded]; // Avoids the right button to stretch when animating the constraint changes
         
-        BOOL bounces = self.controller.bounces && [self.textView isFirstResponder];
+        BOOL bounces = self.bounces && [self.textView isFirstResponder];
         
         if (self.window) {
             [self slk_animateLayoutIfNeededWithBounce:bounces
@@ -704,7 +719,7 @@ NSString * const SLKTextInputbarDidMoveNotification =   @"SLKTextInputbarDidMove
 }
 
 
-#pragma mark - NSNotificationCenter register/unregister
+#pragma mark - NSNotificationCenter registration
 
 - (void)slk_registerNotifications
 {

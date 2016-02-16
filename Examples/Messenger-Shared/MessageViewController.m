@@ -158,6 +158,11 @@
 
 - (void)configureActionItems
 {
+    UIBarButtonItem *arrowItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_arrow_down"]
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(hideOrShowTextInputbar:)];
+    
     UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icn_editing"]
                                                                  style:UIBarButtonItemStylePlain
                                                                 target:self
@@ -178,11 +183,22 @@
                                                                target:self
                                                                action:@selector(togglePIPWindow:)];
     
-    self.navigationItem.rightBarButtonItems = @[pipItem, editItem, appendItem, typeItem];
+    self.navigationItem.rightBarButtonItems = @[arrowItem, pipItem, editItem, appendItem, typeItem];
 }
 
 
 #pragma mark - Action Methods
+
+- (void)hideOrShowTextInputbar:(id)sender
+{
+    BOOL hide = !self.textInputbarHidden;
+    
+    UIImage *image = hide ? [UIImage imageNamed:@"icn_arrow_up"] : [UIImage imageNamed:@"icn_arrow_down"];
+    UIBarButtonItem *buttonItem = (UIBarButtonItem *)sender;
+    
+    [self setTextInputbarHidden:hide animated:YES];
+    [buttonItem setImage:image];
+}
 
 - (void)fillWithText:(id)sender
 {
@@ -406,14 +422,13 @@
     [super didPressRightButton:sender];
 }
 
-- (void)didPressArrowKey:(id)sender
+- (void)didPressArrowKey:(UIKeyCommand *)keyCommand
 {
-    [super didPressArrowKey:sender];
-    
-    UIKeyCommand *keyCommand = (UIKeyCommand *)sender;
-    
-    if ([keyCommand.input isEqualToString:UIKeyInputUpArrow]) {
+    if ([keyCommand.input isEqualToString:UIKeyInputUpArrow] && self.textView.text.length == 0) {
         [self editLastMessage:nil];
+    }
+    else {
+        [super didPressArrowKey:keyCommand];
     }
 }
 

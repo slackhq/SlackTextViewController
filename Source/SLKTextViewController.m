@@ -184,6 +184,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [self.view addSubview:self.textInputbar];
     
     [self slk_setupViewConstraints];
+    
+    [self slk_registerKeyCommands];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -311,7 +313,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     if (!_textInputbar) {
         _textInputbar = [[SLKTextInputbar alloc] initWithTextViewClass:self.textViewClass];
         _textInputbar.translatesAutoresizingMaskIntoConstraints = NO;
-        _textInputbar.controller = self;
         
         [_textInputbar.leftButton addTarget:self action:@selector(didPressLeftButton:) forControlEvents:UIControlEventTouchUpInside];
         [_textInputbar.rightButton addTarget:self action:@selector(didPressRightButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -355,19 +356,24 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     return _presentedInPopover && SLK_IS_IPAD;
 }
 
+- (BOOL)isTextInputbarHidden
+{
+    return _textInputbar.hidden;
+}
+
 - (SLKTextView *)textView
 {
-    return self.textInputbar.textView;
+    return _textInputbar.textView;
 }
 
 - (UIButton *)leftButton
 {
-    return self.textInputbar.leftButton;
+    return _textInputbar.leftButton;
 }
 
 - (UIButton *)rightButton
 {
-    return self.textInputbar.rightButton;
+    return _textInputbar.rightButton;
 }
 
 - (UIModalPresentationStyle)modalPresentationStyle
@@ -563,6 +569,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     self.scrollViewProxy.transform = inverted ? CGAffineTransformMake(1, 0, 0, -1, 0, 0) : CGAffineTransformIdentity;
 }
 
+- (void)setBounces:(BOOL)bounces
+{
+    _bounces = bounces;
+    _textInputbar.bounces = bounces;
+}
+
 - (BOOL)slk_updateKeyboardStatus:(SLKKeyboardStatus)status
 {
     // Skips if trying to update the same status
@@ -651,14 +663,14 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)textDidUpdate:(BOOL)animated
 {
-    if (self.textInputbarHidden) {
+    if (self.isTextInputbarHidden) {
         return;
     }
     
-    CGFloat inputbarHeight = self.textInputbar.appropriateHeight;
+    CGFloat inputbarHeight = _textInputbar.appropriateHeight;
     
-    self.textInputbar.rightButton.enabled = [self canPressRightButton];
-    self.textInputbar.editorRightButton.enabled = [self canPressRightButton];
+    _textInputbar.rightButton.enabled = [self canPressRightButton];
+    _textInputbar.editorRightButton.enabled = [self canPressRightButton];
     
     if (inputbarHeight != self.textInputbarHC.constant)
     {
@@ -669,11 +681,13 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
             
             BOOL bounces = self.bounces && [self.textView isFirstResponder];
             
+            __weak typeof(self) weakSelf = self;
+            
             [self.view slk_animateLayoutIfNeededWithBounce:bounces
                                                    options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
                                                 animations:^{
-                                                    if (self.textInputbar.isEditing) {
-                                                        [self.textView slk_scrollToCaretPositonAnimated:NO];
+                                                    if (weakSelf.textInputbar.isEditing) {
+                                                        [weakSelf.textView slk_scrollToCaretPositonAnimated:NO];
                                                     }
                                                 }];
         }
@@ -713,7 +727,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 {
     NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
-    if (text.length > 0 && ![self.textInputbar limitExceeded]) {
+    if (text.length > 0 && ![_textInputbar limitExceeded]) {
         return YES;
     }
     
@@ -738,14 +752,14 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)editText:(NSString *)text
 {
-    if (![self.textInputbar canEditText:text]) {
+    if (![_textInputbar canEditText:text]) {
         return;
     }
     
     // Caches the current text, in case the user cancels the edition
     [self slk_cacheTextToDisk:self.textView.text];
     
-    [self.textInputbar beginTextEditing];
+    [_textInputbar beginTextEditing];
     
     // Setting the text after calling -beginTextEditing is safer
     [self.textView setText:text];
@@ -758,11 +772,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)didCommitTextEditing:(id)sender
 {
-    if (!self.textInputbar.isEditing) {
+    if (!_textInputbar.isEditing) {
         return;
     }
     
-    [self.textInputbar endTextEdition];
+    [_textInputbar endTextEdition];
     
     // Clears the text and but not the undo manager
     [self.textView slk_clearText:NO];
@@ -770,11 +784,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)didCancelTextEditing:(id)sender
 {
-    if (!self.textInputbar.isEditing) {
+    if (!_textInputbar.isEditing) {
         return;
     }
     
-    [self.textInputbar endTextEdition];
+    [_textInputbar endTextEdition];
     
     // Clears the text and but not the undo manager
     [self.textView slk_clearText:NO];
@@ -786,7 +800,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (BOOL)canShowTypingIndicator
 {
     // Don't show if the text is being edited or auto-completed.
-    if (self.textInputbar.isEditing || self.isAutoCompleting) {
+    if (_textInputbar.isEditing || self.isAutoCompleting) {
         return NO;
     }
     
@@ -866,7 +880,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
-    _textInputbarHidden = hidden;
+    _textInputbar.hidden = hidden;
     
     __weak typeof(self) weakSelf = self;
     
@@ -916,7 +930,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     static BOOL dragging = NO;
     static BOOL presenting = NO;
     
-    __block UIView *keyboardView = [self.textInputbar.inputAccessoryView keyboardViewProxy];
+    __block UIView *keyboardView = [_textInputbar.inputAccessoryView keyboardViewProxy];
     
     // When no keyboard view has been detecting, let's skip any handling.
     if (!keyboardView) {
@@ -947,7 +961,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         
         presenting = YES;
 #else
-        if ([gesture.view isEqual:self.textInputbar] && gestureVelocity.y < 0) {
+        if ([gesture.view isEqual:_textInputbar] && gestureVelocity.y < 0) {
             [self presentKeyboard:YES];
         }
         return;
@@ -965,7 +979,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
                 [self presentKeyboard:NO];
                 
                 // So we can capture the keyboard's view
-                keyboardView = [self.textInputbar.inputAccessoryView keyboardViewProxy];
+                keyboardView = [_textInputbar.inputAccessoryView keyboardViewProxy];
                 
                 originalFrame = keyboardView.frame;
                 originalFrame.origin.y = CGRectGetMaxY(self.view.frame);
@@ -979,7 +993,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         }
         case UIGestureRecognizerStateChanged: {
             
-            if (CGRectContainsPoint(self.textInputbar.frame, gestureLocation) || dragging || presenting){
+            if (CGRectContainsPoint(_textInputbar.frame, gestureLocation) || dragging || presenting){
                 
                 if (CGPointEqualToPoint(startPoint, CGPointZero)) {
                     startPoint = gestureLocation;
@@ -1269,23 +1283,23 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 #pragma mark - Keyboard Events
 
-- (void)didPressReturnKey:(id)sender
+- (void)didPressReturnKey:(UIKeyCommand *)keyCommand
 {
-    if (self.textInputbar.isEditing) {
-        [self didCommitTextEditing:sender];
+    if (_textInputbar.isEditing) {
+        [self didCommitTextEditing:keyCommand];
     }
     else {
         [self slk_performRightAction];
     }
 }
 
-- (void)didPressEscapeKey:(id)sender
+- (void)didPressEscapeKey:(UIKeyCommand *)keyCommand
 {
     if (self.isAutoCompleting) {
         [self cancelAutoCompletion];
     }
-    else if (self.textInputbar.isEditing) {
-        [self didCancelTextEditing:sender];
+    else if (_textInputbar.isEditing) {
+        [self didCancelTextEditing:keyCommand];
     }
     
     if ([self ignoreTextInputbarAdjustment] || ([self.textView isFirstResponder] && self.keyboardHC.constant == 0)) {
@@ -1295,9 +1309,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [self dismissKeyboard:YES];
 }
 
-- (void)didPressArrowKey:(id)sender
+- (void)didPressArrowKey:(UIKeyCommand *)keyCommand
 {
-    [self.textView didPressAnyArrowKey:sender];
+    [self.textView didPressArrowKey:keyCommand];
 }
 
 
@@ -1611,7 +1625,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 {
     // Reloads the tableview before showing/hiding
     if (show) {
-        [self.autoCompletionView reloadData];
+        [_autoCompletionView reloadData];
     }
     
     self.autoCompleting = show;
@@ -1762,7 +1776,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     _foundWord = nil;
     _foundPrefixRange = NSMakeRange(0, 0);
     
-    [self.autoCompletionView setContentOffset:CGPointZero];
+    [_autoCompletionView setContentOffset:CGPointZero];
 }
 
 - (void)slk_hideAutoCompletionViewIfNeeded
@@ -2102,7 +2116,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if ([scrollView isEqual:self.autoCompletionView]) {
+    if ([scrollView isEqual:_autoCompletionView]) {
         CGRect frame = self.autoCompletionHairline.frame;
         frame.origin.y = scrollView.contentOffset.y;
         self.autoCompletionHairline.frame = frame;
@@ -2180,7 +2194,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
     self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromRect:CGRectNull];
     
-    if (self.textInputbar.isEditing) {
+    if (_textInputbar.isEditing) {
         self.textInputbarHC.constant += self.textInputbar.editorContentViewHeight;
     }
     
@@ -2188,82 +2202,41 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 }
 
 
-#pragma mark - External Keyboard Support
+#pragma mark - Keyboard Command registration
+
+- (void)slk_registerKeyCommands
+{
+    __weak typeof(self) weakSelf = self;
+
+    // Enter Key
+    [self.textView observeKeyInput:@"\r" modifiers:0 title:NSLocalizedString(@"Send/Accept", nil) completion:^(UIKeyCommand *keyCommand) {
+        [weakSelf didPressReturnKey:keyCommand];
+    }];
+    
+    // Esc Key
+    [self.textView observeKeyInput:UIKeyInputEscape modifiers:0 title:NSLocalizedString(@"Dismiss", nil) completion:^(UIKeyCommand *keyCommand) {
+        [weakSelf didPressEscapeKey:keyCommand];
+    }];
+    
+    // Up Arrow
+    [self.textView observeKeyInput:UIKeyInputUpArrow modifiers:0 title:nil completion:^(UIKeyCommand *keyCommand) {
+        [weakSelf didPressArrowKey:keyCommand];
+    }];
+    
+    // Down Arrow
+    [self.textView observeKeyInput:UIKeyInputDownArrow modifiers:0 title:nil completion:^(UIKeyCommand *keyCommand) {
+        [weakSelf didPressArrowKey:keyCommand];
+    }];
+}
 
 - (NSArray *)keyCommands
 {
-    NSMutableArray *keyboardCommands = [NSMutableArray new];
-    
-    [keyboardCommands addObject:[self slk_returnKeyCommand]];
-    [keyboardCommands addObject:[self slk_escKeyCommand]];
-    [keyboardCommands addObject:[self slk_arrowKeyCommand:UIKeyInputUpArrow]];
-    [keyboardCommands addObject:[self slk_arrowKeyCommand:UIKeyInputDownArrow]];
-    
-    return keyboardCommands;
-}
-
-- (UIKeyCommand *)slk_returnKeyCommand
-{
-    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:0 action:@selector(didPressReturnKey:)];
-    
-#ifdef __IPHONE_9_0
-    if ([UIKeyCommand respondsToSelector:@selector(keyCommandWithInput:modifierFlags:action:discoverabilityTitle:)] ) {
-        // Only available since iOS 9
-        if (self.textInputbar.isEditing) {
-            command.discoverabilityTitle = [self.textInputbar.editorRightButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Commit Editing", nil);
-        }
-        else if (self.textView.text.length > 0) {
-            command.discoverabilityTitle = [self.rightButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Send", nil);
-        }
-    }
-#endif
-    
-    return command;
-}
-
-- (UIKeyCommand *)slk_escKeyCommand
-{
-    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(didPressEscapeKey:)];
-    
-#ifdef __IPHONE_9_0
-    if ([UIKeyCommand respondsToSelector:@selector(keyCommandWithInput:modifierFlags:action:discoverabilityTitle:)] ) {
-        // Only available since iOS 9
-        if (self.isAutoCompleting) {
-            command.discoverabilityTitle = NSLocalizedString(@"Exit Auto-Completion", nil);
-        }
-        else if (self.textInputbar.isEditing) {
-            command.discoverabilityTitle = [self.textInputbar.editorRightButton titleForState:UIControlStateNormal] ? : NSLocalizedString(@"Exit Editing", nil);
-        }
-        else if (!self.isExternalKeyboardDetected && self.keyboardHC.constant != 0) {
-            command.discoverabilityTitle = NSLocalizedString(@"Hide Keyboard", nil);
-        }
-    }
-#endif
-    
-    return command;
-}
-
-- (UIKeyCommand *)slk_arrowKeyCommand:(NSString *)inputUpArrow
-{
-    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:inputUpArrow modifierFlags:0 action:@selector(didPressArrowKey:)];
-    
-#ifdef __IPHONE_9_0
-    // Only available since iOS 9
-    if ([UIKeyCommand respondsToSelector:@selector(keyCommandWithInput:modifierFlags:action:discoverabilityTitle:)] ) {
-        if ([inputUpArrow isEqualToString:UIKeyInputUpArrow]) {
-            command.discoverabilityTitle = NSLocalizedString(@"Move Up", nil);
-        }
-        if ([inputUpArrow isEqualToString:UIKeyInputDownArrow]) {
-            command.discoverabilityTitle = NSLocalizedString(@"Move Down", nil);
-        }
-    }
-#endif
-    
-    return command;
+    // Important to keep this in, for backwards compatibility.
+    return @[];
 }
 
 
-#pragma mark - NSNotificationCenter register/unregister
+#pragma mark - NSNotificationCenter registration
 
 - (void)slk_registerNotifications
 {
@@ -2376,6 +2349,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)dealloc
 {
+    [self slk_unregisterNotifications];
+
     _tableView.delegate = nil;
     _tableView.dataSource = nil;
     _tableView = nil;
@@ -2390,7 +2365,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     _autoCompletionView.dataSource = nil;
     _autoCompletionView = nil;
     
-    _textInputbar.textView.delegate = nil;
     _textInputbar = nil;
     _textViewClass = nil;
     
@@ -2408,8 +2382,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     _typingIndicatorViewHC = nil;
     _autoCompletionViewHC = nil;
     _keyboardHC = nil;
-    
-    [self slk_unregisterNotifications];
 }
 
 @end

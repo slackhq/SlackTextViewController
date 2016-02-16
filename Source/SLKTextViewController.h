@@ -83,7 +83,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** A vertical pan gesture used for bringing the keyboard from the bottom. SLKTextViewController is its delegate. */
 @property (nonatomic, readonly) UIPanGestureRecognizer *verticalPanGesture;
 
-/** YES if control's animation should have bouncy effects. Default is YES. */
+/** YES if animations should have bouncy effects. Default is YES. */
 @property (nonatomic, assign) BOOL bounces;
 
 /** YES if text view's content can be cleaned with a shake gesture. Default is NO. */
@@ -321,21 +321,21 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  You can override this method to perform additional tasks.
  You MUST call super at some point in your implementation.
  */
-- (void)didPressReturnKey:(id)sender NS_REQUIRES_SUPER;
+- (void)didPressReturnKey:(UIKeyCommand *)keyCommand NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller when the user has pressed the Escape key (Esc) with an external keyboard.
  You can override this method to perform additional tasks.
  You MUST call super at some point in your implementation.
  */
-- (void)didPressEscapeKey:(id)sender NS_REQUIRES_SUPER;
+- (void)didPressEscapeKey:(UIKeyCommand *)keyCommand NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller when the user has pressed the arrow key with an external keyboard.
  You can override this method to perform additional tasks.
  You MUST call super at some point in your implementation.
  */
-- (void)didPressArrowKey:(id)sender NS_REQUIRES_SUPER;
+- (void)didPressArrowKey:(UIKeyCommand *)keyCommand NS_REQUIRES_SUPER;
 
 
 #pragma mark - Text Input Bar Adjustment
