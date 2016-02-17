@@ -400,11 +400,11 @@ Dynamic Type is enabled by default with the `dynamicTypeEnabled` property. You c
 ![Dynamic-Type](Screenshots/screenshot_dynamic-type.png)
 
 
-###XCode Templates
+###Xcode Templates
 
 ![Template](Screenshots/screenshot_template.png)
 
-We have prepared a set of useful XCode templates so you can quickly start using SlackTextViewController.
+We have prepared a set of useful Xcode templates so you can quickly start using SlackTextViewController.
 
 To install them, open up your terminal and type:
 ```bash
