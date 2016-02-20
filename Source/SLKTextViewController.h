@@ -444,14 +444,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)showAutoCompletionView:(BOOL)show;
 
 /**
- Verifies that the autocompletion view should be shown. Default is NO.
- To enabled autocompletion, you MUST override this method to perform additional tasks, before the autocompletion view is shown (i.e. populating the data source).
- 
- @return YES if the autocompletion view should be shown.
- */
-- (BOOL)canShowAutoCompletion DEPRECATED_MSG_ATTRIBUTE("Override -didChangeAutoCompletionPrefix:andWord: instead");
-
-/**
  Returns a custom height for the autocompletion view. Default is 0.0.
  You can override this method to return a custom height.
  
