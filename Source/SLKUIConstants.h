@@ -55,7 +55,7 @@ inline static CGRect SLKRectInvert(CGRect rect)
  @param category A content size category constant string.
  @returns A float constant font size difference.
  */
-CGFloat SLKPointSizeDifferenceForCategory(NSString *category)
+inline CGFloat SLKPointSizeDifferenceForCategory(NSString *category)
 {
     if ([category isEqualToString:UIContentSizeCategoryExtraSmall])                         return -3.0;
     if ([category isEqualToString:UIContentSizeCategorySmall])                              return -2.0;
