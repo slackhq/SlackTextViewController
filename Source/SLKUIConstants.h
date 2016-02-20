@@ -32,30 +32,13 @@
 
 static NSString *SLKTextViewControllerDomain = @"com.slack.TextViewController";
 
-inline static CGRect SLKKeyWindowBounds()
-{
-    return [[UIApplication sharedApplication] keyWindow].bounds;
-}
-
-inline static CGRect SLKRectInvert(CGRect rect)
-{
-    CGRect invert = CGRectZero;
-    
-    invert.origin.x = rect.origin.y;
-    invert.origin.y = rect.origin.x;
-    invert.size.width = rect.size.height;
-    invert.size.height = rect.size.width;
-    
-    return invert;
-}
-
 /**
  Returns a constant font size difference reflecting the current accessibility settings.
  
  @param category A content size category constant string.
  @returns A float constant font size difference.
  */
-inline CGFloat SLKPointSizeDifferenceForCategory(NSString *category)
+__unused static CGFloat SLKPointSizeDifferenceForCategory(NSString *category)
 {
     if ([category isEqualToString:UIContentSizeCategoryExtraSmall])                         return -3.0;
     if ([category isEqualToString:UIContentSizeCategorySmall])                              return -2.0;
@@ -70,4 +53,21 @@ inline CGFloat SLKPointSizeDifferenceForCategory(NSString *category)
     if ([category isEqualToString:UIContentSizeCategoryAccessibilityExtraExtraLarge])       return 12.0;
     if ([category isEqualToString:UIContentSizeCategoryAccessibilityExtraExtraExtraLarge])  return 13.0;
     return 0;
+}
+
+__unused static CGRect SLKKeyWindowBounds()
+{
+    return [[UIApplication sharedApplication] keyWindow].bounds;
+}
+
+__unused static CGRect SLKRectInvert(CGRect rect)
+{
+    CGRect invert = CGRectZero;
+    
+    invert.origin.x = rect.origin.y;
+    invert.origin.y = rect.origin.x;
+    invert.size.width = rect.size.height;
+    invert.size.height = rect.size.width;
+    
+    return invert;
 }

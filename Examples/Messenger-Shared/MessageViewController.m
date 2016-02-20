@@ -23,6 +23,7 @@
 @property (nonatomic, strong) NSArray *users;
 @property (nonatomic, strong) NSArray *channels;
 @property (nonatomic, strong) NSArray *emojis;
+@property (nonatomic, strong) NSArray *commands;
 
 @property (nonatomic, strong) NSArray *searchResult;
 
@@ -111,7 +112,7 @@
     [self.tableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:MessengerCellIdentifier];
     
     [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
-    [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":", @"+:"]];
+    [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":", @"+:", @"/"]];
     
     [self.textView registerMarkdownFormattingSymbol:@"*" withTitle:@"Bold"];
     [self.textView registerMarkdownFormattingSymbol:@"_" withTitle:@"Italics"];
@@ -154,6 +155,7 @@
     self.users = @[@"Allen", @"Anna", @"Alicia", @"Arnold", @"Armando", @"Antonio", @"Brad", @"Catalaya", @"Christoph", @"Emerson", @"Eric", @"Everyone", @"Steve"];
     self.channels = @[@"General", @"Random", @"iOS", @"Bugs", @"Sports", @"Android", @"UI", @"SSB"];
     self.emojis = @[@"-1", @"m", @"man", @"machine", @"block-a", @"block-b", @"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
+    self.commands = @[@"msg", @"call", @"text", @"skype", @"kick", @"invite"];
 }
 
 - (void)configureActionItems
@@ -487,6 +489,27 @@
 #endif
 }
 
+- (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text
+{
+    if ([text hasPrefix:@"/"] && self.isAutoCompleting) {
+        if (self.foundPrefixRange.location != 0) {
+            return NO;
+        }
+        
+        NSArray *components = [text componentsSeparatedByString:@" "];
+        NSString *command = [[components firstObject] stringByReplacingOccurrencesOfString:@"/" withString:@""];
+        
+        if ([self.commands containsObject:command]) {
+            return NO;
+        }
+    }
+    
+//    if ([text hasPrefix:@"/"] && text.length > 2 && [text containsString:@" "]) {
+//        return NO;
+//    }
+    return YES;
+}
+
 - (void)didChangeAutoCompletionPrefix:(NSString *)prefix andWord:(NSString *)word
 {
     NSArray *array = nil;
@@ -506,6 +529,14 @@
     }
     else if (([prefix isEqualToString:@":"] || [prefix isEqualToString:@"+:"]) && word.length > 1) {
         array = [self.emojis filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
+    }
+    else if ([prefix isEqualToString:@"/"] && self.foundPrefixRange.location == 0) {
+        if (word.length > 0) {
+            array = [self.commands filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
+        }
+        else {
+            array = self.commands;
+        }
     }
     
     if (array.count > 0) {

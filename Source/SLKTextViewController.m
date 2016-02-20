@@ -18,6 +18,7 @@
 #import "SLKInputAccessoryView.h"
 
 #import "UIResponder+SLKAdditions.h"
+#import "SLKUIConstants.h"
 
 /** Feature flagged while waiting to implement a more reliable technique. */
 #define SLKBottomPanningEnabled 0
@@ -1606,6 +1607,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     _registeredPrefixes = [NSSet setWithSet:set];
 }
 
+- (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text
+{
+    // Always return YES by default.
+    return YES;
+}
+
 - (void)didChangeAutoCompletionPrefix:(NSString *)prefix andWord:(NSString *)word
 {
     // No implementation here. Meant to be overriden in subclass.
@@ -1691,7 +1698,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)slk_processTextForAutoCompletion
 {
-    if (self.isTransitioning) {
+    if (self.isTransitioning || ![self shouldProcessTextForAutoCompletion:self.textView.text]) {
         return;
     }
     
