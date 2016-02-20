@@ -1589,7 +1589,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)registerPrefixesForAutoCompletion:(NSArray *)prefixes
 {
-    NSMutableArray *array = [NSMutableArray arrayWithArray:self.registeredPrefixes];
+    NSMutableSet *set = [NSMutableSet setWithSet:self.registeredPrefixes];
     
     for (NSString *prefix in prefixes) {
         // Skips if the prefix is not a valid string
@@ -1598,16 +1598,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         }
         
         // Adds the prefix if not contained already
-        if (![array containsObject:prefix]) {
-            [array addObject:prefix];
+        if (![set containsObject:prefix]) {
+            [set addObject:prefix];
         }
     }
-    
-    if (_registeredPrefixes) {
-        _registeredPrefixes = nil;
-    }
-    
-    _registeredPrefixes = [[NSArray alloc] initWithArray:array];
+
+    _registeredPrefixes = [NSSet setWithSet:set];
 }
 
 - (void)didChangeAutoCompletionPrefix:(NSString *)prefix andWord:(NSString *)word

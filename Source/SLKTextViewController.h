@@ -413,7 +413,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, readonly, copy) NSString *foundWord;
 
 /** An array containing all the registered prefix strings for autocompletion. */
-@property (nonatomic, readonly, copy) NSArray *registeredPrefixes;
+@property (nonatomic, readonly, copy) NSSet *registeredPrefixes;
 
 /**
  Registers any string prefix for autocompletion detection, useful for user mentions and/or hashtags autocompletion.
