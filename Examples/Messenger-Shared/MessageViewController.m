@@ -504,9 +504,6 @@
         }
     }
     
-//    if ([text hasPrefix:@"/"] && text.length > 2 && [text containsString:@" "]) {
-//        return NO;
-//    }
     return YES;
 }
 
