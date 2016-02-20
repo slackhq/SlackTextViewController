@@ -1695,40 +1695,29 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
-    // Avoids text processing for auto-completion if the registered prefix list is empty.
-    if (self.registeredPrefixes.count == 0) {
-        return;
-    }
-    
-    NSString *text = self.textView.text;
-    
-    // Skip, when there is no text to process
-    if (text.length == 0) {
-        return [self cancelAutoCompletion];
-    }
-    
-    NSRange range;
-    NSString *word = [self.textView slk_wordAtCaretRange:&range];
-    
-    [self slk_invalidateAutoCompletion];
-    
-    if (word.length > 0) {
-        
-        for (NSString *prefix in self.registeredPrefixes) {
-            if ([word hasPrefix:prefix]) {
-                // Captures the detected symbol prefix
-                _foundPrefix = prefix;
-                
-                // Used later for replacing the detected range with a new string alias returned in -acceptAutoCompletionWithString:
-                _foundPrefixRange = NSMakeRange(range.location, prefix.length);
-            }
-        }
-    }
-    
-    [self slk_handleProcessedWord:word range:range];
+    [self.textView slk_searchPrefixes:self.registeredPrefixes
+                           completion:^(NSString *prefix, NSString *word, NSRange wordRange) {
+                               
+                               if (prefix.length > 0 && word.length > 0) {
+                                   
+                                   // Captures the detected symbol prefix
+                                   _foundPrefix = prefix;
+                                   
+                                   // Removes the found prefix, or not.
+                                   _foundWord = [word substringFromIndex:prefix.length];
+                                   
+                                   // Used later for replacing the detected range with a new string alias returned in -acceptAutoCompletionWithString:
+                                   _foundPrefixRange = NSMakeRange(wordRange.location, prefix.length);
+                                   
+                                   [self slk_handleProcessedWord:word wordRange:wordRange];
+                               }
+                               else {
+                                   [self cancelAutoCompletion];
+                               }
+                           }];
 }
 
-- (void)slk_handleProcessedWord:(NSString *)word range:(NSRange)range
+- (void)slk_handleProcessedWord:(NSString *)word wordRange:(NSRange)wordRange
 {
     // Cancel auto-completion if the cursor is placed before the prefix
     if (self.textView.selectedRange.location <= self.foundPrefixRange.location) {
@@ -1736,14 +1725,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     if (self.foundPrefix.length > 0) {
-        if (range.length == 0 || range.length != word.length) {
+        if (wordRange.length == 0 || wordRange.length != word.length) {
             return [self cancelAutoCompletion];
         }
         
         if (word.length > 0) {
-            // Removes the found prefix
-            _foundWord = [word substringFromIndex:self.foundPrefix.length];
-            
             // If the prefix is still contained in the word, cancels
             if ([self.foundWord rangeOfString:self.foundPrefix].location != NSNotFound) {
                 return [self cancelAutoCompletion];
@@ -1764,7 +1750,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 {
     _foundPrefix = nil;
     _foundWord = nil;
-    _foundPrefixRange = NSMakeRange(0, 0);
+    _foundPrefixRange = NSMakeRange(0,0);
     
     [_autoCompletionView setContentOffset:CGPointZero];
 }
