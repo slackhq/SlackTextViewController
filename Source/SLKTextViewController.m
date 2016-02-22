@@ -1466,7 +1466,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_willChangeTextViewText:(NSNotification *)notification
 {
     // Skips this it's not the expected textView.
-    if (![notification.object isEqual:self.textView] || !self.textView.window) {
+    if (![notification.object isEqual:self.textView]) {
         return;
     }
     
@@ -1476,7 +1476,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_didChangeTextViewText:(NSNotification *)notification
 {
     // Skips this it's not the expected textView.
-    if (![notification.object isEqual:self.textView] || !self.textView.window) {
+    if (![notification.object isEqual:self.textView]) {
         return;
     }
     
@@ -1492,7 +1492,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_didChangeTextViewContentSize:(NSNotification *)notification
 {
     // Skips this it's not the expected textView.
-    if (![notification.object isEqual:self.textView] || !self.textView.window) {
+    if (![notification.object isEqual:self.textView]) {
         return;
     }
     
@@ -1503,7 +1503,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_didChangeTextViewSelectedRange:(NSNotification *)notification
 {
     // Skips this it's not the expected textView.
-    if (![notification.object isEqual:self.textView] || !self.textView.window) {
+    if (![notification.object isEqual:self.textView]) {
         return;
     }
     
