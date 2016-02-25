@@ -28,31 +28,32 @@
     NSAssert([prefixes isKindOfClass:[NSSet class]], @"You must provide a set containing String prefixes.");
     NSAssert(completion != nil, @"You must provide a non-nil completion block.");
     
+    // Skip when there is no prefixes to look for.
+    if (prefixes.count == 0) {
+        return;
+    }
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        // Skip when there is no prefixes to look for.
-        if (prefixes.count > 0) {
-            NSRange wordRange;
-            NSString *word = [self wordAtCaretRange:&wordRange];
-            
-            if (word.length > 0) {
-
-                for (NSString *prefix in prefixes) {
+        NSRange wordRange;
+        NSString *word = [self wordAtCaretRange:&wordRange];
+        
+        if (word.length > 0) {
+            for (NSString *prefix in prefixes) {
+                if ([word hasPrefix:prefix]) {
                     
-                    if ([word hasPrefix:prefix]) {
-                        
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if (completion) {
-                                completion(prefix, word, wordRange);
-                            }
-                        });
-                        
-                        return;
-                    }
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (completion) {
+                            completion(prefix, word, wordRange);
+                        }
+                    });
+                    
+                    return;
                 }
             }
         }
         
+        // Fallback to an empty callback
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completion) {
                 completion(nil, nil, NSMakeRange(0,0));
