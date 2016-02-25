@@ -88,8 +88,9 @@
     
     if (location > 0) {
         NSString *characterBeforeCursor = [text substringWithRange:NSMakeRange(location-1, 1)];
+        NSRange whitespaceRange = [characterBeforeCursor rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
         
-        if ([characterBeforeCursor isEqualToString:@" "]) {
+        if (whitespaceRange.length == 1) {
             // At the start of a word, just use the word behind the cursor for the current word
             *rangePointer = NSMakeRange(location, rightPart.length);
             
