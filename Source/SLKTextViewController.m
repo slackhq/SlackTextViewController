@@ -714,7 +714,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     if (self.textView.selectedRange.length > 0) {
-        if (self.isAutoCompleting) {
+        if (self.isAutoCompleting && [self shouldProcessTextForAutoCompletion:self.textView.text]) {
             [self cancelAutoCompletion];
         }
         return;
@@ -1621,9 +1621,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)showAutoCompletionView:(BOOL)show
 {
     // Reloads the tableview before showing/hiding
-    if (show) {
-        [_autoCompletionView reloadData];
-    }
+    [_autoCompletionView reloadData];
     
     self.autoCompleting = show;
     
@@ -1668,8 +1666,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
-    SLKTextView *textView = self.textView;
-    
     NSUInteger location = self.foundPrefixRange.location;
     if (keepPrefix) {
         location += self.foundPrefixRange.length;
@@ -1681,13 +1677,13 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     NSRange range = NSMakeRange(location, length);
-    NSRange insertionRange = [textView slk_insertText:string inRange:range];
+    NSRange insertionRange = [self.textView slk_insertText:string inRange:range];
     
-    textView.selectedRange = NSMakeRange(insertionRange.location, 0);
+    self.textView.selectedRange = NSMakeRange(insertionRange.location, 0);
+    
+    [self.textView slk_scrollToCaretPositonAnimated:NO];
     
     [self cancelAutoCompletion];
-    
-    [textView slk_scrollToCaretPositonAnimated:NO];
 }
 
 - (void)cancelAutoCompletion
