@@ -21,7 +21,9 @@
 
 @implementation NSObject (SLKTextInput)
 
-- (void)slk_searchPrefixes:(NSSet *)prefixes completion:(void (^)(NSString *prefix, NSString *word, NSRange wordRange))completion
+#pragma mark - Public Methods
+
+- (void)lookForPrefixes:(NSSet *)prefixes completion:(void (^)(NSString *prefix, NSString *word, NSRange wordRange))completion
 {
     NSAssert([prefixes isKindOfClass:[NSSet class]], @"You must provide a set containing String prefixes.");
     NSAssert(completion != nil, @"You must provide a non-nil completion block.");
@@ -31,7 +33,7 @@
         // Skip when there is no prefixes to look for.
         if (prefixes.count > 0) {
             NSRange wordRange;
-            NSString *word = [self slk_wordAtCaretRange:&wordRange];
+            NSString *word = [self wordAtCaretRange:&wordRange];
             
             if (word.length > 0) {
 
@@ -59,32 +61,12 @@
     });
 }
 
-- (NSString *)slk_text
+- (NSString *)wordAtCaretRange:(NSRangePointer)range
 {
-    UITextRange *textRange = [self textRangeFromPosition:self.beginningOfDocument toPosition:self.endOfDocument];
-    return [self textInRange:textRange];
+    return [self wordAtRange:[self slk_caretRange] rangeInText:range];
 }
 
-- (NSRange)slk_caretRange
-{
-    UITextPosition *beginning = self.beginningOfDocument;
-    
-    UITextRange *selectedRange = self.selectedTextRange;
-    UITextPosition *selectionStart = selectedRange.start;
-    UITextPosition *selectionEnd = selectedRange.end;
-    
-    const NSInteger location = [self offsetFromPosition:beginning toPosition:selectionStart];
-    const NSInteger length = [self offsetFromPosition:selectionStart toPosition:selectionEnd];
-    
-    return NSMakeRange(location, length);
-}
-
-- (NSString *)slk_wordAtCaretRange:(NSRangePointer)range
-{
-    return [self slk_wordAtRange:[self slk_caretRange] rangeInText:range];
-}
-
-- (NSString *)slk_wordAtRange:(NSRange)range rangeInText:(NSRangePointer)rangePointer
+- (NSString *)wordAtRange:(NSRange)range rangeInText:(NSRangePointer)rangePointer
 {
     NSString *text = [self slk_text];
     NSInteger location = range.location;
@@ -125,6 +107,29 @@
     }
     
     return word;
+}
+
+
+#pragma mark - Private Methods
+
+- (NSString *)slk_text
+{
+    UITextRange *textRange = [self textRangeFromPosition:self.beginningOfDocument toPosition:self.endOfDocument];
+    return [self textInRange:textRange];
+}
+
+- (NSRange)slk_caretRange
+{
+    UITextPosition *beginning = self.beginningOfDocument;
+    
+    UITextRange *selectedRange = self.selectedTextRange;
+    UITextPosition *selectionStart = selectedRange.start;
+    UITextPosition *selectionEnd = selectedRange.end;
+    
+    const NSInteger location = [self offsetFromPosition:beginning toPosition:selectionStart];
+    const NSInteger length = [self offsetFromPosition:selectionStart toPosition:selectionEnd];
+    
+    return NSMakeRange(location, length);
 }
 
 @end

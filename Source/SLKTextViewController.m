@@ -1698,7 +1698,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
-    [self.textView slk_searchPrefixes:self.registeredPrefixes
+    [self.textView lookForPrefixes:self.registeredPrefixes
                            completion:^(NSString *prefix, NSString *word, NSRange wordRange) {
                                
                                if (prefix.length > 0 && word.length > 0) {
@@ -1942,7 +1942,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
                 if ([self textView:textView shouldInsertSuffixForFormattingWithSymbol:symbol prefixRange:prefixRange]) {
                     
                     NSRange suffixRange;
-                    [textView slk_wordAtRange:wordRange rangeInText:&suffixRange];
+                    [textView wordAtRange:wordRange rangeInText:&suffixRange];
                     
                     // Skip if the detected word already has a suffix
                     if ([[textView.text substringWithRange:suffixRange] hasSuffix:symbol]) {

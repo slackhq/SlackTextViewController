@@ -25,13 +25,13 @@
 
 /**
  Searches for any matching string prefix at the text input's caret position. When nothing found, the completion block returns nil values.
- This implementation is internally performed on a background thread and forwarding to the main thread once completed.
+ This implementation is internally performed on a background thread and forwarded to the main thread once completed.
  
- @param prefixes A list of prefixes to search for.
+ @param prefixes A set of prefixes to search for.
  @param completion A completion block called whenever the text processing finishes, successfuly or not. Required.
  */
-- (void)slk_searchPrefixes:(NSSet *)prefixes
-                completion:(void (^)(NSString *prefix, NSString *word, NSRange wordRange))completion;
+- (void)lookForPrefixes:(NSSet *)prefixes
+             completion:(void (^)(NSString *prefix, NSString *word, NSRange wordRange))completion;
 
 /**
  Finds the word close to the caret's position, if any.
@@ -39,7 +39,7 @@
  @param range Returns the range of the found word.
  @returns The found word.
  */
-- (NSString *)slk_wordAtCaretRange:(NSRangePointer)range;
+- (NSString *)wordAtCaretRange:(NSRangePointer)range;
 
 
 /**
@@ -49,6 +49,6 @@
  @param rangePointer Returns the range of the found word.
  @returns The found word.
  */
-- (NSString *)slk_wordAtRange:(NSRange)range rangeInText:(NSRangePointer)rangePointer;
+- (NSString *)wordAtRange:(NSRange)range rangeInText:(NSRangePointer)rangePointer;
 
 @end
