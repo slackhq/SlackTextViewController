@@ -100,12 +100,14 @@
     
     // In the middle of a word, so combine the part of the word before the cursor, and after the cursor to get the current word
     *rangePointer = NSMakeRange(location-leftWordPart.length, leftWordPart.length+rightPart.length);
+    
     NSString *word = [leftWordPart stringByAppendingString:rightPart];
+    NSString *linebreak = @"\n";
     
     // If a break is detected, return the last component of the string
-    if ([word rangeOfString:@"\n"].location != NSNotFound) {
+    if ([word rangeOfString:linebreak].location != NSNotFound) {
         *rangePointer = [text rangeOfString:word];
-        word = [[word componentsSeparatedByString:@"\n"] lastObject];
+        word = [[word componentsSeparatedByString:linebreak] lastObject];
     }
     
     return word;
