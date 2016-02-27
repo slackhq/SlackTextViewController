@@ -1689,7 +1689,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 {
     NSString *text = self.textView.text;
     
-    if (text.length == 0 || self.isTransitioning || ![self shouldProcessTextForAutoCompletion:text]) {
+    if ((!self.isAutoCompleting && text.length == 0) || self.isTransitioning || ![self shouldProcessTextForAutoCompletion:text]) {
         return;
     }
     
