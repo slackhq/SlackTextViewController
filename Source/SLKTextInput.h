@@ -18,7 +18,7 @@
 
 /**
  Classes that adopt the SLKTextInput protocol interact with the text input system and thus acquire features such as text processing.
- All these methods are already implemented in SLKTextInput+Extension.
+ All these methods are already implemented in SLKTextInput+Implementation.m
  */
 @protocol SLKTextInput <UITextInput>
 @optional

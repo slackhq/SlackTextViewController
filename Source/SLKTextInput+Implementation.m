@@ -1,22 +1,26 @@
 //
-//  UITextInput+Processing.m
-//  Pods
+//   Copyright 2014-2016 Slack Technologies, Inc.
 //
-//  Created by Ignacio Romero on 2/20/16.
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
 //
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
 //
 
 #import "SLKTextInput.h"
-
-// Helps preventing the UITextInput's warnings for missing implementations. We assume they are all implemented already.
-#pragma GCC diagnostic ignored "-Wprotocol"
-#pragma GCC diagnostic ignored "-Wobjc-property-implementation"
 
 /**
  Implementing SLKTextInput methods in a generic NSObject helps reusing the same logic for any SLKTextInput conformant class.
  This is the closest and cleanest technique to extend protocol's default implementations, like you'd do in Swift.
  */
-@interface NSObject (SLKTextInput) <SLKTextInput>
+@interface NSObject (SLKTextInput)
 @end
 
 @implementation NSObject (SLKTextInput)
@@ -25,6 +29,10 @@
 
 - (void)lookForPrefixes:(NSSet *)prefixes completion:(void (^)(NSString *prefix, NSString *word, NSRange wordRange))completion
 {
+    if (![self conformsToProtocol:@protocol(SLKTextInput)]) {
+        return;
+    }
+    
     NSAssert([prefixes isKindOfClass:[NSSet class]], @"You must provide a set containing String prefixes.");
     NSAssert(completion != nil, @"You must provide a non-nil completion block.");
     
@@ -69,8 +77,17 @@
 
 - (NSString *)wordAtRange:(NSRange)range rangeInText:(NSRangePointer)rangePointer
 {
-    NSString *text = [self slk_text];
+    if (![self conformsToProtocol:@protocol(SLKTextInput)]) {
+        return nil;
+    }
+    
     NSInteger location = range.location;
+    
+    if (location == NSNotFound) {
+        return nil;
+    }
+    
+    NSString *text = [self slk_text];
     
     // Aborts in case minimum requieres are not fufilled
     if (text.length == 0 || location < 0 || (range.location+range.length) > text.length) {
@@ -118,20 +135,32 @@
 
 - (NSString *)slk_text
 {
-    UITextRange *textRange = [self textRangeFromPosition:self.beginningOfDocument toPosition:self.endOfDocument];
-    return [self textInRange:textRange];
+    if (![self conformsToProtocol:@protocol(SLKTextInput)]) {
+        return nil;
+    }
+    
+    id<SLKTextInput>input = (id<SLKTextInput>)self;
+    
+    UITextRange *textRange = [input textRangeFromPosition:input.beginningOfDocument toPosition:input.endOfDocument];
+    return [input textInRange:textRange];
 }
 
 - (NSRange)slk_caretRange
 {
-    UITextPosition *beginning = self.beginningOfDocument;
+    if (![self conformsToProtocol:@protocol(SLKTextInput)]) {
+        return NSMakeRange(0,0);
+    }
     
-    UITextRange *selectedRange = self.selectedTextRange;
+    id<SLKTextInput>input = (id<SLKTextInput>)self;
+    
+    UITextPosition *beginning = input.beginningOfDocument;
+    
+    UITextRange *selectedRange = input.selectedTextRange;
     UITextPosition *selectionStart = selectedRange.start;
     UITextPosition *selectionEnd = selectedRange.end;
     
-    const NSInteger location = [self offsetFromPosition:beginning toPosition:selectionStart];
-    const NSInteger length = [self offsetFromPosition:selectionStart toPosition:selectionEnd];
+    const NSInteger location = [input offsetFromPosition:beginning toPosition:selectionStart];
+    const NSInteger length = [input offsetFromPosition:selectionStart toPosition:selectionEnd];
     
     return NSMakeRange(location, length);
 }
