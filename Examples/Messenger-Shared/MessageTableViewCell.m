@@ -7,7 +7,7 @@
 //
 
 #import "MessageTableViewCell.h"
-#import "SLKTextView+SLKAdditions.h"
+#import "SLKUIConstants.h"
 
 @implementation MessageTableViewCell
 
@@ -117,7 +117,7 @@
     CGFloat pointSize = 16.0;
     
     NSString *contentSizeCategory = [[UIApplication sharedApplication] preferredContentSizeCategory];
-    pointSize += [SLKTextView pointSizeDifferenceForCategory:contentSizeCategory];
+    pointSize += SLKPointSizeDifferenceForCategory(contentSizeCategory);
     
     return pointSize;
 }

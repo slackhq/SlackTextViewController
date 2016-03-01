@@ -18,6 +18,7 @@
 #import "SLKInputAccessoryView.h"
 
 #import "UIResponder+SLKAdditions.h"
+#import "SLKUIConstants.h"
 
 /** Feature flagged while waiting to implement a more reliable technique. */
 #define SLKBottomPanningEnabled 0
@@ -713,7 +714,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     if (self.textView.selectedRange.length > 0) {
-        if (self.isAutoCompleting) {
+        if (self.isAutoCompleting && [self shouldProcessTextForAutoCompletion:self.textView.text]) {
             [self cancelAutoCompletion];
         }
         return;
@@ -1589,25 +1590,20 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)registerPrefixesForAutoCompletion:(NSArray *)prefixes
 {
-    NSMutableArray *array = [NSMutableArray arrayWithArray:self.registeredPrefixes];
-    
-    for (NSString *prefix in prefixes) {
-        // Skips if the prefix is not a valid string
-        if (![prefix isKindOfClass:[NSString class]] || prefix.length == 0) {
-            continue;
-        }
-        
-        // Adds the prefix if not contained already
-        if (![array containsObject:prefix]) {
-            [array addObject:prefix];
-        }
+    if (prefixes.count == 0) {
+        return;
     }
     
-    if (_registeredPrefixes) {
-        _registeredPrefixes = nil;
-    }
+    NSMutableSet *set = [NSMutableSet setWithSet:self.registeredPrefixes];
+    [set addObjectsFromArray:prefixes];
     
-    _registeredPrefixes = [[NSArray alloc] initWithArray:array];
+    _registeredPrefixes = [NSSet setWithSet:set];
+}
+
+- (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text
+{
+    // Always return YES by default.
+    return YES;
 }
 
 - (void)didChangeAutoCompletionPrefix:(NSString *)prefix andWord:(NSString *)word
@@ -1615,18 +1611,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // No implementation here. Meant to be overriden in subclass.
 }
 
-- (BOOL)canShowAutoCompletion
-{
-    // Let's keep this around for a bit, for backwards compatibility.
-    return NO;
-}
-
 - (void)showAutoCompletionView:(BOOL)show
 {
     // Reloads the tableview before showing/hiding
-    if (show) {
-        [_autoCompletionView reloadData];
-    }
+    [_autoCompletionView reloadData];
     
     self.autoCompleting = show;
     
@@ -1671,8 +1659,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
-    SLKTextView *textView = self.textView;
-    
     NSUInteger location = self.foundPrefixRange.location;
     if (keepPrefix) {
         location += self.foundPrefixRange.length;
@@ -1684,13 +1670,13 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     NSRange range = NSMakeRange(location, length);
-    NSRange insertionRange = [textView slk_insertText:string inRange:range];
+    NSRange insertionRange = [self.textView slk_insertText:string inRange:range];
     
-    textView.selectedRange = NSMakeRange(insertionRange.location, 0);
+    self.textView.selectedRange = NSMakeRange(insertionRange.location, 0);
+    
+    [self.textView slk_scrollToCaretPositonAnimated:NO];
     
     [self cancelAutoCompletion];
-    
-    [textView slk_scrollToCaretPositonAnimated:NO];
 }
 
 - (void)cancelAutoCompletion
@@ -1701,44 +1687,35 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)slk_processTextForAutoCompletion
 {
-    if (self.isTransitioning) {
-        return;
-    }
-    
-    // Avoids text processing for auto-completion if the registered prefix list is empty.
-    if (self.registeredPrefixes.count == 0) {
-        return;
-    }
-    
     NSString *text = self.textView.text;
     
-    // Skip, when there is no text to process
-    if (text.length == 0) {
-        return [self cancelAutoCompletion];
+    if ((!self.isAutoCompleting && text.length == 0) || self.isTransitioning || ![self shouldProcessTextForAutoCompletion:text]) {
+        return;
     }
     
-    NSRange range;
-    NSString *word = [self.textView slk_wordAtCaretRange:&range];
-    
-    [self slk_invalidateAutoCompletion];
-    
-    if (word.length > 0) {
-        
-        for (NSString *prefix in self.registeredPrefixes) {
-            if ([word hasPrefix:prefix]) {
-                // Captures the detected symbol prefix
-                _foundPrefix = prefix;
-                
-                // Used later for replacing the detected range with a new string alias returned in -acceptAutoCompletionWithString:
-                _foundPrefixRange = NSMakeRange(range.location, prefix.length);
-            }
-        }
-    }
-    
-    [self slk_handleProcessedWord:word range:range];
+    [self.textView lookForPrefixes:self.registeredPrefixes
+                        completion:^(NSString *prefix, NSString *word, NSRange wordRange) {
+                            
+                            if (prefix.length > 0 && word.length > 0) {
+                                
+                                // Captures the detected symbol prefix
+                                _foundPrefix = prefix;
+                                
+                                // Removes the found prefix, or not.
+                                _foundWord = [word substringFromIndex:prefix.length];
+                                
+                                // Used later for replacing the detected range with a new string alias returned in -acceptAutoCompletionWithString:
+                                _foundPrefixRange = NSMakeRange(wordRange.location, prefix.length);
+                                
+                                [self slk_handleProcessedWord:word wordRange:wordRange];
+                            }
+                            else {
+                                [self cancelAutoCompletion];
+                            }
+                        }];
 }
 
-- (void)slk_handleProcessedWord:(NSString *)word range:(NSRange)range
+- (void)slk_handleProcessedWord:(NSString *)word wordRange:(NSRange)wordRange
 {
     // Cancel auto-completion if the cursor is placed before the prefix
     if (self.textView.selectedRange.location <= self.foundPrefixRange.location) {
@@ -1746,14 +1723,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     if (self.foundPrefix.length > 0) {
-        if (range.length == 0 || range.length != word.length) {
+        if (wordRange.length == 0 || wordRange.length != word.length) {
             return [self cancelAutoCompletion];
         }
         
         if (word.length > 0) {
-            // Removes the found prefix
-            _foundWord = [word substringFromIndex:self.foundPrefix.length];
-            
             // If the prefix is still contained in the word, cancels
             if ([self.foundWord rangeOfString:self.foundPrefix].location != NSNotFound) {
                 return [self cancelAutoCompletion];
@@ -1774,7 +1748,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 {
     _foundPrefix = nil;
     _foundWord = nil;
-    _foundPrefixRange = NSMakeRange(0, 0);
+    _foundPrefixRange = NSMakeRange(0,0);
     
     [_autoCompletionView setContentOffset:CGPointZero];
 }
@@ -1963,7 +1937,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
                 if ([self textView:textView shouldInsertSuffixForFormattingWithSymbol:symbol prefixRange:prefixRange]) {
                     
                     NSRange suffixRange;
-                    [textView slk_wordAtRange:wordRange rangeInText:&suffixRange];
+                    [textView wordAtRange:wordRange rangeInText:&suffixRange];
                     
                     // Skip if the detected word already has a suffix
                     if ([[textView.text substringWithRange:suffixRange] hasSuffix:symbol]) {
@@ -2242,61 +2216,64 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 {
     [self slk_unregisterNotifications];
     
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    
     // Keyboard notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willShowOrHideKeyboard:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willShowOrHideKeyboard:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didShowOrHideKeyboard:) name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didShowOrHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_willShowOrHideKeyboard:) name:UIKeyboardWillShowNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_willShowOrHideKeyboard:) name:UIKeyboardWillHideNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_didShowOrHideKeyboard:) name:UIKeyboardDidShowNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_didShowOrHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
     
 #if SLK_KEYBOARD_NOTIFICATION_DEBUG
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didPostSLKKeyboardNotification:) name:SLKKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didPostSLKKeyboardNotification:) name:SLKKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didPostSLKKeyboardNotification:) name:SLKKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didPostSLKKeyboardNotification:) name:SLKKeyboardDidHideNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_didPostSLKKeyboardNotification:) name:SLKKeyboardWillShowNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_didPostSLKKeyboardNotification:) name:SLKKeyboardDidShowNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_didPostSLKKeyboardNotification:) name:SLKKeyboardWillHideNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_didPostSLKKeyboardNotification:) name:SLKKeyboardDidHideNotification object:nil];
 #endif
     
     // TextView notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willChangeTextViewText:) name:SLKTextViewTextWillChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewSelectedRange:) name:SLKTextViewSelectedRangeDidChangeNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewPasteboard:) name:SLKTextViewDidPasteItemNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didShakeTextView:) name:SLKTextViewDidShakeNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_willChangeTextViewText:) name:SLKTextViewTextWillChangeNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_didChangeTextViewSelectedRange:) name:SLKTextViewSelectedRangeDidChangeNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_didChangeTextViewPasteboard:) name:SLKTextViewDidPasteItemNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_didShakeTextView:) name:SLKTextViewDidShakeNotification object:nil];
     
     // Application notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willTerminateApplication:) name:UIApplicationWillTerminateNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_willTerminateApplication:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_willTerminateApplication:) name:UIApplicationWillTerminateNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_willTerminateApplication:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 }
 
 - (void)slk_unregisterNotifications
 {
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+
     // Keyboard notifications
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
+    [notificationCenter removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [notificationCenter removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [notificationCenter removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+    [notificationCenter removeObserver:self name:UIKeyboardDidHideNotification object:nil];
     
 #if SLK_KEYBOARD_NOTIFICATION_DEBUG
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKKeyboardDidHideNotification object:nil];
+    [notificationCenter removeObserver:self name:SLKKeyboardWillShowNotification object:nil];
+    [notificationCenter removeObserver:self name:SLKKeyboardDidShowNotification object:nil];
+    [notificationCenter removeObserver:self name:SLKKeyboardWillHideNotification object:nil];
+    [notificationCenter removeObserver:self name:SLKKeyboardDidHideNotification object:nil];
 #endif
     
     // TextView notifications
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidBeginEditingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidEndEditingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewTextWillChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewContentSizeDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewSelectedRangeDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewDidPasteItemNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SLKTextViewDidShakeNotification object:nil];
+    [notificationCenter removeObserver:self name:UITextViewTextDidBeginEditingNotification object:nil];
+    [notificationCenter removeObserver:self name:UITextViewTextDidEndEditingNotification object:nil];
+    [notificationCenter removeObserver:self name:SLKTextViewTextWillChangeNotification object:nil];
+    [notificationCenter removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+    [notificationCenter removeObserver:self name:SLKTextViewContentSizeDidChangeNotification object:nil];
+    [notificationCenter removeObserver:self name:SLKTextViewSelectedRangeDidChangeNotification object:nil];
+    [notificationCenter removeObserver:self name:SLKTextViewDidPasteItemNotification object:nil];
+    [notificationCenter removeObserver:self name:SLKTextViewDidShakeNotification object:nil];
     
     // Application notifications
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+    [notificationCenter removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
+    [notificationCenter removeObserver:self name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 }
 
 

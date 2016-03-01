@@ -15,6 +15,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SLKTextInput.h"
 
 UIKIT_EXTERN NSString * const SLKTextViewTextWillChangeNotification;
 UIKIT_EXTERN NSString * const SLKTextViewContentSizeDidChangeNotification;
@@ -42,7 +43,7 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 @protocol SLKTextViewDelegate;
 
 /** @name A custom text input view. */
-@interface SLKTextView : UITextView
+@interface SLKTextView : UITextView <SLKTextInput>
 
 @property (nonatomic, weak) id<SLKTextViewDelegate,UITextViewDelegate>delegate;
 

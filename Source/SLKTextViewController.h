@@ -413,7 +413,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, readonly, copy) NSString *foundWord;
 
 /** An array containing all the registered prefix strings for autocompletion. */
-@property (nonatomic, readonly, copy) NSArray *registeredPrefixes;
+@property (nonatomic, readonly, copy) NSSet *registeredPrefixes;
 
 /**
  Registers any string prefix for autocompletion detection, useful for user mentions and/or hashtags autocompletion.
@@ -423,6 +423,15 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param prefixes An array of prefix strings.
  */
 - (void)registerPrefixesForAutoCompletion:(NSArray *)prefixes;
+
+/**
+ Verifies that controller is allowed to process the textView's text for auto-completion. Default is YES.
+ This is useful to disable momentarily the auto-completion feature, or to let it visible for longer time.
+ 
+ @param text The textView's current text.
+ @return YES if the controller is allowed to process the text for auto-completion.
+ */
+- (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text;
 
 /**
  Notifies the view controller either the autocompletion prefix or word have changed.
@@ -442,14 +451,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param show YES if the autocompletion view should be shown.
  */
 - (void)showAutoCompletionView:(BOOL)show;
-
-/**
- Verifies that the autocompletion view should be shown. Default is NO.
- To enabled autocompletion, you MUST override this method to perform additional tasks, before the autocompletion view is shown (i.e. populating the data source).
- 
- @return YES if the autocompletion view should be shown.
- */
-- (BOOL)canShowAutoCompletion DEPRECATED_MSG_ATTRIBUTE("Override -didChangeAutoCompletionPrefix:andWord: instead");
 
 /**
  Returns a custom height for the autocompletion view. Default is 0.0.

@@ -15,7 +15,6 @@
 //
 
 #import "SLKTextView.h"
-
 #import "SLKTextView+SLKAdditions.h"
 
 #import "SLKUIConstants.h"
@@ -207,7 +206,7 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
     
     if (self.isDynamicTypeEnabled) {
         NSString *contentSizeCategory = [[UIApplication sharedApplication] preferredContentSizeCategory];
-        CGFloat pointSizeDifference = [SLKTextView pointSizeDifferenceForCategory:contentSizeCategory];
+        CGFloat pointSizeDifference = SLKPointSizeDifferenceForCategory(contentSizeCategory);
         
         CGFloat factor = pointSizeDifference/self.initialFontSize;
         
@@ -481,7 +480,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 - (void)setFontName:(NSString *)fontName pointSize:(CGFloat)pointSize withContentSizeCategory:(NSString *)contentSizeCategory
 {
     if (self.isDynamicTypeEnabled) {
-        pointSize += [SLKTextView pointSizeDifferenceForCategory:contentSizeCategory];
+        pointSize += SLKPointSizeDifferenceForCategory(contentSizeCategory);
     }
     
     UIFont *dynamicFont = [UIFont fontWithName:fontName size:pointSize];
