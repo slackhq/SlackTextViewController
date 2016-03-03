@@ -491,19 +491,6 @@
 
 - (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text
 {
-    if ([text hasPrefix:@"/"] && self.isAutoCompleting) {
-        if (self.foundPrefixRange.location != 0) {
-            return NO;
-        }
-        
-        NSArray *components = [text componentsSeparatedByString:@" "];
-        NSString *command = [[components firstObject] stringByReplacingOccurrencesOfString:@"/" withString:@""];
-        
-        if ([self.commands containsObject:command]) {
-            return NO;
-        }
-    }
-    
     return YES;
 }
 
