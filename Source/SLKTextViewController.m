@@ -580,14 +580,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return NO;
     }
     
-    // Forces the keyboard status when didHide to avoid any inconsistency.
-    if (status == SLKKeyboardStatusDidHide) {
-        _keyboardStatus = status;
-        return YES;
-    }
-    
     // Skips illogical conditions
-    if ([self slk_isIllogicalKeyboardStatus:status]) {
+    // Forces the keyboard status when didHide to avoid any inconsistency.
+    if (status != SLKKeyboardStatusDidHide && [self slk_isIllogicalKeyboardStatus:status]) {
         return NO;
     }
     
