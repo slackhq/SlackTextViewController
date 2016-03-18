@@ -696,7 +696,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)textSelectionDidChange
 {
     // The text view must be first responder
-    if (![self.textView isFirstResponder]) {
+    if (![self.textView isFirstResponder] || self.keyboardStatus != SLKKeyboardStatusDidShow) {
         return;
     }
     
