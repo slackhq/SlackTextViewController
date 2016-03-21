@@ -122,7 +122,8 @@ UIKIT_EXTERN NSString * const SLKTextViewPastedItemData;
  @param symbol A markdown symbol to be prefixed and sufixed to a text selection.
  @param title The tooltip item title for this formatting.
  */
-- (void)registerMarkdownFormattingSymbol:(NSString *)symbol withTitle:(NSString *)title;
+- (void)registerMarkdownFormattingSymbol:(NSString *)symbol
+                               withTitle:(NSString *)title;
 
 
 #pragma mark - External Keyboard Support
@@ -136,7 +137,10 @@ UIKIT_EXTERN NSString * const SLKTextViewPastedItemData;
  @param title The title to display to the user. Optional.
  @param completion A completion block called whenever the key combination is detected. Required.
  */
-- (void)observeKeyInput:(NSString *)input modifiers:(UIKeyModifierFlags)modifiers title:(NSString *)title completion:(void (^)(UIKeyCommand *keyCommand))completion;
+- (void)observeKeyInput:(NSString *)input
+              modifiers:(UIKeyModifierFlags)modifiers
+                  title:(NSString *_Nullable)title
+             completion:(void (^)(UIKeyCommand *keyCommand))completion;
 
 @end
 

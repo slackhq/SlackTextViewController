@@ -919,7 +919,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 typedef void (^SLKKeyCommandHandler)(UIKeyCommand *keyCommand);
 
-- (void)observeKeyInput:(NSString *)input modifiers:(UIKeyModifierFlags)modifiers title:(NSString *)title completion:(SLKKeyCommandHandler)completion;
+- (void)observeKeyInput:(NSString *)input modifiers:(UIKeyModifierFlags)modifiers title:(NSString *_Nullable)title completion:(void (^)(UIKeyCommand *keyCommand))completion
 {
     NSAssert([input isKindOfClass:[NSString class]], @"You must provide a string with one or more characters corresponding to the keys to observe.");
     NSAssert(completion != nil, @"You must provide a non-nil completion block.");
