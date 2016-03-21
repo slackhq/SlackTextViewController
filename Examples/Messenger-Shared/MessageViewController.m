@@ -239,6 +239,10 @@
 
 - (void)didLongPressCell:(UIGestureRecognizer *)gesture
 {
+    if (gesture.state != UIGestureRecognizerStateBegan) {
+        return
+    }
+
 #ifdef __IPHONE_8_0
     if (SLK_IS_IOS8_AND_HIGHER && [UIAlertController class]) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -615,11 +619,11 @@
 {
     MessageTableViewCell *cell = (MessageTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:MessengerCellIdentifier];
     
-    if (!cell.textLabel.text) {
+    if (cell.gestureRecognizers.count == 0) {
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPressCell:)];
         [cell addGestureRecognizer:longPress];
     }
-    
+
     Message *message = self.messages[indexPath.row];
     
     cell.titleLabel.text = message.username;
