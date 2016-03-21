@@ -23,24 +23,18 @@ class MessageViewController: SLKTextViewController {
     
     var editingMessage = Message()
     
-    // MARK: - Lifeterm
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
     
+    // MARK: - Initialisation
+
     override class func tableViewStyleForCoder(decoder: NSCoder) -> UITableViewStyle {
+        
         return .Plain
     }
     
     func commonInit() {
-        NSNotificationCenter.defaultCenter().addObserver(self.tableView,
-            selector: "reloadData",
-            name: UIContentSizeCategoryDidChangeNotification,
-            object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "textInputbarDidMove:",
-            name: SLKTextInputbarDidMoveNotification,
-            object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self.tableView, selector: "reloadData", name: UIContentSizeCategoryDidChangeNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self,  selector: "textInputbarDidMove:", name: SLKTextInputbarDidMoveNotification, object: nil)
         
         // Register a SLKTextView subclass, if you need any special appearance and/or behavior customisation.
         self.registerClassForTextView(MessageTextView.classForCoder())
@@ -52,6 +46,7 @@ class MessageViewController: SLKTextViewController {
     }
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         self.commonInit()
@@ -100,9 +95,15 @@ class MessageViewController: SLKTextViewController {
         self.textView.registerMarkdownFormattingSymbol(">", withTitle: "Quote")
     }
     
+    
+    // MARK: - Lifeterm
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 }
 
@@ -111,6 +112,7 @@ extension MessageViewController {
     // MARK: - Example's Configuration
     
     func configureDataSource() {
+        
         var array = [Message]()
         
         for _ in 0..<100 {
@@ -127,6 +129,7 @@ extension MessageViewController {
     }
     
     func configureActionItems() {
+        
         let arrowItem = UIBarButtonItem(image: UIImage(named: "icn_arrow_down"), style: .Plain, target: self, action: "hideOrShowTextInputbar:")
         let editItem = UIBarButtonItem(image: UIImage(named: "icn_editing"), style: .Plain, target: self, action: "editRandomMessage:")
         let typeItem = UIBarButtonItem(image: UIImage(named: "icn_typing"), style: .Plain, target: self, action: "simulateUserTyping:")
@@ -138,98 +141,114 @@ extension MessageViewController {
     // MARK: - Action Methods
     
     func hideOrShowTextInputbar(sender: AnyObject) {
-        let hide = !self.textInputbarHidden
-        
-        let image = hide ? UIImage(named: "icn_arrow_up") : UIImage(named: "icn_arrow_down")
         
         guard let buttonItem = sender as? UIBarButtonItem else {
             return
         }
+        
+        let hide = !self.textInputbarHidden
+        let image = hide ? UIImage(named: "icn_arrow_up") : UIImage(named: "icn_arrow_down")
+        
         self.setTextInputbarHidden(hide, animated: true)
         buttonItem.image = image
     }
     
     func fillWithText(sender: AnyObject) {
+        
         if self.textView.text.characters.count == 0 {
             var sentences = Int(arc4random() % 4)
             if sentences <= 1 {
                 sentences = 1
             }
             self.textView.text = LoremIpsum.sentencesWithNumber(sentences)
-        } else {
+        }
+        else {
             self.textView.slk_insertTextAtCaretRange(" " + LoremIpsum.word())
         }
     }
     
     func simulateUserTyping(sender: AnyObject) {
-        if self.canShowTypingIndicator() {
-            if DEBUG_CUSTOM_TYPING_INDICATOR == true {
-                guard let view = self.typingIndicatorProxyView as? TypingIndicatorView else {
+        
+        if !self.canShowTypingIndicator() {
+            return
+        }
+        
+        if DEBUG_CUSTOM_TYPING_INDICATOR == true {
+            guard let view = self.typingIndicatorProxyView as? TypingIndicatorView else {
+                return
+            }
+            
+            let scale = UIScreen.mainScreen().scale
+            let imgSize = CGSizeMake(kTypingIndicatorViewAvatarHeight*scale, kTypingIndicatorViewAvatarHeight*scale)
+            
+            // This will cause the typing indicator to show after a delay ¯\_(ツ)_/¯
+            LoremIpsum.asyncPlaceholderImageWithSize(imgSize, completion: { (image) -> Void in
+                guard let cgImage = image.CGImage else {
                     return
                 }
-                
-                let scale = UIScreen.mainScreen().scale
-                let imgSize = CGSizeMake(kTypingIndicatorViewAvatarHeight*scale, kTypingIndicatorViewAvatarHeight*scale)
-                
-                // This will cause the typing indicator to show after a delay ¯\_(ツ)_/¯
-                LoremIpsum.asyncPlaceholderImageWithSize(imgSize, completion: { (image) -> Void in
-                    guard let cgImage = image.CGImage else {
-                        return
-                    }
-                    let thumbnail = UIImage(CGImage: cgImage, scale: scale, orientation: .Up)
-                    view.presentIndicatorWithName(LoremIpsum.name(), image: thumbnail)
-                })
-            } else {
-                self.typingIndicatorView.insertUsername(LoremIpsum.name())
-            }
+                let thumbnail = UIImage(CGImage: cgImage, scale: scale, orientation: .Up)
+                view.presentIndicatorWithName(LoremIpsum.name(), image: thumbnail)
+            })
+        }
+        else {
+            self.typingIndicatorView.insertUsername(LoremIpsum.name())
         }
     }
     
     func didLongPressCell(gesture: UIGestureRecognizer) {
-        if gesture.state == .Ended {
-            if #available(iOS 8, *) {
-                guard let view = gesture.view else {
-                    return
-                }
-                let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-                alertController.modalPresentationStyle = .Popover
-                alertController.popoverPresentationController?.sourceView = view.superview
-                alertController.popoverPresentationController?.sourceRect = view.frame
-                
-                alertController.addAction(UIAlertAction(title: "Edit Message", style: .Default, handler: { [unowned self] (action) -> Void in
-                    self.editCellMessage(gesture)
-                    }))
-                
-                alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-                
-                self.navigationController?.presentViewController(alertController, animated: true, completion: nil)
-            } else {
+        
+        guard let view = gesture.view else {
+            return
+        }
+
+        if gesture.state != .Began {
+            return
+        }
+        
+        if #available(iOS 8, *) {
+            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+            alertController.modalPresentationStyle = .Popover
+            alertController.popoverPresentationController?.sourceView = view.superview
+            alertController.popoverPresentationController?.sourceRect = view.frame
+            
+            alertController.addAction(UIAlertAction(title: "Edit Message", style: .Default, handler: { [unowned self] (action) -> Void in
                 self.editCellMessage(gesture)
-            }
+                }))
+            
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+            
+            self.navigationController?.presentViewController(alertController, animated: true, completion: nil)
+        }
+        else {
+            self.editCellMessage(gesture)
         }
     }
     
     func editCellMessage(gesture: UIGestureRecognizer) {
+        
         guard let cell = gesture.view as? MessageTableViewCell else {
             return
         }
         
         self.editingMessage = self.messages[cell.indexPath.row]
-        
         self.editText(self.editingMessage.text)
         
         self.tableView.scrollToRowAtIndexPath(cell.indexPath, atScrollPosition: .Bottom, animated: true)
     }
     
     func editRandomMessage(sender: AnyObject) {
+        
         var sentences = Int(arc4random() % 10)
+        
         if sentences <= 1 {
             sentences = 1
         }
+        
         self.editText(LoremIpsum.sentencesWithNumber(sentences))
     }
     
     func editLastMessage(sender: AnyObject?) {
+        
         if self.textView.text.characters.count > 0 {
             return
         }
@@ -245,14 +264,17 @@ extension MessageViewController {
     }
     
     func togglePIPWindow(sender: AnyObject) {
+        
         if self.pipWindow == nil {
             self.showPIPWindow(sender)
-        } else {
+        }
+        else {
             self.hidePIPWindow(sender)
         }
     }
     
     func showPIPWindow(sender: AnyObject) {
+        
         var frame = CGRectMake(CGRectGetWidth(self.view.frame) - 60.0, 0.0, 50.0, 50.0)
         frame.origin.y = CGRectGetMinY(self.textInputbar.frame) - 60.0
         
@@ -271,6 +293,7 @@ extension MessageViewController {
     }
     
     func hidePIPWindow(sender: AnyObject) {
+        
         UIView.animateWithDuration(0.3, animations: { [unowned self] () -> Void in
             self.pipWindow?.alpha = 0.0
             }) { [unowned self] (finished) -> Void in
@@ -309,41 +332,43 @@ extension MessageViewController {
     }
     
     override func forceTextInputbarAdjustmentForResponder(responder: UIResponder!) -> Bool {
+        
         if #available(iOS 8.0, *) {
             guard let _ = responder as? UIAlertController else {
                 // On iOS 9, returning YES helps keeping the input view visible when the keyboard if presented from another app when using multi-tasking on iPad.
                 return UIDevice.currentDevice().userInterfaceIdiom == .Pad
             }
             return true
-        } else {
+        }
+        else {
             return UIDevice.currentDevice().userInterfaceIdiom == .Pad
         }
     }
     
+    // Notifies the view controller that the keyboard changed status.
     override func didChangeKeyboardStatus(status: SLKKeyboardStatus) {
-        // Notifies the view controller that the keyboard changed status.
+        // So something
     }
     
+    // Notifies the view controller that the text will update.
     override func textWillUpdate() {
-        // Notifies the view controller that the text will update.
         super.textWillUpdate()
     }
     
+    // Notifies the view controller that the text did update.
     override func textDidUpdate(animated: Bool) {
-        // Notifies the view controller that the text did update.
         super.textDidUpdate(animated)
     }
     
+    // Notifies the view controller when the left button's action has been triggered, manually.
     override func didPressLeftButton(sender: AnyObject!) {
-        // Notifies the view controller when the left button's action has been triggered, manually.
         super.didPressLeftButton(sender)
     }
     
+    // Notifies the view controller when the right button's action has been triggered, manually or by using the keyboard return key.
     override func didPressRightButton(sender: AnyObject!) {
-        // Notifies the view controller when the right button's action has been triggered, manually or by using the keyboard return key.
         
         // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button
-        
         self.textView.refreshFirstResponder()
         
         let message = Message()
@@ -369,19 +394,23 @@ extension MessageViewController {
     }
     
     override func didPressArrowKey(keyCommand: UIKeyCommand!) {
+        
         if keyCommand.input == UIKeyInputUpArrow && self.textView.text.characters.count == 0 {
             self.editLastMessage(nil)
-        } else {
+        }
+        else {
             super.didPressArrowKey(keyCommand)
         }
     }
     
     override func keyForTextCaching() -> String! {
+        
         return NSBundle.mainBundle().bundleIdentifier
     }
     
+    // Notifies the view controller when the user has pasted a media (image, video, etc) inside of the text view.
     override func didPasteMediaContent(userInfo: [NSObject : AnyObject]!) {
-        // Notifies the view controller when the user has pasted a media (image, video, etc) inside of the text view.
+        
         super.didPasteMediaContent(userInfo)
         
         let mediaType = userInfo[SLKTextViewPastedItemMediaType]?.integerValue
@@ -391,23 +420,22 @@ extension MessageViewController {
         print("\(__FUNCTION__) : \(contentType) (type = \(mediaType) | data : \(data))")
     }
     
+    // Notifies the view controller when a user did shake the device to undo the typed text
     override func willRequestUndo() {
-        // Notifies the view controller when a user did shake the device to undo the typed text
         super.willRequestUndo()
     }
     
+    // Notifies the view controller when tapped on the right "Accept" button for commiting the edited text
     override func didCommitTextEditing(sender: AnyObject!) {
-        // Notifies the view controller when tapped on the right "Accept" button for commiting the edited text
-        //self.editingMessage.text = self.textView.text
-        
+
+        self.editingMessage.text = self.textView.text
         self.tableView.reloadData()
         
         super.didCommitTextEditing(sender)
     }
     
+    // Notifies the view controller when tapped on the left "Cancel" button
     override func didCancelTextEditing(sender: AnyObject!) {
-        // Notifies the view controller when tapped on the left "Cancel" button
-        
         super.didCancelTextEditing(sender)
     }
     
@@ -416,9 +444,11 @@ extension MessageViewController {
     }
     
     override func canShowTypingIndicator() -> Bool {
+        
         if DEBUG_CUSTOM_TYPING_INDICATOR == true {
             return true
-        } else {
+        }
+        else {
             return super.canShowTypingIndicator()
         }
     }
@@ -428,6 +458,7 @@ extension MessageViewController {
     }
     
     override func didChangeAutoCompletionPrefix(prefix: String!, andWord word: String!) {
+        
         var array: [AnyObject]?
         
         self.searchResult = nil
@@ -435,17 +466,22 @@ extension MessageViewController {
         if prefix == "@" {
             if word.characters.count > 0 {
                 array = (self.users as NSArray).filteredArrayUsingPredicate(NSPredicate(format: "self BEGINSWITH[c] %@", word))
-            } else {
+            }
+            else {
                 array = self.users
             }
-        } else if prefix == "#" && word.characters.count > 0 {
+        }
+        else if prefix == "#" && word.characters.count > 0 {
             array = (self.channels as NSArray).filteredArrayUsingPredicate(NSPredicate(format: "self BEGINSWITH[c] %@", word))
-        } else if (prefix == ":" || prefix == "+:") && word.characters.count > 0 {
+        }
+        else if (prefix == ":" || prefix == "+:") && word.characters.count > 0 {
             array = (self.emojis as NSArray).filteredArrayUsingPredicate(NSPredicate(format: "self BEGINSWITH[c] %@", word))
-        } else if prefix == "/" && self.foundPrefixRange.location == 0 {
+        }
+        else if prefix == "/" && self.foundPrefixRange.location == 0 {
             if word.characters.count > 0 {
                 array = (self.commands as NSArray).filteredArrayUsingPredicate(NSPredicate(format: "self BEGINSWITH[c] %@", word))
-            } else {
+            }
+            else {
                 array = self.commands
             }
         }
@@ -462,6 +498,7 @@ extension MessageViewController {
     }
     
     override func heightForAutoCompletionView() -> CGFloat {
+        
         guard let searchResult = self.searchResult else {
             return 0
         }
@@ -483,25 +520,31 @@ extension MessageViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         if tableView == self.tableView {
             return self.messages.count
-        } else {
-            guard let searchResult = self.searchResult else {
-                return 0
-            }
-            return searchResult.count
         }
+        else {
+            if let searchResult = self.searchResult {
+                return searchResult.count
+            }
+        }
+        
+        return 0
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
         if tableView == self.tableView {
             return self.messageCellForRowAtIndexPath(indexPath)
-        } else {
+        }
+        else {
             return self.autoCompletionCellForRowAtIndexPath(indexPath)
         }
     }
     
     func messageCellForRowAtIndexPath(indexPath: NSIndexPath) -> MessageTableViewCell {
+        
         let cell = self.tableView.dequeueReusableCellWithIdentifier(MessengerCellIdentifier) as! MessageTableViewCell
         
         if cell.gestureRecognizers?.count == nil {
@@ -525,6 +568,7 @@ extension MessageViewController {
     }
     
     func autoCompletionCellForRowAtIndexPath(indexPath: NSIndexPath) -> MessageTableViewCell {
+        
         let cell = self.autoCompletionView.dequeueReusableCellWithIdentifier(AutoCompletionCellIdentifier) as! MessageTableViewCell
         cell.indexPath = indexPath
         
@@ -536,7 +580,8 @@ extension MessageViewController {
         
         if self.foundPrefix == "#" {
             text = "# " + text
-        } else if self.foundPrefix == ":" || self.foundPrefix == "+:" {
+        }
+        else if self.foundPrefix == ":" || self.foundPrefix == "+:" {
             text = ":\(text):"
         }
         
@@ -547,6 +592,7 @@ extension MessageViewController {
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
         if tableView == self.tableView {
             let message = self.messages[indexPath.row]
             
@@ -575,14 +621,13 @@ extension MessageViewController {
             height += CGRectGetHeight(bodyBounds)
             height += 40
             
-            
             if height < kMessageTableViewCellMinimumHeight {
                 height = kMessageTableViewCellMinimumHeight
             }
             
             return height
-            
-        } else {
+        }
+        else {
             return kMessageTableViewCellMinimumHeight
         }
     }
@@ -590,6 +635,7 @@ extension MessageViewController {
     // MARK: - UITableViewDelegate Methods
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
         if tableView == self.autoCompletionView {
             
             guard let searchResult = self.searchResult as? [String] else {
@@ -600,7 +646,8 @@ extension MessageViewController {
             
             if self.foundPrefix == "@" && self.foundPrefixRange.location == 0 {
                 item += ":"
-            } else if self.foundPrefix == ":" || self.foundPrefix == "+:" {
+            }
+            else if self.foundPrefix == ":" || self.foundPrefix == "+:" {
                 item += ":"
             }
             
@@ -615,14 +662,15 @@ extension MessageViewController {
     
     // MARK: - UIScrollViewDelegate Methods
     
+    // Since SLKTextViewController uses UIScrollViewDelegate to update a few things, it is important that if you override this method, to call super.
     override func scrollViewDidScroll(scrollView: UIScrollView!) {
-        // Since SLKTextViewController uses UIScrollViewDelegate to update a few things, it is important that if you override this method, to call super.
         super.scrollViewDidScroll(scrollView)
     }
     
 }
 
 extension MessageViewController {
+    
     // MARK: - UITextViewDelegate Methods
     
     override func textViewShouldBeginEditing(textView: UITextView) -> Bool {
@@ -630,14 +678,17 @@ extension MessageViewController {
     }
     
     override func textViewShouldEndEditing(textView: UITextView) -> Bool {
+        // Since SLKTextViewController uses UIScrollViewDelegate to update a few things, it is important that if you override this method, to call super.
         return true
     }
     
     override func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        
         return super.textView(textView, shouldChangeTextInRange: range, replacementText: text)
     }
     
     override func textView(textView: SLKTextView, shouldOfferFormattingForSymbol symbol: String) -> Bool {
+        
         if symbol == ">" {
             let selection = textView.selectedRange
             
@@ -660,9 +711,11 @@ extension MessageViewController {
     }
     
     override func textView(textView: SLKTextView, shouldInsertSuffixForFormattingWithSymbol symbol: String, prefixRange: NSRange) -> Bool {
+        
         if symbol == ">" {
             return false
         }
+        
         return super.textView(textView, shouldInsertSuffixForFormattingWithSymbol: symbol, prefixRange: prefixRange)
     }
 }
