@@ -1,5 +1,5 @@
 //
-//   Copyright 2014 Slack Technologies, Inc.
+//   Copyright 2014-2016 Slack Technologies, Inc.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -110,54 +110,6 @@
     return self.selectedRange;
 }
 
-- (NSString *)slk_wordAtCaretRange:(NSRangePointer)range
-{
-    return [self slk_wordAtRange:self.selectedRange rangeInText:range];
-}
-
-- (NSString *)slk_wordAtRange:(NSRange)range rangeInText:(NSRangePointer)rangePointer
-{
-    NSString *text = self.text;
-    NSInteger location = range.location;
-    
-    // Aborts in case minimum requieres are not fufilled
-    if (text.length == 0 || location < 0 || (range.location+range.length) > text.length) {
-        *rangePointer = NSMakeRange(0, 0);
-        return nil;
-    }
-    
-    NSString *leftPortion = [text substringToIndex:location];
-    NSArray *leftComponents = [leftPortion componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSString *leftWordPart = [leftComponents lastObject];
-    
-    NSString *rightPortion = [text substringFromIndex:location];
-    NSArray *rightComponents = [rightPortion componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSString *rightPart = [rightComponents firstObject];
-    
-    if (location > 0) {
-        NSString *characterBeforeCursor = [text substringWithRange:NSMakeRange(location-1, 1)];
-        
-        if ([characterBeforeCursor isEqualToString:@" "]) {
-            // At the start of a word, just use the word behind the cursor for the current word
-            *rangePointer = NSMakeRange(location, rightPart.length);
-            
-            return rightPart;
-        }
-    }
-    
-    // In the middle of a word, so combine the part of the word before the cursor, and after the cursor to get the current word
-    *rangePointer = NSMakeRange(location-leftWordPart.length, leftWordPart.length+rightPart.length);
-    NSString *word = [leftWordPart stringByAppendingString:rightPart];
-    
-    // If a break is detected, return the last component of the string
-    if ([word rangeOfString:@"\n"].location != NSNotFound) {
-        *rangePointer = [text rangeOfString:word];
-        word = [[word componentsSeparatedByString:@"\n"] lastObject];
-    }
-    
-    return word;
-}
-
 - (void)slk_prepareForUndo:(NSString *)description
 {
     if (!self.undoManagerEnabled) {
@@ -167,23 +119,6 @@
     SLKTextView *prepareInvocation = [self.undoManager prepareWithInvocationTarget:self];
     [prepareInvocation setText:self.text];
     [self.undoManager setActionName:description];
-}
-
-+ (CGFloat)pointSizeDifferenceForCategory:(NSString *)category
-{
-    if ([category isEqualToString:UIContentSizeCategoryExtraSmall])                         return -3.0;
-    if ([category isEqualToString:UIContentSizeCategorySmall])                              return -2.0;
-    if ([category isEqualToString:UIContentSizeCategoryMedium])                             return -1.0;
-    if ([category isEqualToString:UIContentSizeCategoryLarge])                              return 0.0;
-    if ([category isEqualToString:UIContentSizeCategoryExtraLarge])                         return 2.0;
-    if ([category isEqualToString:UIContentSizeCategoryExtraExtraLarge])                    return 4.0;
-    if ([category isEqualToString:UIContentSizeCategoryExtraExtraExtraLarge])               return 6.0;
-    if ([category isEqualToString:UIContentSizeCategoryAccessibilityMedium])                return 8.0;
-    if ([category isEqualToString:UIContentSizeCategoryAccessibilityLarge])                 return 10.0;
-    if ([category isEqualToString:UIContentSizeCategoryAccessibilityExtraLarge])            return 11.0;
-    if ([category isEqualToString:UIContentSizeCategoryAccessibilityExtraExtraLarge])       return 12.0;
-    if ([category isEqualToString:UIContentSizeCategoryAccessibilityExtraExtraExtraLarge])  return 13.0;
-    return 0;
 }
 
 @end

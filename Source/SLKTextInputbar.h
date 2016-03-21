@@ -1,5 +1,5 @@
 //
-//   Copyright 2014 Slack Technologies, Inc.
+//   Copyright 2014-2016 Slack Technologies, Inc.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 #import <UIKit/UIKit.h>
 
-@class SLKTextViewController;
 @class SLKTextView;
 @class SLKInputAccessoryView;
 
@@ -37,9 +36,6 @@ NS_ASSUME_NONNULL_BEGIN
 /** @name A custom tool bar encapsulating messaging controls. */
 @interface SLKTextInputbar : UIToolbar
 
-/** A weak reference to the core view controller. */
-@property (nonatomic, weak) SLKTextViewController *controller;
-
 /** The centered text input view.
  The maximum number of lines is configured by default, to best fit each devices dimensions.
  For iPhone 4       (<=480pts): 4 lines
@@ -59,6 +55,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** YES if the right button should be hidden animatedly in case the text view has no text in it. Default is YES. */
 @property (nonatomic, readwrite) BOOL autoHideRightButton;
+
+/** YES if animations should have bouncy effects. Default is YES. */
+@property (nonatomic, assign) BOOL bounces;
 
 /** The inner padding to use when laying out content in the view. Default is {5, 8, 5, 8}. */
 @property (nonatomic, assign) UIEdgeInsets contentInset;

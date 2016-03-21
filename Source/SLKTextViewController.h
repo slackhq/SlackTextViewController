@@ -1,5 +1,5 @@
 //
-//   Copyright 2014 Slack Technologies, Inc.
+//   Copyright 2014-2016 Slack Technologies, Inc.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -85,7 +85,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** A vertical pan gesture used for bringing the keyboard from the bottom. SLKTextViewController is its delegate. */
 @property (nonatomic, readonly) UIPanGestureRecognizer *verticalPanGesture;
 
-/** YES if control's animation should have bouncy effects. Default is YES. */
+/** YES if animations should have bouncy effects. Default is YES. */
 @property (nonatomic, assign) BOOL bounces;
 
 /** YES if text view's content can be cleaned with a shake gesture. Default is NO. */
@@ -121,6 +121,9 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /** YES if the view controller is presented inside of a popover controller. If YES, the keyboard won't move the text input bar and tapping on the tableView/collectionView will not cause the keyboard to be dismissed. This property is compatible only with iPad. */
 @property (nonatomic, assign, getter = isPresentedInPopover) BOOL presentedInPopover;
+
+/** The current keyboard status (will/did hide, will/did show) */
+@property (nonatomic, readonly) SLKKeyboardStatus keyboardStatus;
 
 /** Convenience accessors (accessed through the text input bar) */
 @property (nonatomic, readonly) SLKTextView *textView;
@@ -323,21 +326,21 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  You can override this method to perform additional tasks.
  You MUST call super at some point in your implementation.
  */
-- (void)didPressReturnKey:(id _Nullable)sender NS_REQUIRES_SUPER;
+- (void)didPressReturnKey:(UIKeyCommand * _Nullable)keyCommand NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller when the user has pressed the Escape key (Esc) with an external keyboard.
  You can override this method to perform additional tasks.
  You MUST call super at some point in your implementation.
  */
-- (void)didPressEscapeKey:(id _Nullable)sender NS_REQUIRES_SUPER;
+- (void)didPressEscapeKey:(UIKeyCommand * _Nullable)keyCommand NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller when the user has pressed the arrow key with an external keyboard.
  You can override this method to perform additional tasks.
  You MUST call super at some point in your implementation.
  */
-- (void)didPressArrowKey:(id _Nullable)sender NS_REQUIRES_SUPER;
+- (void)didPressArrowKey:(UIKeyCommand * _Nullable)keyCommand NS_REQUIRES_SUPER;
 
 
 #pragma mark - Text Input Bar Adjustment
@@ -415,7 +418,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, readonly, copy) NSString *_Nullable foundWord;
 
 /** An array containing all the registered prefix strings for autocompletion. */
-@property (nonatomic, readonly, copy) NSArray *_Nullable registeredPrefixes;
+@property (nonatomic, readonly, copy) NSSet *_Nullable registeredPrefixes;
 
 /**
  Registers any string prefix for autocompletion detection, useful for user mentions and/or hashtags autocompletion.
@@ -425,6 +428,15 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param prefixes An array of prefix strings.
  */
 - (void)registerPrefixesForAutoCompletion:(NSArray *_Nullable)prefixes;
+
+/**
+ Verifies that controller is allowed to process the textView's text for auto-completion. Default is YES.
+ This is useful to disable momentarily the auto-completion feature, or to let it visible for longer time.
+ 
+ @param text The textView's current text.
+ @return YES if the controller is allowed to process the text for auto-completion.
+ */
+- (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text;
 
 /**
  Notifies the view controller either the autocompletion prefix or word have changed.
@@ -444,14 +456,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param show YES if the autocompletion view should be shown.
  */
 - (void)showAutoCompletionView:(BOOL)show;
-
-/**
- Verifies that the autocompletion view should be shown. Default is NO.
- To enabled autocompletion, you MUST override this method to perform additional tasks, before the autocompletion view is shown (i.e. populating the data source).
- 
- @return YES if the autocompletion view should be shown.
- */
-- (BOOL)canShowAutoCompletion DEPRECATED_MSG_ATTRIBUTE("Override -didChangeAutoCompletionPrefix:andWord: instead");
 
 /**
  Returns a custom height for the autocompletion view. Default is 0.0.

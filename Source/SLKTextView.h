@@ -1,5 +1,5 @@
 //
-//   Copyright 2014 Slack Technologies, Inc.
+//   Copyright 2014-2016 Slack Technologies, Inc.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SLKTextInput.h"
 
 typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
     SLKPastableMediaTypeNone        = 0,
@@ -44,7 +45,7 @@ UIKIT_EXTERN NSString * const SLKTextViewPastedItemData;
 @protocol SLKTextViewDelegate;
 
 /** @name A custom text input view. */
-@interface SLKTextView : UITextView
+@interface SLKTextView : UITextView <SLKTextInput>
 
 @property (nonatomic, weak) id<SLKTextViewDelegate,UITextViewDelegate>delegate;
 
@@ -101,7 +102,7 @@ UIKIT_EXTERN NSString * const SLKTextViewPastedItemData;
 /**
  Notifies the text view that the user pressed any arrow key. This is used to move the cursor up and down while having multiple lines.
  */
-- (void)didPressAnyArrowKey:(id)sender;
+- (void)didPressArrowKey:(UIKeyCommand *)keyCommand;
 
 
 #pragma mark - Markdown Formatting
@@ -122,6 +123,20 @@ UIKIT_EXTERN NSString * const SLKTextViewPastedItemData;
  @param title The tooltip item title for this formatting.
  */
 - (void)registerMarkdownFormattingSymbol:(NSString *)symbol withTitle:(NSString *)title;
+
+
+#pragma mark - External Keyboard Support
+
+/**
+ Registers and observes key commands' updates, when the text view is first responder.
+ Instead of typically overriding UIResponder's -keyCommands method, it is better to use this API for easier and safer implementation of key input detection.
+ 
+ @param input The keys that must be pressed by the user. Required.
+ @param modifiers The bit mask of modifier keys that must be pressed. Use 0 if none.
+ @param title The title to display to the user. Optional.
+ @param completion A completion block called whenever the key combination is detected. Required.
+ */
+- (void)observeKeyInput:(NSString *)input modifiers:(UIKeyModifierFlags)modifiers title:(NSString *)title completion:(void (^)(UIKeyCommand *keyCommand))completion;
 
 @end
 
