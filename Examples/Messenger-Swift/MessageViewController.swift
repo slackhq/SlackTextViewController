@@ -471,8 +471,14 @@ extension MessageViewController {
                 array = self.users
             }
         }
-        else if prefix == "#" && word.characters.count > 0 {
-            array = (self.channels as NSArray).filteredArrayUsingPredicate(NSPredicate(format: "self BEGINSWITH[c] %@", word))
+        else if prefix == "#" {
+            
+            if word.characters.count > 0 {
+                array = (self.channels as NSArray).filteredArrayUsingPredicate(NSPredicate(format: "self BEGINSWITH[c] %@", word))
+            }
+            else {
+                array = self.channels
+            }
         }
         else if (prefix == ":" || prefix == "+:") && word.characters.count > 0 {
             array = (self.emojis as NSArray).filteredArrayUsingPredicate(NSPredicate(format: "self BEGINSWITH[c] %@", word))
@@ -485,14 +491,13 @@ extension MessageViewController {
                 array = self.commands
             }
         }
+
+        var show = false
         
-        if array?.count == 0 {
-            return
+        if  array?.count > 0 {
+            self.searchResult = (array! as NSArray).sortedArrayUsingSelector("localizedCaseInsensitiveCompare:")
+            show = (self.searchResult?.count > 0)
         }
-        
-        self.searchResult = (array! as NSArray).sortedArrayUsingSelector("localizedCaseInsensitiveCompare:")
-        
-        let show = (self.searchResult?.count > 0)
         
         self.showAutoCompletionView(show)
     }
@@ -571,22 +576,26 @@ extension MessageViewController {
         
         let cell = self.autoCompletionView.dequeueReusableCellWithIdentifier(AutoCompletionCellIdentifier) as! MessageTableViewCell
         cell.indexPath = indexPath
-        
+        cell.selectionStyle = .Default
+
         guard let searchResult = self.searchResult as? [String] else {
+            return cell
+        }
+        
+        guard let prefix = self.foundPrefix else {
             return cell
         }
         
         var text = searchResult[indexPath.row]
         
-        if self.foundPrefix == "#" {
+        if prefix == "#" {
             text = "# " + text
         }
-        else if self.foundPrefix == ":" || self.foundPrefix == "+:" {
+        else if prefix == ":" || prefix == "+:" {
             text = ":\(text):"
         }
         
         cell.titleLabel.text = text
-        cell.selectionStyle = .Default
         
         return cell
     }
