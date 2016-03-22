@@ -41,33 +41,26 @@
         return;
     }
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        NSRange wordRange;
-        NSString *word = [self wordAtCaretRange:&wordRange];
-        
-        if (word.length > 0) {
-            for (NSString *prefix in prefixes) {
-                if ([word hasPrefix:prefix]) {
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if (completion) {
-                            completion(prefix, word, wordRange);
-                        }
-                    });
-                    
-                    return;
+    NSRange wordRange;
+    NSString *word = [self wordAtCaretRange:&wordRange];
+    
+    if (word.length > 0) {
+        for (NSString *prefix in prefixes) {
+            if ([word hasPrefix:prefix]) {
+                
+                if (completion) {
+                    completion(prefix, word, wordRange);
                 }
+                
+                return;
             }
         }
-        
-        // Fallback to an empty callback
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (completion) {
-                completion(nil, nil, NSMakeRange(0,0));
-            }
-        });
-    });
+    }
+    
+    // Fallback to an empty callback
+    if (completion) {
+        completion(nil, nil, NSMakeRange(0,0));
+    }
 }
 
 - (NSString *)wordAtCaretRange:(NSRangePointer)range
