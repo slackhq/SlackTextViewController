@@ -16,6 +16,8 @@
 
 #import "SLKTextView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /** @name SLKTextView additional features used for SlackTextViewController. */
 @interface SLKTextView (SLKAdditions)
 
@@ -70,3 +72,6 @@
 - (void)slk_prepareForUndo:(NSString *)description;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

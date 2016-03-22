@@ -16,6 +16,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /** Generic protocol needed when customizing your own typing indicator view. */
 @protocol SLKTypingIndicatorProtocol <NSObject>
 @required
@@ -35,3 +37,5 @@
 - (void)dismissIndicator;
 
 @end
+
+NS_ASSUME_NONNULL_END

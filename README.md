@@ -3,12 +3,10 @@
 **IMPORTANT NOTICE: Please update to >= `1.9` to avoid any risk of app rejection.
 More details in [#361](https://github.com/slackhq/SlackTextViewController/issues/361)**
 
-[![Build Status](https://img.shields.io/travis/slackhq/SlackTextViewController.svg?style=flat-square)](https://travis-ci.org/slackhq/SlackTextViewController)
-[![Coverage Status](https://img.shields.io/coveralls/slackhq/SlackTextViewController/master.svg?style=flat-square)](https://coveralls.io/r/slackhq/SlackTextViewController)
+[![License](https://img.shields.io/badge/license-apache%202.0-blue.svg?style=flat-square)](http://opensource.org/licenses/Apache2.0)
 [![Pod Version](https://img.shields.io/cocoapods/v/SlackTextViewController.svg?style=flat-square)](http://cocoadocs.org/docsets/SlackTextViewController/1.8/)
 [![Carthage compatible](https://img.shields.io/badge/carthage-compatible-F5B369.svg?style=flat-square)](https://github.com/Carthage/Carthage)
-[![License](https://img.shields.io/badge/license-apache%202.0-blue.svg?style=flat-square)](http://opensource.org/licenses/Apache2.0)
-
+[![Build Status](https://img.shields.io/travis/slackhq/SlackTextViewController.svg?style=flat-square)](https://travis-ci.org/slackhq/SlackTextViewController)
 
 A drop-in UIViewController subclass with a growing text input view and other useful messaging features. Meant to be a replacement for UITableViewController & UICollectionViewController.
 
@@ -35,7 +33,7 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 - [Typing Indicator](https://github.com/slackhq/SlackTextViewController#typing-indicator) display
 - [Shake Gesture](https://github.com/slackhq/SlackTextViewController#shake-gesture) for clearing text view
 - Multimedia Pasting (png, gif, mov, etc.)
-- [Inverted Mode](https://github.com/slackhq/SlackTextViewController#inverted-mode) for displaying cells upside-down (using CATransform) -- a necessary hack for some messaging apps. `YES` by default, so beware, your entire cells might be flipped!
+- [Inverted Mode](https://github.com/slackhq/SlackTextViewController#inverted-mode) for displaying cells upside-down (using CATransform) -- a necessary hack for some messaging apps. `YES`/`true` by default, so beware, your entire cells might be flipped!
 - Tap Gesture for dismissing the keyboard
 - [Panning Gesture](https://github.com/slackhq/SlackTextViewController#panning-gesture) for sliding down/up the keyboard
 - [Hideable TextInputbar](https://github.com/slackhq/SlackTextViewController#hideable-textinputbar)
@@ -80,18 +78,33 @@ There are two ways to do this:
 Start by creating a new subclass of `SLKTextViewController`.
 
 In the init overriding method, if you wish to use the `UITableView` version, call:
+##### Obj-C
 ```objc
 [super initWithTableViewStyle:UITableViewStylePlain]
 ```
+##### Swift
+```swift
+super.init(tableViewStyle: .Plain)
+```
 
 or the `UICollectionView` version:
+##### Obj-C
 ```objc
 [super initWithCollectionViewLayout:[UICollectionViewFlowLayout new]]
 ```
+##### Swift
+```swift
+super.init(collectionViewLayout: UICollectionViewFlowLayout())
+```
 
 or the `UIScrollView` version:
+##### Obj-C
 ```objc
 [super initWithScrollView:self.myStrongScrollView]
+```
+##### Swift
+```swift
+super.init(scrollView: self.myStrongScrollView)
 ```
 
 Protocols like `UITableViewDelegate` and `UITableViewDataSource` are already setup for you. You will be able to call whatever delegate and data source methods you need for customising your control.
@@ -103,18 +116,32 @@ Calling `[super init]` will call `[super initWithTableViewStyle:UITableViewStyle
 When using SlackTextViewController with storyboards, instead of overriding the traditional `initWithCoder:` you will need to override any of the two custom methods below. This approach helps preserving the exact same features from the programatic approach, but also limits the edition of the nib of your `SLKTextViewController` subclass since it doesn't layout subviews from the nib (subviews are still initialized and layed out programatically).
 
 if you wish to use the `UITableView` version, call:
+##### Obj-C
 ```objc
 + (UITableViewStyle)tableViewStyleForCoder:(NSCoder *)decoder
 {
     return UITableViewStylePlain;
 }
 ```
+##### Swift
+```swift
+override class func tableViewStyleForCoder(decoder: NSCoder) -> UITableViewStyle {
+    return .Plain
+}
+```
 
 or the `UICollectionView` version:
+##### Obj-C
 ```objc
 + (UICollectionViewLayout *)collectionViewLayoutForCoder:(NSCoder *)decoder
 {
     return [UICollectionViewFlowLayout new];
+}
+```
+##### Swift
+```swift
+override class func collectionViewLayoutForCoder(decoder: NSCoder) -> UICollectionViewLayout {
+    return UICollectionViewFlowLayout()
 }
 ```
 
@@ -146,15 +173,25 @@ On iPhone devices, in landscape orientation, the maximum number of lines is chan
 
 ###Inverted Mode
 
-Some layouts may require to show from bottom to top and new subviews are inserted from the bottom. To enable this, you must use the `inverted` flag property (default is YES). This will actually invert the entire ScrollView object. Make sure to apply the same transformation to every subview. In the case of UITableView, the best place for adjusting the transformation is in its data source methods like:
-
-````objc
+Some layouts may require to show from bottom to top and new subviews are inserted from the bottom. To enable this, you must use the `inverted` flag property (default is `YES`/`true`). This will actually invert the entire ScrollView object. Make sure to apply the same transformation to every subview. In the case of UITableView, the best place for adjusting the transformation is in its data source methods like:
+##### Obj-C
+```objc
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:chatCellIdentifier];
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kCellIdentifier];
     cell.transform = self.tableView.transform;
 }
-````
+```
+##### Swift
+```swift
+override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+    if let cell = tableView.dequeueReusableCellWithIdentifier(kAutoCompletionCellIdentifier) {
+        cell.textLabel!.text = self.searchResult[indexPath.row]
+        return cell
+    }
+}
+```
 
 
 ###Autocompletion
@@ -167,83 +204,116 @@ To set up autocompletion in your app, follow these simple steps:
 
 #### 1. Registration
 You must first register all the prefixes you'd like to support for autocompletion detection:
-````objc
+##### Obj-C
+```objc
 [self registerPrefixesForAutoCompletion:@[@"#"]];
-````
+```
+##### Swift
+```swift
+self.registerPrefixesForAutoCompletion(["@", "#"])
+```
 
 #### 2. Processing
 Every time a new character is inserted in the text view, the nearest word to the caret will be processed and verified if it contains any of the registered prefixes.
 
-Once the prefix has been detected, `-didChangeAutoCompletionPrefix:andWord:` will be called. This is the perfect place to populate your data source and show/hide the autocompletion view. So you must override it in your subclass, to be able to perform additional tasks. Default returns NO.
-
-````objc
+Once the prefix has been detected, `didChangeAutoCompletionPrefix:andWord:` will be called. This is the perfect place to populate your data source and show/hide the autocompletion view. So you must override it in your subclass, to be able to perform additional tasks. Default returns NO.
+##### Obj-C
+```objc
 - (void)didChangeAutoCompletionPrefix:(NSString *)prefix andWord:(NSString *)word
 {
-    self.searchResult = [[NSArray alloc] initWithArray:self.channels];
+    NSArray *array = [NSArray arrayWithArray:self.channels];
     
-    if ([prefix isEqualToString:@"#"])
-    {
-        if (word.length > 0) {
-            self.searchResult = [self.searchResult filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self !=[c] %@", word, word]];
-        }
-    }
-
-    if (self.searchResult.count > 0) {
-        self.searchResult = [self.searchResult sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    if ([prefix isEqualToString:@"#"] && word.length > 0) {
+        self.searchResult = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c]", word]];
     }
     
     BOOL show = (self.searchResult.count > 0);
     
     [self showAutoCompletionView:show];
 }
-````
+```
+##### Swift
+```swift
+override func didChangeAutoCompletionPrefix(prefix: String, andWord word: String) {
+    
+    let array: NSArray = self.channels
+    
+    if prefix == "#" && word.characters.count > 0 {
+        self.searchResult = array.filteredArrayUsingPredicate(NSPredicate(format: "self BEGINSWITH[c] %@", word))
+    }
+    
+    let show = (self.searchResult.count > 0)
+    
+    self.showAutoCompletionView(show)
+}
+```
 
 The autocompletion view is a `UITableView` instance, so you will need to use `UITableViewDataSource` to populate its cells. You have complete freedom for customizing the cells.
 
-You don't need to call `-reloadData` yourself, since it will be invoked automatically right after calling the `-showAutoCompletionView` method.
+You don't need to call `reloadData` yourself, since it will be invoked automatically right after calling the `showAutoCompletionView` method.
 
 #### 3. Layout
 
 The maximum height of the autocompletion view is set to 140 pts by default. You can update this value anytime, so the view automatically adjusts based on the amount of displayed cells.
-
-````objc
+##### Obj-C
+```objc
 - (CGFloat)heightForAutoCompletionView
 {
     CGFloat cellHeight = 34.0;
     return cellHeight*self.searchResult.count;
 }
-````
+```
+##### Swift
+```swift
+override func heightForAutoCompletionView() -> CGFloat {
+    let cellHeight:CGFloat = 34
+    return cellHeight * CGFloat(self.searchResult.count)
+}
+```
 
 #### 4. Confirmation
 
-If the user selects any autocompletion view cell on `-tableView:didSelectRowAtIndexPath:`, you must call `-acceptAutoCompletionWithString:` to commit autocompletion. That method expects a string matching the selected item, that you would like to be inserted in the text view.
-
-`````objc
+If the user selects any autocompletion view cell on `tableView:didSelectRowAtIndexPath:`, you must call `acceptAutoCompletionWithString:` to commit autocompletion. That method expects a string matching the selected item, that you would like to be inserted in the text view.
+##### Obj-C
+```objc
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([tableView isEqual:self.autoCompletionView]) {
         
-        NSString *item = self.searchResult[indexPath.row];
+        NSMutableString *item = [self.searchResult[indexPath.row] mutableCopy];
+        [item appendString:@" "]; // Adding a space helps dismissing the auto-completion view
         
-        [self acceptAutoCompletionWithString:item];
+        [self acceptAutoCompletionWithString:item keepPrefix:YES];
     }
 }
-````
+```
+##### Swift
+```swift
+override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+    if tableView.isEqual(tableView) {
+        var item = self.searchResult[indexPath.row]
+        item += " "  // Adding a space helps dismissing the auto-completion view
+            
+        self.acceptAutoCompletionWithString(item)
+    }
+}
+```
 
 The autocompletion view will automatically be dismissed and the chosen string will be inserted in the text view, replacing the detected prefix and word.
 
-You can always call `-cancelAutoCompletion` to exit the autocompletion mode and refresh the UI.
+You can always call `cancelAutoCompletion` to exit the autocompletion mode and refresh the UI.
 
 
 ###Edit Mode
 
 ![Edit Mode](Screenshots/screenshot_edit-mode.png)
 
-To enable edit mode, you simply need to call `[self editText:@"hello"];`, and the text input will switch to edit mode, removing both left and right buttons, extending the input bar a bit higher with "Accept" and "Cancel" buttons. Both of this buttons are accessible in the `SLKTextInputbar` instance for customisation.
+To enable edit mode, you simply need to call `editText:`, and the text input will switch to edit mode, removing both left and right buttons, extending the input bar a bit higher with "Accept" and "Cancel" buttons. Both of this buttons are accessible in the `SLKTextInputbar` instance for customisation.
 
 To capture the "Accept" or "Cancel" events, you must override the following methods.
-
-````objc
+##### Obj-C
+```objc
 - (void)didCommitTextEditing:(id)sender
 {
     NSString *message = [self.textView.text copy];
@@ -259,7 +329,26 @@ To capture the "Accept" or "Cancel" events, you must override the following meth
 {
     [super didCancelTextEditing:sender];
 }
-````
+```
+##### Swift
+```swift
+override func didCommitTextEditing(sender: AnyObject) {
+    
+    let message:String = self.textView.text
+    
+    self.messages.removeAtIndex(0)
+    self.messages.insert(message, atIndex: 0)
+    
+    self.tableView!.reloadData()
+    
+    super.didCommitTextEditing(sender)
+}
+ 
+override func didCancelTextEditing(sender: AnyObject) {
+        
+    super.didCancelTextEditing(sender)
+}
+```
 
 Notice that you must call `super` at some point, so the text input exits the edit mode, re-adjusting the layout and clearing the text view.
 Use the `editing` property to know if the editing mode is on.
@@ -278,16 +367,21 @@ Optionally, you can enable `autoCompleteFormatting` so any pending markdown clos
 #### 1. Registration
 
 You must first register the formatting symbol and assign a title string to be used in the menu controller item.
-````objc
+##### Obj-C
+```objc
 [self.textView registerMarkdownFormattingSymbol:@"*" withTitle:@"Bold"];
-````
+```
+##### Swift
+```swift
+self.textView.registerMarkdownFormattingSymbol("*", withTitle: "Bold")
+```
 
 #### 2. Customisation
 
 Futher more, you can customise some of the behavior for special formatting cases, using the `UITextViewDelegate` methods.
 In the following example, we don't present the Quote formatting in the contextual menu when the text selection isn't a paragraph.
-
-````objc
+##### Obj-C
+```objc
 - (BOOL)textView:(SLKTextView *)textView shouldOfferFormattingForSymbol:(NSString *)symbol
 {
     if ([symbol isEqualToString:@">"]) {
@@ -311,10 +405,11 @@ In the following example, we don't present the Quote formatting in the contextua
     
     return [super textView:textView shouldOfferFormattingForSymbol:symbol];
 }
-````
+```
 
 In this other method implementation, we don't want to allow auto-completion for the Quote formatting since it doesn't require a closure.
-````objc
+##### Obj-C
+```objc
 - (BOOL)textView:(SLKTextView *)textView shouldInsertSuffixForFormattingWithSymbol:(NSString *)symbol prefixRange:(NSRange)prefixRange
 {
     if ([symbol isEqualToString:@">"]) {
@@ -323,7 +418,7 @@ In this other method implementation, we don't want to allow auto-completion for 
     
     return [super textView:textView shouldInsertSuffixForFormattingWithSymbol:symbol prefixRange:prefixRange];
 }
-````
+```
 
 
 ###Typing Indicator
@@ -332,12 +427,37 @@ In this other method implementation, we don't want to allow auto-completion for 
 
 Optionally, you can enable a simple typing indicator, which will be displayed right above the text input. It shows the name of the people that are typing, and if more than 2, it will display "Several are typing" message.
 
-To enable the typing indicator, just call `[self.typingIndicatorView insertUsername:@"John"];` and the view will automatically be animated on top of the text input. After a default interval of 6 seconds, if the same name hasn't been assigned once more, the view will be dismissed with animation.
+To enable the typing indicator, just call:
+##### Obj-C
+```objc
+[self.typingIndicatorView insertUsername:@"John"];
+```
+##### Swift
+```swift
+self.typingIndicatorView?.insertUsername("John")
+```
 
-You can remove names from the list by calling `[self.typingIndicatorView removeUsername:@"John"];`
+and the view will automatically be animated on top of the text input. After a default interval of 6 seconds, if the same name hasn't been assigned once more, the view will be dismissed with animation.
 
-You can also dismiss it by calling `[self.typingIndicatorView dismissIndicator];`
+You can remove names from the list by calling:
+##### Obj-C
+```objc
+[self.typingIndicatorView removeUsername:@"John"];
+```
+##### Swift
+```swift
+self.typingIndicatorView?.removeUsername("John")
+```
 
+You can also dismiss it by calling:
+##### Obj-C
+```objc
+[self.typingIndicatorView dismissIndicator];
+```
+##### Swift
+```swift
+self.typingIndicatorView?.dismissIndicator()
+```
 
 ###Panning Gesture
 
@@ -348,8 +468,13 @@ Dismissing the keyboard with a panning gesture is enabled by default with the `k
 
 Sometimes you may need to hide the text input bar.
 Very similar to `UINavigationViewController`'s API, simply do:
+##### Obj-C
 ```objc
 [self setTextInputbarHidden:YES animated:YES];
+```
+##### Swift
+```swift
+self.setTextInputbarHidden(true, animated: true)
 ```
 
 
@@ -359,9 +484,9 @@ Very similar to `UINavigationViewController`'s API, simply do:
 
 A shake gesture to clear text is enabled by default with the `undoShakingEnabled` property.
 
-You can optionally override `-willRequestUndo`, to implement your UI to ask the users if he would like to clean the text view's text. If there is not text entered, the method will not be called.
+You can optionally override `willRequestUndo`, to implement your UI to ask the users if he would like to clean the text view's text. If there is not text entered, the method will not be called.
 
-If you don't override `-willRequestUndo` and `undoShakingEnabled` is set to `YES`, a system UIAlertView will 
+If you don't override `willRequestUndo` and `undoShakingEnabled` is set to `YES`/`true`, a system alert will be shown.
 
 
 ###External Keyboard
@@ -369,14 +494,14 @@ If you don't override `-willRequestUndo` and `undoShakingEnabled` is set to `YES
 There a few basic key commands enabled by default:
 - cmd + z -> undo
 - shift + cmd + z -> redo
-- return key -> calls `-didPressRightButton:`, or `-didCommitTextEditing:` if in edit mode
+- return key -> calls `didPressRightButton:`, or `didCommitTextEditing:` if in edit mode
 - shift/cmd + return key -> line break
 - escape key -> exits edit mode, or auto-completion mode, or dismisses the keyboard
 - up & down arrows -> vertical cursor movement
 
-To add additional key commands, simply override `-keyCommands` and append `super`'s array.
-
-`````objc
+To add additional key commands, simply override `keyCommands` and append `super`'s array.
+##### Obj-C
+```objc
 - (NSArray *)keyCommands
 {
     NSMutableArray *commands = [NSMutableArray arrayWithArray:[super keyCommands]];
@@ -388,7 +513,20 @@ To add additional key commands, simply override `-keyCommands` and append `super
     
     return commands;
 }
-````
+```
+##### Swift
+```swift
+override var keyCommands: [UIKeyCommand]? {
+        
+    var commands = super.keyCommands
+        
+    // Edit last message
+    let command = UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: .Command, action: "editLastMessage:")
+    commands?.append(command)
+        
+    return commands
+}
+```
 
 There are also a set of useful flags for keyboard special detections such as `isExternalKeyboardDetected`, `isKeyboardUndocked`, `typingSuggestionEnabled` and `isTrackpadEnabled` (iOS 9 only)
 

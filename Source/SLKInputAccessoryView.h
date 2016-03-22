@@ -19,6 +19,6 @@
 @interface SLKInputAccessoryView : UIView
 
 /* The system keyboard view used as reference. */
-@property (nonatomic, weak, readonly) UIView *keyboardViewProxy;
+@property (nonatomic, weak, readonly) UIView *_Nullable keyboardViewProxy;
 
 @end
