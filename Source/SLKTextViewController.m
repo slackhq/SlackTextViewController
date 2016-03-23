@@ -1365,8 +1365,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         [self slk_hideAutoCompletionViewIfNeeded];
     }
     
-    // store the previous keyboard height
-    CGFloat preKeyboardHeight = self.keyboardHC.constant;
+    // Stores the previous keyboard height
+    CGFloat previousKeyboardHeight = self.keyboardHC.constant;
 
     // Updates the height constraints' constants
     self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromNotification:notification];
@@ -1394,7 +1394,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // Begin and end frames are the same when the keyboard is shown during navigation controller's push animation.
     // The animation happens in window coordinates (slides from right to left) but doesn't in the view controller's view coordinates.
     // Second condition: check if the height of the keyboard changed.
-    if (!CGRectEqualToRect(beginFrame, endFrame) || fabs(preKeyboardHeight - self.keyboardHC.constant) >= FLT_EPSILON)
+    if (!CGRectEqualToRect(beginFrame, endFrame) || fabs(previousKeyboardHeight - self.keyboardHC.constant) > 0.0)
     {
         // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
         [self.view slk_animateLayoutIfNeededWithDuration:duration
