@@ -240,7 +240,7 @@
 - (void)didLongPressCell:(UIGestureRecognizer *)gesture
 {
     if (gesture.state != UIGestureRecognizerStateBegan) {
-        return
+        return;
     }
 
 #ifdef __IPHONE_8_0
