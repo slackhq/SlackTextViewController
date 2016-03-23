@@ -52,7 +52,6 @@
 		9F4466C51C9A1B6B0001609A /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */; };
 		9F4466C71C9A1B6B0001609A /* TypingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF04E581B3F7A04004C3BED /* TypingIndicatorView.m */; };
 		F556AFAE1BA7B41F009898BD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F556AFAD1BA7B41F009898BD /* QuartzCore.framework */; };
-		F56A8EBB1C5EFC7F00C2B5A7 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = F56A8EBA1C5EFC7F00C2B5A7 /* README.md */; };
 		F5CD59211C9FE0EC00DD9A4E /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A1CC971C542EB600908ECB /* MessageViewController.swift */; };
 		F5DE01401B9679C4005E9082 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F86BF7619F011D0007A3D4A /* LaunchScreen.xib */; };
 /* End PBXBuildFile section */
@@ -107,7 +106,6 @@
 		DDFA9095EABC480682E6396C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E76FE7634642D0C745F673A5 /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F556AFAD1BA7B41F009898BD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		F56A8EBA1C5EFC7F00C2B5A7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		F5A1CC971C542EB600908ECB /* MessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -198,7 +196,6 @@
 		4F3EDB40199ED00F004C15D6 = {
 			isa = PBXGroup;
 			children = (
-				F56A8EBA1C5EFC7F00C2B5A7 /* README.md */,
 				4F86BF8B19F011E9007A3D4A /* Examples */,
 				4F1AD51C19E727640027043E /* Templates */,
 				4F3EDB4B199ED00F004C15D6 /* Frameworks */,
@@ -638,7 +635,6 @@
 				4F86BF9519F01234007A3D4A /* MessageTableViewCell.m in Sources */,
 				4FF04E591B3F7A04004C3BED /* TypingIndicatorView.m in Sources */,
 				4F3EDB59199ED00F004C15D6 /* main.m in Sources */,
-				F56A8EBB1C5EFC7F00C2B5A7 /* README.md in Sources */,
 				4F32561E1AA77431008C1DD9 /* MessageTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
