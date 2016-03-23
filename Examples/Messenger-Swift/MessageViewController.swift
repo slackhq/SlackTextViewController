@@ -33,8 +33,8 @@ class MessageViewController: SLKTextViewController {
     
     func commonInit() {
         
-        NSNotificationCenter.defaultCenter().addObserver(self.tableView!, selector: "reloadData", name: UIContentSizeCategoryDidChangeNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self,  selector: "textInputbarDidMove:", name: SLKTextInputbarDidMoveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self.tableView!, selector: #selector(UITableView.reloadData), name: UIContentSizeCategoryDidChangeNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self,  selector: #selector(MessageViewController.textInputbarDidMove(_:)), name: SLKTextInputbarDidMoveNotification, object: nil)
         
         // Register a SLKTextView subclass, if you need any special appearance and/or behavior customisation.
         self.registerClassForTextView(MessageTextView.classForCoder())
@@ -132,11 +132,11 @@ extension MessageViewController {
     
     func configureActionItems() {
         
-        let arrowItem = UIBarButtonItem(image: UIImage(named: "icn_arrow_down"), style: .Plain, target: self, action: "hideOrShowTextInputbar:")
-        let editItem = UIBarButtonItem(image: UIImage(named: "icn_editing"), style: .Plain, target: self, action: "editRandomMessage:")
-        let typeItem = UIBarButtonItem(image: UIImage(named: "icn_typing"), style: .Plain, target: self, action: "simulateUserTyping:")
-        let appendItem = UIBarButtonItem(image: UIImage(named: "icn_append"), style: .Plain, target: self, action: "fillWithText:")
-        let pipItem = UIBarButtonItem(image: UIImage(named: "icn_pic"), style: .Plain, target: self, action: "togglePIPWindow:")
+        let arrowItem = UIBarButtonItem(image: UIImage(named: "icn_arrow_down"), style: .Plain, target: self, action: #selector(MessageViewController.hideOrShowTextInputbar(_:)))
+        let editItem = UIBarButtonItem(image: UIImage(named: "icn_editing"), style: .Plain, target: self, action: #selector(MessageViewController.editRandomMessage(_:)))
+        let typeItem = UIBarButtonItem(image: UIImage(named: "icn_typing"), style: .Plain, target: self, action: #selector(MessageViewController.simulateUserTyping(_:)))
+        let appendItem = UIBarButtonItem(image: UIImage(named: "icn_append"), style: .Plain, target: self, action: #selector(MessageViewController.fillWithText(_:)))
+        let pipItem = UIBarButtonItem(image: UIImage(named: "icn_pic"), style: .Plain, target: self, action: #selector(MessageViewController.togglePIPWindow(_:)))
         self.navigationItem.rightBarButtonItems = [arrowItem, pipItem, editItem, appendItem, typeItem]
     }
     
@@ -421,7 +421,7 @@ extension MessageViewController {
         let contentType = userInfo[SLKTextViewPastedItemContentType]
         let data = userInfo[SLKTextViewPastedItemData]
         
-        print("\(__FUNCTION__) : \(contentType) (type = \(mediaType) | data : \(data))")
+        print("didPasteMediaContent : \(contentType) (type = \(mediaType) | data : \(data))")
     }
     
     // Notifies the view controller when a user did shake the device to undo the typed text
@@ -499,7 +499,7 @@ extension MessageViewController {
         var show = false
         
         if  array?.count > 0 {
-            self.searchResult = (array! as NSArray).sortedArrayUsingSelector("localizedCaseInsensitiveCompare:")
+            self.searchResult = (array! as NSArray).sortedArrayUsingSelector(#selector(NSString.localizedCaseInsensitiveCompare(_:)))
             show = (self.searchResult?.count > 0)
         }
         
@@ -557,7 +557,7 @@ extension MessageViewController {
         let cell = self.tableView!.dequeueReusableCellWithIdentifier(MessengerCellIdentifier) as! MessageTableViewCell
         
         if cell.gestureRecognizers?.count == nil {
-            let longPress = UILongPressGestureRecognizer(target: self, action: "didLongPressCell:")
+            let longPress = UILongPressGestureRecognizer(target: self, action: #selector(MessageViewController.didLongPressCell(_:)))
             cell.addGestureRecognizer(longPress)
         }
 
