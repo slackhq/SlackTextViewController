@@ -1561,14 +1561,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
                                         }];
 }
 
-- (void)slk_willTerminateApplication:(NSNotification *)notification
-{
-    // Caches the text before it's too late!
-    if (self.isViewVisible) {
-        [self slk_cacheTextView];
-    }
-}
-
 
 #pragma mark - KVO Events
 
@@ -2237,8 +2229,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [notificationCenter addObserver:self selector:@selector(slk_didShakeTextView:) name:SLKTextViewDidShakeNotification object:nil];
     
     // Application notifications
-    [notificationCenter addObserver:self selector:@selector(slk_willTerminateApplication:) name:UIApplicationWillTerminateNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(slk_willTerminateApplication:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_cacheTextView) name:UIApplicationWillTerminateNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_cacheTextView) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_cacheTextView) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 }
 
 - (void)slk_unregisterNotifications
@@ -2270,6 +2263,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     // Application notifications
     [notificationCenter removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
+    [notificationCenter removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
     [notificationCenter removeObserver:self name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 }
 
