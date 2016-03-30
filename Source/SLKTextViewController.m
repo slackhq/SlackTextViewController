@@ -1335,7 +1335,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     UIResponder *currentResponder = [UIResponder slk_currentFirstResponder];
     // Skips this it's not the expected textView and shouldn't force adjustment of the text input bar.
     // This will also dismiss the text input bar if it's visible, and exit auto-completion mode if enabled.
-    if (![currentResponder isEqual:self.textView]) {
+    if (currentResponder && ![currentResponder isEqual:self.textView]) {
         // Detect the current first responder. If there is no first responder, we should just ignore these notifications.
         if (![self forceTextInputbarAdjustmentForResponder:currentResponder]) {
             return [self slk_dismissTextInputbarIfNeeded];
