@@ -433,6 +433,13 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     [self refreshFirstResponder];
 }
 
+- (void)setContentOffset:(CGPoint)contentOffset
+{
+    // At times during a layout pass, the content offset's x value may change.
+    // Since we only care about vertical offset, let's override its horizontal value to avoid other layout issues.
+    [super setContentOffset:CGPointMake(0.0, contentOffset.y)];
+}
+
 
 #pragma mark - UITextView Overrides
 
