@@ -6,7 +6,7 @@
   "homepage": "https://slack.com/",
   "screenshots": "https://github.com/slackhq/SlackTextViewController/raw/master/Screenshots/slacktextviewcontroller_demo.gif",
   "license": {
-    "type": "Apache License, Version 2.0",
+    "type": "MIT",
     "file": "LICENSE"
   },
   "authors": {
