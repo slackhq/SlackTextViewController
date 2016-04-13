@@ -623,7 +623,7 @@
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPressCell:)];
         [cell addGestureRecognizer:longPress];
     }
-
+    
     Message *message = self.messages[indexPath.row];
     
     cell.titleLabel.text = message.username;
