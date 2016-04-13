@@ -12,6 +12,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   LoremIpsum: 9029c55d36501b2ee0b05cc9ecda11d3a0479160
-  SlackTextViewController: 6b0d1030c53937226fc5358f217af2a34fc211cf
+  SlackTextViewController: 01dafb1bffa45ff4b03fceebb3eed524a8c02370
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0
