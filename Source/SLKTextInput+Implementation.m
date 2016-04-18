@@ -19,7 +19,7 @@
 
 #pragma mark - Public Methods
 
-- (void)lookForPrefixes:(NSSet *)prefixes completion:(void (^)(NSString *prefix, NSString *word, NSRange wordRange))completion
+- (void)lookForPrefixes:(NSSet<NSString *> *)prefixes completion:(void (^)(NSString *prefix, NSString *word, NSRange wordRange))completion
 {
     if (![self conformsToProtocol:@protocol(SLKTextInput)]) {
         return;

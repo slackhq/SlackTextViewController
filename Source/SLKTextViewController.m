@@ -1569,14 +1569,14 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 #pragma mark - Auto-Completion Text Processing
 
-- (void)registerPrefixesForAutoCompletion:(NSArray *)prefixes
+- (void)registerPrefixesForAutoCompletion:(NSArray <NSString *> *)prefixes
 {
     if (prefixes.count == 0) {
         return;
     }
     
     NSMutableSet *set = [NSMutableSet setWithSet:self.registeredPrefixes];
-    [set addObjectsFromArray:prefixes];
+    [set addObjectsFromArray:[prefixes copy]];
     
     _registeredPrefixes = [NSSet setWithSet:set];
 }
