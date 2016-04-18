@@ -206,7 +206,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)dismissKeyboard:(BOOL)animated;
 
 /**
- Verifies if the text input bar should still move up/down even if it is not first responder. Default is NO.
+ Verifies if the text input bar should still move up/down even if it is NOT first responder. Default is NO.
  You can override this method to perform additional tasks associated with presenting the view.
  You don't need call super since this method doesn't do anything.
  
@@ -216,9 +216,11 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *_Nullable)responder;
 
 /**
- Verifies if the text input bar should still move up/down when it is first responder. Default is NO.
+ Verifies if the text input bar should still move up/down when the text view is first responder.
  This is very useful when presenting the view controller in a custom modal presentation, when there keyboard events are being handled externally to reframe the presented view.
  You SHOULD call super to inherit some conditionals.
+ 
+ @return YES so the text input bar still move up/down.
  */
 - (BOOL)ignoreTextInputbarAdjustment NS_REQUIRES_SUPER;
 
@@ -298,7 +300,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)didPasteMediaContent:(NSDictionary *)userInfo;
 
 /**
- Verifies that the typing indicator view should be shown. Default is YES, if meeting some requierements.
+ Verifies that the typing indicator view should be shown.
  You can override this method to perform additional tasks.
  You SHOULD call super to inherit some conditionals.
  
@@ -317,6 +319,8 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  Notifies the view controller when the user has pressed the Return key (↵) with an external keyboard.
  You can override this method to perform additional tasks.
  You MUST call super at some point in your implementation.
+ 
+ @param keyCommand The UIKeyCommand object being recognized.
  */
 - (void)didPressReturnKey:(UIKeyCommand * _Nullable)keyCommand NS_REQUIRES_SUPER;
 
@@ -324,6 +328,8 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  Notifies the view controller when the user has pressed the Escape key (Esc) with an external keyboard.
  You can override this method to perform additional tasks.
  You MUST call super at some point in your implementation.
+ 
+ @param keyCommand The UIKeyCommand object being recognized.
  */
 - (void)didPressEscapeKey:(UIKeyCommand * _Nullable)keyCommand NS_REQUIRES_SUPER;
 
@@ -331,6 +337,8 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  Notifies the view controller when the user has pressed the arrow key with an external keyboard.
  You can override this method to perform additional tasks.
  You MUST call super at some point in your implementation.
+ 
+ @param keyCommand The UIKeyCommand object being recognized.
  */
 - (void)didPressArrowKey:(UIKeyCommand * _Nullable)keyCommand NS_REQUIRES_SUPER;
 
@@ -410,25 +418,26 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, readonly, copy) NSString *_Nullable foundWord;
 
 /** An array containing all the registered prefix strings for autocompletion. */
-@property (nonatomic, readonly, copy) NSSet *_Nullable registeredPrefixes;
+@property (nonatomic, readonly, copy) NSSet <NSString *> *_Nullable registeredPrefixes;
 
 /**
- Registers any string prefix for autocompletion detection, useful for user mentions and/or hashtags autocompletion.
- The prefix must be valid string (i.e: '@', '#', '\', and so on). This also checks if no repeated prefix are inserted.
+ Registers any string prefix for autocompletion detection, like for user mentions or hashtags autocompletion.
+ The prefix must be valid string (i.e: '@', '#', '\', and so on).
  Prefixes can be of any length.
  
  @param prefixes An array of prefix strings.
  */
-- (void)registerPrefixesForAutoCompletion:(NSArray *_Nullable)prefixes;
+- (void)registerPrefixesForAutoCompletion:(NSArray <NSString *> *_Nullable)prefixes;
 
 /**
- Verifies that controller is allowed to process the textView's text for auto-completion. Default is YES.
- This is useful to disable momentarily the auto-completion feature, or to let it visible for longer time.
+ Verifies that controller is allowed to process the textView's text for auto-completion.
+ You can override this method to disable momentarily the auto-completion feature, or to let it visible for longer time.
+ You SHOULD call super to inherit some conditionals.
  
  @param text The textView's current text.
  @return YES if the controller is allowed to process the text for auto-completion.
  */
-- (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text;
+- (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller either the autocompletion prefix or word have changed.

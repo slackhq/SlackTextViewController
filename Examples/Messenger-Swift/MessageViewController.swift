@@ -67,7 +67,6 @@ class MessageViewController: SLKTextViewController {
         
         self.rightButton.setTitle(NSLocalizedString("Send", comment: ""), forState: .Normal)
         
-        
         self.textInputbar.autoHideRightButton = true
         self.textInputbar.maxCharCount = 256
         self.textInputbar.counterStyle = .Split
@@ -88,6 +87,8 @@ class MessageViewController: SLKTextViewController {
         
         self.autoCompletionView.registerClass(MessageTableViewCell.classForCoder(), forCellReuseIdentifier: AutoCompletionCellIdentifier)
         self.registerPrefixesForAutoCompletion(["@",  "#", ":", "+:", "/"])
+        
+        self.textView.placeholder = "Message";
         
         self.textView.registerMarkdownFormattingSymbol("*", withTitle: "Bold")
         self.textView.registerMarkdownFormattingSymbol("_", withTitle: "Italics")

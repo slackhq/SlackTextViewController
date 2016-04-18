@@ -22,7 +22,7 @@
  @param prefixes A set of prefixes to search for.
  @param completion A completion block called whenever the text processing finishes, successfuly or not. Required.
  */
-- (void)lookForPrefixes:(NSSet *)prefixes
+- (void)lookForPrefixes:(NSSet<NSString *> *)prefixes
              completion:(void (^)(NSString *prefix, NSString *word, NSRange wordRange))completion;
 
 /**
