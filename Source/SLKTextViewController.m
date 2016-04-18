@@ -1583,7 +1583,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text
 {
-    // Always return YES by default.
+    if (!_registeredPrefixes || _registeredPrefixes.count == 0) {
+        return NO;
+    }
+    
     return YES;
 }
 

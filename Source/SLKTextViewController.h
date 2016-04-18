@@ -422,13 +422,14 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)registerPrefixesForAutoCompletion:(NSArray *_Nullable)prefixes;
 
 /**
- Verifies that controller is allowed to process the textView's text for auto-completion. Default is YES.
- This is useful to disable momentarily the auto-completion feature, or to let it visible for longer time.
+ Verifies that controller is allowed to process the textView's text for auto-completion.
+ You can override this method to disable momentarily the auto-completion feature, or to let it visible for longer time.
+ You SHOULD call super to inherit some conditionals.
  
  @param text The textView's current text.
  @return YES if the controller is allowed to process the text for auto-completion.
  */
-- (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text;
+- (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller either the autocompletion prefix or word have changed.
