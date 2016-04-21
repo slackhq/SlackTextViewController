@@ -1865,11 +1865,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     BOOL newWordInserted = ([text rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].location != NSNotFound);
     
-    // It should not change if auto-completion is active and trying to replace with an auto-correction suggested text.
-    if (self.isAutoCompleting && text.length > 1) {
-        return NO;
-    }
-    
     // Records text for undo for every new word
     if (newWordInserted) {
         [textView slk_prepareForUndo:@"Word Change"];
