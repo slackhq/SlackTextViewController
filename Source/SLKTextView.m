@@ -597,12 +597,8 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
         return self.selectedRange.length > 0 ? YES : NO;
     }
     
-    if (action == @selector(paste:) && [self slk_isPasteboardItemSupported]) {
-        return YES;
-    }
-    
-    if (action == @selector(paste:) && [self slk_isPasteboardItemSupported]) {
-        return YES;
+    if (action == @selector(paste:)) {
+        return [self slk_isPasteboardItemSupported];
     }
     
     if (self.undoManagerEnabled) {
