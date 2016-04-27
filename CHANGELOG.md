@@ -1,10 +1,11 @@
 # Change Log
 All notable changes to this project are also be documented here.
+
 `SlackTextViewController` adheres to [Semantic Versioning](http://semver.org/).
 
 --- 
 
-## [1.9.2](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9.2)
+## [Version 1.9.2](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9.2)
 
 #### SlackTextViewController is now MIT licensed!
 
@@ -24,7 +25,7 @@ All notable changes to this project are also be documented here.
 - Many, many, many auto-completion bug fixes 💪 
 
 
-## [1.9.1](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9.1)
+## [Version 1.9.1](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9.1)
 
 ##### Features & Enhancements:
 - Renamed public `autoCompleteFormatting` to `formattingEnabled`.
@@ -41,7 +42,7 @@ All notable changes to this project are also be documented here.
 - Fixed issue causing not to forward all UITextViewDelegate callbacks.
 
 
-## [1.9](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9)
+## [Version 1.9](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9)
 
 ##### Deprecations:
 - Deprecated the keyboard panning gesture on iOS 9, to drag the keyboard up and down. More information about this in #361
@@ -59,7 +60,7 @@ All notable changes to this project are also be documented here.
 - Fixed the auto-completion layout being busted in 1.8. This was a regression.
 
 
-## [1.8](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.8)
+## [Version 1.8](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.8)
 
 ##### Features & Enhancements:
 * Added [Markdown Formatting](https://github.com/slackhq/SlackTextViewController#markdown-formatting) ⚡️📝, a useful and simple way to allow your users to auto-complete any markdown formatting from within the text input. 1 small step to make writing markdown quicker.
@@ -74,7 +75,7 @@ All notable changes to this project are also be documented here.
 * Removed annoying iOS 8 warnings.
 
 
-## [1.7.2](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.7.2)
+## [Version 1.7.2](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.7.2)
 
 ##### Hot Fixes:
 * Better [Carthage](https://github.com/Carthage/Carthage) support 🙏
@@ -82,7 +83,7 @@ All notable changes to this project are also be documented here.
 * Fixed the textView's contentSize to never be higher than its bounds. Very useful for stuff.
 
 
-## [1.7.1](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.7.1)
+## [Version 1.7.1](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.7.1)
 
 ##### Features & Enhancements:
 * Changed how the auto-completion API worked: it now allows asynch auto-completion! Have a look at how to set it up / update it](https://github.com/slackhq/SlackTextViewController#autocompletion)
@@ -103,7 +104,7 @@ All notable changes to this project are also be documented here.
 * Better (Carthage)[https://github.com/Carthage/Carthage] support 🙏
 
 
-## [1.7](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.7)
+## [Version 1.7](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.7)
 
 ##### Deprecations:
 - Removed `shouldForceTextInputbarAdjustment` and replace it with `-forceTextInputbarAdjustmentForResponder:`
@@ -124,7 +125,7 @@ All notable changes to this project are also be documented here.
 - Fixed swift compiler warning. Thanks @csjones 
 
 
-## [1.6](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.6)
+## [Version 1.6](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.6)
 
 ##### Features:
 - Added support for custom typing indicator, following the same pattern of registering a class using `registerClassForTypingIndicatorView:`, while this class conforms to `SLKTypingIndicatorProtocol`. Please refer to the documentation for more details about the feature. Thanks @sveinhal! (#207)
@@ -137,6 +138,6 @@ All notable changes to this project are also be documented here.
 - Made sure not to register the same notifications twice.
 - Fixes issue where the text input would not adjust on top of the keyboard when presenting an `UIAlertViewController` (`UIAlertView` or `UIActionSheet`) in iOS8
 
-##
 
+## Previous versions
 For more release notes of this project, please visit https://github.com/slackhq/SlackTextViewController/releases
