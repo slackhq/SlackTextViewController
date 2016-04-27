@@ -23,6 +23,12 @@ class MessageViewController: SLKTextViewController {
     
     var editingMessage = Message()
     
+    override var tableView: UITableView {
+        get {
+            return super.tableView!
+        }
+    }
+    
     
     // MARK: - Initialisation
 
@@ -33,7 +39,7 @@ class MessageViewController: SLKTextViewController {
     
     func commonInit() {
         
-        NSNotificationCenter.defaultCenter().addObserver(self.tableView!, selector: #selector(UITableView.reloadData), name: UIContentSizeCategoryDidChangeNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self.tableView, selector: #selector(UITableView.reloadData), name: UIContentSizeCategoryDidChangeNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self,  selector: #selector(MessageViewController.textInputbarDidMove(_:)), name: SLKTextInputbarDidMoveNotification, object: nil)
         
         // Register a SLKTextView subclass, if you need any special appearance and/or behavior customisation.
@@ -80,10 +86,8 @@ class MessageViewController: SLKTextViewController {
             self.typingIndicatorView!.canResignByTouch = true
         }
         
-        if let tableView = self.tableView {
-            tableView.separatorStyle = .None
-            tableView.registerClass(MessageTableViewCell.classForCoder(), forCellReuseIdentifier: MessengerCellIdentifier)
-        }
+        self.tableView.separatorStyle = .None
+        self.tableView.registerClass(MessageTableViewCell.classForCoder(), forCellReuseIdentifier: MessengerCellIdentifier)
         
         self.autoCompletionView.registerClass(MessageTableViewCell.classForCoder(), forCellReuseIdentifier: AutoCompletionCellIdentifier)
         self.registerPrefixesForAutoCompletion(["@",  "#", ":", "+:", "/"])
@@ -236,7 +240,7 @@ extension MessageViewController {
         self.editingMessage = self.messages[cell.indexPath.row]
         self.editText(self.editingMessage.text)
         
-        self.tableView!.scrollToRowAtIndexPath(cell.indexPath, atScrollPosition: .Bottom, animated: true)
+        self.tableView.scrollToRowAtIndexPath(cell.indexPath, atScrollPosition: .Bottom, animated: true)
     }
     
     func editRandomMessage(sender: AnyObject) {
@@ -256,14 +260,14 @@ extension MessageViewController {
             return
         }
         
-        let lastSectionIndex = self.tableView!.numberOfSections-1
-        let lastRowIndex = self.tableView!.numberOfRowsInSection(lastSectionIndex)-1
+        let lastSectionIndex = self.tableView.numberOfSections-1
+        let lastRowIndex = self.tableView.numberOfRowsInSection(lastSectionIndex)-1
         
         let lastMessage = self.messages[lastRowIndex]
         
         self.editText(lastMessage.text)
         
-        self.tableView!.scrollToRowAtIndexPath(NSIndexPath(forRow: lastRowIndex, inSection: lastSectionIndex), atScrollPosition: .Bottom, animated: true)
+        self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: lastRowIndex, inSection: lastSectionIndex), atScrollPosition: .Bottom, animated: true)
     }
     
     func togglePIPWindow(sender: AnyObject) {
@@ -382,16 +386,16 @@ extension MessageViewController {
         let rowAnimation: UITableViewRowAnimation = self.inverted ? .Bottom : .Top
         let scrollPosition: UITableViewScrollPosition = self.inverted ? .Bottom : .Top
         
-        self.tableView!.beginUpdates()
+        self.tableView.beginUpdates()
         self.messages.insert(message, atIndex: 0)
-        self.tableView!.insertRowsAtIndexPaths([indexPath], withRowAnimation: rowAnimation)
-        self.tableView!.endUpdates()
+        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: rowAnimation)
+        self.tableView.endUpdates()
         
-        self.tableView!.scrollToRowAtIndexPath(indexPath, atScrollPosition: scrollPosition, animated: true)
+        self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: scrollPosition, animated: true)
         
         // Fixes the cell from blinking (because of the transform, when using translucent cells)
         // See https://github.com/slackhq/SlackTextViewController/issues/94#issuecomment-69929927
-        self.tableView!.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
         
         super.didPressRightButton(sender)
     }
@@ -434,7 +438,7 @@ extension MessageViewController {
     override func didCommitTextEditing(sender: AnyObject) {
 
         self.editingMessage.text = self.textView.text
-        self.tableView!.reloadData()
+        self.tableView.reloadData()
         
         super.didCommitTextEditing(sender)
     }
@@ -555,7 +559,7 @@ extension MessageViewController {
     
     func messageCellForRowAtIndexPath(indexPath: NSIndexPath) -> MessageTableViewCell {
         
-        let cell = self.tableView!.dequeueReusableCellWithIdentifier(MessengerCellIdentifier) as! MessageTableViewCell
+        let cell = self.tableView.dequeueReusableCellWithIdentifier(MessengerCellIdentifier) as! MessageTableViewCell
         
         if cell.gestureRecognizers?.count == nil {
             let longPress = UILongPressGestureRecognizer(target: self, action: #selector(MessageViewController.didLongPressCell(_:)))
@@ -572,7 +576,7 @@ extension MessageViewController {
         
         // Cells must inherit the table view's transform
         // This is very important, since the main table view may be inverted
-        cell.transform = self.tableView!.transform
+        cell.transform = self.tableView.transform
         
         return cell
     }
