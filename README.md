@@ -3,7 +3,7 @@
 **IMPORTANT NOTICE: Please update to >= `1.9` to avoid any risk of app rejection.
 More details in [#361](https://github.com/slackhq/SlackTextViewController/issues/361)**
 
-[![License](http://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+[![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![Pod Version](https://img.shields.io/cocoapods/v/SlackTextViewController.svg?style=flat-square)](http://cocoadocs.org/docsets/SlackTextViewController/1.9/)
 [![Carthage compatible](https://img.shields.io/badge/carthage-compatible-F5B369.svg?style=flat-square)](https://github.com/Carthage/Carthage)
 [![Build Status](https://img.shields.io/travis/slackhq/SlackTextViewController.svg?style=flat-square)](https://travis-ci.org/slackhq/SlackTextViewController)
