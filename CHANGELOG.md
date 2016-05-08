@@ -1,9 +1,13 @@
 # Change Log
-All notable changes to this project are also be documented here.
 
-`SlackTextViewController` adheres to [Semantic Versioning](http://semver.org/).
 
---- 
+## [Version 1.9.3](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9.3)
+
+##### Hot Fixes & Enhancements:
+- Fixes a regression causing to trigger auto-completion text processing even if no prefix have been registered. This was causing a crash to many. Sorry about that!
+- Ignores keyboard notifications when no valid first responder is detected. This fixes the text input not following the keyboard at times.
+- Now `shouldProcessTextForAutoCompletion:` requires calling super.
+
 
 ## [Version 1.9.2](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9.2)
 
