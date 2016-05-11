@@ -150,6 +150,8 @@ override class func collectionViewLayoutForCoder(decoder: NSCoder) -> UICollecti
 Check out the sample project,  everything is demo'd there.
 There are 2 main examples (different targets) for testing the programatic and storyboard approaches, and a Swift example. Most of the features are implemented for you to quickly start using them.
 
+Feel free to contribute!
+
 
 ##Features
 
