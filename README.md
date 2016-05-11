@@ -17,7 +17,7 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 ## Feature List
 
 ### Core
-- Works out of the box with [UITableView or UICollectionView or UIScrollView](https://github.com/slackhq/SlackTextViewController/tree/swift-example#subclassing)
+- Works out of the box with [UITableView or UICollectionView or UIScrollView](https://github.com/slackhq/SlackTextViewController#subclassing)
 - [Growing Text View](https://github.com/slackhq/SlackTextViewController#growing-text-view), with line count limit support
 - Flexible UI built with Auto Layout
 - Customizable: provides left and right button, and toolbar outlets
@@ -42,7 +42,7 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 
 ### Compatibility
 - Carthage & CocoaPods
-- Swift: [A sample project is available in a different branch] (https://github.com/slackhq/SlackTextViewController/tree/swift-example)
+- Objective-C & Swift
 - iOS 7, 8 & 9
 - iPhone & iPad
 - [Storyboard](https://github.com/slackhq/SlackTextViewController#storyboard)
@@ -148,10 +148,7 @@ override class func collectionViewLayoutForCoder(decoder: NSCoder) -> UICollecti
 ###Sample Project
 
 Check out the sample project,  everything is demo'd there.
-There are 2 main examples (different targets) for testing the programatic and storyboard approaches. Most of the features are implemented for you to quickly start using them.
-
-A CollectionView example, using Swift, is in progress on the `swift-example` branch. The idea with this project is to build a custom collection view layout allowing to display cells from the bottom (currently working but needs serious tweaks to make it perfect).
-Feel free to contribute!
+There are 2 main examples (different targets) for testing the programatic and storyboard approaches, and a Swift example. Most of the features are implemented for you to quickly start using them.
 
 
 ##Features
