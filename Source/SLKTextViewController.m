@@ -1935,6 +1935,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
                     [textView slk_insertText:symbol inRange:suffixRange];
                     shouldChange = NO;
                     
+                    // Reset the original cursor location +1 for the new character
+                    NSRange adjustedCursorPosition = NSMakeRange(range.location + 1, 0);
+                    textView.selectedRange = adjustedCursorPosition;
+                    
                     break; // exit
                 }
             }
