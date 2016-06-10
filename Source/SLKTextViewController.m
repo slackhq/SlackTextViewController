@@ -1154,9 +1154,17 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     BOOL enable = !self.isAutoCompleting;
     
+    NSString *inputPrimaryLanguage = self.textView.textInputMode.primaryLanguage;
+
     // Toggling autocorrect on Japanese keyboards breaks autocompletion by replacing the autocompletion prefix by an empty string.
     // So for now, let's not disable autocorrection for Japanese.
-    if ([self.textView.textInputMode.primaryLanguage isEqualToString:@"ja-JP"]) {
+    if ([inputPrimaryLanguage isEqualToString:@"ja-JP"]) {
+        return;
+    }
+    
+    // Let's avoid refreshing the text view while dictation mode is enabled.
+    // This solves a crash some users were experiencing when auto-completing with the dictation input mode.
+    if ([inputPrimaryLanguage isEqualToString:@"dictation"]) {
         return;
     }
     

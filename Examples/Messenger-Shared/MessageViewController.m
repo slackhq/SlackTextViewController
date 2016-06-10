@@ -495,7 +495,7 @@
 
 - (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text
 {
-    return YES;
+    return [super shouldProcessTextForAutoCompletion:text];
 }
 
 - (void)didChangeAutoCompletionPrefix:(NSString *)prefix andWord:(NSString *)word

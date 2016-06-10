@@ -876,7 +876,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (void)slk_willShowMenuController:(NSNotification *)notification
 {
-    
+    // Do something
 }
 
 - (void)slk_didHideMenuController:(NSNotification *)notification
