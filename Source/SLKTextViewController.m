@@ -215,14 +215,14 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     self.textView.didNotResignFirstResponder = self.isMovingFromParentViewController;
     
     self.viewVisible = NO;
-    
-    // Caches the text before it's too late!
-    [self slk_cacheTextView];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    
+    // Caches the text before it's too late!
+    [self slk_cacheTextView];
 }
 
 - (void)viewWillLayoutSubviews
