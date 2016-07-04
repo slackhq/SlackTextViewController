@@ -143,6 +143,7 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
         _placeholderLabel.backgroundColor = [UIColor clearColor];
         _placeholderLabel.textColor = [UIColor lightGrayColor];
         _placeholderLabel.hidden = YES;
+        _placeholderLabel.isAccessibilityElement = NO;
         
         [self addSubview:_placeholderLabel];
     }
