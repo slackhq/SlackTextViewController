@@ -1,30 +1,29 @@
+* [ ] I've read and understood the [Contributing guidelines](./CONTRIBUTING.md) and have done my best effort to follow them.
+* [ ] I've read and agree to the [Code of Conduct](./CODE_OF_CONDUCT.md).
+* [ ] I've searched for any related issues and avoided creating a duplicate issue.
 
-* [ ] I've read and understood the [*CONTRIBUTING guidelines and have done my best effort to follow](https://github.com/slackhq/{project_name}/blob/master/CONTRIBUTING.md).
-
-### Description
+#### Description
 > e.g. Description of the bug or feature
 
-### Reproducible in:
-SlackTextViewController version: 
-iOS version(s): 
-iOS device(s): 
+#### Reproducible in:
+* [ ] This is reproducible in the sample project.
+SlackTextViewController version:
+iOS version(s):
+Device(s):
 
-### Steps to reproduce:
+#### Steps to reproduce:
 
 1. 
 2. 
 3. 
 
 ### Expected result:
-
 > e.g. What you expected to happen
 
-### Expected result:
-
+### Actual result:
 > e.g. What actually happened
 
 ### Attachments:
-
 > e.g. Logs, screenshots, screencast, sample project, funny gif, etc.
 
 
