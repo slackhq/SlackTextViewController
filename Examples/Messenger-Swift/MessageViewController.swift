@@ -354,7 +354,16 @@ extension MessageViewController {
     
     // Notifies the view controller that the keyboard changed status.
     override func didChangeKeyboardStatus(status: SLKKeyboardStatus) {
-        // So something
+        switch status {
+        case .WillShow:
+            print("Will Show")
+        case .DidShow:
+            print("Did Show")
+        case .WillHide:
+            print("Will Hide")
+        case .DidHide:
+            print("Did Hide")
+        }
     }
     
     // Notifies the view controller that the text will update.
@@ -370,6 +379,9 @@ extension MessageViewController {
     // Notifies the view controller when the left button's action has been triggered, manually.
     override func didPressLeftButton(sender: AnyObject!) {
         super.didPressLeftButton(sender)
+        
+        self.dismissKeyboard(true)
+        self.performSegueWithIdentifier("Push", sender: nil)
     }
     
     // Notifies the view controller when the right button's action has been triggered, manually or by using the keyboard return key.
