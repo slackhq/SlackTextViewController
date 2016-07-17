@@ -16,6 +16,7 @@ DerivedData
 .idea/
 *.hmap
 .gutter.json
+Carthage/
 
 SlackTextViewController/Pods
 SlackTextViewController/Podfile.lock
