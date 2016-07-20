@@ -376,6 +376,13 @@
 - (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status
 {
     // Notifies the view controller that the keyboard changed status.
+    
+    switch (status) {
+        case SLKKeyboardStatusWillShow:     return NSLog(@"Will Show");
+        case SLKKeyboardStatusDidShow:      return NSLog(@"Did Show");
+        case SLKKeyboardStatusWillHide:     return NSLog(@"Will Hide");
+        case SLKKeyboardStatusDidHide:      return NSLog(@"Did Hide");
+    }
 }
 
 - (void)textWillUpdate
@@ -397,6 +404,12 @@
     // Notifies the view controller when the left button's action has been triggered, manually.
     
     [super didPressLeftButton:sender];
+    
+    UIViewController *vc = [UIViewController new];
+    vc.view.backgroundColor = [UIColor whiteColor];
+    vc.title = @"Details";
+    
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)didPressRightButton:(id)sender
