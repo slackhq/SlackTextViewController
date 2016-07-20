@@ -933,7 +933,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // Skips this if it's not the expected textView.
     // Checking the keyboard height constant helps to disable the view constraints update on iPad when the keyboard is undocked.
     // Checking the keyboard status allows to keep the inputAccessoryView valid when still reacing the bottom of the screen.
-    if (![self.textView isFirstResponder] || (self.keyboardHC.constant == 0 && self.keyboardStatus == SLKKeyboardStatusDidHide)) {
+    CGFloat bottomMargin = [self slk_appropriateBottomMargin];
+    if (![self.textView isFirstResponder] || (self.keyboardHC.constant == bottomMargin && self.keyboardStatus == SLKKeyboardStatusDidHide)) {
 #if SLKBottomPanningEnabled
         if ([gesture.view isEqual:self.scrollViewProxy]) {
             if (gestureVelocity.y > 0) {
@@ -1169,11 +1170,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)slk_dismissTextInputbarIfNeeded
 {
-    if (self.keyboardHC.constant == 0) {
+    CGFloat bottomMargin = [self slk_appropriateBottomMargin];
+    if (self.keyboardHC.constant == bottomMargin) {
         return;
     }
     
-    self.keyboardHC.constant = 0.0;
+    self.keyboardHC.constant = bottomMargin;
     self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
     
     [self slk_hideAutoCompletionViewIfNeeded];
@@ -1294,8 +1296,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     else if (_textInputbar.isEditing) {
         [self didCancelTextEditing:keyCommand];
     }
-    
-    if ([self ignoreTextInputbarAdjustment] || ([self.textView isFirstResponder] && self.keyboardHC.constant == 0)) {
+   
+    CGFloat bottomMargin = [self slk_appropriateBottomMargin];
+    if ([self ignoreTextInputbarAdjustment] || ([self.textView isFirstResponder] && self.keyboardHC.constant == bottomMargin)) {
         return;
     }
     
