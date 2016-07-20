@@ -377,7 +377,12 @@
 {
     // Notifies the view controller that the keyboard changed status.
     
-    NSLog(@"didChangeKeyboardStatus : %ld", status);
+    switch (status) {
+        case SLKKeyboardStatusWillShow:     return NSLog(@"Will Show");
+        case SLKKeyboardStatusDidShow:      return NSLog(@"Did Show");
+        case SLKKeyboardStatusWillHide:     return NSLog(@"Will Hide");
+        case SLKKeyboardStatusDidHide:      return NSLog(@"Did Hide");
+    }
 }
 
 - (void)textWillUpdate
