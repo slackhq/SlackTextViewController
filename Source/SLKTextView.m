@@ -450,12 +450,23 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (void)setText:(NSString *)text
 {
+    if (!text) {
+        return;
+    }
+
     // Registers for undo management
     [self slk_prepareForUndo:@"Text Set"];
     
-    [super setText:text];
+    NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:text];
+    
+    [self setAttributedText:attributedText];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:self];
+}
+
+- (NSString *)text
+{
+    return self.attributedText.string;
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText
