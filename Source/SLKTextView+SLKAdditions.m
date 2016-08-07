@@ -88,8 +88,8 @@
     return [self slk_insertAttributedText:attributedText inRange:range];
 }
 
-- (NSAttributedString *)slk_setAttribute:(NSDictionary<NSString *, id> *)attributes
-                                 inRange:(NSRange)range
+- (NSAttributedString *)slk_setAttributes:(NSDictionary<NSString *, id> *)attributes
+                                  inRange:(NSRange)range
 {
     NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedText];
     

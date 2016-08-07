@@ -86,8 +86,8 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return The attributedText with updated attributes.
  */
-- (NSAttributedString *)slk_setAttribute:(NSDictionary<NSString *, id> *)attributes
-                                 inRange:(NSRange)range;
+- (NSAttributedString *)slk_setAttributes:(NSDictionary<NSString *, id> *)attributes
+                                  inRange:(NSRange)range;
 
 /**
  Inserts an attributed string at the caret's position.
