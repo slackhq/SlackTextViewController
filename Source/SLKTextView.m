@@ -454,9 +454,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     [self slk_prepareForUndo:@"Text Set"];
 
     if (text) {
-        [self setAttributedText:[[NSAttributedString alloc] initWithString:text
-                                                                attributes:@{NSFontAttributeName: self.font,
-                                                                             NSForegroundColorAttributeName: self.textColor}]];
+        [self setAttributedText:[self slk_defaultAttributedStringForText:text]];
     } else {
         [self setAttributedText:nil];
     }

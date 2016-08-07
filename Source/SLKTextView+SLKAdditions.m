@@ -67,8 +67,7 @@
     self.selectedRange = NSMakeRange(range.location, 0);
 }
 
-- (void)slk_insertTextAtCaretRange:(NSString *)text
-                    withAttributes:(NSDictionary<NSString *, id> *)attributes
+- (void)slk_insertTextAtCaretRange:(NSString *)text withAttributes:(NSDictionary<NSString *, id> *)attributes
 {
     NSRange range = [self slk_insertText:text withAttributes:attributes inRange:self.selectedRange];
     self.selectedRange = NSMakeRange(range.location, 0);
@@ -76,15 +75,15 @@
 
 - (NSRange)slk_insertText:(NSString *)text inRange:(NSRange)range
 {
-    NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:text];
+    NSAttributedString *attributedText = [self slk_defaultAttributedStringForText:text];
+    
     return [self slk_insertAttributedText:attributedText inRange:range];
 }
 
-- (NSRange)slk_insertText:(NSString *)text
-           withAttributes:(NSDictionary<NSString *, id> *)attributes
-                  inRange:(NSRange)range
+- (NSRange)slk_insertText:(NSString *)text withAttributes:(NSDictionary<NSString *, id> *)attributes inRange:(NSRange)range
 {
     NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:text attributes:attributes];
+    
     return [self slk_insertAttributedText:attributedText inRange:range];
 }
 
@@ -95,6 +94,7 @@
     
     [attributedText setAttributes:attributes range:range];
     [self setAttributedText:attributedText];
+    
     return self.attributedText;
 }
 
@@ -154,6 +154,21 @@
     
     [mutableAttributedText setAttributes:nil range:range];
     [self setAttributedText:mutableAttributedText];
+}
+
+- (NSAttributedString *)slk_defaultAttributedStringForText:(NSString *)text
+{
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
+    
+    if (self.textColor) {
+        attributes[NSForegroundColorAttributeName] = self.textColor;
+    }
+    
+    if (self.font) {
+        attributes[NSFontAttributeName] = self.font;
+    }
+        
+    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
 }
 
 - (void)slk_prepareForUndo:(NSString *)description
