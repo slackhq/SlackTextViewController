@@ -138,7 +138,6 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
         _placeholderLabel = [UILabel new];
         _placeholderLabel.clipsToBounds = NO;
         _placeholderLabel.autoresizesSubviews = NO;
-        _placeholderLabel.numberOfLines = 1;
         _placeholderLabel.font = self.font;
         _placeholderLabel.backgroundColor = [UIColor clearColor];
         _placeholderLabel.textColor = [UIColor lightGrayColor];
@@ -399,6 +398,13 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 - (void)setPlaceholderColor:(UIColor *)color
 {
     self.placeholderLabel.textColor = color;
+}
+
+- (void)setPlaceholderNumberOfLines:(NSInteger)numberOfLines
+{
+    self.placeholderLabel.numberOfLines = numberOfLines;
+    
+    [self setNeedsLayout];
 }
 
 - (void)setUndoManagerEnabled:(BOOL)enabled
