@@ -137,6 +137,7 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
     if (!_placeholderLabel) {
         _placeholderLabel = [UILabel new];
         _placeholderLabel.clipsToBounds = NO;
+        _placeholderLabel.numberOfLines = 1;
         _placeholderLabel.autoresizesSubviews = NO;
         _placeholderLabel.font = self.font;
         _placeholderLabel.backgroundColor = [UIColor clearColor];
