@@ -1642,6 +1642,16 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
                                         animations:NULL];
 }
 
+- (void)showAutoCompletionView:(BOOL)show withPrefix:(NSString *)prefix
+{
+    if ([self.registeredPrefixes containsObject:prefix]) {
+        _foundPrefix = prefix;
+        _foundWord = @"";
+        [self didChangeAutoCompletionPrefix:self.foundPrefix andWord:self.foundWord];
+        [self showAutoCompletionView:show];
+    }
+}
+
 - (void)acceptAutoCompletionWithString:(NSString *)string
 {
     [self acceptAutoCompletionWithString:string keepPrefix:YES];
