@@ -460,13 +460,13 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 
 /**
- Use this method to programatically show/hide the autocompletion view, with provided prefix.
+ Use this method to programatically show/hide the autocompletion view, with provided prefix and word to search.
  Right before the view is shown, -reloadData is called. So avoid calling it manually.
  
- @param show YES if the autocompletion view should be shown.
  @param prefix a prefix that is used to trigger autocompletion
+ @parm word a word to search for autocompletion
 */
-- (void)showAutoCompletionView:(BOOL)show withPrefix:(NSString *)prefix;
+- (void)showAutoCompletionViewWithPrefix:(NSString *)prefix andWord:(NSString *)word;
 
 /**
  Returns a custom height for the autocompletion view. Default is 0.0.
