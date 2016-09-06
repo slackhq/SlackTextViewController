@@ -760,6 +760,26 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [self presentKeyboard:YES];
 }
 
+- (void)editAttributedText:(NSAttributedString *)attributedText
+{
+    if (![_textInputbar canEditText:attributedText.string]) {
+        return;
+    }
+    
+    // Caches the current text, in case the user cancels the edition
+    [self slk_cacheAttributedTextToDisk:self.textView.attributedText];
+    
+    [_textInputbar beginTextEditing];
+    
+    // Setting the text after calling -beginTextEditing is safer
+    [self.textView setAttributedText:attributedText];
+    
+    [self.textView slk_scrollToCaretPositonAnimated:YES];
+    
+    // Brings up the keyboard if needed
+    [self presentKeyboard:YES];
+}
+
 - (void)didCommitTextEditing:(id)sender
 {
     if (!_textInputbar.isEditing) {
@@ -1642,11 +1662,12 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
                                         animations:NULL];
 }
 
-- (void)showAutoCompletionViewWithPrefix:(NSString *)prefix andWord:(NSString *)word;
+- (void)showAutoCompletionViewWithPrefix:(NSString *)prefix andWord:(NSString *)word prefixRange:(NSRange)prefixRange
 {
     if ([self.registeredPrefixes containsObject:prefix]) {
         _foundPrefix = prefix;
         _foundWord = word;
+        _foundPrefixRange = prefixRange;
         [self didChangeAutoCompletionPrefix:self.foundPrefix andWord:self.foundWord];
         [self showAutoCompletionView:YES];
     }
@@ -1788,21 +1809,67 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     if (key == nil) {
         return;
     }
-    NSString *cachedText = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+    NSAttributedString *cachedAttributedText = [[NSAttributedString alloc] initWithString:@""];
     
-    if (self.textView.text.length == 0 || cachedText.length > 0) {
-        self.textView.text = cachedText;
+    id obj = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+    if (obj) {
+        if ([obj isKindOfClass:[NSString class]]) {
+            cachedAttributedText = [[NSAttributedString alloc] initWithString:obj];
+        }
+        else if ([obj isKindOfClass:[NSData class]]) {
+            cachedAttributedText = [NSKeyedUnarchiver unarchiveObjectWithData:obj];
+        }
+    }
+    
+    if (self.textView.attributedText.length == 0 || cachedAttributedText.length > 0) {
+        self.textView.attributedText = cachedAttributedText;
     }
 }
 
 - (void)slk_cacheTextView
 {
-    [self slk_cacheTextToDisk:self.textView.text];
+    [self slk_cacheAttributedTextToDisk:self.textView.attributedText];
 }
 
 - (void)clearCachedText
 {
-    [self slk_cacheTextToDisk:nil];
+    [self slk_cacheAttributedTextToDisk:nil];
+}
+
+- (void)slk_cacheAttributedTextToDisk:(NSAttributedString *)attributedText
+{
+    NSString *key = [self slk_keyForPersistency];
+    
+    if (!key || key.length == 0) {
+        return;
+    }
+    
+    NSAttributedString *cachedAttributedText = [[NSAttributedString alloc] initWithString:@""];
+    id obj = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+    if (obj) {
+        if ([obj isKindOfClass:[NSString class]]) {
+            cachedAttributedText = [[NSAttributedString alloc] initWithString:obj];
+        }
+        else if ([obj isKindOfClass:[NSData class]]) {
+            cachedAttributedText = [NSKeyedUnarchiver unarchiveObjectWithData:obj];
+        }
+    }
+    
+    // Caches text only if its a valid string and not already cached
+    if (attributedText.length > 0 && ![attributedText isEqualToAttributedString:cachedAttributedText]) {
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:attributedText];
+        [[NSUserDefaults standardUserDefaults] setObject:data forKey:key];
+    }
+    // Clears cache only if it exists
+    else if (attributedText.length == 0 && cachedAttributedText.length > 0) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+    }
+    else {
+        // Skips so it doesn't hit 'synchronize' unnecessarily
+        return;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)slk_cacheTextToDisk:(NSString *)text
@@ -1813,22 +1880,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
-    NSString *cachedText = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-    
-    // Caches text only if its a valid string and not already cached
-    if (text.length > 0 && ![text isEqualToString:cachedText]) {
-        [[NSUserDefaults standardUserDefaults] setObject:text forKey:key];
-    }
-    // Clears cache only if it exists
-    else if (text.length == 0 && cachedText.length > 0) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-    }
-    else {
-        // Skips so it doesn't hit 'synchronize' unnecessarily
-        return;
-    }
-    
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:text];
+    [self slk_cacheAttributedTextToDisk:attributedText];
 }
 
 + (void)clearAllCachedText
