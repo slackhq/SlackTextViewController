@@ -467,17 +467,15 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  */
 - (void)showAutoCompletionView:(BOOL)show;
 
-
 /**
  Use this method to programatically show the autocompletion view, with provided prefix and word to search.
  Right before the view is shown, -reloadData is called. So avoid calling it manually.
  
- @param prefix a prefix that is used to trigger autocompletion
- @param word a word to search for autocompletion
- @param prefixRange range in which prefix spans.
+ @param prefix A prefix that is used to trigger autocompletion
+ @param word A word to search for autocompletion
+ @param prefixRange The range in which prefix spans.
 */
 - (void)showAutoCompletionViewWithPrefix:(NSString *)prefix andWord:(NSString *)word prefixRange:(NSRange)prefixRange;
-
 
 /**
  Returns a custom height for the autocompletion view. Default is 0.0.

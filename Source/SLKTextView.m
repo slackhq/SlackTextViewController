@@ -464,7 +464,8 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
     if (text) {
         [self setAttributedText:[self slk_defaultAttributedStringForText:text]];
-    } else {
+    }
+    else {
         [self setAttributedText:nil];
     }
     
