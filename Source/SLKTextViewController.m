@@ -742,22 +742,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (void)editText:(NSString *)text
 {
-    if (![_textInputbar canEditText:text]) {
-        return;
-    }
-    
-    // Caches the current text, in case the user cancels the edition
-    [self slk_cacheTextToDisk:self.textView.text];
-    
-    [_textInputbar beginTextEditing];
-    
-    // Setting the text after calling -beginTextEditing is safer
-    [self.textView setText:text];
-    
-    [self.textView slk_scrollToCaretPositonAnimated:YES];
-    
-    // Brings up the keyboard if needed
-    [self presentKeyboard:YES];
+    NSAttributedString *attributedText = [self.textView slk_defaultAttributedStringForText:text];
+    [self editAttributedText:attributedText];
 }
 
 - (void)editAttributedText:(NSAttributedString *)attributedText
