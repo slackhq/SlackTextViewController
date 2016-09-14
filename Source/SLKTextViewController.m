@@ -1352,6 +1352,13 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
+    // Stores the previous keyboard height
+    CGFloat previousKeyboardHeight = self.keyboardHC.constant;
+    
+    // Updates the height constraints' constants
+    self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromNotification:notification];
+    self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
+    
     // Updates and notifies about the keyboard status update
     if ([self slk_updateKeyboardStatus:status]) {
         // Posts custom keyboard notification, if logical conditions apply
@@ -1367,14 +1374,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     if (![self.textView isFirstResponder] || status == SLKKeyboardStatusWillHide) {
         [self slk_hideAutoCompletionViewIfNeeded];
     }
-    
-    // Stores the previous keyboard height
-    CGFloat previousKeyboardHeight = self.keyboardHC.constant;
-
-    // Updates the height constraints' constants
-    self.keyboardHC.constant = [self slk_appropriateKeyboardHeightFromNotification:notification];
-    self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
-    
     
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
