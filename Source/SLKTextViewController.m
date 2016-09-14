@@ -1352,6 +1352,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
+    // Programatically stops scrolling before updating the view constraints (to avoid scrolling glitch).
+    if (status == SLKKeyboardStatusWillShow) {
+        [self.scrollViewProxy slk_stopScrolling];
+    }
+    
     // Stores the previous keyboard height
     CGFloat previousKeyboardHeight = self.keyboardHC.constant;
     
@@ -1363,11 +1368,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     if ([self slk_updateKeyboardStatus:status]) {
         // Posts custom keyboard notification, if logical conditions apply
         [self slk_postKeyboarStatusNotification:notification];
-    }
-    
-    // Programatically stops scrolling before updating the view constraints (to avoid scrolling glitch).
-    if (status == SLKKeyboardStatusWillShow) {
-        [self.scrollViewProxy slk_stopScrolling];
     }
     
     // Hides the auto-completion view if the keyboard is being dismissed.
