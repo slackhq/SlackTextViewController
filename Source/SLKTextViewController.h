@@ -541,6 +541,11 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  */
 + (void)clearAllCachedText;
 
+/**
+ Caches text to disk.
+ */
+- (void)cacheTextView;
+
 
 #pragma mark - Customization
 ///------------------------------------------------
