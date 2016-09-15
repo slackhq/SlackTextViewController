@@ -1812,7 +1812,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
 }
 
-- (void)slk_cacheTextView
+- (void)cacheTextView
 {
     [self slk_cacheAttributedTextToDisk:self.textView.attributedText];
 }
