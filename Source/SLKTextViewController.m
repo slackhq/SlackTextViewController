@@ -222,7 +222,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [super viewDidDisappear:animated];
     
     // Caches the text before it's too late!
-    [self slk_cacheTextView];
+    [self cacheTextView];
 }
 
 - (void)viewWillLayoutSubviews
@@ -2282,9 +2282,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [notificationCenter addObserver:self selector:@selector(slk_didShakeTextView:) name:SLKTextViewDidShakeNotification object:nil];
     
     // Application notifications
-    [notificationCenter addObserver:self selector:@selector(slk_cacheTextView) name:UIApplicationWillTerminateNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(slk_cacheTextView) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(slk_cacheTextView) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(cacheTextView) name:UIApplicationWillTerminateNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(cacheTextView) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(cacheTextView) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 }
 
 - (void)slk_unregisterNotifications
