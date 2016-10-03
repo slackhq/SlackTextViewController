@@ -12,12 +12,12 @@ class MessageViewController: SLKTextViewController {
     
     var messages = [Message]()
     
-    var users = ["Allen", "Anna", "Alicia", "Arnold", "Armando", "Antonio", "Brad", "Catalaya", "Christoph", "Emerson", "Eric", "Everyone", "Steve"]
-    var channels = ["General", "Random", "iOS", "Bugs", "Sports", "Android", "UI", "SSB"]
-    var emojis = ["-1", "m", "man", "machine", "block-a", "block-b", "bowtie", "boar", "boat", "book", "bookmark", "neckbeard", "metal", "fu", "feelsgood"]
-    var commands = ["msg", "call", "text", "skype", "kick", "invite"]
+    var users: Array = ["Allen", "Anna", "Alicia", "Arnold", "Armando", "Antonio", "Brad", "Catalaya", "Christoph", "Emerson", "Eric", "Everyone", "Steve"]
+    var channels: Array = ["General", "Random", "iOS", "Bugs", "Sports", "Android", "UI", "SSB"]
+    var emojis: Array = ["-1", "m", "man", "machine", "block-a", "block-b", "bowtie", "boar", "boat", "book", "bookmark", "neckbeard", "metal", "fu", "feelsgood"]
+    var commands: Array = ["msg", "call", "text", "skype", "kick", "invite"]
     
-    var searchResult: [AnyObject]?
+    var searchResult: [String]?
     
     var pipWindow: UIWindow?
     
@@ -480,44 +480,46 @@ extension MessageViewController {
     
     override func didChangeAutoCompletionPrefix(_ prefix: String, andWord word: String) {
         
-        var array: [AnyObject]?
+        var array:Array<String> = []
+        let wordPredicate = NSPredicate(format: "self BEGINSWITH[c] %@", word);
         
         self.searchResult = nil
         
         if prefix == "@" {
             if word.characters.count > 0 {
-                array = (self.users as NSArray).filtered(using: NSPredicate(format: "self BEGINSWITH[c] %@", word)) as [AnyObject]?
+                array = self.users.filter { wordPredicate.evaluate(with: $0) };
             }
             else {
-                array = self.users as [AnyObject]?
+                array = self.users
             }
         }
         else if prefix == "#" {
             
             if word.characters.count > 0 {
-                array = (self.channels as NSArray).filtered(using: NSPredicate(format: "self BEGINSWITH[c] %@", word)) as [AnyObject]?
+                array = self.channels.filter { wordPredicate.evaluate(with: $0) };
             }
             else {
-                array = self.channels as [AnyObject]?
+                array = self.channels
             }
         }
         else if (prefix == ":" || prefix == "+:") && word.characters.count > 0 {
-            array = (self.emojis as NSArray).filtered(using: NSPredicate(format: "self BEGINSWITH[c] %@", word)) as [AnyObject]?
+            array = self.emojis.filter { wordPredicate.evaluate(with: $0) };
         }
         else if prefix == "/" && self.foundPrefixRange.location == 0 {
             if word.characters.count > 0 {
-                array = (self.commands as NSArray).filtered(using: NSPredicate(format: "self BEGINSWITH[c] %@", word)) as [AnyObject]?
+                array = self.commands.filter { wordPredicate.evaluate(with: $0) };
             }
             else {
-                array = self.commands as [AnyObject]?
+                array = self.commands
             }
         }
 
         var show = false
         
-        if  (array?.count)! > 0 {
-            self.searchResult = (array! as NSArray).sortedArray(using: #selector(NSString.localizedCaseInsensitiveCompare(_:))) as [AnyObject]
-            show = ((self.searchResult?.count)! > 0)
+        if array.count > 0 {
+            let sortedArray = array.sorted { $0.localizedCaseInsensitiveCompare($1) == ComparisonResult.orderedAscending }
+            self.searchResult = sortedArray
+            show = sortedArray.count > 0
         }
         
         self.showAutoCompletionView(show)
@@ -599,7 +601,7 @@ extension MessageViewController {
         cell.indexPath = indexPath
         cell.selectionStyle = .default
 
-        guard let searchResult = self.searchResult as? [String] else {
+        guard let searchResult = self.searchResult else {
             return cell
         }
         
@@ -668,7 +670,7 @@ extension MessageViewController {
         
         if tableView == self.autoCompletionView {
             
-            guard let searchResult = self.searchResult as? [String] else {
+            guard let searchResult = self.searchResult else {
                 return
             }
             
