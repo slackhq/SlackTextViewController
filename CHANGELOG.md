@@ -1,5 +1,25 @@
 # Change Log
 
+## [Version 1.9.5](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9.5)
+
+##### Features:
+- Migrated the library to be using NSAttributedString underneath. The `text` property on `SLKTextView` uses a NSAttributedString representation based on its font and text color, and doesn't forward to super. By @jacywu07 (https://github.com/slackhq/SlackTextViewController/pull/501)
+- As part of the migration to NSAttributedString, new helpers for attributed strings have been added to `SLKTextView+SLKAdditions`.
+- Introduced a new API to end users to open the auto-completion mode with a given prefix. By @jacywu07 (https://github.com/slackhq/SlackTextViewController/pull/506)
+- Exposed the private `cacheTextView` method. By @acandelaria1 (https://github.com/slackhq/SlackTextViewController/pull/513)
+
+##### Hot Fixes & Enhancements:
+- Updated the sample project to Swift 3! By @cyhsutw (https://github.com/slackhq/SlackTextViewController/pull/522) 
+- Added a property to allow the user to set how many lines of text SLKTextView's placeholder should have. By @jedmund (https://github.com/slackhq/SlackTextViewController/pull/505)
+- Tweaked keyboard height calculations on invert mode. By @ZAndyL (https://github.com/slackhq/SlackTextViewController/pull/512)
+
+## [Version 1.9.4](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9.4)
+##### Hot Fixes & Enhancements:
+- Fixed keyboard status updates inconsistencies, causing sometimes the text input bar not to follow the keyboard.
+- Fixed bottom margin inconsistencies. Thanks @yury! 💪 
+- Fixed an edge case where the caret would jump to the end after double-space completion in middle of text. Thanks @mtackes 
+- Improved Carthage support
+
 
 ## [Version 1.9.3](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9.3)
 

@@ -7,4 +7,26 @@
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
+   <Group
+      location = "container:"
+      name = "Meta">
+      <FileRef
+         location = "group:../CHANGELOG.md">
+      </FileRef>
+      <FileRef
+         location = "group:../CODE_OF_CONDUCT.md">
+      </FileRef>
+      <FileRef
+         location = "group:../Gemfile">
+      </FileRef>
+      <FileRef
+         location = "group:../LICENSE">
+      </FileRef>
+      <FileRef
+         location = "group:../README.md">
+      </FileRef>
+      <FileRef
+         location = "group:../SlackTextViewController.podspec">
+      </FileRef>
+   </Group>
 </Workspace>
