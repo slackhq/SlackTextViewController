@@ -682,7 +682,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
                                                     }
                                                     if (weakSelf.textInputbar.isEditing) {
                                                         [weakSelf.textView slk_scrollToCaretPositonAnimated:NO];
-                                                        
                                                     }
                                                 }];
         }
