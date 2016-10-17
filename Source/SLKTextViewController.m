@@ -664,6 +664,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     if (inputbarHeight != self.textInputbarHC.constant)
     {
+        CGFloat inputBarHeightDelta = inputbarHeight - self.textInputbarHC.constant;
         self.textInputbarHC.constant = inputbarHeight;
         self.scrollViewHC.constant = [self slk_appropriateScrollViewHeight];
         
@@ -676,6 +677,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
             [self.view slk_animateLayoutIfNeededWithBounce:bounces
                                                    options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionLayoutSubviews|UIViewAnimationOptionBeginFromCurrentState
                                                 animations:^{
+                                                    if (!self.isInverted) {
+                                                        self.scrollViewProxy.contentOffset = CGPointMake(0, self.scrollViewProxy.contentOffset.y + inputBarHeightDelta);
+                                                    }
                                                     if (weakSelf.textInputbar.isEditing) {
                                                         [weakSelf.textView slk_scrollToCaretPositonAnimated:NO];
                                                     }
