@@ -531,7 +531,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (nullable NSString *)keyForTextCaching;
 
 /**
- Removes the current's vien controller cached text.
+ Removes the current view controller's cached text.
  To enable this, you must return a valid key string in -keyForTextCaching.
  */
 - (void)clearCachedText;
