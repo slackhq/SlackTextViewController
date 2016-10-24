@@ -185,9 +185,8 @@ Some layouts may require to show from bottom to top and new subviews are inserte
 ```swift
 override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-    if let cell = tableView.dequeueReusableCellWithIdentifier(kAutoCompletionCellIdentifier) {
-        cell.textLabel!.text = self.searchResult[indexPath.row]
-        return cell
+    if let cell = tableView.dequeueReusableCellWithIdentifier(kCellIdentifier) {
+        cell.transform = self.tableView.transform
     }
 }
 ```
