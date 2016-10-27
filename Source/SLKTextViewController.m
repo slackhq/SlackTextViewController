@@ -1380,6 +1380,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         [self slk_hideAutoCompletionViewIfNeeded];
     }
     
+    UIScrollView *scrollView = self.scrollViewProxy;
+    
     NSInteger curve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
@@ -1390,10 +1392,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         // Scrolls to bottom only if the keyboard is about to show.
         if (self.shouldScrollToBottomAfterKeyboardShows && self.keyboardStatus == SLKKeyboardStatusWillShow) {
             if (self.isInverted) {
-                [self.scrollViewProxy slk_scrollToTopAnimated:YES];
+                [scrollView slk_scrollToTopAnimated:YES];
             }
             else {
-                [self.scrollViewProxy slk_scrollToBottomAnimated:YES];
+                [scrollView slk_scrollToBottomAnimated:YES];
             }
         }
     };
@@ -1403,14 +1405,18 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // Second condition: check if the height of the keyboard changed.
     if (!CGRectEqualToRect(beginFrame, endFrame) || fabs(previousKeyboardHeight - self.keyboardHC.constant) > 0.0)
     {
-        // Content Offset correction if not inverted.
-        if (!self.isInverted) {
-            // Don't set new offset if autocompletion is showing.
-            if (self.autoCompletionViewHC.constant == 0 && !self.isAutoCompleting) {
-                CGFloat newOffset = MIN(self.scrollViewProxy.contentSize.height - self.scrollViewHC.constant,
-                                        self.scrollViewProxy.contentOffset.y + self.keyboardHC.constant - previousKeyboardHeight);
-                self.scrollViewProxy.contentOffset = CGPointMake(self.scrollViewProxy.contentOffset.x, newOffset);
-            }
+        // Content Offset correction if not inverted and not auto-completing.
+        if (!self.isInverted && !self.isAutoCompleting) {
+            
+            CGFloat scrollViewHeight = self.scrollViewHC.constant;
+            CGFloat keyboardHeight = self.keyboardHC.constant;
+            CGSize contentSize = scrollView.contentSize;
+            CGPoint contentOffset = scrollView.contentOffset;
+            
+            CGFloat newOffset = MIN(contentSize.height - scrollViewHeight,
+                                    contentOffset.y + keyboardHeight - previousKeyboardHeight);
+            
+            scrollView.contentOffset = CGPointMake(contentOffset.x, newOffset);
         }
         
         // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
