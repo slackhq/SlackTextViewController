@@ -1403,6 +1403,16 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // Second condition: check if the height of the keyboard changed.
     if (!CGRectEqualToRect(beginFrame, endFrame) || fabs(previousKeyboardHeight - self.keyboardHC.constant) > 0.0)
     {
+        // Content Offset correction if not inverted.
+        if (!self.isInverted) {
+            // Don't set new offset if autocompletion is showing.
+            if (self.autoCompletionViewHC.constant == 0 && !self.isAutoCompleting) {
+                CGFloat newOffset = MIN(self.scrollViewProxy.contentSize.height - self.scrollViewHC.constant,
+                                        self.scrollViewProxy.contentOffset.y + self.keyboardHC.constant - previousKeyboardHeight);
+                self.scrollViewProxy.contentOffset = CGPointMake(self.scrollViewProxy.contentOffset.x, newOffset);
+            }
+        }
+        
         // Only for this animation, we set bo to bounce since we want to give the impression that the text input is glued to the keyboard.
         [self.view slk_animateLayoutIfNeededWithDuration:duration
                                                   bounce:NO
