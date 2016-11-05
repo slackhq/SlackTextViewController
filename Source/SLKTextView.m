@@ -415,10 +415,12 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (void)setPlaceholderFont:(UIFont *)placeholderFont
 {
-    if (!placeholderFont)
+    if (!placeholderFont) {
         self.placeholderLabel.font = self.font;
-    else
+    }
+    else {
         self.placeholderLabel.font = placeholderFont;
+    }
 }
 
 - (void)setUndoManagerEnabled:(BOOL)enabled
