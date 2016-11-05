@@ -160,6 +160,11 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
     return self.placeholderLabel.textColor;
 }
 
+- (UIFont *)placeholderFont
+{
+    return self.placeholderLabel.font;
+}
+
 - (NSUInteger)numberOfLines
 {
     CGSize contentSize = self.contentSize;
@@ -406,6 +411,16 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
     self.placeholderLabel.numberOfLines = numberOfLines;
     
     [self setNeedsLayout];
+}
+
+- (void)setPlaceholderFont:(UIFont *)placeholderFont
+{
+    if (!placeholderFont) {
+        self.placeholderLabel.font = self.font;
+    }
+    else {
+        self.placeholderLabel.font = placeholderFont;
+    }
 }
 
 - (void)setUndoManagerEnabled:(BOOL)enabled
