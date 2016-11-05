@@ -50,7 +50,7 @@ UIKIT_EXTERN NSString * const SLKTextViewPastedItemData;
 /** The placeholder's number of lines. Default is 1. */
 @property (nonatomic, readwrite) NSInteger placeholderNumberOfLines;
 
-/** Default is the textView's font. */
+/** The placeholder's font. Default is the textView's font. */
 @property (nonatomic, copy, null_resettable) UIFont *placeholderFont;
 
 /** The maximum number of lines before enabling scrolling. Default is 0 wich means limitless.
