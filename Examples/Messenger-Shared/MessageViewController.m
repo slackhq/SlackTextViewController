@@ -511,6 +511,11 @@
     return [super shouldProcessTextForAutoCompletion:text];
 }
 
+- (BOOL)shouldDisableTypingSuggestionForAutoCompletion
+{
+    return [super shouldDisableTypingSuggestionForAutoCompletion];
+}
+    
 - (void)didChangeAutoCompletionPrefix:(NSString *)prefix andWord:(NSString *)word
 {
     NSArray *array = nil;
