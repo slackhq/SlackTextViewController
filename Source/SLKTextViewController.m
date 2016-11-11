@@ -1635,7 +1635,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)showAutoCompletionView:(BOOL)show
 {
     // Reloads the tableview before showing/hiding
-    [_autoCompletionView reloadData];
+    if (show) {
+        [_autoCompletionView reloadData];
+    }
     
     self.autoCompleting = show;
     
