@@ -1175,7 +1175,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
         return;
     }
     
-    // During text autocompletion, the iOS 8 QuickType bar is hidden and auto-correction and spell checking are disabled.
+    if (enable == NO && ![self shouldDisableTypingSuggestionForAutoCompletion]) {
+        return;
+    }
+    
     [self.textView setTypingSuggestionEnabled:enable];
 }
 
@@ -1619,6 +1622,20 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 
 - (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text
 {
+    return [self shouldProcessTextForAutoCompletion];
+}
+
+- (BOOL)shouldProcessTextForAutoCompletion
+{
+    if (!_registeredPrefixes || _registeredPrefixes.count == 0) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (BOOL)shouldDisableTypingSuggestionForAutoCompletion
+{
     if (!_registeredPrefixes || _registeredPrefixes.count == 0) {
         return NO;
     }
@@ -1634,7 +1651,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)showAutoCompletionView:(BOOL)show
 {
     // Reloads the tableview before showing/hiding
-    [_autoCompletionView reloadData];
+    if (show) {
+        [_autoCompletionView reloadData];
+    }
     
     self.autoCompleting = show;
     

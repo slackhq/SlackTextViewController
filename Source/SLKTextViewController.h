@@ -443,16 +443,26 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  You can override this method to disable momentarily the auto-completion feature, or to let it visible for longer time.
  You SHOULD call super to inherit some conditionals.
  
- @param text The textView's current text.
  @return YES if the controller is allowed to process the text for auto-completion.
  */
-- (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text NS_REQUIRES_SUPER;
+- (BOOL)shouldProcessTextForAutoCompletion;
+- (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text DEPRECATED_MSG_ATTRIBUTE("Use -shouldProcessTextForAutoCompletion instead.");
+
+/**
+ During text autocompletion, by default, auto-correction and spell checking are disabled.
+ Doing so, refreshes the text input to get rid of the Quick Type bar.
+ You can override this method to avoid disabling in some cases.
+ 
+ @return YES if the controller should not hide the quick type bar.
+ */
+- (BOOL)shouldDisableTypingSuggestionForAutoCompletion;
 
 /**
  Notifies the view controller either the autocompletion prefix or word have changed.
  Use this method to modify your data source or fetch data asynchronously from an HTTP resource.
  Once your data source is ready, make sure to call -showAutoCompletionView: to display the view accordingly.
  You don't need call super since this method doesn't do anything.
+ You SHOULD call super to inherit some conditionals.
 
  @param prefix The detected prefix.
  @param word The derected word.
