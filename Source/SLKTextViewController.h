@@ -418,13 +418,13 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, readonly, getter = isAutoCompleting) BOOL autoCompleting;
 
 /** The recently found prefix symbol used as prefix for autocompletion mode. */
-@property (nonatomic, readonly, copy) NSString *_Nullable foundPrefix;
+@property (nonatomic, copy) NSString *_Nullable foundPrefix;
 
 /** The range of the found prefix in the text view content. */
-@property (nonatomic, readonly) NSRange foundPrefixRange;
+@property (nonatomic) NSRange foundPrefixRange;
 
 /** The recently found word at the text view's caret position. */
-@property (nonatomic, readonly, copy) NSString *_Nullable foundWord;
+@property (nonatomic, copy) NSString *_Nullable foundWord;
 
 /** An array containing all the registered prefix strings for autocompletion. */
 @property (nonatomic, readonly, copy) NSSet <NSString *> *_Nullable registeredPrefixes;
