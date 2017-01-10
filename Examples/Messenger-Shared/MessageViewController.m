@@ -15,6 +15,7 @@
 #import <LoremIpsum/LoremIpsum.h>
 
 #define DEBUG_CUSTOM_TYPING_INDICATOR 0
+#define DEBUG_CUSTOM_BOTTOM_VIEW 0
 
 @interface MessageViewController ()
 
@@ -103,6 +104,20 @@
     [self.textInputbar.editorTitle setTextColor:[UIColor darkGrayColor]];
     [self.textInputbar.editorLeftButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
     [self.textInputbar.editorRightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
+    
+#if DEBUG_CUSTOM_BOTTOM_VIEW
+    // Example of view that can be added to the bottom of the text view
+    
+    UIView *bannerView = [UIView new];
+    bannerView.translatesAutoresizingMaskIntoConstraints = NO;
+    bannerView.backgroundColor = [UIColor blueColor];
+    
+    NSDictionary *views = NSDictionaryOfVariableBindings(bannerView);
+    
+    [self.textInputbar.contentView addSubview:bannerView];
+    [self.textInputbar.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bannerView]|" options:0 metrics:nil views:views]];
+    [self.textInputbar.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[bannerView(40)]|" options:0 metrics:nil views:views]];
+#endif
     
 #if !DEBUG_CUSTOM_TYPING_INDICATOR
     self.typingIndicatorView.canResignByTouch = YES;
@@ -199,6 +214,7 @@
     UIBarButtonItem *buttonItem = (UIBarButtonItem *)sender;
     
     [self setTextInputbarHidden:hide animated:YES];
+    
     [buttonItem setImage:image];
 }
 

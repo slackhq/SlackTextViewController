@@ -882,7 +882,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     void (^animations)() = ^void(){
         
-        weakSelf.textInputbarHC.constant = hidden ? 0 : weakSelf.textInputbar.appropriateHeight;
+        weakSelf.textInputbarHC.constant = hidden ? 0.0 : weakSelf.textInputbar.appropriateHeight;
         
         [weakSelf.view layoutIfNeeded];
     };
@@ -945,6 +945,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // Checking the keyboard height constant helps to disable the view constraints update on iPad when the keyboard is undocked.
     // Checking the keyboard status allows to keep the inputAccessoryView valid when still reacing the bottom of the screen.
     CGFloat bottomMargin = [self slk_appropriateBottomMargin];
+    
     if (![self.textView isFirstResponder] || (self.keyboardHC.constant == bottomMargin && self.keyboardStatus == SLKKeyboardStatusDidHide)) {
 #if SLKBottomPanningEnabled
         if ([gesture.view isEqual:self.scrollViewProxy]) {
@@ -1185,6 +1186,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)slk_dismissTextInputbarIfNeeded
 {
     CGFloat bottomMargin = [self slk_appropriateBottomMargin];
+    
     if (self.keyboardHC.constant == bottomMargin) {
         return;
     }
@@ -1312,6 +1314,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
    
     CGFloat bottomMargin = [self slk_appropriateBottomMargin];
+    
     if ([self ignoreTextInputbarAdjustment] || ([self.textView isFirstResponder] && self.keyboardHC.constant == bottomMargin)) {
         return;
     }
@@ -2410,38 +2413,8 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 - (void)dealloc
 {
     [self slk_unregisterNotifications];
-
-    _tableView.delegate = nil;
-    _tableView.dataSource = nil;
-    _tableView = nil;
-    
-    _collectionView.delegate = nil;
-    _collectionView.dataSource = nil;
-    _collectionView = nil;
-    
-    _scrollView = nil;
-    
-    _autoCompletionView.delegate = nil;
-    _autoCompletionView.dataSource = nil;
-    _autoCompletionView = nil;
-    
-    _textInputbar = nil;
-    _textViewClass = nil;
     
     [_typingIndicatorProxyView removeObserver:self forKeyPath:@"visible"];
-    _typingIndicatorProxyView = nil;
-    _typingIndicatorViewClass = nil;
-    
-    _registeredPrefixes = nil;
-    _singleTapGesture.delegate = nil;
-    _singleTapGesture = nil;
-    _verticalPanGesture.delegate = nil;
-    _verticalPanGesture = nil;
-    _scrollViewHC = nil;
-    _textInputbarHC = nil;
-    _typingIndicatorViewHC = nil;
-    _autoCompletionViewHC = nil;
-    _keyboardHC = nil;
 }
 
 @end

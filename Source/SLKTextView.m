@@ -1141,13 +1141,6 @@ typedef void (^SLKKeyCommandHandler)(UIKeyCommand *keyCommand);
     [self slk_unregisterNotifications];
     
     [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSize))];
-    
-    _placeholderLabel = nil;
-    
-    _registeredFormattingTitles = nil;
-    _registeredFormattingSymbols = nil;
-    _registeredKeyCommands = nil;
-    _registeredKeyCallbacks = nil;
 }
 
 @end

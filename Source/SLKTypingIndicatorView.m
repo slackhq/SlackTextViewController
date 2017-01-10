@@ -337,11 +337,7 @@
 
 - (void)dealloc
 {
-    [self slk_prepareForReuse];
-    
-    _textLabel = nil;
-    _usernames = nil;
-    _timers = nil;
+    [self slk_invalidateTimers];
 }
 
 @end
