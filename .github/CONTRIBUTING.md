@@ -4,7 +4,7 @@
 
 ## Before Contributing
 
-Before contributing, please read our [Code of Conduct](../CODE_OF_CONDUCT.md). We take it very seriously, and expect that you will as well.
+Before contributing, please read our [Code of Conduct](CODE_OF_CONDUCT.md). We take it very seriously, and expect that you will as well.
 
 ## New Issues
 
