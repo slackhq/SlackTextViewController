@@ -1353,7 +1353,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     // Skips if it's not the expected textView and shouldn't force adjustment of the text input bar.
     // This will also dismiss the text input bar if it's visible, and exit auto-completion mode if enabled.
-    if (![currentResponder isEqual:self.textView] && ![self forceTextInputbarAdjustmentForResponder:currentResponder]) {
+    if (currentResponder && ![currentResponder isEqual:self.textView] && ![self forceTextInputbarAdjustmentForResponder:currentResponder]) {
         [self slk_dismissTextInputbarIfNeeded];
         return;
     }
