@@ -1,4 +1,4 @@
-#SlackTextViewController
+# SlackTextViewController
 
 **IMPORTANT NOTICE: Please update to >= `1.9` to avoid any risk of app rejection.
 More details in [#361](https://github.com/slackhq/SlackTextViewController/issues/361)**
@@ -70,9 +70,9 @@ There are two ways to do this:
 - or compile the project located in `Builder/SlackTextViewController.xcodeproj` to create a `SlackTextViewController.framework` package. You could also [link the library into your project](https://developer.apple.com/library/ios/recipes/xcode_help-project_editor/Articles/AddingaLibrarytoaTarget.html#//apple_ref/doc/uid/TP40010155-CH17-SW1).
 
 
-##How to use
+## How to use
 
-###Subclassing
+### Subclassing
 `SLKTextViewController` is meant to be subclassed, like you would normally do with UITableViewController or UICollectionViewController or UIScrollView. This pattern is a convenient way of extending UIViewController. SlackTextViewController manages a lot behind the scenes while still providing the ability to add custom behaviours. You may override methods, and decide to call super and  perform additional logic, or not to call super and override default logic.
 
 Start by creating a new subclass of `SLKTextViewController`.
@@ -111,7 +111,7 @@ Protocols like `UITableViewDelegate` and `UITableViewDataSource` are already set
 
 Calling `[super init]` will call `[super initWithTableViewStyle:UITableViewStylePlain]` by default.
 
-###Storyboard
+### Storyboard
 
 When using SlackTextViewController with storyboards, instead of overriding the traditional `initWithCoder:` you will need to override any of the two custom methods below. This approach helps preserving the exact same features from the programatic approach, but also limits the edition of the nib of your `SLKTextViewController` subclass since it doesn't layout subviews from the nib (subviews are still initialized and layed out programatically).
 
@@ -145,7 +145,7 @@ override class func collectionViewLayoutForCoder(decoder: NSCoder) -> UICollecti
 }
 ```
 
-###Sample Project
+### Sample Project
 
 Check out the sample project,  everything is demo'd there.
 There are 2 main examples (different targets) for testing the programatic and storyboard approaches, and a Swift example. Most of the features are implemented for you to quickly start using them.
@@ -153,10 +153,10 @@ There are 2 main examples (different targets) for testing the programatic and st
 Feel free to contribute!
 
 
-##Features
+## Features
 
 
-###Growing Text View
+### Growing Text View
 
 ![Growing](Screenshots/screenshot_auto-expanding.png)
 
@@ -170,7 +170,7 @@ By default, the number of lines is set to best fit each device dimensions:
 On iPhone devices, in landscape orientation, the maximum number of lines is changed to fit the available space.
 
 
-###Inverted Mode
+### Inverted Mode
 
 Some layouts may require to show from bottom to top and new subviews are inserted from the bottom. To enable this, you must use the `inverted` flag property (default is `YES`/`true`). This will actually invert the entire ScrollView object. Make sure to apply the same transformation to every subview. In the case of UITableView, the best place for adjusting the transformation is in its data source methods like:
 ##### Obj-C
@@ -192,7 +192,7 @@ override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath:
 ```
 
 
-###Autocompletion
+### Autocompletion
 
 We use autocompletion for many things: names, channels, emoji, and more.
 
@@ -303,7 +303,7 @@ The autocompletion view will automatically be dismissed and the chosen string wi
 You can always call `cancelAutoCompletion` to exit the autocompletion mode and refresh the UI.
 
 
-###Edit Mode
+### Edit Mode
 
 ![Edit Mode](Screenshots/screenshot_edit-mode.png)
 
@@ -352,7 +352,7 @@ Notice that you must call `super` at some point, so the text input exits the edi
 Use the `editing` property to know if the editing mode is on.
 
 
-###Markdown Formatting
+### Markdown Formatting
 
 ![Markdown Formatting](Screenshots/screenshot_markdown-formatting.png)
 
@@ -419,7 +419,7 @@ In this other method implementation, we don't want to allow auto-completion for 
 ```
 
 
-###Typing Indicator
+### Typing Indicator
 
 ![Typing Indicator](Screenshots/screenshot_typing-indicator.png)
 
@@ -457,12 +457,12 @@ You can also dismiss it by calling:
 self.typingIndicatorView?.dismissIndicator()
 ```
 
-###Panning Gesture
+### Panning Gesture
 
 Dismissing the keyboard with a panning gesture is enabled by default with the `keyboardPanningEnabled` property. You can always disable it if you'd like. You can extend the `verticalPanGesture` behaviors with the `UIGestureRecognizerDelegate` methods.
 
 
-###Hideable TextInputbar
+### Hideable TextInputbar
 
 Sometimes you may need to hide the text input bar.
 Very similar to `UINavigationViewController`'s API, simply do:
@@ -476,7 +476,7 @@ self.setTextInputbarHidden(true, animated: true)
 ```
 
 
-###Shake Gesture
+### Shake Gesture
 
 ![Shake Gesture](Screenshots/screenshot_shake-undo.png)
 
@@ -487,7 +487,7 @@ You can optionally override `willRequestUndo`, to implement your UI to ask the u
 If you don't override `willRequestUndo` and `undoShakingEnabled` is set to `YES`/`true`, a system alert will be shown.
 
 
-###External Keyboard
+### External Keyboard
 
 There a few basic key commands enabled by default:
 - cmd + z -> undo
@@ -529,14 +529,14 @@ override var keyCommands: [UIKeyCommand]? {
 There are also a set of useful flags for keyboard special detections such as `isExternalKeyboardDetected`, `isKeyboardUndocked`, `typingSuggestionEnabled` and `isTrackpadEnabled` (iOS 9 only)
 
 
-###Dynamic Type
+### Dynamic Type
 
 Dynamic Type is enabled by default with the `dynamicTypeEnabled` property. You can always disable it if you'd like, but the text input bar would still adjust to best fit the font size of the text view.
 
 ![Dynamic-Type](Screenshots/screenshot_dynamic-type.png)
 
 
-###Xcode Templates
+### Xcode Templates
 
 ![Template](Screenshots/screenshot_template.png)
 
