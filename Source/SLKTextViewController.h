@@ -446,7 +446,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @return YES if the controller is allowed to process the text for auto-completion.
  */
 - (BOOL)shouldProcessTextForAutoCompletion;
-- (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text DEPRECATED_MSG_ATTRIBUTE("Use -shouldProcessTextForAutoCompletion instead.");
 
 /**
  During text autocompletion, by default, auto-correction and spell checking are disabled.

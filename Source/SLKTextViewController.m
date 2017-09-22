@@ -708,7 +708,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     if (self.textView.selectedRange.length > 0) {
-        if (self.isAutoCompleting && [self shouldProcessTextForAutoCompletion:self.textView.text]) {
+        if (self.isAutoCompleting && [self shouldProcessTextForAutoCompletion]) {
             [self cancelAutoCompletion];
         }
         return;
@@ -880,7 +880,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     __weak typeof(self) weakSelf = self;
     
-    void (^animations)() = ^void(){
+    void (^animations)(void) = ^void(){
         
         weakSelf.textInputbarHC.constant = hidden ? 0.0 : weakSelf.textInputbar.appropriateHeight;
         
@@ -1394,7 +1394,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGRect beginFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
-    void (^animations)() = ^void() {
+    void (^animations)(void) = ^void() {
         // Scrolls to bottom only if the keyboard is about to show.
         if (self.shouldScrollToBottomAfterKeyboardShows && self.keyboardStatus == SLKKeyboardStatusWillShow) {
             if (self.isInverted) {
@@ -1623,11 +1623,6 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     _registeredPrefixes = [NSSet setWithSet:set];
 }
 
-- (BOOL)shouldProcessTextForAutoCompletion:(NSString *)text
-{
-    return [self shouldProcessTextForAutoCompletion];
-}
-
 - (BOOL)shouldProcessTextForAutoCompletion
 {
     if (!_registeredPrefixes || _registeredPrefixes.count == 0) {
@@ -1742,7 +1737,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 {
     NSString *text = self.textView.text;
     
-    if ((!self.isAutoCompleting && text.length == 0) || self.isTransitioning || ![self shouldProcessTextForAutoCompletion:text]) {
+    if ((!self.isAutoCompleting && text.length == 0) || self.isTransitioning || ![self shouldProcessTextForAutoCompletion]) {
         return;
     }
     

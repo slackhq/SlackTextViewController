@@ -14,7 +14,13 @@
          location = "group:../CHANGELOG.md">
       </FileRef>
       <FileRef
-         location = "group:../CODE_OF_CONDUCT.md">
+         location = "group:../.github/CODE_OF_CONDUCT.md">
+      </FileRef>
+      <FileRef
+         location = "group:../.github/ISSUE_TEMPLATE.md">
+      </FileRef>
+      <FileRef
+         location = "group:../.github/PULL_REQUEST_TEMPLATE.md">
       </FileRef>
       <FileRef
          location = "group:../Gemfile">

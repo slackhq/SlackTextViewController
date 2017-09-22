@@ -26,7 +26,7 @@ typedef NS_ENUM(NSUInteger, SLKCounterPosition) {
 NS_ASSUME_NONNULL_BEGIN
 
 /** @name A custom tool bar encapsulating messaging controls. */
-@interface SLKTextInputbar : UIToolbar
+@interface SLKTextInputbar : UIView
 
 /** The centered text input view.
  The maximum number of lines is configured by default, to best fit each devices dimensions.
