@@ -440,7 +440,9 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     
     // A bottom margin is required for iPhone X
     if (@available(iOS 11.0, *)) {
-        return self.view.safeAreaInsets.bottom;
+        if (!self.textInputbar.isHidden) {
+            return self.view.safeAreaInsets.bottom;
+        }
     }
     
     return 0.0;
@@ -894,6 +896,10 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     _textInputbar.hidden = hidden;
+
+    if (@available(iOS 11.0, *)) {
+        [self viewSafeAreaInsetsDidChange];
+    }
     
     __weak typeof(self) weakSelf = self;
     
