@@ -14,20 +14,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F5A782731BD0CEF300EC230B"
-               BuildableName = "SlackTextViewController.framework"
-               BlueprintName = "SlackTextViewController"
-               ReferencedContainer = "container:SlackTextViewController.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "F5B4E78D1C4DA053005CBBE0"
                BuildableName = "SlackTextViewControllerTests.xctest"
                BlueprintName = "SlackTextViewControllerTests"
@@ -44,13 +30,23 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       codeCoverageEnabled = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F5B4E78D1C4DA053005CBBE0"
+               BuildableName = "SlackTextViewControllerTests.xctest"
+               BlueprintName = "SlackTextViewControllerTests"
+               ReferencedContainer = "container:SlackTextViewController.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F5A782731BD0CEF300EC230B"
-            BuildableName = "SlackTextViewController.framework"
-            BlueprintName = "SlackTextViewController"
+            BlueprintIdentifier = "F5B4E78D1C4DA053005CBBE0"
+            BuildableName = "SlackTextViewControllerTests.xctest"
+            BlueprintName = "SlackTextViewControllerTests"
             ReferencedContainer = "container:SlackTextViewController.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -71,9 +67,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F5A782731BD0CEF300EC230B"
-            BuildableName = "SlackTextViewController.framework"
-            BlueprintName = "SlackTextViewController"
+            BlueprintIdentifier = "F5B4E78D1C4DA053005CBBE0"
+            BuildableName = "SlackTextViewControllerTests.xctest"
+            BlueprintName = "SlackTextViewControllerTests"
             ReferencedContainer = "container:SlackTextViewController.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -89,9 +85,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F5A782731BD0CEF300EC230B"
-            BuildableName = "SlackTextViewController.framework"
-            BlueprintName = "SlackTextViewController"
+            BlueprintIdentifier = "F5B4E78D1C4DA053005CBBE0"
+            BuildableName = "SlackTextViewControllerTests.xctest"
+            BlueprintName = "SlackTextViewControllerTests"
             ReferencedContainer = "container:SlackTextViewController.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

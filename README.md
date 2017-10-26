@@ -3,10 +3,10 @@
 **IMPORTANT NOTICE: Please update to >= `1.9` to avoid any risk of app rejection.
 More details in [#361](https://github.com/slackhq/SlackTextViewController/issues/361)**
 
-[![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://opensource.org/licenses/MIT)
-[![Pod Version](https://img.shields.io/cocoapods/v/SlackTextViewController.svg?style=flat-square)](http://cocoadocs.org/docsets/SlackTextViewController/1.9/)
-[![Carthage compatible](https://img.shields.io/badge/carthage-compatible-F5B369.svg?style=flat-square)](https://github.com/Carthage/Carthage)
-[![Build Status](https://img.shields.io/travis/slackhq/SlackTextViewController.svg?style=flat-square)](https://travis-ci.org/slackhq/SlackTextViewController)
+[![License](http://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+[![Pod Version](https://img.shields.io/cocoapods/v/SlackTextViewController.svg)](http://cocoadocs.org/docsets/SlackTextViewController/1.9/)
+[![Carthage compatible](https://img.shields.io/badge/carthage-compatible-F5B369.svg)](https://github.com/Carthage/Carthage)
+[![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=59f2234423c5f600018bb24b&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/59f2234423c5f600018bb24b/build/latest?branch=master)
 
 A drop-in UIViewController subclass with a growing text input view and other useful messaging features. Meant to be a replacement for UITableViewController & UICollectionViewController.
 
