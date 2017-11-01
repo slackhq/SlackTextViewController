@@ -1,26 +1,38 @@
 # Change Log
 
-## Version 1.9.6
+## Version 1.9.6 (unreleased)
+
+This release includes many iOS 11 and iPhone X hot fixes.
+
+##### Features:
+- Allowing color customization in typing indicator. By @dskatz22 (#613)
+- Adding support for an optional view to host outlets under the text view. By @dzenbot (#562)
+- Exposing auto-completion variables. By @dzenbot (#561)
 
 ##### Hot Fixes & Enhancements:
-- Fixed the text input not being interactive on iOS. Making `SLKTextInputbar` a UIView subclass instead of `UIToolbar`.
+- Fixed the text input not being interactive on iOS. Making `SLKTextInputbar` a UIView subclass instead of `UIToolbar`. By @dzenbot (#624)
+- Fixed scroll view content inset adjustments on iOS 11. By @gim- (#643)
+- Fixed compiler error in example app. By @BasThomas (#629)
+- Fixed content offset for keyboard when uninverted. By @ZAndyL (#542)
 
 ##### Deprecation:
 - Deprecated `-shouldProcessTextForAutoCompletion:` in favor of `-shouldProcessTextForAutoCompletion`
 
+##### CI:
+- Building the SlackTextViewController framework and running basic tests using BuddyBuild CI, against all PRs. By @dzenbot (#640)
 
 ## [Version 1.9.5](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9.5)
 
 ##### Features:
-- Migrated the library to be using NSAttributedString underneath. The `text` property on `SLKTextView` uses a NSAttributedString representation based on its font and text color, and doesn't forward to super. By @jacywu07 (https://github.com/slackhq/SlackTextViewController/pull/501)
+- Migrated the library to be using NSAttributedString underneath. The `text` property on `SLKTextView` uses a NSAttributedString representation based on its font and text color, and doesn't forward to super. By @jacywu07 (#501)
 - As part of the migration to NSAttributedString, new helpers for attributed strings have been added to `SLKTextView+SLKAdditions`.
-- Introduced a new API to end users to open the auto-completion mode with a given prefix. By @jacywu07 (https://github.com/slackhq/SlackTextViewController/pull/506)
-- Exposed the private `cacheTextView` method. By @acandelaria1 (https://github.com/slackhq/SlackTextViewController/pull/513)
+- Introduced a new API to end users to open the auto-completion mode with a given prefix. By @jacywu07 (#506)
+- Exposed the private `cacheTextView` method. By @acandelaria1 (#513)
 
 ##### Hot Fixes & Enhancements:
-- Updated the sample project to Swift 3! By @cyhsutw (https://github.com/slackhq/SlackTextViewController/pull/522) 
-- Added a property to allow the user to set how many lines of text SLKTextView's placeholder should have. By @jedmund (https://github.com/slackhq/SlackTextViewController/pull/505)
-- Tweaked keyboard height calculations on invert mode. By @ZAndyL (https://github.com/slackhq/SlackTextViewController/pull/512)
+- Updated the sample project to Swift 3! By @cyhsutw (#522)
+- Added a property to allow the user to set how many lines of text SLKTextView's placeholder should have. By @jedmund (#505)
+- Tweaked keyboard height calculations on invert mode. By @ZAndyL (#512)
 
 ## [Version 1.9.4](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9.4)
 ##### Hot Fixes & Enhancements:
