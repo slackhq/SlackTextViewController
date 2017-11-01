@@ -57,6 +57,7 @@
     self.timers = [NSMutableArray new];
     
     self.textColor = [UIColor grayColor];
+    self.highlightTextColor = [UIColor grayColor];
     self.textFont = [UIFont systemFontOfSize:12.0];
     self.highlightFont = [UIFont boldSystemFontOfSize:12.0];
     self.contentInset = UIEdgeInsetsMake(10.0, 40.0, 10.0, 10.0);
@@ -146,6 +147,8 @@
     if (self.usernames.count <= 2) {
         [attributedString addAttribute:NSFontAttributeName value:self.highlightFont range:[text rangeOfString:firstObject]];
         [attributedString addAttribute:NSFontAttributeName value:self.highlightFont range:[text rangeOfString:lastObject]];
+        [attributedString addAttribute:NSForegroundColorAttributeName value:self.highlightTextColor range:[text rangeOfString:firstObject]];
+        [attributedString addAttribute:NSForegroundColorAttributeName value:self.highlightTextColor range:[text rangeOfString:lastObject]];
     }
     
     return attributedString;

@@ -23,6 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** The color of the text. Default is grayColor. */
 @property (nonatomic, strong) UIColor *textColor;
 
+/** The color of the highlighted text. Default is grayColor. */
+@property (nonatomic, strong) UIColor *highlightTextColor;
+
 /** The font of the text. Default is system font, 12 pts. */
 @property (nonatomic, strong) UIFont *textFont;
 
