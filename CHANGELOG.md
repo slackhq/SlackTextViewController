@@ -10,7 +10,8 @@ This release includes many iOS 11 and iPhone X hot fixes.
 - Exposing auto-completion variables. By @dzenbot (#561)
 
 ##### Hot Fixes & Enhancements:
-- Fixed the text input not being interactive on iOS. Making `SLKTextInputbar` a UIView subclass instead of `UIToolbar`. By @dzenbot (#624)
+- Fixed the text input not being interactive on iOS 11. By @dzenbot (#624)
+- Fixed iPhone X issue where the text input bar wouldn't expand to the bottom of the screen, below the home indicator. (#619)
 - Fixed scroll view content inset adjustments on iOS 11. By @gim- (#643)
 - Fixed compiler error in example app. By @BasThomas (#629)
 - Fixed content offset for keyboard when uninverted. By @ZAndyL (#542)
