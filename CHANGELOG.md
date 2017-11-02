@@ -1,6 +1,6 @@
 # Change Log
 
-## Version 1.9.6 (unreleased)
+## [Version 1.9.6](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9.6)
 
 This release includes many iOS 11 and iPhone X hot fixes.
 
