@@ -289,7 +289,7 @@ If the user selects any autocompletion view cell on `tableView:didSelectRowAtInd
 ```swift
 override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-    if tableView.isEqual(tableView) {
+    if tableView.isEqual(self.autoCompletionView) {
         var item = self.searchResult[indexPath.row]
         item += " "  // Adding a space helps dismissing the auto-completion view
             
