@@ -1,5 +1,11 @@
 # Change Log
 
+## [Version 1.9.7](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9.7)
+
+#### Features:
+
+- Enables building the CocoaPod with `CLANG_MODULES_ENABLED=NO` which enables compiling with `ccache`.
+
 ## [Version 1.9.6](https://github.com/slackhq/SlackTextViewController/releases/tag/v1.9.6)
 
 This release includes many iOS 11 and iPhone X hot fixes.
