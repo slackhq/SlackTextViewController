@@ -1,3 +1,7 @@
+⛔️ DEPRECATED ⛔️
+
+We are no longer providing support for `SlackTextViewController`. This project satisfied all of our iOS messaging needs in the past and we are proud to have contributed it to the open-source community. Today, in order to delight our users with a solution that is highly tailored and rapidly iterated-upon, we have shifted focus to our internal projects. Unfortunately, this renders us lacking the capacity to support our past projects in addition to our newer, internal projects. This project has been deprecated as a result.
+
 # SlackTextViewController
 
 **IMPORTANT NOTICE: Please update to >= `1.9` to avoid any risk of app rejection.
@@ -12,7 +16,7 @@ A drop-in UIViewController subclass with a growing text input view and other use
 
 ![Demo Gif](Screenshots/slacktextviewcontroller_demo.gif)
 
-This library is used in Slack's iOS app. It was built to fit our needs, but is flexible enough to be reused by others wanting to build great messaging apps for iOS.
+This library was historically used in our iOS app. At its inception, the library satisfied our product needs and was flexible enough to be reused by others wanting to build great messaging apps for iOS.
 
 ## Feature List
 
