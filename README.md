@@ -1,4 +1,4 @@
-Note: This project is now deprecated
+# Deprecation
 
 We are no longer providing support for `SlackTextViewController`. This project satisfied all of our iOS messaging needs in the past and we are proud to have contributed it to the open-source community. Today, in order to delight our users with a solution that is highly tailored and rapidly iterated-upon, we have shifted focus to our internal projects. Unfortunately, this renders us lacking the capacity to support our past projects in addition to our newer, internal projects. This project has been deprecated as a result.
 
